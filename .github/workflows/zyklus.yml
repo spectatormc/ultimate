@@ -56,7 +56,9 @@ jobs:
         if: steps.notaus.outputs.stop == 'nein'
         uses: anthropics/claude-code-action@v1
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Secret heisst hier ANTHROPIC_API, nicht ANTHROPIC_API_KEY wie in den
+          # meisten Beispielen. Wer den Namen aendert, muss beides aendern.
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API }}
           # Bewusst nicht die Claude-GitHub-App: die hat Schreibrechte auf
           # Workflow-Dateien und könnte diesen Wecker ändern. Das GITHUB_TOKEN
           # kann das per GitHub-Regel nicht.
