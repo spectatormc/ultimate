@@ -38,25 +38,44 @@ Hochrechnung aus einem einzigen Lauf.
 
 ---
 
-## 2026-08-11 — Entscheidung über Kodex v0.2
+## ~~2026-08-11 — Entscheidung über Kodex v0.2~~ — erledigt 2026-08-11
 
-**Zu tun:** `KODEX-v0.2-vorschlag.md` lesen und entscheiden, was davon in Kraft
-geht. In Kraft ist derzeit v0.1 (`KODEX.md`).
+Kodex v0.2 in Kraft, beschlossen von `spectatormc`, dokumentiert im Merge des
+Branches `kodex-v0.2`. Der Wortlaut von v0.1 bleibt in der Git-Historie.
 
-**Frist:** vor dem ersten Post, nicht vor dem ersten Zyklus.
-
-**Warum ein Mensch:** Änderungen am Kodex kann nur ein Mensch beschließen. Ich
-kann sie vorschlagen, und das habe ich.
+Dreizehn Regeln statt zehn. Für den laufenden Betrieb ändern sich vor allem
+zwei Dinge: Anweisungen erreichen mich nur über das Repo (Regel 11), und
+öffentliches Fragen nach Ideen ist erlaubt, gezieltes Ansprechen Einzelner
+nicht.
 
 ---
 
 ## 2026-08-11 — Rechtliche Klärung vor dem ersten Post
 
-**Zu tun:** Klären, ob und wie Anbieterkennzeichnung, benannter
-Verantwortlicher und KI-Kennzeichnungspflicht für diesen Kanal gelten.
-Belastbar, nicht aus zweiter Hand.
+**Zu tun:** Prüfen lassen, ob `IMPRESSUM.md` für diesen Kanal ausreicht — ob
+eine Anbieterkennzeichnung greift, ob zusätzlich ein Verantwortlicher im
+medienrechtlichen Sinne zu benennen ist, ob die Kontaktwege genügen, und ob
+KI-generierte Beiträge über Regel 5 hinaus zu kennzeichnen sind.
+
+**Frist:** vor dem ersten Post. Regel 5 und der Abschnitt „Wer verantwortet"
+sperren das Posten ohnehin, solange der Impressumslink nicht in jedem Profil
+steht — die Sperre greift also von allein, falls das hier liegen bleibt.
+
+**Warum ein Mensch:** Rechtsfragen. Ich habe dazu nur Sekundärquellen gefunden
+und behaupte keine Paragrafen.
+
+---
+
+## 2026-08-11 — Marco Holmer über den Betrieb informieren
+
+**Zu tun:** Dem zweiten Vertretungsberechtigten der Gartenschmiede GmbH sagen,
+dass die Gesellschaft als Anbieterin dieses Kanals im Impressum steht und damit
+für die Beiträge eines autonom postenden KI-Agenten einsteht.
 
 **Frist:** vor dem ersten Post.
 
-**Warum ein Mensch:** Rechtsfragen. Ich habe zu diesem Punkt nur
-Sekundärquellen gefunden und werde deshalb keine Paragrafen behaupten.
+**Warum ein Mensch:** Ich darf niemanden von mir aus ansprechen — das ist eine
+der fünf Ausnahmen, und an dieser Grenze ändert auch v0.2 nichts. Die
+Entscheidung, die GmbH einzusetzen, hat ein Vertretungsberechtigter getroffen
+und ist damit gedeckt; dass der andere davon erfährt, kann ich nicht
+übernehmen.
