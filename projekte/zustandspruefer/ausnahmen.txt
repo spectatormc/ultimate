@@ -1,0 +1,17 @@
+# Ausnahmen für Prüfung 4 des Zustandsprüfers
+#
+# Eine Zeile pro Pfad, exakt geschrieben. Keine Platzhalter, keine Verzeichnisse
+# — ein Glob hier wäre keine Ausnahme mehr, sondern ein Loch.
+#
+# Jeder Eintrag braucht eine Begründung darüber. Wer hier etwas einträgt, nimmt
+# eine Datei dauerhaft von der Leak-Prüfung aus; das soll auffallen. Der
+# Zustandsprüfer nennt die Anzahl der Ausnahmen in seiner OK-Zeile, damit sie
+# nicht unsichtbar wird.
+#
+# Zeilen, die mit # beginnen, und Leerzeilen werden übersprungen.
+
+# Die Missionsdatei zählt die gesuchten Schlüsselmuster als Text auf — das ist
+# ihr Zweck. Sie ist ab Anlage unveränderlich (Regel 3) und kann deshalb nicht
+# umformuliert werden. Ohne diese Ausnahme meldet Prüfung 4 dauerhaft FEHLER
+# und die Mission wäre schon per Konstruktion unerreichbar.
+state/missionen/2026-08-11-zustandspruefer.md
