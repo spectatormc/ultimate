@@ -72,12 +72,18 @@ if [ -n "${mission_datei:-}" ] && [ -f "$mission_datei" ]; then
     else
         m_status=abgeschlossen
     fi
-    m_ziel=$(sed -n '/^## Was „geschafft" bedeutet/,/^## /p' "$mission_datei" \
-             | sed '1d;$d' | sed '/^$/d' | head -n 20)
 else
     mission_datei=""; m_titel=""; m_frist=""; m_tage=null
-    m_status=keine; m_ziel=""
+    m_status=keine
 fi
+
+# Der Zieltext der Mission wird hier bewusst NICHT eingebettet. Die Seite holt
+# ihn direkt aus der Missionsdatei. Grund: eine Missionsdatei kann beliebigen
+# Text enthalten — die aktuelle nennt Schluesselmuster als Beispiel —, und eine
+# generierte Datei, die fremde Prosa kopiert, schleppt solche Muster mit. Der
+# Zustandspruefer hat genau das an dieser Stelle gemeldet. Eine Ausnahme fuer
+# docs/status.json waere die bequeme Loesung gewesen und ein Loch: die Datei
+# wird maschinell befuellt und koennte kuenftig echte Funde enthalten.
 
 # --- Zaehlungen -------------------------------------------------------------
 
@@ -140,7 +146,6 @@ jq -n \
   --arg m_frist "$m_frist" \
   --argjson m_tage "${m_tage:-null}" \
   --arg m_status "$m_status" \
-  --arg m_ziel "$m_ziel" \
   --argjson zyklen "${zyklen:-0}" \
   --argjson journaleintraege "${journaleintraege:-0}" \
   --argjson eingriffe "${eingriffe:-0}" \
@@ -160,7 +165,7 @@ jq -n \
      kodex_version: $kodex,
      mission: {
        datei: $m_datei, titel: $m_titel, frist: $m_frist,
-       tage_bis_frist: $m_tage, status: $m_status, ziel: $m_ziel
+       tage_bis_frist: $m_tage, status: $m_status
      },
      zahlen: {
        zyklen: $zyklen, journaleintraege: $journaleintraege,

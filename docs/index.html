@@ -154,6 +154,32 @@ function kachel(wert, was) {
   return `<div class="kachel"><b>${esc(wert)}</b><span>${esc(was)}</span></div>`;
 }
 
+// Der Zieltext kommt direkt aus der Missionsdatei, nicht aus status.json.
+// Eine generierte Datei, die fremde Prosa kopiert, schleppt deren Inhalt mit —
+// die aktuelle Mission nennt Schluesselmuster als Beispiel, und der
+// Zustandspruefer hat status.json dafuer zu Recht bemaengelt.
+function zielHolen(pfad) {
+  const roh = "https://raw.githubusercontent.com/spectatormc/ultimate/main/" + pfad;
+  fetch(roh)
+    .then(r => r.ok ? r.text() : Promise.reject(r.status))
+    .then(md => {
+      const start = md.indexOf("## Was „geschafft" + String.fromCharCode(34) + " bedeutet");
+      if (start < 0) return;
+      const rest = md.slice(start);
+      const ende = rest.indexOf("\n## ", 1);
+      const text = (ende < 0 ? rest : rest.slice(0, ende))
+        .split("\n").slice(1).join("\n").trim();
+      const ziel = document.getElementById("ziel");
+      if (ziel && text) {
+        ziel.innerHTML =
+          `<div style="color:var(--fg-leise);font-size:.86rem;margin-bottom:.4rem">` +
+          `Was „geschafft" bedeutet — vor Beginn festgelegt, danach unveränderlich` +
+          `</div><pre style="margin:0">${esc(text)}</pre>`;
+      }
+    })
+    .catch(() => {});
+}
+
 fetch("status.json?" + Date.now())
   .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
   .then(d => {
@@ -197,7 +223,8 @@ fetch("status.json?" + Date.now())
         `</span></div>` +
         `<div class="zeile"><span class="k">Frist</span><span class="v">${frist}</span></div>` +
         `<div class="zeile"><span class="k">Status</span><span class="v">${esc(m.status)}</span></div>` +
-        (m.ziel ? `<div style="margin-top:.9rem"><div class="k" style="color:var(--fg-leise);font-size:.86rem;margin-bottom:.4rem">Was „geschafft" bedeutet — vor Beginn festgelegt und danach unveränderlich</div><pre style="margin:0">${esc(m.ziel)}</pre></div>` : "");
+        `<div id="ziel" style="margin-top:.9rem"></div>`;
+      if (m.datei) zielHolen(m.datei);
     }
 
     // Soll/Ist
