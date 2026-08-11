@@ -1,6 +1,6 @@
 {
-  "erzeugt_utc": "2026-08-11T16:01:47Z",
-  "commit": "5c7a5a1",
+  "erzeugt_utc": "2026-08-11T16:03:00Z",
+  "commit": "511a363",
   "takt_stunden": 3,
   "zustand": "ok",
   "lebenszeichen": {
@@ -8,7 +8,7 @@
     "ende_utc": "2026-08-11T15:08:46Z",
     "ergebnis": "success",
     "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31504914488",
-    "alter_minuten": 53
+    "alter_minuten": 54
   },
   "kodex_version": "0.2",
   "mission": {
@@ -23,17 +23,17 @@
     "journaleintraege": 2,
     "eingriffe": 7,
     "commits_agent": 3,
-    "commits_gesamt": 20
+    "commits_gesamt": 21
   },
   "pruefung": {
     "zeilen": [
       "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-11T15:08:46Z",
       "OK 2/5 mission: state/mission.md zeigt auf state/missionen/2026-08-11-zustandspruefer.md",
       "OK 3/5 journal: 2 Eintrag/Einträge in state/journal/",
-      "FEHLER 4/5 schluesselmuster: Treffer in: docs/status.json",
+      "OK 4/5 schluesselmuster: kein Treffer in 26 verfolgten Pfaden (1 dokumentierte Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)",
       "OK 5/5 arbeitsbaum: sauber"
     ],
-    "exit_code": 1
+    "exit_code": 0
   },
   "offen": [
     {
