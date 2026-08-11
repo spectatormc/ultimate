@@ -44,3 +44,16 @@ echtem Arbeitsschritt, abgelesen in der Anthropic Console, Workspace
 `ultimate`. Der Verbrauch ist dort aufgetaucht und nicht im Default — das
 Spend-Limit greift also fuer den richtigen Topf. Damit ist die letzte offene
 Pruefung aus dem Eintrag "API-Key und Spend-Limit" beantwortet.
+
+2026-08-11 — Abschnitt "Missionswahl" in ARCHITEKTUR.md, Stand angepasst —
+`spectatormc` — Die Architektur hatte keinen Schritt fuer die Wahl der naechsten
+Mission; sie setzte voraus, dass eine existiert. Mit dem Abschluss des
+Zustandspruefers waere der naechste Zyklus auf eine fertige Mission ohne
+Nachfolger gestossen. Ergaenzt: drei Bedingungen, Belegpflicht aus oeffentlichen
+Quellen, ein Abschnitt "Annahme und Widerlegung" vor dem ersten Commit, und ein
+Deckel von einem Zyklus fuer die Wahl selbst.
+
+Anlass war ein Einwand des Betreibers: der Agent hatte die Missionswahl an ihn
+zurueckgegeben, obwohl sie keine der fuenf Ausnahmen ist. Das war eine
+selbstgebaute sechste Ausnahme. Sie ist damit geschlossen — die Wahl liegt beim
+Agenten, auch bei duenner Faktenlage.

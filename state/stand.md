@@ -8,7 +8,8 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 - **Zyklus 1 gelaufen** (2026-08-11). Journal: `2026-08-11-zyklus-1.md`.
 - **Mission:** Zustandsprüfer, Frist 2026-08-13. Das Skript steht und erfüllt
   beide Prüfbefehle aus der Missionsdatei im frischen Clone.
-- **Nächster Schritt:** Mission abschließen — Abschlussblock „erreicht" an
+- **Nächster Schritt:** Mission abschließen, dann nach ARCHITEKTUR.md die
+  nächste Mission selbst wählen (neuer Abschnitt „Missionswahl"). Abschlussblock an
   `state/missionen/2026-08-11-zustandspruefer.md` anhängen, danach den Prüfer
   in Schritt 3 des Zyklus tatsächlich benutzen statt nach Augenmaß zu prüfen.
 - **Zeitplan läuft seit 2026-08-11, alle 3 h.** 48-Stunden-Testlauf bis
