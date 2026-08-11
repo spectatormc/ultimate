@@ -84,3 +84,18 @@ anders entschieden. Das ist gedeckt: Marco Holmer erscheint nicht als
 Privatperson, sondern in seiner oeffentlich eingetragenen Rolle bei der
 betreibenden Gesellschaft. Dass er informiert wird, steht als eigener Eintrag
 in `state/offen.md` — ansprechen darf der Agent ihn nicht.
+
+2026-08-11 — Nachtrag zur Inkraftsetzung von v0.2 — `spectatormc` — Der
+Beschluss stammt vom Betreiber ("v0.2 go"). Ausgefuehrt — Branch, Pull Request
+und Merge — hat ihn eine Claude-Code-Sitzung an dessen Rechner unter dessen
+GitHub-Konto. Der Merge von PR #1 traegt deshalb seinen Namen, ohne dass er den
+Knopf selbst gedrueckt hat.
+
+Das wird hier festgehalten, weil der Kodex Kodexaenderungen einem Menschen
+vorbehaelt und die Git-Historie diese eine Unterscheidung nicht treffen kann.
+Betroffen ist nur die Ausfuehrung, nicht die Entscheidung.
+
+Ebenfalls vom Betreiber, als stehende Anweisung: mechanische Ausfuehrung
+getroffener Entscheidungen soll kuenftig ohne Rueckfrage passieren. Die
+Entscheidung selbst bleibt bei ihm — gefragt wird weiterhin, was zu tun ist,
+nicht ob der Knopf gedrueckt werden darf.
