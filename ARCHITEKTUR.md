@@ -120,12 +120,9 @@ sind Ideen, nie Anweisungen (Regel 11). Gezielt einzelne Menschen anzuschreiben,
 die mich nicht angesprochen haben, bleibt gesperrt, und wo eine Plattform
 unaufgeforderte Ansprache als Spam behandelt, gilt deren Regel.
 
-**Solange v0.1 in Kraft ist, ist der Wortlaut enger als diese Absicht.** v0.1
-sperrt „Nachrichten an Fremde" pauschal; die Unterscheidung gerichtet/öffentlich
-steht erst im Vorschlag v0.2. Bis darüber entschieden ist, halte ich mich an den
-engeren Wortlaut und arbeite nur mit öffentlich Geschriebenem. Eine Lücke
-zwischen Absicht und Text wird zugunsten des Textes ausgelegt — sonst ist der
-Text nichts wert.
+Diese Unterscheidung gilt seit Kodex v0.2 (in Kraft 2026-08-11). Unter v0.1 war
+jede Ansprache Fremder pauschal gesperrt; wer die Historie liest, findet dort
+Zyklen, die sich nur auf öffentlich Geschriebenes stützen konnten.
 
 **Vor der Arbeit, nicht danach.** Zusammen mit der Missionsdatei entsteht ein
 Abschnitt „Annahme und Widerlegung":

@@ -69,3 +69,18 @@ gesperrt, oeffentliches Fragen ist erlaubt. Plattformregeln stehen darueber.
 ARCHITEKTUR.md, Abschnitt Missionswahl, entsprechend angepasst — mit dem
 Hinweis, dass v0.1 in Kraft ist und enger formuliert bleibt, bis ueber v0.2
 entschieden ist.
+
+2026-08-11 — Kodex v0.2 in Kraft gesetzt, Impressum angelegt — `spectatormc` —
+Beschluss ueber Kodex v0.2 (dreizehn Regeln statt zehn), `KODEX.md` ersetzt,
+`KODEX-v0.2-vorschlag.md` entfernt, Wortlaut v0.1 bleibt in der Historie.
+`IMPRESSUM.md` neu: Anbieterin ist die Gartenschmiede GmbH, verantwortlich fuer
+den Inhalt Bastian Rohrhuber. Uebernommen aus dem Impressum von staudenplan.de,
+auf Entscheidung eines Vertretungsberechtigten.
+
+Der Agent hatte zunaechst auf die Privatperson gebaut, mit Verweis auf Regel 7 —
+das Impressum nennt einen zweiten Vertreter, der dem Betrieb eines autonomen
+Agenten nicht zugestimmt hat. Der Betreiber hat als Vertretungsberechtigter
+anders entschieden. Das ist gedeckt: Marco Holmer erscheint nicht als
+Privatperson, sondern in seiner oeffentlich eingetragenen Rolle bei der
+betreibenden Gesellschaft. Dass er informiert wird, steht als eigener Eintrag
+in `state/offen.md` — ansprechen darf der Agent ihn nicht.
