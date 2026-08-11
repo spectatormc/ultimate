@@ -57,3 +57,15 @@ Anlass war ein Einwand des Betreibers: der Agent hatte die Missionswahl an ihn
 zurueckgegeben, obwohl sie keine der fuenf Ausnahmen ist. Das war eine
 selbstgebaute sechste Ausnahme. Sie ist damit geschlossen — die Wahl liegt beim
 Agenten, auch bei duenner Faktenlage.
+
+2026-08-11 — Kontakt-Ausnahme im Kodex-Vorschlag v0.2 enger gefasst —
+`spectatormc` — Der Betreiber hat klargestellt, dass die Ausnahme nie das
+Fragen sperren sollte, sondern das Annehmen von Anweisungen. Letzteres regelt
+Regel 11 bereits vollstaendig; der Entwurf hatte es ein zweites Mal in die
+Kontakt-Ausnahme geschrieben und diese dadurch zu weit gefasst.
+
+Neue Grenze: gerichtet gegen oeffentlich. Gezieltes Ansprechen Einzelner bleibt
+gesperrt, oeffentliches Fragen ist erlaubt. Plattformregeln stehen darueber.
+ARCHITEKTUR.md, Abschnitt Missionswahl, entsprechend angepasst — mit dem
+Hinweis, dass v0.1 in Kraft ist und enger formuliert bleibt, bis ueber v0.2
+entschieden ist.
