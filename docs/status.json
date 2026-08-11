@@ -1,0 +1,74 @@
+{
+  "erzeugt_utc": "2026-08-11T15:57:32Z",
+  "commit": "fe9cfb3",
+  "takt_stunden": 3,
+  "zustand": "ok",
+  "lebenszeichen": {
+    "lauf": 1,
+    "ende_utc": "2026-08-11T15:08:46Z",
+    "ergebnis": "success",
+    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31504914488",
+    "alter_minuten": 48
+  },
+  "kodex_version": "0.2",
+  "mission": {
+    "datei": "state/missionen/2026-08-11-zustandspruefer.md",
+    "titel": "Mission: Zustandsprüfer",
+    "frist": "2026-08-13,",
+    "tage_bis_frist": -20676,
+    "status": "laufend",
+    "ziel": "Ein Dritter kann Folgendes ausführen, ohne mich zu fragen:\n```\ngit clone https://github.com/spectatormc/ultimate.git pruef\ncd pruef\nbash projekte/zustandspruefer/pruefe.sh\necho \"Exit-Code: $?\"\n```\n**Erwartete Ausgabe:** fünf Zeilen, jede beginnt mit `OK` oder `FEHLER`, in der\nReihenfolge der fünf Prüfungen oben. Danach `Exit-Code: 0`.\nZusätzlich muss Prüfung 4 nachweislich greifen. Prüfbar so:\n```\necho \"sk-ant-api03-beispiel\" > kanarienvogel.txt\ngit add kanarienvogel.txt\nbash projekte/zustandspruefer/pruefe.sh\necho \"Exit-Code: $?\"\n```\n**Erwartete Ausgabe:** die Zeile zu Prüfung 4 beginnt mit `FEHLER` und nennt\n`kanarienvogel.txt`. Danach `Exit-Code: 1`.\nKeine Abhängigkeiten außer `git`, `jq` und POSIX-Shell — alles auf\n`ubuntu-latest` vorhanden."
+  },
+  "zahlen": {
+    "zyklen": 1,
+    "journaleintraege": 2,
+    "eingriffe": 7,
+    "commits_agent": 3,
+    "commits_gesamt": 16
+  },
+  "pruefung": {
+    "zeilen": [
+      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-11T15:08:46Z",
+      "OK 2/5 mission: state/mission.md zeigt auf state/missionen/2026-08-11-zustandspruefer.md",
+      "OK 3/5 journal: 2 Eintrag/Einträge in state/journal/",
+      "OK 4/5 schluesselmuster: kein Treffer in 25 verfolgten Pfaden (1 dokumentierte Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)",
+      "OK 5/5 arbeitsbaum: sauber"
+    ],
+    "exit_code": 0
+  },
+  "offen": [
+    {
+      "titel": "~~2026-08-11 — API-Key und Spend-Limit~~ — erledigt 2026-08-11",
+      "erledigt": true
+    },
+    {
+      "titel": "~~2026-08-11 — Zeitplan aktivieren~~ — erledigt 2026-08-11",
+      "erledigt": true
+    },
+    {
+      "titel": "~~2026-08-11 — Entscheidung über Kodex v0.2~~ — erledigt 2026-08-11",
+      "erledigt": true
+    },
+    {
+      "titel": "2026-08-11 — Rechtliche Klärung vor dem ersten Post",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-11 — Marco Holmer über den Betrieb informieren",
+      "erledigt": false
+    }
+  ],
+  "journal": [
+    {
+      "datei": "2026-08-11-zyklus-1.md",
+      "titel": "2026-08-11 — Zyklus 1"
+    },
+    {
+      "datei": "2026-08-11-einrichtung.md",
+      "titel": "2026-08-11 — Einrichtung"
+    }
+  ],
+  "projekte": [
+    "zustandspruefer"
+  ]
+}
