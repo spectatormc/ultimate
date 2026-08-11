@@ -1,0 +1,111 @@
+name: Zyklus
+
+# Der Takt der Arbeit. Nicht der Takt des Kanals.
+#
+# Der Zeitplan ist absichtlich deaktiviert. Aktiviert wird er erst, wenn
+# ANTHROPIC_API_KEY als Repo-Secret steht UND das Spend-Limit im Anthropic-
+# Workspace gesetzt ist. Vorher kostet ein Lauf entweder nichts (er scheitert)
+# oder unbegrenzt viel (er läuft).
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: "17 */3 * * *"
+
+# Zwei Zyklen gleichzeitig gibt es nicht. GitHub stellt den zweiten in die
+# Warteschlange, statt ihn parallel zu starten.
+concurrency:
+  group: zyklus
+  cancel-in-progress: false
+
+jobs:
+  zyklus:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+      - name: Repo holen
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      # Not-Aus, Ebene 1. Bewusst hier und nicht im Prompt: die Bremse darf
+      # nicht davon abhängen, dass das Modell sich korrekt verhält.
+      - name: Not-Aus prüfen
+        id: notaus
+        run: |
+          if [ -f state/STOP ]; then
+            echo "state/STOP liegt. Zyklus arbeitet nicht (Regel 9)."
+            echo "stop=ja" >> "$GITHUB_OUTPUT"
+          else
+            echo "stop=nein" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Feste, im README genannte Identität. Menschen committen unter ihrer
+      # eigenen — daran erkennt der nächste Zyklus fremde Eingriffe.
+      - name: Git-Identität des Agenten
+        if: steps.notaus.outputs.stop == 'nein'
+        run: |
+          git config user.name "ultimate-agent"
+          git config user.email "ultimate-agent@users.noreply.github.com"
+
+      - name: Zyklus ausführen
+        if: steps.notaus.outputs.stop == 'nein'
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Bewusst nicht die Claude-GitHub-App: die hat Schreibrechte auf
+          # Workflow-Dateien und könnte diesen Wecker ändern. Das GITHUB_TOKEN
+          # kann das per GitHub-Regel nicht.
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            Führe genau einen Zyklus aus.
+
+            Lies zuerst KODEX.md, dann ARCHITEKTUR.md, und arbeite den dort
+            beschriebenen Ablauf ab. Die Architektur ist die Anweisung — was
+            dort steht, gilt, auch wenn dieser Prompt es nicht wiederholt.
+
+            Drei Dinge, die dieser Lauf nicht tut:
+            - Nicht posten. Es gibt noch keinen Kanal.
+            - Nichts an .github/ ändern. Der Wecker gehört nicht dir.
+            - Nicht raten. Was unklar ist, geht nach state/offen.md.
+
+            Ein abgeschlossener Schritt, kein halber. Dann committen, Journal
+            fortschreiben, Stand überschreiben, pushen. Fertig.
+          claude_args: |
+            --model claude-opus-5
+            --max-turns 60
+            --allowedTools "Read,Write,Edit,Glob,Grep,Bash"
+
+      # Lebenszeichen, Ebene Harness. Läuft auch, wenn der Zyklus abgestürzt
+      # ist oder das Zeitlimit gerissen hat — genau dann ist es interessant.
+      - name: Lebenszeichen schreiben
+        if: always()
+        run: |
+          if [ "${{ steps.notaus.outputs.stop }}" = "ja" ]; then
+            ergebnis="gestoppt"
+          else
+            ergebnis="${{ job.status }}"
+          fi
+
+          git config user.name "ultimate-agent"
+          git config user.email "ultimate-agent@users.noreply.github.com"
+
+          mkdir -p state
+          cat > state/heartbeat.json <<EOF
+          {
+            "lauf": ${{ github.run_number }},
+            "ende_utc": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "ergebnis": "$ergebnis",
+            "letzter_commit": "$(git rev-parse HEAD)",
+            "lauf_url": "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }
+          EOF
+
+          git add state/heartbeat.json
+          git commit -m "state: Lebenszeichen Lauf ${{ github.run_number }} ($ergebnis)" || exit 0
+          git pull --rebase --autostash origin "${{ github.ref_name }}" || true
+          git push origin "HEAD:${{ github.ref_name }}"

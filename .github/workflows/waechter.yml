@@ -1,0 +1,79 @@
+name: Wächter
+
+# Prüft, ob der Agent noch lebt. Er kann das nicht selbst melden: fällt der
+# Trigger aus, schreibt er auch keine Fehlermeldung mehr — und weil "meistens
+# nicht posten" der Normalfall ist, sieht ein toter Agent von außen exakt aus
+# wie ein arbeitender, der gerade nichts zu berichten hat.
+#
+# Einschränkung, ehrlich benannt: dieser Wächter läuft auf derselben
+# Infrastruktur wie der Zyklus. Fällt GitHub Actions als Ganzes aus, schweigt
+# er mit. Er fängt den häufigen Fall (Workflow deaktiviert, Läufe scheitern
+# dauerhaft, Agent hängt), nicht den seltenen.
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #   - cron: "40 */6 * * *"
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  pruefen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Alter des Lebenszeichens prüfen
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Schwelle: das Vierfache des Trigger-Intervalls (3h) plus Puffer.
+          SCHWELLE_STUNDEN: "12"
+        run: |
+          set -u
+
+          if [ ! -f state/heartbeat.json ]; then
+            echo "Kein state/heartbeat.json vorhanden."
+            exit 0
+          fi
+
+          ende=$(jq -r '.ende_utc // empty' state/heartbeat.json)
+          if [ -z "$ende" ]; then
+            echo "heartbeat.json hat kein ende_utc — kaputt oder halb geschrieben."
+            exit 1
+          fi
+
+          alter=$(( $(date -u +%s) - $(date -u -d "$ende" +%s) ))
+          stunden=$(( alter / 3600 ))
+          echo "Letztes Lebenszeichen: $ende ($stunden Stunden alt)"
+
+          if [ "$stunden" -lt "$SCHWELLE_STUNDEN" ]; then
+            echo "Innerhalb der Schwelle von $SCHWELLE_STUNDEN Stunden. Alles gut."
+            exit 0
+          fi
+
+          titel="Wächter: kein Lebenszeichen seit ${stunden}h"
+
+          # Nicht bei jedem Lauf ein neues Issue aufmachen.
+          if gh issue list --state open --search "$titel in:title" \
+               --json number --jq 'length' | grep -qv '^0$'; then
+            echo "Es gibt bereits ein offenes Issue dazu."
+            exit 0
+          fi
+
+          gh issue create --title "$titel" --body "$(cat <<EOF
+          Das letzte Lebenszeichen in \`state/heartbeat.json\` ist **$stunden Stunden** alt
+          (\`$ende\`). Die Schwelle liegt bei $SCHWELLE_STUNDEN Stunden.
+
+          Mögliche Ursachen, in der Reihenfolge, in der ich sie prüfen würde:
+
+          1. Der Zeitplan in \`.github/workflows/zyklus.yml\` ist deaktiviert oder auskommentiert.
+          2. GitHub hat den Zeitplan wegen 60 Tagen Repo-Inaktivität abgeschaltet.
+          3. Die Läufe scheitern dauerhaft — siehe Actions-Tab.
+          4. \`state/STOP\` liegt. Dann ist das erwartetes Verhalten und dieses Issue kann zu.
+
+          Dieses Issue kommt von einem automatischen Wächter, der nichts kann außer
+          lesen und Alarm schlagen.
+          EOF
+          )"
