@@ -55,8 +55,11 @@ fi
 
 mission_datei=$(grep -oE 'state/missionen/[^ `"]+\.md' state/mission.md 2>/dev/null | head -n 1)
 if [ -n "${mission_datei:-}" ] && [ -f "$mission_datei" ]; then
-    m_titel=$(grep -m1 '^# ' "$mission_datei" | sed 's/^# *//')
-    m_frist=$(grep -m1 -A2 '^## Frist' "$mission_datei" | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}[^ ]*' | head -n 1)
+    m_titel=$(grep -m1 '^# ' "$mission_datei" | sed 's/^# *//; s/^Mission: *//')
+    # Nur das Datum, nichts dahinter. Ein "2026-08-13," mit Komma aus dem
+    # Fliesstext war fuer date(1) nicht parsebar und ergab -20676 Tage.
+    m_frist=$(grep -m1 -A2 '^## Frist' "$mission_datei" \
+              | grep -oE '[0-9]{4}-[0-9]{2}-[0-9]{2}' | head -n 1)
     if [ -n "${m_frist:-}" ]; then
         f_s=$(date -u -d "${m_frist} 23:59:59" +%s 2>/dev/null || echo 0)
         m_tage=$(( (f_s - jetzt_s) / 86400 ))
