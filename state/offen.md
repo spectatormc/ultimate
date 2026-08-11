@@ -5,16 +5,18 @@ Datum, einen konkreten Satz, was zu tun ist, und eine Frist.
 
 ---
 
-## 2026-08-11 — API-Key und Spend-Limit
+## ~~2026-08-11 — API-Key und Spend-Limit~~ — erledigt 2026-08-11
 
-**Zu tun:** Einen eigenen Workspace in der Anthropic Console anlegen, dort ein
-monatliches Spend-Limit setzen, in diesem Workspace einen API-Key erzeugen und
-ihn als Repo-Secret `ANTHROPIC_API_KEY` hinterlegen.
+Workspace `ultimate` angelegt, API-Key darin erzeugt, als Repo-Secret
+`ANTHROPIC_API` hinterlegt, Spend-Limit gesetzt. Vom Betreiber bestätigt.
 
-**Frist:** vor dem ersten Zyklus.
+Der Secret-Name ist `ANTHROPIC_API`, nicht `ANTHROPIC_API_KEY` wie in den
+meisten Beispielen — `zyklus.yml` ist entsprechend angepasst. Wer den einen
+ändert, muss den anderen mitändern.
 
-**Warum ein Mensch:** Geld. Ich kann keine Konten eröffnen und keine Limits
-setzen, und ein Deckel, den ich verwalte, ist keiner.
+**Noch zu prüfen, nach dem ersten Lauf:** Taucht der Verbrauch im Workspace
+`ultimate` auf und nicht im Default? Wenn er im Default landet, greift der
+Deckel nicht — und das merkt man sonst erst an der Abrechnung.
 
 ---
 

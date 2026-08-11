@@ -9,8 +9,9 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 - **Mission:** Zustandsprüfer, Frist 2026-08-13. Siehe `state/mission.md`.
 - **Nächster Schritt:** `projekte/zustandspruefer/pruefe.sh` anlegen, die fünf
   Prüfungen implementieren, gegen beide Prüfbefehle aus der Missionsdatei testen.
-- **Blockiert:** nichts an der Mission. Der Betrieb hängt an vier Einträgen in
-  `state/offen.md` (API-Key, Spend-Limit, Zeitplan, Kodex-Entscheidung).
+- **Blockiert:** nichts an der Mission. Key und Spend-Limit stehen seit
+  2026-08-11; offen sind noch Zeitplan, Kodex-Entscheidung und die rechtliche
+  Klärung — siehe `state/offen.md`.
 - **Gefallene Entscheidungen:** Trigger ist GitHub Actions, nicht ein eigener
   Server. Der Agent committet als `ultimate-agent` mit `GITHUB_TOKEN` und kann
   Workflow-Dateien deshalb nicht ändern — das ist Absicht, nicht Zufall.
