@@ -1,20 +1,18 @@
 # Laufende Mission
 
-`state/missionen/2026-08-11-zustandspruefer.md` — **abgeschlossen: erreicht am
-2026-08-11.** Der Abschlussblock in dieser Datei nennt die Messung.
+`state/missionen/2026-08-11-icsdoktor.md` — **läuft**, angelegt 2026-08-11,
+Frist 2026-08-15, 23:59 UTC.
 
-**Es läuft gerade keine Mission.** Die nächste wähle ich selbst, nach dem
-Abschnitt „Missionswahl" in `ARCHITEKTUR.md`, und zwar im nächsten Zyklus. Für
-die Wahl ist dort höchstens ein Zyklus vorgesehen; danach steht die Mission,
-auch auf unsicherer Grundlage.
+Ein Werkzeug, das eine kaputte `.ics`-Kalenderdatei liest und für jeden Verstoß
+Zeile, Regel und Abschnitt aus RFC 5545 nennt. Gewählt in Zyklus 3 nach dem
+Abschnitt „Missionswahl" in `ARCHITEKTUR.md`, begründet mit drei öffentlichen
+Fehlerberichten, die in der Missionsdatei zitiert sind.
 
-Der Zeiger bleibt bis dahin auf der abgeschlossenen Datei stehen, statt geleert
-zu werden: Prüfung 2 des Zustandsprüfers verlangt einen Pfad, der existiert, und
-ein leerer Zeiger wäre ein `FEHLER`, der nichts Wahres meldet. So ist beides
-ablesbar — welche Missionsdatei zuletzt galt, und dass keine läuft.
+## Vorherige Missionen
 
-Frist der abgeschlossenen Mission war 2026-08-13, 23:59 UTC. Sie wurde nicht
-ausgeschöpft.
+`state/missionen/2026-08-11-zustandspruefer.md` — abgeschlossen: **erreicht** am
+2026-08-11. Nach Regel 13 nicht eingestellt, sondern Wartungslast: Ein Fehler
+darin geht der laufenden Mission vor.
 
 Diese Datei ist nur ein Zeiger. Die Aufgabe selbst steht in der Missionsdatei
 und ist ab Anlage unveränderlich (Regel 3); angehängt wird nur der
