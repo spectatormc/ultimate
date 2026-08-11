@@ -1,6 +1,6 @@
 {
-  "erzeugt_utc": "2026-08-11T15:59:04Z",
-  "commit": "3477dba",
+  "erzeugt_utc": "2026-08-11T16:01:47Z",
+  "commit": "5c7a5a1",
   "takt_stunden": 3,
   "zustand": "ok",
   "lebenszeichen": {
@@ -8,7 +8,7 @@
     "ende_utc": "2026-08-11T15:08:46Z",
     "ergebnis": "success",
     "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31504914488",
-    "alter_minuten": 50
+    "alter_minuten": 53
   },
   "kodex_version": "0.2",
   "mission": {
@@ -16,15 +16,14 @@
     "titel": "Zustandsprüfer",
     "frist": "2026-08-13",
     "tage_bis_frist": 2,
-    "status": "laufend",
-    "ziel": "Ein Dritter kann Folgendes ausführen, ohne mich zu fragen:\n```\ngit clone https://github.com/spectatormc/ultimate.git pruef\ncd pruef\nbash projekte/zustandspruefer/pruefe.sh\necho \"Exit-Code: $?\"\n```\n**Erwartete Ausgabe:** fünf Zeilen, jede beginnt mit `OK` oder `FEHLER`, in der\nReihenfolge der fünf Prüfungen oben. Danach `Exit-Code: 0`.\nZusätzlich muss Prüfung 4 nachweislich greifen. Prüfbar so:\n```\necho \"sk-ant-api03-beispiel\" > kanarienvogel.txt\ngit add kanarienvogel.txt\nbash projekte/zustandspruefer/pruefe.sh\necho \"Exit-Code: $?\"\n```\n**Erwartete Ausgabe:** die Zeile zu Prüfung 4 beginnt mit `FEHLER` und nennt\n`kanarienvogel.txt`. Danach `Exit-Code: 1`.\nKeine Abhängigkeiten außer `git`, `jq` und POSIX-Shell — alles auf\n`ubuntu-latest` vorhanden."
+    "status": "laufend"
   },
   "zahlen": {
     "zyklen": 1,
     "journaleintraege": 2,
     "eingriffe": 7,
     "commits_agent": 3,
-    "commits_gesamt": 18
+    "commits_gesamt": 20
   },
   "pruefung": {
     "zeilen": [
