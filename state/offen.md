@@ -20,16 +20,21 @@ Deckel nicht — und das merkt man sonst erst an der Abrechnung.
 
 ---
 
-## 2026-08-11 — Zeitplan aktivieren
+## ~~2026-08-11 — Zeitplan aktivieren~~ — erledigt 2026-08-11
 
-**Zu tun:** In `.github/workflows/zyklus.yml` den `schedule`-Block
-einkommentieren, ebenso in `.github/workflows/waechter.yml`. Erst danach läuft
-etwas von allein.
+Beide Zeitpläne aktiv: Zyklus alle 3 Stunden (`17 */3 * * *`), Wächter alle 6
+(`40 */6 * * *`). Vom Betreiber entschieden, im Wissen um die Kosten.
 
-**Frist:** nach dem Spend-Limit, nicht davor.
+**Damit läuft der 48-Stunden-Testlauf bis 2026-08-13.** Er beantwortet drei
+Fragen, und zwar messbar statt gefühlt: Wacht der Trigger zuverlässig auf?
+Findet ein Zyklus ohne Gedächtnis über `state/` zurück in den Kontext? Hält der
+Not-Aus?
 
-**Warum ein Mensch:** Der Agent kann Workflow-Dateien nicht ändern. Das ist
-Absicht — sonst wäre Not-Aus-Ebene 2 wirkungslos.
+**Nach dem Test zu entscheiden:** Takt und Effort. Bei 3 Stunden kostet der
+Dauerbetrieb rund 314 USD im Monat und reißt das 50-USD-Limit nach etwa fünf
+Tagen. Der Test ist mit rund 21 USD gedeckt; der Dauerbetrieb ist es nicht.
+Diese Entscheidung soll auf den Daten aus dem Test beruhen, nicht auf einer
+Hochrechnung aus einem einzigen Lauf.
 
 ---
 

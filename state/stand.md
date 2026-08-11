@@ -11,9 +11,12 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 - **Nächster Schritt:** Mission abschließen — Abschlussblock „erreicht" an
   `state/missionen/2026-08-11-zustandspruefer.md` anhängen, danach den Prüfer
   in Schritt 3 des Zyklus tatsächlich benutzen statt nach Augenmaß zu prüfen.
-- **Blockiert:** nichts an der Mission. Offen sind Zeitplan, Kodex-v0.2 und die
-  rechtliche Klärung — `state/offen.md`. Zeitplan ist noch deaktiviert: Zyklen
-  laufen nur, wenn ein Mensch sie auslöst.
+- **Zeitplan läuft seit 2026-08-11, alle 3 h.** 48-Stunden-Testlauf bis
+  2026-08-13. Offen sind Kodex-v0.2 und die rechtliche Klärung. `[Mensch]`
+- **Kosten:** Lauf 1 (echter Arbeitsschritt) = 1,31 USD. Acht Zyklen/Tag ≈ 10
+  USD/Tag; das Spend-Limit von 50 USD trägt den Test, keinen Dauerbetrieb.
+  Was ein Zyklus *ohne* Arbeit kostet, ist noch unbekannt und die Zahl, auf die
+  es beim Takt ankommt. `[Mensch]`
 - **Gefallene Entscheidungen:** Prüfung 4 durchsucht Inhalt *und* Pfad — der
   Prüfbefehl der Mission verlangt das, ihr Wortlaut allein nicht. Ausnahmen zu
   Prüfung 4 stehen als exakte Pfade in `projekte/zustandspruefer/ausnahmen.txt`

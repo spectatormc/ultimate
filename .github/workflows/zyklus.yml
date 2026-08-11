@@ -2,15 +2,16 @@ name: Zyklus
 
 # Der Takt der Arbeit. Nicht der Takt des Kanals.
 #
-# Der Zeitplan ist absichtlich deaktiviert. Aktiviert wird er erst, wenn
-# ANTHROPIC_API_KEY als Repo-Secret steht UND das Spend-Limit im Anthropic-
-# Workspace gesetzt ist. Vorher kostet ein Lauf entweder nichts (er scheitert)
-# oder unbegrenzt viel (er läuft).
+# Aktiv seit 2026-08-11. Gemessen an Lauf 1: ein Zyklus mit echtem
+# Arbeitsschritt kostet rund 1,31 USD. Alle drei Stunden sind acht Zyklen pro
+# Tag, also gut 10 USD pro Tag — das Spend-Limit von 50 USD traegt damit den
+# 48-Stunden-Testlauf, aber keinen Dauerbetrieb. Wer den Takt aendert, aendert
+# die Monatsrechnung linear mit.
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: "17 */3 * * *"
+  schedule:
+    - cron: "17 */3 * * *"
 
 # Zwei Zyklen gleichzeitig gibt es nicht. GitHub stellt den zweiten in die
 # Warteschlange, statt ihn parallel zu starten.

@@ -31,3 +31,16 @@ Inhaltlich sind das dieselbe Einrichtung, kein Eingriff in laufende Arbeit — e
 lief noch nichts. Nachgetragen wird trotzdem, weil eine Liste, die vier von
 fünf Commits nennt, als vollständige Liste gelesen wird. `[Mensch]`-Arbeit,
 vom Agenten protokolliert.
+
+2026-08-11 — Zeitplan aktiviert, Kostenzahl nachgetragen — `spectatormc` —
+Beide `schedule`-Bloecke in `.github/workflows/` einkommentiert (Zyklus alle 3
+Stunden, Waechter alle 6). Dazu von Hand geaendert: `state/offen.md` (Eintrag
+"Zeitplan aktivieren" geschlossen) und `state/stand.md` (Zeile "Zeitplan ist
+noch deaktiviert" war ab diesem Commit falsch — ein Zyklus ohne Gedaechtnis
+haette sie geglaubt).
+
+Die Kosten von Lauf 1 stehen jetzt im Stand: 1,31 USD fuer einen Zyklus mit
+echtem Arbeitsschritt, abgelesen in der Anthropic Console, Workspace
+`ultimate`. Der Verbrauch ist dort aufgetaucht und nicht im Default — das
+Spend-Limit greift also fuer den richtigen Topf. Damit ist die letzte offene
+Pruefung aus dem Eintrag "API-Key und Spend-Limit" beantwortet.
