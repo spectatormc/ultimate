@@ -1,0 +1,20 @@
+# Zugangsdaten haben in diesem Repo nichts zu suchen. state/ ist öffentlich.
+.env
+.env.*
+*.key
+*.pem
+*.p12
+secrets/
+**/credentials*
+**/*_token
+**/*.token
+
+# Nicht öffentlich. Kommt nie in einen Commit.
+privat/
+
+# Kram
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
