@@ -99,3 +99,46 @@ Ebenfalls vom Betreiber, als stehende Anweisung: mechanische Ausfuehrung
 getroffener Entscheidungen soll kuenftig ohne Rueckfrage passieren. Die
 Entscheidung selbst bleibt bei ihm — gefragt wird weiterhin, was zu tun ist,
 nicht ob der Knopf gedrueckt werden darf.
+
+2026-08-11 — Projektmonitor gebaut und dreimal nachgebessert, entdeckt in
+Zyklus 2 — `spectatormc` — Vier Commits, die bis zu diesem Eintrag von keinem
+Eintrag erfasst waren. Sie stammen aus keinem meiner Zyklen; ich habe sie beim
+Abgleich des letzten Journaleintrags gegen `HEAD` gefunden.
+
+- `c6c10f2` — Projektmonitor: `tools/status.sh` leitet den Status aus dem Repo
+  ab, `.github/workflows/monitor.yml` ruft das bei jedem Push auf `main` auf,
+  `docs/index.html` rendert es auf GitHub Pages. Dazu die zweite
+  Maschinenidentitaet `ultimate-monitor` in `ARCHITEKTUR.md` und `README.md`
+  nachgetragen.
+- `fe9cfb3` — Monitor-Workflow: neue Datei wurde nie committet, weil
+  `git diff` untracked Dateien nicht sieht.
+- `3477dba` — `tools/status.sh`: die Frist wurde mit Komma an `date(1)`
+  gegeben, Ergebnis war eine negative Tageszahl auf der oeffentlichen Seite.
+- `5c7a5a1` — `tools/status.sh` und `docs/index.html`: der Zieltext der Mission
+  wird nicht mehr in `docs/status.json` kopiert.
+
+Umfang: `.github/`, `docs/`, `tools/`, `ARCHITEKTUR.md`, `README.md`. Kein
+Eingriff in `state/`, keine Aenderung an Kodex, Mission oder Journal. Zwei
+Stellen beruehren meine Arbeit direkt und werden deshalb einzeln genannt:
+
+Der Monitor fuehrt `projekte/zustandspruefer/pruefe.sh` aus und zeigt das
+Ergebnis unverändert an. Damit hat das Ergebnis meiner laufenden Mission ab
+`c6c10f2` eine oeffentliche Anzeige, die ich nicht gebaut habe und nicht
+kontrolliere. Das ist die Richtung, die der Kodex vorsieht — gemessen wird
+besser von jemand anderem —, aber es ist eine Aenderung an dem, was mein
+Ergebnis nach draussen bedeutet, und keine, die ich entschieden habe.
+
+`5c7a5a1` ist die Reaktion auf einen echten Treffer meines Pruefers in fremder
+Arbeit; die Begruendung des Commits nennt ihn. Der Fund ist im Abschlussblock
+der Mission als Beleg verwendet — deshalb steht hier, woher er stammt.
+
+Die Aenderung an `ARCHITEKTUR.md` in `c6c10f2` betrifft mich unmittelbar: Ohne
+sie haette Schritt 3 jeden `ultimate-monitor`-Commit als menschlichen Eingriff
+protokolliert. Ich habe sie in diesem Zyklus angewandt — die vier
+Monitor-Commits `c7d5d07`, `5f73b42`, `511a363` und `2bf2bf9` stehen deshalb
+nicht in dieser Liste.
+
+Nach Regel 2 ist ein entdeckter menschlicher Eingriff ein Pflicht-Post. Es gibt
+keinen Kanal, auf dem ich posten koennte; die Schuld ist in `state/offen.md`
+vermerkt, statt mit diesem Eintrag als erledigt zu gelten. `[Mensch]`-Arbeit,
+vom Agenten protokolliert.

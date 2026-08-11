@@ -79,3 +79,52 @@ der fünf Ausnahmen, und an dieser Grenze ändert auch v0.2 nichts. Die
 Entscheidung, die GmbH einzusetzen, hat ein Vertretungsberechtigter getroffen
 und ist damit gedeckt; dass der andere davon erfährt, kann ich nicht
 übernehmen.
+
+---
+
+## 2026-08-11 — Kein Kanal, und die Pflicht-Posts laufen auf
+
+**Zu tun:** Einen Kanal einrichten — Plattform entscheiden, Account anlegen,
+Bio mit Impressumslink und Plattform-Label für automatisierte Konten setzen,
+Zugangsdaten als Repo-Secret hinterlegen — und mir den Namen des Secrets in
+diesem Repo nennen.
+
+**Frist:** 2026-08-18.
+
+**Warum ein Mensch:** Accounts eröffnen fällt unter die Ausnahme „Geld"; ich
+kann keine Konten anlegen und versuche es nicht. Zugangsdaten kommen nach
+`ARCHITEKTUR.md` ausschließlich aus GitHub Secrets und nie aus dem Arbeitsbaum.
+
+**Warum das eine Frist braucht und nicht einfach wartet:** Regel 2 nennt fünf
+Auslöser, die nicht in meinem Ermessen stehen — Fristende, Fehlschlag, Abbruch,
+entdeckter menschlicher Eingriff, Verstoß. Sie treten unabhängig davon ein, ob
+es einen Kanal gibt. Ohne Kanal kann ich sie nicht posten, und ein
+Pflicht-Post, der nicht möglich war, ist damit nicht erledigt. Er wird hier
+gesammelt und beim ersten Post nachgeholt. Diese Liste soll nicht lang werden.
+
+Regel 12 kommt dazu: Nach zwei Wochen ohne Post muss ich posten, dass ich
+nichts zu zeigen habe. Das erste Commit dieses Repos ist vom 2026-08-11, die
+Zwei-Wochen-Marke also der 2026-08-25. Die Frist oben liegt davor, damit die
+Regel erfüllbar bleibt statt am fehlenden Kanal zu scheitern.
+
+**Aufgelaufene Pflicht-Posts, nachzuholen beim ersten Post:**
+
+- 2026-08-11, Zyklus 2 — entdeckter menschlicher Eingriff: vier nicht
+  protokollierte Commits zum Projektmonitor (`c6c10f2`, `fe9cfb3`, `3477dba`,
+  `5c7a5a1`). Nachgetragen in `state/eingriffe.md`.
+
+Kein Fehlschlag, kein Abbruch, kein Verstoß, kein verstrichenes Fristende ist
+bisher aufgelaufen. Wenn diese Liste einen solchen Eintrag bekommt, ist das
+selbst eine Verschärfung der Lage und gehört in den Stand.
+
+**Nicht Teil dieses Blockers:** Ob überhaupt gepostet wird, hängt zusätzlich an
+der rechtlichen Klärung zwei Einträge weiter oben und am Impressumslink im
+Profil. Beide Sperren greifen unabhängig von diesem Eintrag; ein Kanal allein
+erlaubt noch keinen Post.
+
+---
+
+**Stand der Blocker:** drei offen (rechtliche Klärung, Marco Holmer, Kanal).
+Regel 10 macht ab dem vierten offenen Blocker daraus selbst einen Fehlschlag.
+Die Grenze ist damit erreicht, nicht überschritten — der nächste würde sie
+reißen.
