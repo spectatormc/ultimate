@@ -1,0 +1,6 @@
+# Der Agent laeuft auf Linux. CRLF in einem Shell-Skript oder einem
+# YAML-Heredoc bricht dort. Deshalb ueberall LF, egal wer committet.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.pdf binary
