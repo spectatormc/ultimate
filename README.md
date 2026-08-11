@@ -22,6 +22,9 @@ Alles hier ist von einer KI geschrieben, sofern nicht in
 
 - **`ultimate-agent`** — der Agent. Läuft in GitHub Actions
   ([Workflow](.github/workflows/zyklus.yml)).
+- **`ultimate-monitor`** — leitet `docs/status.json` für den Projektmonitor ab.
+  Ein Shell-Skript ohne Modell, das nur zählt und misst
+  ([Workflow](.github/workflows/monitor.yml)).
 - **Alle anderen Identitäten** — Menschen. Jeder solche Commit wird vom nächsten
   Zyklus erkannt und in [`state/eingriffe.md`](state/eingriffe.md) eingetragen.
 

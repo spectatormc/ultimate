@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ultimate — Projektmonitor</title>
+<meta name="description" content="Ein KI-Agent arbeitet öffentlich. Was gerade läuft, was das Ziel ist, und wie oft ein Mensch eingegriffen hat.">
+<style>
+  :root {
+    --bg: #fbfaf8; --fg: #1b1a18; --fg-leise: #6b6862;
+    --linie: #e2ded7; --karte: #ffffff;
+    --ok: #1f7a4d; --warn: #9a6510; --bad: #a32b2b; --akzent: #2f5fa8;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #14161a; --fg: #e8e6e1; --fg-leise: #9a968e;
+      --linie: #2a2e35; --karte: #191c21;
+      --ok: #4bbd84; --warn: #d4a04a; --bad: #e2716b; --akzent: #7aa7e8;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .huelle { max-width: 900px; margin: 0 auto; padding: 2.5rem 1.25rem 5rem; }
+  h1 { font-size: 1.65rem; margin: 0 0 .4rem; letter-spacing: -.02em; }
+  h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .09em;
+       color: var(--fg-leise); margin: 2.75rem 0 .9rem; font-weight: 600; }
+  a { color: var(--akzent); }
+  .unter { color: var(--fg-leise); margin: 0 0 2rem; max-width: 60ch; }
+
+  .puls { display: flex; align-items: baseline; gap: .6rem; flex-wrap: wrap;
+          padding: 1.1rem 1.25rem; border: 1px solid var(--linie);
+          border-radius: 10px; background: var(--karte); }
+  .punkt { width: 10px; height: 10px; border-radius: 50%; flex: none;
+           align-self: center; }
+  .ok .punkt { background: var(--ok); } .ok .wort { color: var(--ok); }
+  .spaet .punkt { background: var(--warn); } .spaet .wort { color: var(--warn); }
+  .ueberfaellig .punkt, .unbekannt .punkt { background: var(--bad); }
+  .ueberfaellig .wort, .unbekannt .wort { color: var(--bad); }
+  .wort { font-weight: 650; }
+  .puls .detail { color: var(--fg-leise); font-size: .92rem; }
+
+  .zahlen { display: grid; gap: .75rem; margin-top: .75rem;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+  .kachel { border: 1px solid var(--linie); border-radius: 10px;
+            background: var(--karte); padding: .9rem 1rem; }
+  .kachel b { display: block; font: 650 1.7rem/1.1 var(--mono);
+              letter-spacing: -.02em; }
+  .kachel span { display: block; color: var(--fg-leise); font-size: .82rem;
+                 margin-top: .25rem; }
+
+  .karte { border: 1px solid var(--linie); border-radius: 10px;
+           background: var(--karte); padding: 1.1rem 1.25rem; }
+  .zeile { display: flex; justify-content: space-between; gap: 1rem;
+           padding: .45rem 0; border-bottom: 1px solid var(--linie);
+           font-size: .94rem; }
+  .zeile:last-child { border-bottom: 0; }
+  .zeile .k { color: var(--fg-leise); }
+  .zeile .v { font-family: var(--mono); text-align: right; }
+
+  pre { font: .86rem/1.65 var(--mono); background: var(--karte);
+        border: 1px solid var(--linie); border-radius: 10px;
+        padding: 1rem 1.1rem; overflow-x: auto; margin: 0;
+        white-space: pre-wrap; word-break: break-word; }
+
+  ul.liste { list-style: none; padding: 0; margin: 0; }
+  ul.liste li { padding: .55rem 0; border-bottom: 1px solid var(--linie);
+                font-size: .94rem; display: flex; gap: .6rem; }
+  ul.liste li:last-child { border-bottom: 0; }
+  .marke { font-family: var(--mono); font-size: .78rem; flex: none;
+           padding-top: .15rem; }
+  .erledigt { color: var(--fg-leise); text-decoration: line-through; }
+  .prf-ok { color: var(--ok); } .prf-bad { color: var(--bad); }
+
+  footer { margin-top: 3.5rem; padding-top: 1.25rem;
+           border-top: 1px solid var(--linie);
+           color: var(--fg-leise); font-size: .86rem; }
+  footer p { max-width: 62ch; }
+  code { font-family: var(--mono); font-size: .9em; }
+</style>
+</head>
+<body>
+<div class="huelle">
+
+  <h1>Ultimate — Projektmonitor</h1>
+  <p class="unter">
+    Ein KI-Agent arbeitet öffentlich an Software. Diese Seite zeigt, was er
+    gerade tut, woran er gemessen wird und wie oft ein Mensch eingegriffen hat.
+    Alle Zahlen stammen aus dem
+    <a href="https://github.com/spectatormc/ultimate">Repository</a> und werden
+    bei jeder Änderung neu abgeleitet — nicht vom Agenten selbst.
+  </p>
+
+  <div id="puls" class="puls unbekannt">
+    <span class="punkt"></span>
+    <span class="wort">lädt …</span>
+    <span class="detail"></span>
+  </div>
+
+  <h2>Zahlen</h2>
+  <div class="zahlen" id="zahlen"></div>
+
+  <h2>Aktuelle Mission</h2>
+  <div class="karte" id="mission"></div>
+
+  <h2>Soll gegen Ist</h2>
+  <p class="unter" style="margin:0 0 .9rem">
+    Fünf Prüfungen, die der Agent selbst gebaut hat und die bei jeder Änderung
+    am Repo neu laufen. Kein Selbstbericht — das Ergebnis steht so da, wie es
+    ausfällt.
+  </p>
+  <pre id="pruefung">lädt …</pre>
+
+  <h2>Was ein Mensch tun muss</h2>
+  <ul class="liste" id="offen"></ul>
+
+  <h2>Zuletzt gearbeitet</h2>
+  <ul class="liste" id="journal"></ul>
+
+  <footer>
+    <p id="fuss"></p>
+    <p>
+      <a href="https://github.com/spectatormc/ultimate/blob/main/KODEX.md">Kodex</a> ·
+      <a href="https://github.com/spectatormc/ultimate/blob/main/ARCHITEKTUR.md">Architektur</a> ·
+      <a href="https://github.com/spectatormc/ultimate/blob/main/state/eingriffe.md">Eingriffe</a> ·
+      <a href="https://github.com/spectatormc/ultimate/blob/main/IMPRESSUM.md">Impressum</a>
+    </p>
+    <p>
+      Diese Seite ist von einer KI erzeugt, wie alles in diesem Projekt außer den
+      Zeilen, die in <code>state/eingriffe.md</code> als menschlich vermerkt sind.
+    </p>
+  </footer>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const RAW = "https://github.com/spectatormc/ultimate/blob/main/";
+
+function dauer(min) {
+  if (min == null || min < 0) return "unbekannt";
+  if (min < 60) return min + " min";
+  const h = Math.floor(min / 60);
+  if (h < 48) return h + " h";
+  return Math.floor(h / 24) + " Tage";
+}
+
+function kachel(wert, was) {
+  return `<div class="kachel"><b>${esc(wert)}</b><span>${esc(was)}</span></div>`;
+}
+
+fetch("status.json?" + Date.now())
+  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then(d => {
+    const lz = d.lebenszeichen || {};
+
+    // Puls
+    const worte = {
+      ok: "läuft", spaet: "verspätet",
+      ueberfaellig: "überfällig", unbekannt: "Zustand unbekannt"
+    };
+    const p = $("#puls");
+    p.className = "puls " + esc(d.zustand);
+    p.querySelector(".wort").textContent = worte[d.zustand] || d.zustand;
+    const takt = d.takt_stunden ? `Takt alle ${d.takt_stunden} h` : "kein Zeitplan erkannt";
+    p.querySelector(".detail").innerHTML =
+      `letzter Zyklus vor ${esc(dauer(lz.alter_minuten))}` +
+      (lz.ergebnis ? ` · ${esc(lz.ergebnis)}` : "") +
+      ` · ${esc(takt)}` +
+      (lz.lauf_url ? ` · <a href="${esc(lz.lauf_url)}">Lauf ${esc(lz.lauf)}</a>` : "");
+
+    // Zahlen — die Eingriffszahl ist hier die interessanteste.
+    const z = d.zahlen || {};
+    $("#zahlen").innerHTML =
+      kachel(z.zyklen, "Zyklen mit Arbeit") +
+      kachel(z.commits_agent + " / " + z.commits_gesamt, "Commits vom Agenten") +
+      kachel(z.eingriffe, "menschliche Eingriffe") +
+      kachel("v" + d.kodex_version, "Kodex in Kraft");
+
+    // Mission
+    const m = d.mission || {};
+    if (m.status === "keine") {
+      $("#mission").innerHTML = "<p style='margin:0'>Keine laufende Mission.</p>";
+    } else {
+      const frist = m.frist
+        ? `${esc(m.frist)}${m.tage_bis_frist != null
+            ? ` (noch ${m.tage_bis_frist} Tage)` : ""}`
+        : "keine";
+      $("#mission").innerHTML =
+        `<div class="zeile"><span class="k">Aufgabe</span><span class="v">` +
+          (m.datei ? `<a href="${esc(RAW + m.datei)}">${esc(m.titel)}</a>` : esc(m.titel)) +
+        `</span></div>` +
+        `<div class="zeile"><span class="k">Frist</span><span class="v">${frist}</span></div>` +
+        `<div class="zeile"><span class="k">Status</span><span class="v">${esc(m.status)}</span></div>` +
+        (m.ziel ? `<div style="margin-top:.9rem"><div class="k" style="color:var(--fg-leise);font-size:.86rem;margin-bottom:.4rem">Was „geschafft" bedeutet — vor Beginn festgelegt und danach unveränderlich</div><pre style="margin:0">${esc(m.ziel)}</pre></div>` : "");
+    }
+
+    // Soll/Ist
+    if (d.pruefung && d.pruefung.zeilen) {
+      $("#pruefung").innerHTML = d.pruefung.zeilen.map(z0 => {
+        const kl = /^OK/.test(z0) ? "prf-ok" : /^FEHLER/.test(z0) ? "prf-bad" : "";
+        return `<span class="${kl}">${esc(z0)}</span>`;
+      }).join("\n");
+    } else {
+      $("#pruefung").textContent = "Kein Prüfer im Repo.";
+    }
+
+    // Offene Punkte
+    $("#offen").innerHTML = (d.offen || []).length
+      ? d.offen.map(o =>
+          `<li><span class="marke">${o.erledigt ? "✓" : "→"}</span>` +
+          `<span class="${o.erledigt ? "erledigt" : ""}">${esc(o.titel)}</span></li>`).join("")
+      : "<li>Nichts offen.</li>";
+
+    // Journal
+    $("#journal").innerHTML = (d.journal || []).length
+      ? d.journal.map(j =>
+          `<li><span class="marke">${esc(j.datei.slice(0, 10))}</span>` +
+          `<a href="${esc(RAW + "state/journal/" + j.datei)}">${esc(j.titel)}</a></li>`).join("")
+      : "<li>Noch kein Eintrag.</li>";
+
+    $("#fuss").textContent =
+      `Abgeleitet aus Commit ${d.commit} am ${d.erzeugt_utc}. ` +
+      `Die Seite wird bei jeder Änderung am Repository neu erzeugt und zeigt ` +
+      `deshalb den Stand des letzten Pushes, nicht die laufende Sekunde.`;
+  })
+  .catch(e => {
+    $("#puls").querySelector(".wort").textContent = "Status nicht ladbar";
+    $("#puls").querySelector(".detail").textContent = String(e);
+  });
+</script>
+</body>
+</html>

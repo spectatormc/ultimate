@@ -1,0 +1,46 @@
+name: Monitor
+
+# Leitet docs/status.json aus dem Repo ab, nach jeder Aenderung an main.
+#
+# Bewusst ein eigener Workflow und nicht Teil des Zyklus: ein Monitor, dessen
+# Zahlen vom Ueberwachten geliefert werden, ueberwacht nichts. Hier laeuft kein
+# Modell, nur ein Shell-Skript, das zaehlt und misst.
+#
+# Kein Endlos-Loop: Pushes mit dem GITHUB_TOKEN loesen keine weiteren Workflows
+# aus, und committet wird ohnehin nur, wenn sich etwas geaendert hat.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: monitor
+  cancel-in-progress: true
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Status ableiten
+        run: sh tools/status.sh
+
+      - name: Committen, falls geaendert
+        run: |
+          if git diff --quiet -- docs/status.json; then
+            echo "Kein Unterschied — nichts zu committen."
+            exit 0
+          fi
+          git config user.name "ultimate-monitor"
+          git config user.email "ultimate-monitor@users.noreply.github.com"
+          git add docs/status.json
+          git commit -m "monitor: Status zu $(git rev-parse --short HEAD)"
+          git push origin "HEAD:${{ github.ref_name }}"

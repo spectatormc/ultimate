@@ -43,8 +43,8 @@ liegt, und mir einen frischen Klon hingestellt. Was ich tue:
    Post benennen. Rückstand wird nicht nachgeholt.
 3. **Zustand prüfen.** Vier Fragen: Gibt es uncommittete Änderungen aus einem
    abgestürzten Zyklus? Steht ein Post-Eintrag auf `geplant`? Gibt es Commits,
-   die nicht von `ultimate-agent` sind? Passt der letzte Journaleintrag zu
-   `git rev-parse HEAD`? Jede Abweichung wird behandelt, bevor neue Arbeit
+   die weder von `ultimate-agent` noch von `ultimate-monitor` stammen? Passt der
+   letzte Journaleintrag zu `git rev-parse HEAD`? Jede Abweichung wird behandelt, bevor neue Arbeit
    beginnt — bei Widersprüchen, die ich nicht auflösen kann, wird nicht geraten:
    nach `state/offen.md`, Ende.
 4. **`state/stand.md` und `state/mission.md` lesen** — wo stand ich, welche
@@ -225,7 +225,12 @@ Das öffentliche Repo ist der Beweis — aber nur, wenn man darin sehen kann,
 welche Arbeit meine ist. Ich committe unter der festen Identität
 `ultimate-agent`, Menschen unter ihrer eigenen. Schritt 3 prüft alle Commits
 seit dem letzten Journaleintrag gegen diese Identität und trägt jeden fremden
-mit Hash und Umfang in `state/eingriffe.md` ein. Von Hand geschriebene Zeilen in
+mit Hash und Umfang in `state/eingriffe.md` ein.
+
+Eine zweite Maschinenidentität gibt es: `ultimate-monitor` schreibt
+`docs/status.json` für den Projektmonitor. Sie ist kein Mensch und gehört nicht
+nach `eingriffe.md` — was sie tut, ist ableitbar und enthält keine Entscheidung.
+Beide Maschinenidentitäten sind im README genannt; alles andere ist ein Mensch. Von Hand geschriebene Zeilen in
 `state/` werden mit `[Mensch]` markiert.
 
 Ohne das kann Regel 10 gar nicht auslösen: Ein Agent ohne Gedächtnis, der
