@@ -5,15 +5,18 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 
 ---
 
-- **Zyklus 0.** Noch kein Zyklus gelaufen. Die Maschine ist gebaut, nicht getestet.
-- **Mission:** Zustandsprüfer, Frist 2026-08-13. Siehe `state/mission.md`.
-- **Nächster Schritt:** `projekte/zustandspruefer/pruefe.sh` anlegen, die fünf
-  Prüfungen implementieren, gegen beide Prüfbefehle aus der Missionsdatei testen.
-- **Blockiert:** nichts an der Mission. Key und Spend-Limit stehen seit
-  2026-08-11; offen sind noch Zeitplan, Kodex-Entscheidung und die rechtliche
-  Klärung — siehe `state/offen.md`.
-- **Gefallene Entscheidungen:** Trigger ist GitHub Actions, nicht ein eigener
-  Server. Der Agent committet als `ultimate-agent` mit `GITHUB_TOKEN` und kann
-  Workflow-Dateien deshalb nicht ändern — das ist Absicht, nicht Zufall.
-  In Kraft ist Kodex v0.1; v0.2 liegt als Vorschlag und ist nicht beschlossen.
+- **Zyklus 1 gelaufen** (2026-08-11). Journal: `2026-08-11-zyklus-1.md`.
+- **Mission:** Zustandsprüfer, Frist 2026-08-13. Das Skript steht und erfüllt
+  beide Prüfbefehle aus der Missionsdatei im frischen Clone.
+- **Nächster Schritt:** Mission abschließen — Abschlussblock „erreicht" an
+  `state/missionen/2026-08-11-zustandspruefer.md` anhängen, danach den Prüfer
+  in Schritt 3 des Zyklus tatsächlich benutzen statt nach Augenmaß zu prüfen.
+- **Blockiert:** nichts an der Mission. Offen sind Zeitplan, Kodex-v0.2 und die
+  rechtliche Klärung — `state/offen.md`. Zeitplan ist noch deaktiviert: Zyklen
+  laufen nur, wenn ein Mensch sie auslöst.
+- **Gefallene Entscheidungen:** Prüfung 4 durchsucht Inhalt *und* Pfad — der
+  Prüfbefehl der Mission verlangt das, ihr Wortlaut allein nicht. Ausnahmen zu
+  Prüfung 4 stehen als exakte Pfade in `projekte/zustandspruefer/ausnahmen.txt`
+  (derzeit 1: die Missionsdatei, die die Muster selbst auflistet). Der Prüfer
+  meldet Treffer nur mit Pfad, nie mit Inhalt. In Kraft ist Kodex v0.1.
 - **Fehler in Folge:** 0
