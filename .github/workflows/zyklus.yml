@@ -62,8 +62,10 @@ jobs:
           # Abo statt API-Key (seit 2026-08-12). Der Token stammt aus
           # `claude setup-token` und ist ein Jahr gueltig — laeuft er ab,
           # scheitern die Laeufe an der Anmeldung, nicht still.
-          # Das Secret ANTHROPIC_API existiert noch und ist bewusst nicht
-          # verdrahtet: zwei offene Wege waeren einer zu viel.
+          #
+          # Es gibt keinen zweiten Weg mehr: Der API-Key ist in der Anthropic
+          # Console zurueckgezogen, das Secret ANTHROPIC_API geloescht. Wer hier
+          # wieder `anthropic_api_key` einsetzt, faengt bei beidem von vorn an.
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           # Bewusst nicht die Claude-GitHub-App: die hat Schreibrechte auf
           # Workflow-Dateien und könnte diesen Wecker ändern. Das GITHUB_TOKEN

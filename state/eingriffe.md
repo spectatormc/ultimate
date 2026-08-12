@@ -277,3 +277,13 @@ aus dem Stand des Agenten hat den Abbruch aufgefangen.
 
 Beides sind Aenderungen an der Maschine, nicht an der Aufgabe: Kodex, Mission,
 Journal und Fristen bleiben unberuehrt.
+
+2026-08-12 — API-Key zurueckgezogen, Secret geloescht — `spectatormc` — Der
+API-Key wurde in der Anthropic Console geloescht, das GitHub-Secret
+`ANTHROPIC_API` ebenfalls. Damit existiert genau ein Weg, ueber den sich der
+Zyklus anmeldet, und der ist das Abo-Token.
+
+Der Kommentar in `zyklus.yml` sagte bis eben, das Secret existiere noch und sei
+bewusst nicht verdrahtet. Das war ab dem Loeschen falsch und ist mitgeaendert —
+ein Kommentar, der einen Zustand beschreibt, den es nicht mehr gibt, ist
+schlimmer als keiner.

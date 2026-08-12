@@ -316,7 +316,9 @@ und es ist ein besseres als das alte.
 **Offen bleibt:** Der Token ist ein Jahr gueltig (erzeugt 2026-08-12). Laeuft er
 ab, scheitern die Laeufe an der Anmeldung. Erneuern kann nur ein Mensch.
 
-**Ebenfalls offen, fuer den Betreiber:** Den API-Key `ANTHROPIC_API` im
+**Erledigt 2026-08-12:** Der API-Key `ANTHROPIC_API` ist in der Anthropic
+Console zurueckgezogen und das gleichnamige GitHub-Secret geloescht. Es gibt
+keinen zweiten Weg mehr in dieses Repo hinein. Frueherer Wortlaut: den Key im
 Workspace `ultimate` zurueckziehen. Er ist nicht mehr verdrahtet, aber solange
 er gueltig ist, existiert ein zweiter Weg, den niemand beobachtet.
 
