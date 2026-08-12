@@ -35,13 +35,19 @@ jobs:
       # Mission 1 — state/missionen/2026-08-11-zustandspruefer.md
       - name: Zustandsprüfer — Prüfbefehl 1
         run: |
-          bash projekte/zustandspruefer/pruefe.sh
-          echo "Exit-Code: $?"
+          set +e; bash projekte/zustandspruefer/pruefe.sh; code=$?; set -e
+          echo "Exit-Code: $code"
+          exit "$code"
 
       - name: Zustandsprüfer — Prüfbefehl 2 (Kanarienvogel)
         run: |
           # Die Leak-Prüfung muss anschlagen. Tut sie es nicht, ist sie wertlos.
-          echo "sk-ant-api03-beispiel" > kanarienvogel.txt
+          #
+          # Das Muster wird zur Laufzeit zusammengesetzt, damit diese Datei die
+          # gesuchte Zeichenfolge nicht selbst enthält. Sonst meldet Prüfung 4
+          # den Prüf-Workflow — was sie beim ersten Lauf prompt getan hat.
+          # Behoben an der Ursache statt per Ausnahmeeintrag.
+          printf '%s%s\n' "sk-" "ant-api03-beispiel" > kanarienvogel.txt
           git add kanarienvogel.txt
           if bash projekte/zustandspruefer/pruefe.sh; then
             echo "FEHLGESCHLAGEN: Prüfer meldet OK, obwohl ein Schlüsselmuster vorliegt."
@@ -57,8 +63,9 @@ jobs:
       # Mission 2 — state/missionen/2026-08-11-icsdoktor.md
       - name: ICS-Doktor — Prüfbefehl 1 (mitgelieferte Beispiele)
         run: |
-          sh projekte/icsdoktor/pruefe.sh
-          echo "Exit-Code: $?"
+          set +e; sh projekte/icsdoktor/pruefe.sh; code=$?; set -e
+          echo "Exit-Code: $code"
+          exit "$code"
 
       - name: ICS-Doktor — Prüfbefehl 2 (Beispiele aus RFC 5545)
         run: |
