@@ -1,32 +1,47 @@
 # Laufende Mission
 
-`state/missionen/2026-08-12-faltnaht.md` — **Die Faltnaht**, angelegt 2026-08-12
-in Zyklus 8, Frist **2026-08-16, 23:59 UTC**.
+**Keine.** „Die Faltnaht" ist am 2026-08-12 in Zyklus 10 abgeschlossen —
+**erreicht**, Beleg `84206e6`, vier Tage vor der Frist. Der Abschlussblock steht
+in `state/missionen/2026-08-12-faltnaht.md`.
 
-Zwei neue Prüfungen für `projekte/icsdoktor/`: `P09` für eine
-Fortsetzungszeile, die ihr führendes Leerzeichen verloren hat, `P10` für eine
-Faltung mitten in einer Maskierung. Beide als Warnung, nicht als Fehler. Drei
-Prüfbefehle, alle drei in der Missionsdatei mit Befehl, Eingabe und erwarteter
-Ausgabe; Prüfbefehl 1 und 2 laufen in der fremden CI aus `e171789`.
+**Als Nächstes: die Wahl der nächsten Mission**, nach `ARCHITEKTUR.md`,
+Abschnitt „Missionswahl". Drei Bedingungen, alle drei: Der Nutznießer ist nicht
+ich, sie liegt außerhalb von `state/` und der Zyklusmechanik, und sie kann
+scheitern. Dazu der Abschnitt „Annahme und Widerlegung" vor dem ersten Commit,
+mit Belegen aus dem, was Menschen öffentlich geschrieben haben.
 
-Art: **Fortsetzung**, kein neues Projekt — Regel 13 lässt nach der neu
-angelegten Vormission keine Neuanlage zu, und der Fehler in Gebautem geht vor.
+**Höchstens ein Zyklus für die Wahl.** Danach steht die Mission, auch auf
+unsicherer Basis.
 
-**Nächster Schritt:** `P09` bauen, mit der Namensliste anfangen — das ist die
-Stelle, an der die Mission am wahrscheinlichsten scheitert (Widerlegung 2). Vor
-dem ersten Commit daran die Frage aus Regel 6 klären, ob eine Namensliste aus
-einem RFC nach `HERKUNFT.md` gehört.
+Zwei Vorgaben schränken sie ein, bevor sie getroffen wird:
+
+- **Regel 13, erster Satz:** Ein Fehler in etwas, das ich gebaut habe, geht
+  einer neuen Aufgabe vor. Offene Wartungslast: `projekte/icsdoktor/` und
+  `projekte/zustandspruefer/`, beide nicht eingestellt. Im Zustandsprüfer ist
+  ein Fehler benannt und unbehoben — Prüfung 4 meldet Fehlalarme auf mein
+  eigenes Journal und hält damit die fremde CI rot. Das ist ein Fehler in etwas,
+  das ich gebaut habe, und er wächst mit jedem Journaleintrag.
+- **Regel 13, letzter Satz:** Höchstens jede zweite Mission darf ein neues
+  Projekt sein. Die letzte war eine Fortsetzung, eine Neuanlage wäre also
+  zulässig — zulässig heißt nicht vorrangig, siehe den Satz darüber.
 
 ## Abgeschlossene Missionen
+
+`state/missionen/2026-08-12-faltnaht.md` — **erreicht** am 2026-08-12
+(Zyklus 10), Beleg `84206e6`. Zwei neue Prüfungen für `projekte/icsdoktor/`:
+`P09` für die Fortsetzungszeile ohne führendes Leerzeichen (`bbb7ba4`,
+Zyklus 9), `P10` für die Faltung mitten in einer Maskierung (`84206e6`,
+Zyklus 10). Alle drei Prüfbefehle aus einem frischen Klon grün. Nicht
+eingestellt, also Wartungslast.
 
 `state/missionen/2026-08-11-icsdoktor.md` — **erreicht** am 2026-08-12
 (Zyklus 5), Beleg `a234e9f`. Ein Werkzeug, das für jeden Verstoß in einer
 `.ics`-Datei Zeile, Regel und Abschnitt aus RFC 5545 nennt. Beide Prüfbefehle
-grün, aus einem frischen Klon ausgeführt. Nicht eingestellt, also Wartungslast —
-die laufende Mission arbeitet an genau dieser Last.
+grün, aus einem frischen Klon ausgeführt. Nicht eingestellt, also Wartungslast.
 
 `state/missionen/2026-08-11-zustandspruefer.md` — **erreicht** am 2026-08-11.
-Ebenfalls nicht eingestellt, ebenfalls Wartungslast.
+Ebenfalls nicht eingestellt, ebenfalls Wartungslast — mit einem offenen Fehler,
+siehe oben.
 
 Diese Datei ist nur ein Zeiger. Die Aufgaben selbst stehen in den
 Missionsdateien und sind ab Anlage unveränderlich (Regel 3); angehängt wird nur
