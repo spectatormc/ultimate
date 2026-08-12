@@ -1,0 +1,78 @@
+name: Prüfung
+
+# Führt die Prüfbefehle aus, die in den Missionsdateien als Definition von
+# "geschafft" stehen — bei jedem Push, auf einer frischen Maschine, ohne
+# Zutun des Agenten.
+#
+# Warum das hier liegt und nicht beim Agenten: Ein Nachweis, den der Erbauer
+# selbst führt, ist schwächer als einer, den jemand anders führt. Der Agent
+# kann diese Datei nicht ändern — das GITHUB_TOKEN darf keine Workflows
+# schreiben. Er kann also seine eigene Prüfung nicht abschalten.
+#
+# Rot heißt: eine Zusage aus einer Missionsdatei stimmt nicht mehr.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pruefen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Umgebung
+        run: |
+          echo "python3: $(python3 --version)"
+          echo "jq:      $(jq --version)"
+
+      # Mission 1 — state/missionen/2026-08-11-zustandspruefer.md
+      - name: Zustandsprüfer — Prüfbefehl 1
+        run: |
+          bash projekte/zustandspruefer/pruefe.sh
+          echo "Exit-Code: $?"
+
+      - name: Zustandsprüfer — Prüfbefehl 2 (Kanarienvogel)
+        run: |
+          # Die Leak-Prüfung muss anschlagen. Tut sie es nicht, ist sie wertlos.
+          echo "sk-ant-api03-beispiel" > kanarienvogel.txt
+          git add kanarienvogel.txt
+          if bash projekte/zustandspruefer/pruefe.sh; then
+            echo "FEHLGESCHLAGEN: Prüfer meldet OK, obwohl ein Schlüsselmuster vorliegt."
+            exit 1
+          fi
+          bash projekte/zustandspruefer/pruefe.sh 2>&1 | grep -q "FEHLER 4/5.*kanarienvogel.txt" || {
+            echo "FEHLGESCHLAGEN: Prüfung 4 nennt kanarienvogel.txt nicht."
+            exit 1
+          }
+          echo "Kanarienvogel wurde erkannt."
+          git rm -q --cached kanarienvogel.txt && rm -f kanarienvogel.txt
+
+      # Mission 2 — state/missionen/2026-08-11-icsdoktor.md
+      - name: ICS-Doktor — Prüfbefehl 1 (mitgelieferte Beispiele)
+        run: |
+          sh projekte/icsdoktor/pruefe.sh
+          echo "Exit-Code: $?"
+
+      - name: ICS-Doktor — Prüfbefehl 2 (Beispiele aus RFC 5545)
+        run: |
+          # Der eigentliche Nachweis: die Eingabe stammt aus dem Normtext, nicht
+          # aus derselben Hand wie das Werkzeug. Ein Kalender aus dem RFC
+          # verstößt nicht gegen den RFC.
+          set +e
+          sh projekte/icsdoktor/rfc-beispiele.sh
+          code=$?
+          set -e
+          if [ "$code" -eq 2 ]; then
+            echo "::warning::rfc-editor.org nicht erreichbar — Prüfbefehl 2 nicht ausgeführt."
+            echo "Nicht als bestanden gewertet, aber auch nicht als Fehler des Werkzeugs."
+            exit 0
+          fi
+          echo "Exit-Code: $code"
+          exit "$code"

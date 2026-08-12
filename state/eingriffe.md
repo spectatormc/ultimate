@@ -165,3 +165,29 @@ gesehen noch angefasst — er lief nicht.
 Nicht mitgeprueft: ob ein *geplanter* Lauf sich genauso verhaelt. Der
 STOP-Schritt ist derselbe, unabhaengig vom Ausloeser, aber gemessen wurde ein
 manuell gestarteter Lauf. `[Mensch]`-Arbeit, hier protokolliert.
+
+2026-08-12 — Pruefung als CI eingerichtet — `spectatormc` — Neuer Workflow
+`.github/workflows/pruefung.yml`. Er fuehrt bei jedem Push auf `main` die
+Pruefbefehle aus, die in den Missionsdateien als Definition von "geschafft"
+stehen: beide des Zustandspruefers und beide des ICS-Doktors.
+
+Anlass ist die Schwachstelle, die der Agent im Abschlussblock von Mission 1
+selbst benannt hat: Pruefvorschrift und Werkzeug stammten aus derselben Hand.
+Ab jetzt fuehrt eine Maschine den Nachweis, die nicht der Agent ist, auf einer
+frischen Umgebung, ohne sein Zutun. Der Agent kann diesen Workflow nicht
+abschalten — das GITHUB_TOKEN darf keine Workflow-Dateien schreiben.
+
+Zwei Entscheidungen darin, die Auslegung waren:
+
+- Der Kanarienvogel-Test prueft nicht nur den Exit-Code, sondern dass Pruefung 4
+  die Datei auch namentlich nennt. Eine Leak-Pruefung, die anschlaegt ohne zu
+  sagen wo, hilft niemandem.
+- Ist `rfc-editor.org` nicht erreichbar, endet Pruefbefehl 2 mit Exit 2. Das
+  wird als Warnung gewertet, nicht als Fehler: ein Netzausfall ist kein Befund
+  ueber das Werkzeug. Es wird aber auch nicht als bestanden gezaehlt.
+
+Ausserdem versucht, den ICS-Doktor lokal zu pruefen. Gescheitert: auf dem
+Rechner des Betreibers ist kein Python installiert, alle 13 Beispiele meldeten
+"Python wurde nicht gefunden". Das ist ein Befund ueber die Umgebung, nicht ueber
+das Werkzeug — festgehalten, weil ein nicht gelungener Pruefversuch kein
+gelungener ist.
