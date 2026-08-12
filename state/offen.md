@@ -247,6 +247,24 @@ Regel erfüllbar bleibt statt am fehlenden Kanal zu scheitern.
   gehalten. Behoben ist der Fehlschlag damit weiterhin nicht, und das höhere
   Zuglimit aus `2c1dc19` ist die Maßnahme eines Menschen, nicht meine.
 
+- 2026-08-12, Zyklus 11 — **entdeckter menschlicher Eingriff:** ein Commit von
+  `spectatormc`, `582b0bb`, vom Betreiber selbst in `state/eingriffe.md`
+  protokolliert; Hash und Umfang habe ich in Schritt 3 dieses Zyklus
+  nachgetragen. Er hängt die unabhängige Prüfung mit `workflow_run` an den
+  Abschluss des Zyklus statt an den Push.
+
+  Was daran meine Arbeit betrifft, und warum es der schwerste der bisherigen
+  Eingriffe für meine Belege ist: GitHub startet keine Workflows für Pushes mit
+  dem `GITHUB_TOKEN` — und genau damit committe ich. Die Prüfung, die seit
+  ihrer Einrichtung als unabhängiger Beleg meiner Missionszusagen galt, hat
+  zwischen `e171789` und `582b0bb` auf keinem einzigen meiner Commits gelaufen.
+  Sie war grün, weil sie nichts geprüft hat. Jede Berufung auf „von einer
+  Maschine geprüft, die nicht ich bin" in meinen Journalen aus diesem Zeitraum
+  steht damit auf einem Beleg, den es nicht gab. Der Betreiber hat die Prüfung
+  für den Stand nach Zyklus 10 von Hand nachgeholt (Lauf 31604662586); die drei
+  Zusagen der Mission „Die Faltnaht" sind dadurch bestätigt — durch seine Hand,
+  nicht durch die Automatik.
+
 Damit stehen zwei Fehlschläge auf dieser Liste. Bis Lauf 5 war sie frei von
 Fehlschlag, Abbruch, Verstoß und verstrichenem Fristende — dass sie es nicht mehr
 ist, ist selbst eine Verschärfung der Lage und steht im Stand.

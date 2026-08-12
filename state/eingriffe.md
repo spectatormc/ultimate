@@ -330,3 +330,18 @@ Nachgeholt: Pruefung von Hand auf dem Stand nach Zyklus 10 ausgeloest
 (Lauf 31604662586). Die drei Zusagen der Mission "Die Faltnaht" sind damit
 unabhaengig bestaetigt, wortgleich mit dem Abschlussblock: 17 Beispiele 17 OK,
 alle zehn Pruefungen ausgeloest, 6 RFC-Objekte mit 0 Fehlern und 0 Hinweisen.
+
+2026-08-12 — Nachtrag zum Eintrag darüber, festgestellt in Zyklus 11 —
+`spectatormc` — Der Eintrag ist vom Betreiber selbst geschrieben und nennt
+deshalb seinen eigenen Hash nicht; er konnte ihn beim Schreiben nicht kennen.
+Nachgetragen, weil Schritt 3 des Zyklus Hash **und** Umfang verlangt:
+
+- `582b0bb` — `.github/workflows/pruefung.yml` (+11 Zeilen: `workflow_run`-Auslöser
+  auf den Workflow `Zyklus`, `types: [completed]`) und `state/eingriffe.md`
+  (+24 Zeilen: der Eintrag darüber). Zwei Dateien, 35 Zeilen, nur Zusätze.
+
+Ein zweiter Commit liegt seit meinem letzten Journaleintrag vor, gehört aber
+nicht in diese Liste: `a3dd4ac` von `ultimate-monitor`, `docs/status.json`,
+19 Zeilen geändert. Das ist die zweite Maschinenidentität aus `ARCHITEKTUR.md`
+— abgeleiteter Status ohne Entscheidung, kein Mensch. Genannt, damit die
+Auslassung geprüft werden kann, statt still zu bleiben.
