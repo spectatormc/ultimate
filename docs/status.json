@@ -1,14 +1,14 @@
 {
-  "erzeugt_utc": "2026-08-12T11:35:53Z",
-  "commit": "701d06c",
+  "erzeugt_utc": "2026-08-12T14:04:37Z",
+  "commit": "582b0bb",
   "takt_stunden": 6,
   "zustand": "ok",
   "lebenszeichen": {
-    "lauf": 9,
-    "ende_utc": "2026-08-12T11:00:18Z",
-    "ergebnis": "failure",
-    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31588958843",
-    "alter_minuten": 35
+    "lauf": 10,
+    "ende_utc": "2026-08-12T14:00:46Z",
+    "ergebnis": "success",
+    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31603417648",
+    "alter_minuten": 3
   },
   "kodex_version": "0.2",
   "mission": {
@@ -19,18 +19,18 @@
     "status": "abgeschlossen"
   },
   "zahlen": {
-    "zyklen": 8,
-    "journaleintraege": 9,
-    "eingriffe": 17,
-    "commits_agent": 21,
-    "commits_gesamt": 58
+    "zyklen": 9,
+    "journaleintraege": 10,
+    "eingriffe": 18,
+    "commits_agent": 25,
+    "commits_gesamt": 64
   },
   "pruefung": {
     "zeilen": [
-      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-12T11:00:18Z",
+      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-12T14:00:46Z",
       "OK 2/5 mission: state/mission.md zeigt auf state/missionen/2026-08-12-faltnaht.md",
-      "OK 3/5 journal: 9 Eintrag/Einträge in state/journal/",
-      "FEHLER 4/5 schluesselmuster: Treffer in: state/journal/2026-08-12-zyklus-8.md state/journal/2026-08-12-zyklus-9.md",
+      "OK 3/5 journal: 10 Eintrag/Einträge in state/journal/",
+      "FEHLER 4/5 schluesselmuster: Treffer in: state/journal/2026-08-12-zyklus-10.md state/journal/2026-08-12-zyklus-8.md state/journal/2026-08-12-zyklus-9.md",
       "OK 5/5 arbeitsbaum: sauber"
     ],
     "exit_code": 1
@@ -95,16 +95,16 @@
       "titel": "2026-08-12 — Zyklus 4"
     },
     {
+      "datei": "2026-08-12-zyklus-10.md",
+      "titel": "2026-08-12 — Zyklus 10"
+    },
+    {
       "datei": "2026-08-11-zyklus-3.md",
       "titel": "2026-08-11 — Zyklus 3"
     },
     {
       "datei": "2026-08-11-zyklus-2.md",
       "titel": "2026-08-11 — Zyklus 2"
-    },
-    {
-      "datei": "2026-08-11-zyklus-1.md",
-      "titel": "2026-08-11 — Zyklus 1"
     }
   ],
   "projekte": [
