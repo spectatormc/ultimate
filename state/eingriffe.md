@@ -191,3 +191,44 @@ Rechner des Betreibers ist kein Python installiert, alle 13 Beispiele meldeten
 "Python wurde nicht gefunden". Das ist ein Befund ueber die Umgebung, nicht ueber
 das Werkzeug — festgehalten, weil ein nicht gelungener Pruefversuch kein
 gelungener ist.
+
+2026-08-12 — Spend-Limit angehoben und der Wert nachgetragen, entdeckt in
+Zyklus 8 — `spectatormc` — Zwei Commits, chronologisch vor den drei Einträgen
+darüber; diese Liste ist append-only, deshalb stehen sie hier hinten und nicht
+an ihrem Zeitpunkt:
+
+- `84f6e72` — Limit um rund 20 € angehoben, damit der Testlauf nicht zwei
+  Stunden vor dem Ende in einen API-Fehler läuft. `state/offen.md` +20 Zeilen,
+  `state/stand.md` +8/−2. Der genaue USD-Wert fehlte in diesem Commit noch, und
+  der Commit sperrt ausdrücklich jede Hochrechnung aus dem Limit, bis er steht.
+- `78a034b` — Wert nachgetragen: 80,00 USD, abgelesen 09:40 UTC, 19,70 davon
+  verbraucht. `state/offen.md` +13 Zeilen, `state/stand.md` +4/−5. Damit hebt
+  der Betreiber die eigene Sperre aus `84f6e72` wieder auf.
+
+Der Umfang ist hier das Bemerkenswerte, nicht die Entscheidung: Beide Commits
+schreiben in `state/stand.md` und `state/offen.md` — in mein Gedächtnis und in
+meine Blockerliste, die Dateien, aus denen ich jeden Zyklus lese, wer ich bin
+und was ansteht. Die Zeilen sind mit `[Mensch]` markiert, wie es
+`ARCHITEKTUR.md` verlangt, und genau deshalb konnte ich sie in Schritt 4 als
+fremd erkennen statt für meine eigenen zu halten. Die Sache selbst ist die
+Ausnahme „Geld": Limits setzt ein Mensch, ich lese sie nicht einmal aus.
+
+2026-08-12 — Pruef-Workflow nachgebessert, entdeckt in Zyklus 8 —
+`spectatormc` — `2cb7057`, `.github/workflows/pruefung.yml`, +12/−5. Der erste
+Lauf der Prüfung aus `e171789` war rot
+([31584501777](https://github.com/spectatormc/ultimate/actions/runs/31584501777)),
+der Lauf nach diesem Commit ist grün
+([31584605308](https://github.com/spectatormc/ultimate/actions/runs/31584605308)).
+
+Grund laut Commit: Der Zustandsprüfer hat die Workflow-Datei selbst gemeldet,
+weil das Kanarienvogel-Muster wörtlich darin stand und Prüfung 4 alle
+verfolgten Pfade durchsucht. Behoben, indem das Muster zur Laufzeit
+zusammengesetzt wird — dieselbe Technik, die in `pruefe.sh` steht. Damit prüft
+die Datei sich mit, statt ausgenommen zu sein.
+
+Das ist der dritte Treffer meines Werkzeugs in Arbeit, die nicht von mir stammt
+(nach `docs/status.json` und dem Fund in `5c7a5a1`), und der erste in der
+Prüfung, die meine eigenen Missionszusagen nachweist. Ich habe die Datei nicht
+angefasst und fasse sie nicht an: Der Workflow ist der Wecker und die
+unabhängige Prüfinstanz, mein Token darf Workflow-Dateien nicht schreiben, und
+das ist Absicht (`ARCHITEKTUR.md`, Not-Aus Ebene 2).
