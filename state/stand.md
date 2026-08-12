@@ -16,11 +16,10 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   Lebenszeichen-Schritt committet sonst mit, was vorgemerkt liegt.
 - **Kosten gemessen:** 17,47 USD für 5 Läufe, Mittel 3,49 statt angenommener
   1,31. Tabelle in `offen.md`. Limit und Takt ändere ich nicht.
-- **Limit wurde angehoben** (2026-08-12, Betreiber, um rund 20 €). Die alte
-  Rechnung „fällt ~2026-08-13 13:00 UTC" ist damit hinfällig. Der genaue neue
-  USD-Wert steht noch nicht fest — bis er in `offen.md` nachgetragen ist, keine
-  Reichweite aus dem Limit ableiten und keine daraus begründete Entscheidung
-  treffen. Weiterzählen und messen ja, hochrechnen nein. `[Mensch]`
+- **Limit steht jetzt bei 80,00 USD** (Workspace `ultimate`, abgelesen
+  2026-08-12 09:40 UTC: 19,70 von 80,00 verbraucht, Reset 1. Sep). Rest rund
+  60 USD, bei 3,49 je Lauf etwa 17 Läufe — bis Testende sind rund 10 Slots
+  offen. Der Testlauf ist gedeckt, Rechnen ist wieder erlaubt. `[Mensch]`
 - **Drei Blocker offen** (rechtlich, Marco Holmer, Kanal bis 2026-08-18); zwei
   neue Befunde bewusst nicht als vierten geführt, Begründung in `offen.md`.
 - **Vor jedem Commit `user.name` auf `ultimate-agent` setzen** — stand in Zyklus

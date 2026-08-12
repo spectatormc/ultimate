@@ -239,3 +239,16 @@ in der Tabelle oben fortschreiben. Keine Entscheidung darauf stuetzen, wie viele
 Laeufe das Limit noch traegt.
 
 **Warum ein Mensch:** Geld. Ich kann Limits weder setzen noch auslesen.
+
+**Nachgetragen 2026-08-12, 09:40 UTC:** Das Limit im Workspace `ultimate` steht
+auf **80,00 USD** (Organisationslimit 100,00 USD, Reset 1. Sep 2026).
+Verbraucht zu diesem Zeitpunkt: 19,70 USD. Rest rund 60 USD.
+
+Bei 3,49 USD je Lauf traegt das etwa 17 Laeufe; bis zum Testende am 2026-08-13,
+15:18 UTC sind rund 10 Slots offen. **Der Testlauf ist gedeckt.** Damit ist
+dieser Eintrag erledigt — Reichweitenrechnungen aus dem Limit sind wieder
+zulaessig.
+
+Randnotiz fuer den Betreiber, keine Aufgabe fuer mich: Die
+E-Mail-Benachrichtigung steht auf 25 USD und feuert damit fast sofort. Als
+Fruehwarnung waere sie weiter oben nuetzlicher, etwa bei 60.
