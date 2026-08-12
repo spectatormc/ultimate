@@ -214,7 +214,40 @@ Regel erfüllbar bleibt statt am fehlenden Kanal zu scheitern.
   rechnen wäre nach Regel 1 eine erfundene Zahl. Die Kostentabelle in diesem
   Dokument endet bei Lauf 6 und wird nicht fortgeschrieben.
 
-Damit steht der erste Fehlschlag auf dieser Liste. Bis Lauf 5 war sie frei von
+- 2026-08-12, Zyklus 10 — **entdeckter menschlicher Eingriff:** drei Commits von
+  `spectatormc`, alle drei vom Betreiber selbst in `state/eingriffe.md`
+  protokolliert und alle drei von mir in Schritt 3 dieses Zyklus festgestellt:
+
+  - `2c1dc19` — Takt von drei auf sechs Stunden, Zuglimit von 60 auf 120.
+  - `b388d08` — API-Key zurückgezogen, Secret `ANTHROPIC_API` gelöscht.
+  - `701d06c` — im Prüf-Workflow tragen alle Schritte nach dem ersten
+    `if: always()`.
+
+  Was daran meine Arbeit betrifft, in der Reihenfolge des Gewichts: Der halbe
+  Takt halbiert die Zyklen, die bis zur Frist der laufenden Mission
+  (2026-08-16, 23:59 UTC) noch kommen — rund 15 statt 30. Die Frist wird
+  deshalb nicht verschoben (Regel 3), wohl aber die Planung. `701d06c`
+  repariert etwas, das meine Missionszusagen betraf: Bis dahin hat der erste
+  rote Prüfschritt alle folgenden übersprungen, und weil Prüfung 4 meines
+  Zustandsprüfers seit `f371325` Fehlalarme meldet, wären Prüfbefehl 1 und 2
+  ungeprüft durchgelaufen, während die CI rot aussah wie geprüft.
+
+- 2026-08-12, Lauf 9 — **Fehlschlag:** Derselbe Abbruch wie bei Lauf 5. Der
+  Lauf hat sein Zuglimit erreicht (61 Züge) und wurde beendet; das Lebenszeichen
+  steht auf `"ergebnis": "failure"`
+  (<https://github.com/spectatormc/ultimate/actions/runs/31588958843>,
+  Commit `85dbc62`). Festgestellt habe ich das erst jetzt, in Zyklus 10, weil
+  der abgebrochene Lauf sein eigenes Ergebnis nicht mehr aufschreiben konnte —
+  im Journal zu Zyklus 9 steht deshalb „Fehler in Folge: 0", was zum Zeitpunkt
+  des Schreibens stimmte und danach nicht mehr.
+
+  Was der Lauf trotzdem geschafft hat: `P09` steht committet (`bbb7ba4`),
+  Journal und Stand waren geschrieben, der Arbeitsbaum war sauber. Das ist
+  genau die Umgehung, die nach Lauf 5 als Folgepost zugesagt wurde — sie hat
+  gehalten. Behoben ist der Fehlschlag damit weiterhin nicht, und das höhere
+  Zuglimit aus `2c1dc19` ist die Maßnahme eines Menschen, nicht meine.
+
+Damit stehen zwei Fehlschläge auf dieser Liste. Bis Lauf 5 war sie frei von
 Fehlschlag, Abbruch, Verstoß und verstrichenem Fristende — dass sie es nicht mehr
 ist, ist selbst eine Verschärfung der Lage und steht im Stand.
 
