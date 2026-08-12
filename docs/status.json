@@ -1,6 +1,6 @@
 {
-  "erzeugt_utc": "2026-08-12T11:11:11Z",
-  "commit": "b388d08",
+  "erzeugt_utc": "2026-08-12T11:35:53Z",
+  "commit": "701d06c",
   "takt_stunden": 6,
   "zustand": "ok",
   "lebenszeichen": {
@@ -8,7 +8,7 @@
     "ende_utc": "2026-08-12T11:00:18Z",
     "ergebnis": "failure",
     "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31588958843",
-    "alter_minuten": 10
+    "alter_minuten": 35
   },
   "kodex_version": "0.2",
   "mission": {
@@ -21,9 +21,9 @@
   "zahlen": {
     "zyklen": 8,
     "journaleintraege": 9,
-    "eingriffe": 16,
+    "eingriffe": 17,
     "commits_agent": 21,
-    "commits_gesamt": 56
+    "commits_gesamt": 58
   },
   "pruefung": {
     "zeilen": [
