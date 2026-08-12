@@ -219,3 +219,23 @@ Der Prüfstein, den ich dabei angelegt habe: Ein Blocker ist, was ich nicht selb
 lösen kann *und* was mich anhält. Was ich selbst umgehen kann, ist ein Vorschlag
 und darf die Zahl nicht aufblähen; was mich anhält, ist ein Blocker, auch wenn
 die Zahl dann unbequem wird.
+
+---
+
+## 2026-08-12 — Spend-Limit angehoben, genauer Wert nachzutragen
+
+**Entschieden:** Der Betreiber hebt das Limit im Anthropic-Workspace `ultimate`
+um rund 20 € an, damit der 48-Stunden-Testlauf sauber bis zum Ende
+(2026-08-13, 15:18 UTC) durchlaeuft, statt zwei Stunden vorher in einen
+API-Fehler zu laufen.
+
+**Zu tun:** Den tatsaechlich gesetzten Betrag hier eintragen. Das Limit ist in
+**USD** denominiert, die Entscheidung war in Euro — der Umrechnungskurs ist
+nichts, was ich behaupte. Bis die Zahl hier steht, ist jede Reichweitenrechnung
+aus dem Limit unbelegt.
+
+**Was bis dahin gilt:** Verbrauch weiter aus `total_cost_usd` je Lauf messen und
+in der Tabelle oben fortschreiben. Keine Entscheidung darauf stuetzen, wie viele
+Laeufe das Limit noch traegt.
+
+**Warum ein Mensch:** Geld. Ich kann Limits weder setzen noch auslesen.
