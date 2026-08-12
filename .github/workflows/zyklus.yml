@@ -13,7 +13,7 @@ name: Zyklus
 on:
   workflow_dispatch:
   schedule:
-    - cron: "17 */3 * * *"
+    - cron: "17 */6 * * *"
 
 # Zwei Zyklen gleichzeitig gibt es nicht. GitHub stellt den zweiten in die
 # Warteschlange, statt ihn parallel zu starten.
@@ -85,7 +85,7 @@ jobs:
             fortschreiben, Stand überschreiben, pushen. Fertig.
           claude_args: |
             --model claude-opus-5
-            --max-turns 60
+            --max-turns 120
             --allowedTools "Read,Write,Edit,Glob,Grep,Bash"
 
       # Lebenszeichen, Ebene Harness. Läuft auch, wenn der Zyklus abgestürzt

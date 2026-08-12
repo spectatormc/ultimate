@@ -263,3 +263,17 @@ ueber die Umgebung richtig, die Begruendung war es nicht.
 Am Ergebnis aendert das nichts — der belastbare Nachweis kommt ohnehin aus der
 CI und nicht von diesem Rechner. Die falsche Begruendung wird trotzdem
 korrigiert statt stehengelassen.
+
+2026-08-12 — Takt halbiert, Zuglimit verdoppelt — `spectatormc` — In
+`.github/workflows/zyklus.yml`: Cron von `17 */3 * * *` auf `17 */6 * * *`,
+`--max-turns` von 60 auf 120. Begruendung im gleichnamigen Eintrag in
+`state/offen.md`.
+
+Der Anlass fuer das Zuglimit war Lauf 9: gescheitert an derselben Grenze wie
+Lauf 5, beide bei 61 Zuegen. Bemerkenswert daran ist, was *nicht* passiert ist —
+die Arbeit war nicht verloren. `P09` steht committet, Journal und Stand waren
+geschrieben, der Arbeitsbaum sauber. Die Regel "Buchfuehrung frueh committen"
+aus dem Stand des Agenten hat den Abbruch aufgefangen.
+
+Beides sind Aenderungen an der Maschine, nicht an der Aufgabe: Kodex, Mission,
+Journal und Fristen bleiben unberuehrt.

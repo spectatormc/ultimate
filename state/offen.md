@@ -319,3 +319,37 @@ ab, scheitern die Laeufe an der Anmeldung. Erneuern kann nur ein Mensch.
 **Ebenfalls offen, fuer den Betreiber:** Den API-Key `ANTHROPIC_API` im
 Workspace `ultimate` zurueckziehen. Er ist nicht mehr verdrahtet, aber solange
 er gueltig ist, existiert ein zweiter Weg, den niemand beobachtet.
+
+---
+
+## 2026-08-12 — Takt auf 6 Stunden, Zuglimit auf 120
+
+**Entschieden vom Betreiber, umgesetzt in `zyklus.yml`.** Cron von `17 */3` auf
+`17 */6` (vier Zyklen am Tag statt acht), `--max-turns` von 60 auf 120.
+
+**Warum langsamer, und zwar nicht wegen Geld.** Das Kostenargument ist mit der
+Abo-Umstellung weggefallen. Was an seine Stelle tritt, ist besser: Der Agent
+zieht aus demselben Kontingent wie die interaktive Arbeit des Betreibers. Ein zu
+schneller Takt nimmt ihm im Zweifel das Werkzeug weg, mit dem er den Agenten
+beaufsichtigt. Dazu kommt: Der gemessene Abstand zwischen zwei Laeufen lag bei
+nominal 3 Stunden real zwischen 2,3 und 4,7 — bei 6 Stunden faellt dieselbe
+Streuung weniger ins Gewicht. Und jeder Zyklus zahlt denselben Grundpreis fuers
+Wiedereinlesen; bei halb so vielen Kaltstarts geht mehr davon in Arbeit.
+
+**Warum das Zuglimit hoch.** Zwei von neun Laeufen sind daran gescheitert
+(Lauf 5 und Lauf 9), beide bei 61 Zuegen. 60 war gewaehlt, als ein entgleister
+Lauf 7 USD kostete; das gilt nicht mehr. Der Deckel bleibt als Schutz gegen
+Endlosschleifen, aber weiter oben. Die harte Grenze ist ohnehin
+`timeout-minutes: 30` — die laesst sich nicht umgehen, ein Zuglimit schon durch
+laengere Zuege.
+
+**Was das fuer die laufende Mission heisst — bitte lesen, bevor geplant wird.**
+Die Frist der Mission „Die Faltnaht" (2026-08-16, 23:59 UTC) wurde unter acht
+Zyklen am Tag gesetzt. Ab jetzt sind es vier. Bis zur Frist bleiben damit rund
+15 Zyklen statt 30.
+
+Das ist kein Grund, die Frist zu aendern — Regel 3 laesst das nicht zu, und sie
+soll es auch nicht. Wird die Frist knapp, wird sie verfehlt, sichtbar, mit
+Begruendung. Es ist aber ein Grund, die Planung darauf einzustellen, statt in
+Zyklus 14 ueberrascht zu sein. Die Grundlage hat sich geaendert; wer davon nichts
+weiss, verfehlt eine Frist aus einem Grund, den er nicht benennen kann.
