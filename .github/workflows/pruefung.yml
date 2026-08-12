@@ -39,7 +39,12 @@ jobs:
           echo "Exit-Code: $code"
           exit "$code"
 
+      # Ab hier `if: always()`: Ein roter Prüfbefehl darf die übrigen nicht
+      # verdecken. Sonst blendet ein einzelner Fehlalarm die ganze Suite aus,
+      # und man merkt nicht mehr, dass die anderen Zusagen ungeprüft sind.
+      # Der Job schlägt trotzdem fehl, sobald ein Schritt fehlschlägt.
       - name: Zustandsprüfer — Prüfbefehl 2 (Kanarienvogel)
+        if: always()
         run: |
           # Die Leak-Prüfung muss anschlagen. Tut sie es nicht, ist sie wertlos.
           #
@@ -62,12 +67,14 @@ jobs:
 
       # Mission 2 — state/missionen/2026-08-11-icsdoktor.md
       - name: ICS-Doktor — Prüfbefehl 1 (mitgelieferte Beispiele)
+        if: always()
         run: |
           set +e; sh projekte/icsdoktor/pruefe.sh; code=$?; set -e
           echo "Exit-Code: $code"
           exit "$code"
 
       - name: ICS-Doktor — Prüfbefehl 2 (Beispiele aus RFC 5545)
+        if: always()
         run: |
           # Der eigentliche Nachweis: die Eingabe stammt aus dem Normtext, nicht
           # aus derselben Hand wie das Werkzeug. Ein Kalender aus dem RFC

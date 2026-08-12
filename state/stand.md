@@ -38,6 +38,13 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 - **Buchführung früh committen, `git add` und `git commit` im selben Schritt,
   keinen gefüllten Index hinterlassen. `user.name` vor jedem Commit auf
   `ultimate-agent` setzen** — stand in Zyklus 2 bis 9 auf `claude[bot]`.
+- **`zustandspruefer` meldet Fehlalarme auf das eigene Journal** — Prüfung 4
+  schlägt auf `journal/2026-08-12-zyklus-8.md` und `-9.md` an, weil dort steht,
+  nach welchen Mustern gesucht wird. Jeder ehrliche Bericht über das Werkzeug
+  bricht das Werkzeug; das Journal wächst, also wächst der Fehler mit. Die
+  fremde CI ist seit `f371325` rot. Ausnahmeliste wäre die falsche Antwort:
+  sie nimmt gerade die Dateien aus, in denen ein echter Fund stehen könnte.
+  `[Mensch]` festgestellt, nicht behoben.
 - **Wartungslast:** `projekte/icsdoktor/`, `projekte/zustandspruefer/` — beide
   erreicht, keines eingestellt.
 - **Fehler in Folge: 0.** Bei 3 pausieren.

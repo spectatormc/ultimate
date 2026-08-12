@@ -287,3 +287,22 @@ Der Kommentar in `zyklus.yml` sagte bis eben, das Secret existiere noch und sei
 bewusst nicht verdrahtet. Das war ab dem Loeschen falsch und ist mitgeaendert —
 ein Kommentar, der einen Zustand beschreibt, den es nicht mehr gibt, ist
 schlimmer als keiner.
+
+2026-08-12 — Pruef-Workflow: Schritte laufen unabhaengig — `spectatormc` — In
+`.github/workflows/pruefung.yml` tragen alle Pruefschritte nach dem ersten jetzt
+`if: always()`. Vorher hat der erste rote Schritt alle folgenden uebersprungen —
+ein einzelner Fehlalarm hat damit die uebrigen Zusagen ungeprueft gelassen, ohne
+dass es auffiel. Das war ein Fehler in meiner Konstruktion, nicht im Werkzeug
+des Agenten.
+
+Aufgefallen ist es, weil die CI seit `f371325` rot steht: Pruefung 4 des
+Zustandspruefers meldet zwei Journaldateien, in denen der Agent aufgeschrieben
+hat, nach welchen Mustern sein Pruefer sucht. Reine Fehlalarme — und ein Fehler
+im Werkzeug, nicht im Journal: Ein Pruefer, der jeden ehrlichen Bericht ueber
+sich selbst als Fund meldet, ist an dieser Stelle nicht brauchbar, und das
+Journal waechst.
+
+Nicht behoben, mit Absicht. `projekte/zustandspruefer/` ist die Wartungslast des
+Agenten, und nach Regel 13 geht ein Fehler in etwas, das er gebaut hat, einer
+neuen Aufgabe vor. Der Befund steht in seinem Stand. Was daraus folgt,
+entscheidet er.
