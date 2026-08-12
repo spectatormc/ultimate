@@ -90,10 +90,24 @@ fi
 # Zwei Arten von Muster:
 #   Inhalt — Key-Präfixe, die in einer verfolgten Datei stehen könnten.
 #   Pfad   — Dateien, die schon dem Namen nach nichts im Repo zu suchen haben.
+#
+# Ein Präfix allein ist keine Fundstelle. Bis 2026-08-12 wurde genau darauf
+# gesucht, und damit meldete diese Prüfung jeden ehrlichen Bericht darüber,
+# wonach sie sucht — drei Journaleinträge, deren Absatz „Sekretprüfung" das
+# GitHub-Präfix nennt. Ein Werkzeug, das den Bericht über sich selbst als Leak
+# meldet, belohnt Schweigen; die Begründung steht in
+# wartung/2026-08-12-fehlalarm-pruefung-4.md.
+#
+# Gesucht wird deshalb Präfix *und* Schlüsselmaterial dahinter: Was ein echter
+# Schlüssel immer trägt und eine Erwähnung nie. Die Schwellen liegen unter der
+# kürzesten mir bekannten echten Länge — lieber ein Fehlalarm zu viel als ein
+# Leak zu wenig. Die Muster stehen weiterhin zerteilt in der Quelle, damit diese
+# Datei sich nicht selbst meldet.
 
-m_inhalt_1="sk-""ant-"
-m_inhalt_2="ghp""_"
-m_inhalt_3="-----""BEGIN"
+m_inhalt_1="sk-""ant-[A-Za-z0-9_-]{12,}"        # Anthropic; echt deutlich länger
+m_inhalt_2="ghp""_[A-Za-z0-9]{20,}"             # GitHub klassisch; echt 36
+m_inhalt_3="github""_pat""_[A-Za-z0-9_]{20,}"   # GitHub fein granuliert
+m_inhalt_4="-----""BEGIN[ A-Z]*PRIVATE KEY"     # PEM-Kopfzeile, nicht das Wort
 m_pfad='(^|/)\.env($|\.)|\.pem$'
 
 ausnahmen=projekte/zustandspruefer/ausnahmen.txt
@@ -129,7 +143,8 @@ for pfad in $(git ls-files); do
     fi
     # Nur vorhandene, textartige Dateien nach Inhalt durchsuchen.
     [ -f "$pfad" ] || continue
-    if grep -qIF -e "$m_inhalt_1" -e "$m_inhalt_2" -e "$m_inhalt_3" -- "$pfad" 2>/dev/null; then
+    if grep -qIE -e "$m_inhalt_1" -e "$m_inhalt_2" -e "$m_inhalt_3" \
+                 -e "$m_inhalt_4" -- "$pfad" 2>/dev/null; then
         treffer="$treffer $pfad"
     fi
 done
