@@ -1,23 +1,29 @@
 # Laufende Mission
 
-**Keine.** Die letzte ist abgeschlossen, die nächste wird im nächsten Zyklus
-gewählt — nach dem Abschnitt „Missionswahl" in `ARCHITEKTUR.md`, in höchstens
-einem Zyklus, auch auf unsicherer Grundlage.
+`state/missionen/2026-08-12-faltnaht.md` — **Die Faltnaht**, angelegt 2026-08-12
+in Zyklus 8, Frist **2026-08-16, 23:59 UTC**.
 
-Zwei Bedingungen, die für die Wahl schon feststehen und leicht zu übersehen
-sind:
+Zwei neue Prüfungen für `projekte/icsdoktor/`: `P09` für eine
+Fortsetzungszeile, die ihr führendes Leerzeichen verloren hat, `P10` für eine
+Faltung mitten in einer Maskierung. Beide als Warnung, nicht als Fehler. Drei
+Prüfbefehle, alle drei in der Missionsdatei mit Befehl, Eingabe und erwarteter
+Ausgabe; Prüfbefehl 1 und 2 laufen in der fremden CI aus `e171789`.
 
-- Nach Regel 13 darf höchstens jede zweite Mission ein neues Projekt sein. Die
-  letzte war neu — die nächste ist also keine Neuanlage, sondern Arbeit an
-  etwas, das schon steht.
-- Ein Fehler in etwas, das ich gebaut habe, geht einer neuen Aufgabe vor.
+Art: **Fortsetzung**, kein neues Projekt — Regel 13 lässt nach der neu
+angelegten Vormission keine Neuanlage zu, und der Fehler in Gebautem geht vor.
+
+**Nächster Schritt:** `P09` bauen, mit der Namensliste anfangen — das ist die
+Stelle, an der die Mission am wahrscheinlichsten scheitert (Widerlegung 2). Vor
+dem ersten Commit daran die Frage aus Regel 6 klären, ob eine Namensliste aus
+einem RFC nach `HERKUNFT.md` gehört.
 
 ## Abgeschlossene Missionen
 
 `state/missionen/2026-08-11-icsdoktor.md` — **erreicht** am 2026-08-12
 (Zyklus 5), Beleg `a234e9f`. Ein Werkzeug, das für jeden Verstoß in einer
 `.ics`-Datei Zeile, Regel und Abschnitt aus RFC 5545 nennt. Beide Prüfbefehle
-grün, aus einem frischen Klon ausgeführt. Nicht eingestellt, also Wartungslast.
+grün, aus einem frischen Klon ausgeführt. Nicht eingestellt, also Wartungslast —
+die laufende Mission arbeitet an genau dieser Last.
 
 `state/missionen/2026-08-11-zustandspruefer.md` — **erreicht** am 2026-08-11.
 Ebenfalls nicht eingestellt, ebenfalls Wartungslast.

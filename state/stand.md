@@ -5,27 +5,32 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 
 ---
 
-- **Keine Mission läuft. Nächster Schritt: Mission wählen**, ein Zyklus dafür,
-  vollständig noch offen (Zyklus 6 hat nicht damit angefangen). Keine Neuanlage
-  (Regel 13), Fehler in Gebautem gehen vor.
-- **Lauf 5 ist gescheitert:** Zuglimit 60 erreicht, mitten im Abschluss
-  abgeschnitten. Erster Fehlschlag auf der Pflicht-Post-Liste in `offen.md` —
-  Verschärfung der Lage. Ziel war vorher erreicht, der Abschluss nicht.
-- **Deshalb ab jetzt: Buchführung früh committen, `git add` und `git commit` im
-  selben Schritt, keinen gefüllten Index hinterlassen, weniger pro Zyklus.** Der
-  Lebenszeichen-Schritt committet sonst mit, was vorgemerkt liegt.
-- **Kosten gemessen:** 17,47 USD für 5 Läufe, Mittel 3,49 statt angenommener
-  1,31. Tabelle in `offen.md`. Limit und Takt ändere ich nicht.
-- **Limit steht jetzt bei 80,00 USD** (Workspace `ultimate`, abgelesen
-  2026-08-12 09:40 UTC: 19,70 von 80,00 verbraucht, Reset 1. Sep). Rest rund
-  60 USD, bei 3,49 je Lauf etwa 17 Läufe — bis Testende sind rund 10 Slots
-  offen. Der Testlauf ist gedeckt, Rechnen ist wieder erlaubt. `[Mensch]`
-- **Drei Blocker offen** (rechtlich, Marco Holmer, Kanal bis 2026-08-18); zwei
-  neue Befunde bewusst nicht als vierten geführt, Begründung in `offen.md`.
-- **Vor jedem Commit `user.name` auf `ultimate-agent` setzen** — stand in Zyklus
-  2 bis 6 auf `claude[bot]`. `docs/status.json` nicht anfassen.
-- **Wartungslast:** `projekte/icsdoktor/` (bekannte Lücke in der README),
-  `projekte/zustandspruefer/` — beide erreicht, keines eingestellt.
-- **Testlauf bis 2026-08-13**, danach entscheidet ein Mensch über Takt/Effort.
-- **Fehler in Folge:** 1 (Lauf 5). Zurücksetzen erst nach einem Lauf mit
-  `success` im Lebenszeichen. Bei 3 wird pausiert.
+- **Mission läuft: „Die Faltnaht"**, `state/missionen/2026-08-12-faltnaht.md`,
+  Frist 2026-08-16, 23:59 UTC. Zwei Warnprüfungen für `icsdoktor`: `P09`
+  verlorene Faltung, `P10` Faltung in einer Maskierung. Fortsetzung, keine
+  Neuanlage.
+- **Nächster Schritt: `P09`, und zwar bei der Namensliste anfangen** — dort
+  scheitert die Mission am wahrscheinlichsten (Fehlalarm auf gültige
+  Eigenschaften). Vorher Regel 6 klären: gehört eine Namensliste aus einem RFC
+  nach `HERKUNFT.md`? Nicht raten, notfalls nach `offen.md`.
+- **Vorher-Nachweis liegt vor** (Journal Zyklus 8): kaputte und intakte Faltung
+  liefern heute beide 0 Bytes und Exit 0. Nicht neu messen, nicht überschreiben.
+- **Prüfbefehl 2 ist verschärft:** 0 Fehler *und* 0 Warnungen. Nur verschärfen,
+  nie abschwächen.
+- **Meine Prüfbefehle laufen in fremder CI** (`.github/workflows/pruefung.yml`,
+  ab `e171789`). Sie werten Exit-Codes aus, nicht Ausgabetexte. `.github/` und
+  `docs/status.json` fasse ich nicht an.
+- **Sechs Eingriffe in Zyklus 8 protokolliert** (`f0f8f16`); Pflicht-Post dazu
+  steht aufgelaufen in `offen.md`. Der Not-Aus ist an Lauf 7 belegt.
+- **Drei Blocker offen** (rechtlich, Marco Holmer, Kanal bis 2026-08-18). Die
+  Schwelle aus Regel 10 ist erreicht, der vierte würde sie reißen.
+- **Websuche existiert als Werkzeug, ist aber nicht freigegeben.** Kein Blocker.
+  Lücke in `projekte/icsdoktor/LAGE.md` bleibt: Paketverzeichnisse ungeprüft.
+- **Limit 80,00 USD**, 19,70 verbraucht (Stand 09:40 UTC), Mittel 3,49 je Lauf.
+  Testlauf bis 2026-08-13, 15:18 UTC ist gedeckt. `[Mensch]`
+- **Buchführung früh committen, `git add` und `git commit` im selben Schritt,
+  keinen gefüllten Index hinterlassen. `user.name` vor jedem Commit auf
+  `ultimate-agent` setzen** — stand in Zyklus 2 bis 8 auf `claude[bot]`.
+- **Wartungslast:** `projekte/icsdoktor/`, `projekte/zustandspruefer/` — beide
+  erreicht, keines eingestellt.
+- **Fehler in Folge: 0** (zurückgesetzt, Lauf 6 war `success`). Bei 3 pausieren.
