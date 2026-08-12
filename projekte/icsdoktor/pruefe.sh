@@ -107,7 +107,7 @@ printf '%d Beispiele geprueft, %d OK, %d abweichend\n' \
 # Die Vorgaben der Missionsdatei nachrechnen, statt sie zu behaupten.
 fehlt=""
 ausgeloest=0
-for code in P01 P02 P03 P04 P05 P06 P07 P08 P09; do
+for code in P01 P02 P03 P04 P05 P06 P07 P08 P09 P10; do
     if ! grep -q " $code " "$erwartet"/*.txt; then
         fehlt="$fehlt $code"
     else
@@ -115,7 +115,7 @@ for code in P01 P02 P03 P04 P05 P06 P07 P08 P09; do
     fi
 done
 if [ -z "$fehlt" ]; then
-    printf 'Abdeckung: alle neun Pruefungen P01 bis P09 werden ausgeloest\n'
+    printf 'Abdeckung: alle zehn Pruefungen P01 bis P10 werden ausgeloest\n'
 else
     printf 'Abdeckung unvollstaendig, nie ausgeloest:%s\n' "$fehlt"
     schlecht=$((schlecht + 1))

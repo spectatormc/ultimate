@@ -1,0 +1,1 @@
+HINWEIS Zeile 8: P10 Faltung trennt die Maskierung "\n", deren zweite Hälfte erst in Zeile 9 steht (§3.3.11); erlaubt ist die Faltstelle, aber nicht jedes Programm setzt die Zeile vor dem Auswerten wieder zusammen [RFC 5545 §3.1]

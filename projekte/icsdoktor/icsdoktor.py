@@ -8,9 +8,9 @@ Die acht Pruefungen P01 bis P08 und das Ausgabeformat stehen dort und sind ab
 Anlage der Mission unveraenderlich. Dieses Programm haelt sich daran und prueft
 nichts darueber hinaus.
 
-P09 kommt aus der Folgemission Die Faltnaht,
-state/missionen/2026-08-12-faltnaht.md; P10 aus derselben Mission fehlt noch.
-Die acht alten Pruefungen bleiben dabei unangetastet.
+P09 und P10 kommen aus der Folgemission Die Faltnaht,
+state/missionen/2026-08-12-faltnaht.md. Die acht alten Pruefungen bleiben dabei
+unangetastet.
 
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
@@ -593,8 +593,55 @@ def pruefe_p09(logische, funde):
             "3.1"))
 
 
+def pruefe_p10(zeilen, funde):
+    """§3.1 zusammen mit §3.3.11: Die Faltung liegt mitten in einer Maskierung.
+
+    Der Fall aus collective/icalendar #1501: Eine lange TEXT-Zeile wird genau
+    zwischen dem "\\" und dem maskierten Zeichen gefaltet. Entfaltet ergibt das
+    wieder die richtige Maskierung — wer die Zeile vor dem Auswerten
+    zusammensetzt, sieht nichts. Wer sie Zeile fuer Zeile liest, sieht einen
+    Rueckwaertsstrich am Zeilenende und ein loses Zeichen dahinter. Der
+    Fehlerbericht nennt genau diesen Unterschied: ein Programm zeigt den Termin
+    nicht an, ein anderes liest ihn ohne Klage.
+
+    Deshalb HINWEIS und nicht FEHLER: §3.1 erlaubt die Faltung an nahezu jeder
+    Stelle, dieses Dokument verstoesst also gegen kein MUST. Gemeldet wird eine
+    Stelle, an der Programme messbar auseinandergehen, nicht ein Verstoss.
+
+    Erkannt wird die Faltstelle, nicht der Text: Endet eine Zeile auf eine
+    *ungerade* Zahl von Rueckwaertsstrichen und ist die naechste Zeile eine
+    Fortsetzung, dann trennt die Naht ein "\\" von seinem maskierten Zeichen.
+    Bei einer geraden Zahl steht am Zeilenende ein fertiges "\\\\" — eine
+    maskierte Maskierung, die vollstaendig auf dieser Zeile liegt. Genau daran
+    haengt Widerlegung 3 der Mission: Ohne diese Unterscheidung waere jede
+    erlaubte Faltung mitgemeldet, und die Pruefung waere nicht baubar.
+    """
+    for i in range(len(zeilen) - 1):
+        z = zeilen[i]
+        naechste = zeilen[i + 1]
+        if naechste.text[:1] not in (" ", "\t"):
+            continue
+        striche = len(z.text) - len(z.text.rstrip("\\"))
+        if striche == 0 or striche % 2 == 0:
+            continue
+        maskiert = naechste.text[1:2]
+        if maskiert == "":
+            gezeigt = ('ein "\\" ohne maskiertes Zeichen; die Fortsetzung in '
+                       'Zeile %d ist leer' % naechste.nr)
+        else:
+            gezeigt = ('die Maskierung %s, deren zweite Hälfte erst in '
+                       'Zeile %d steht'
+                       % (_zeige_wort("\\" + maskiert), naechste.nr))
+        funde.append(Fund(
+            HINWEIS, z.nr, "P10",
+            "Faltung trennt %s (§3.3.11); erlaubt ist die Faltstelle, aber "
+            "nicht jedes Programm setzt die Zeile vor dem Auswerten wieder "
+            "zusammen" % gezeigt,
+            "3.1"))
+
+
 def untersuche(rohdaten):
-    """Alle neun Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle zehn Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     zeilen = zerlege_physisch(rohdaten)
     if not zeilen:
@@ -614,6 +661,7 @@ def untersuche(rohdaten):
     pruefe_p07(komponenten, funde)
     pruefe_p08(logische, funde)
     pruefe_p09(logische, funde)
+    pruefe_p10(zeilen, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))

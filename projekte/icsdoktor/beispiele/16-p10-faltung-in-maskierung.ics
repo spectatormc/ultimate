@@ -1,0 +1,11 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Pruefung//DE
+BEGIN:VEVENT
+UID:2@example.com
+DTSTAMP:20260812T100000Z
+DTSTART:20260812T120000Z
+DESCRIPTION:Erste Zeile der Beschreibung, danach ein Umbruch\
+ nzweite Zeile der Beschreibung.
+END:VEVENT
+END:VCALENDAR
