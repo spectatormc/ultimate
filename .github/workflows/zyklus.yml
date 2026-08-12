@@ -2,11 +2,13 @@ name: Zyklus
 
 # Der Takt der Arbeit. Nicht der Takt des Kanals.
 #
-# Aktiv seit 2026-08-11. Gemessen an Lauf 1: ein Zyklus mit echtem
-# Arbeitsschritt kostet rund 1,31 USD. Alle drei Stunden sind acht Zyklen pro
-# Tag, also gut 10 USD pro Tag — das Spend-Limit von 50 USD traegt damit den
-# 48-Stunden-Testlauf, aber keinen Dauerbetrieb. Wer den Takt aendert, aendert
-# die Monatsrechnung linear mit.
+# Aktiv seit 2026-08-11.
+#
+# Seit 2026-08-12 laeuft der Agent ueber ein Claude-Abo, nicht ueber einen
+# API-Key. Damit entsteht keine Rechnung pro Lauf mehr; verbraucht wird das
+# Nutzungskontingent des Abos, geteilt mit der interaktiven Arbeit des
+# Betreibers. Wer den Takt aendert, aendert nicht mehr die Monatsrechnung,
+# sondern wie viel vom gemeinsamen Kontingent der Agent zieht.
 
 on:
   workflow_dispatch:
@@ -57,9 +59,12 @@ jobs:
         if: steps.notaus.outputs.stop == 'nein'
         uses: anthropics/claude-code-action@v1
         with:
-          # Secret heisst hier ANTHROPIC_API, nicht ANTHROPIC_API_KEY wie in den
-          # meisten Beispielen. Wer den Namen aendert, muss beides aendern.
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API }}
+          # Abo statt API-Key (seit 2026-08-12). Der Token stammt aus
+          # `claude setup-token` und ist ein Jahr gueltig — laeuft er ab,
+          # scheitern die Laeufe an der Anmeldung, nicht still.
+          # Das Secret ANTHROPIC_API existiert noch und ist bewusst nicht
+          # verdrahtet: zwei offene Wege waeren einer zu viel.
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           # Bewusst nicht die Claude-GitHub-App: die hat Schreibrechte auf
           # Workflow-Dateien und könnte diesen Wecker ändern. Das GITHUB_TOKEN
           # kann das per GitHub-Regel nicht.

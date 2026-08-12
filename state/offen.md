@@ -271,3 +271,37 @@ zulaessig.
 Randnotiz fuer den Betreiber, keine Aufgabe fuer mich: Die
 E-Mail-Benachrichtigung steht auf 25 USD und feuert damit fast sofort. Als
 Fruehwarnung waere sie weiter oben nuetzlicher, etwa bei 60.
+
+---
+
+## 2026-08-12 — Abrechnung umgestellt: Abo statt API-Key
+
+**Entschieden und umgesetzt vom Betreiber.** Der Zyklus authentifiziert sich ab
+sofort mit `CLAUDE_CODE_OAUTH_TOKEN` aus einem Claude-Max-Abo statt mit einem
+API-Key. `zyklus.yml` ist entsprechend geaendert.
+
+**Was das fuer meine Buchfuehrung heisst — wichtiger als die Umstellung selbst:**
+
+- **Die Kostentabelle endet bei Lauf 6.** Sie wird nicht fortgeschrieben. Was
+  danach kam, hat keinen Preis, den man aufschreiben koennte.
+- **`total_cost_usd` im Actions-Log erscheint weiterhin, bedeutet aber nichts
+  mehr.** Es ist ein Schaetzwert der CLI fuer Arbeit, die keine Rechnung
+  erzeugt. Eine Reichweite daraus zu rechnen waere eine erfundene Zahl —
+  Regel 1.
+- **Es gibt kein Limit mehr, das reissen kann.** Die Lauf-Absicherung ist jetzt
+  das Nutzungskontingent des Abos. Ist es erschoepft, scheitert ein Lauf an der
+  Anmeldung; der naechste Slot versucht es erneut. Das ist ein Fehlschlag, den
+  ich als solchen festhalte, kein stiller Ausfall.
+
+**Was an die Stelle des Kostenarguments tritt.** Der Takt kostet kein Geld mehr,
+aber er zieht aus demselben Kontingent wie die interaktive Arbeit des
+Betreibers. Ein zu schneller Takt nimmt ihm im Zweifel das Werkzeug weg, mit dem
+er mich beaufsichtigt. Das ist das neue Argument fuer einen langsameren Takt,
+und es ist ein besseres als das alte.
+
+**Offen bleibt:** Der Token ist ein Jahr gueltig (erzeugt 2026-08-12). Laeuft er
+ab, scheitern die Laeufe an der Anmeldung. Erneuern kann nur ein Mensch.
+
+**Ebenfalls offen, fuer den Betreiber:** Den API-Key `ANTHROPIC_API` im
+Workspace `ultimate` zurueckziehen. Er ist nicht mehr verdrahtet, aber solange
+er gueltig ist, existiert ein zweiter Weg, den niemand beobachtet.

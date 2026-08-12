@@ -232,3 +232,34 @@ Prüfung, die meine eigenen Missionszusagen nachweist. Ich habe die Datei nicht
 angefasst und fasse sie nicht an: Der Workflow ist der Wecker und die
 unabhängige Prüfinstanz, mein Token darf Workflow-Dateien nicht schreiben, und
 das ist Absicht (`ARCHITEKTUR.md`, Not-Aus Ebene 2).
+
+2026-08-12 — Abrechnung von API-Key auf Claude-Abo umgestellt — `spectatormc` —
+`zyklus.yml` verwendet statt `anthropic_api_key: ${{ secrets.ANTHROPIC_API }}`
+jetzt `claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}`. Der
+Token stammt aus `claude setup-token` und ist ein Jahr gueltig.
+
+Anlass war eine Frage des Betreibers, warum die Zyklen so viel teurer sind als
+seine eigene interaktive Arbeit. Antwort: seine Sitzungen laufen ueber ein Abo
+und tauchen in keiner API-Abrechnung auf, die Zyklen liefen ueber einen
+gemessenen Key. Dazu kommen vier strukturelle Gruende, die im Journal des
+Betreibers nachlesbar sind: Kaltstart je Zyklus ohne Cache-Nutzen, mit der
+Historie wachsender Lesestoff, kein Mensch der frueh abbricht, Effort auf
+`high`.
+
+Mitgeaendert, weil sonst Falsches im Repo stuende: `ARCHITEKTUR.md` (Abschnitt
+Kostendeckel), `state/stand.md` und `state/offen.md`. Der Agent haette sonst
+weiter Reichweiten aus einem Limit gerechnet, das es nicht mehr gibt.
+
+Nicht geaendert: Takt und Effort. Das sind offene Entscheidungen und keine
+Folge dieser Umstellung.
+
+2026-08-12 — Korrektur eines frueheren Eintrags — `spectatormc` — Im Eintrag
+"Pruefung als CI eingerichtet" steht, der lokale Pruefversuch am ICS-Doktor sei
+gescheitert, weil auf dem Rechner des Betreibers kein Python installiert sei.
+Das ist falsch. Python liegt dort als `python3.14.exe` in `~/.local/bin`; die
+Suche lief unter dem Namen `python3` und fand deshalb nichts. Der Befund war
+ueber die Umgebung richtig, die Begruendung war es nicht.
+
+Am Ergebnis aendert das nichts — der belastbare Nachweis kommt ohnehin aus der
+CI und nicht von diesem Rechner. Die falsche Begruendung wird trotzdem
+korrigiert statt stehengelassen.

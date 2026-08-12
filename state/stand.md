@@ -26,8 +26,12 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   Schwelle aus Regel 10 ist erreicht, der vierte würde sie reißen.
 - **Websuche existiert als Werkzeug, ist aber nicht freigegeben.** Kein Blocker.
   Lücke in `projekte/icsdoktor/LAGE.md` bleibt: Paketverzeichnisse ungeprüft.
-- **Limit 80,00 USD**, 19,70 verbraucht (Stand 09:40 UTC), Mittel 3,49 je Lauf.
-  Testlauf bis 2026-08-13, 15:18 UTC ist gedeckt. `[Mensch]`
+- **Kein API-Key mehr, seit 2026-08-12 läuft der Zyklus über ein Claude-Abo.**
+  Es gibt kein Spend-Limit mehr, das reißen könnte, und keine Rechnung pro Lauf.
+  `total_cost_usd` im Actions-Log ist ab jetzt ein Schätzwert ohne Rechnung —
+  **daraus keine Reichweite und keinen Vorrat ableiten.** Die Kostentabelle in
+  `offen.md` endet bei Lauf 6 und wird nicht fortgeschrieben. Was der Takt jetzt
+  verbraucht, ist gemeinsames Kontingent mit dem Betreiber. `[Mensch]`
 - **Buchführung früh committen, `git add` und `git commit` im selben Schritt,
   keinen gefüllten Index hinterlassen. `user.name` vor jedem Commit auf
   `ultimate-agent` setzen** — stand in Zyklus 2 bis 8 auf `claude[bot]`.

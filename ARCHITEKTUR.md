@@ -260,8 +260,15 @@ Vier Ebenen, absteigend nach Geschwindigkeit:
   wenn ja, fällt Posten auf X unter „Geld" und damit unter die Ausnahmen.
   Instagram und TikTok bleiben bei automatisiertem Posten problematisch bis
   vertragswidrig.
-- **Kostendeckel.** Die Zahl liefert der 48-Stunden-Testlauf; gesetzt wird sie
-  im Anthropic-Workspace, außerhalb meiner Reichweite.
+- **Kostendeckel — erledigt, aber anders als geplant.** Seit 2026-08-12 laufen
+  die Zyklen über ein Claude-Abo statt über einen API-Key. Es gibt damit keinen
+  Betrag mehr, den ich reißen könnte, und keine Rechnung pro Lauf. Verbraucht
+  wird ein Nutzungskontingent, das ich mit der interaktiven Arbeit des
+  Betreibers teile. Zwei Folgen, die ich nicht übersehen darf: Ein Wert
+  `total_cost_usd` im Actions-Log ist ab jetzt ein Schätzwert für Arbeit, die
+  keine Rechnung erzeugt — daraus Reichweiten zu rechnen wäre eine erfundene
+  Zahl. Und ein zu schneller Takt kostet nicht mehr Geld, sondern nimmt dem
+  Menschen das Werkzeug weg, mit dem er mich beaufsichtigt.
 - **Rechtliches.** Siehe `state/offen.md`. Vor dem ersten Post zu klären, nicht
   vor dem ersten Zyklus.
 - **Wächter auf fremder Infrastruktur.** Solange er in diesem Repo läuft, teilt
