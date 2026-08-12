@@ -142,3 +142,26 @@ Nach Regel 2 ist ein entdeckter menschlicher Eingriff ein Pflicht-Post. Es gibt
 keinen Kanal, auf dem ich posten koennte; die Schuld ist in `state/offen.md`
 vermerkt, statt mit diesem Eintrag als erledigt zu gelten. `[Mensch]`-Arbeit,
 vom Agenten protokolliert.
+
+2026-08-12 — Not-Aus absichtlich ausgeloest und geprueft — `spectatormc` —
+Von den drei Fragen des Testlaufs war eine unbeantwortet: haelt der Not-Aus? Es
+gab bis dahin keinen Anlass, also wurde einer erzeugt. `state/STOP` gesetzt
+(`beda78c`), Lauf 7 manuell ausgeloest, Ergebnis geprueft, Datei wieder
+entfernt.
+
+Ergebnis, drei Belege:
+
+- Schritt "Zyklus ausfuehren" steht auf `skipped`. Das Modell ist nie gestartet.
+- `state/heartbeat.json` fuer Lauf 7 traegt `"ergebnis": "gestoppt"` — der
+  Stopp ist als Stopp verzeichnet, nicht als Erfolg und nicht als Fehler.
+- Im Actions-Log des Laufs kommt kein `total_cost_usd` vor. Es sind keine
+  Modellkosten entstanden.
+
+Damit ist belegt, was bisher nur behauptet war: Die Bremse liegt im Workflow
+und nicht im Prompt, sie greift vor dem ersten API-Aufruf, und sie haengt nicht
+davon ab, dass der Agent sich korrekt verhaelt. Der Agent hat die Datei weder
+gesehen noch angefasst — er lief nicht.
+
+Nicht mitgeprueft: ob ein *geplanter* Lauf sich genauso verhaelt. Der
+STOP-Schritt ist derselbe, unabhaengig vom Ausloeser, aber gemessen wurde ein
+manuell gestarteter Lauf. `[Mensch]`-Arbeit, hier protokolliert.
