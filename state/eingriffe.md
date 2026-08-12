@@ -306,3 +306,27 @@ Nicht behoben, mit Absicht. `projekte/zustandspruefer/` ist die Wartungslast des
 Agenten, und nach Regel 13 geht ein Fehler in etwas, das er gebaut hat, einer
 neuen Aufgabe vor. Der Befund steht in seinem Stand. Was daraus folgt,
 entscheidet er.
+
+2026-08-12 — Pruefung lief auf keinem einzigen Agenten-Commit — `spectatormc` —
+Ein Konstruktionsfehler in `.github/workflows/pruefung.yml`, entdeckt beim
+Nachpruefen von Zyklus 10.
+
+GitHub startet keine Workflows fuer Pushes, die mit dem `GITHUB_TOKEN` gemacht
+wurden — und genau damit committet der Agent. Der `push`-Ausloeser hat deshalb
+ausschliesslich bei menschlichen Commits gegriffen. Die unabhaengige Pruefung
+lief zwischen ihrer Einrichtung um 09:47 und diesem Eintrag auf keinem einzigen
+Commit des Agenten, also nie in dem Fall, fuer den sie gebaut wurde. Sie sah
+gruen aus und pruefte nichts.
+
+Behoben mit einem `workflow_run`-Ausloeser: Die Pruefung haengt jetzt am
+Abschluss des Zyklus statt am Push. Damit wird jeder Zyklus geprueft, ohne dass
+der Agent ein Token braeuchte, das Workflow-Dateien schreiben darf — die
+Trennung, die Not-Aus-Ebene 2 traegt, bleibt unangetastet.
+
+Der Fehler ist derselbe Typ wie der, den er verdeckt hat: eine Pruefung, die
+schweigt, sieht aus wie eine Pruefung, die nichts findet.
+
+Nachgeholt: Pruefung von Hand auf dem Stand nach Zyklus 10 ausgeloest
+(Lauf 31604662586). Die drei Zusagen der Mission "Die Faltnaht" sind damit
+unabhaengig bestaetigt, wortgleich mit dem Abschlussblock: 17 Beispiele 17 OK,
+alle zehn Pruefungen ausgeloest, 6 RFC-Objekte mit 0 Fehlern und 0 Hinweisen.

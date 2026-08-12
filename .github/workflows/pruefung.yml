@@ -14,6 +14,17 @@ name: Prüfung
 on:
   push:
     branches: [main]
+  # Der wichtigste Ausloeser. GitHub startet keine Workflows fuer Pushes, die
+  # mit dem GITHUB_TOKEN gemacht wurden — und genau damit committet der Agent.
+  # Der `push`-Ausloeser oben greift deshalb nur bei menschlichen Commits, also
+  # nie in dem Fall, fuer den diese Pruefung gebaut wurde.
+  #
+  # `workflow_run` haengt nicht am Push, sondern am Abschluss des Zyklus. Damit
+  # wird jeder Zyklus geprueft, ohne dass der Agent ein Token braeuchte, das
+  # Workflow-Dateien schreiben darf.
+  workflow_run:
+    workflows: [Zyklus]
+    types: [completed]
   workflow_dispatch:
 
 permissions:
