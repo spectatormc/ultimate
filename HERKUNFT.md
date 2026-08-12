@@ -37,6 +37,28 @@ nicht mitgeliefert; ihr Quelltext liegt nicht in diesem Repo.
 | Text | Herkunft | Bedingungen | Wofür |
 |---|---|---|---|
 | RFC 5545, „Internet Calendaring and Scheduling Core Object Specification (iCalendar)", September 2009 | <https://www.rfc-editor.org/rfc/rfc5545.txt> | IETF Trust, BCP 78 / RFC 5378. Der Text wird zur Laufzeit von Prüfbefehl 2 geladen und **nicht** in dieses Repo kopiert; zitiert werden Abschnittsnummern und einzelne Fehlermeldungsmuster. | Alle acht Prüfungen von `icsdoktor.py`; die sechs Kalenderobjekte aus §4 sind die Eingabe von Prüfbefehl 2 |
+| RFC 7986, „New Properties for iCalendar", Oktober 2016 | <https://www.rfc-editor.org/rfc/rfc7986.txt> | wie oben; ebenfalls nicht kopiert, sondern zur Laufzeit von `namensliste.sh` geladen | Die Tabelle aus §9.1 ist eine der drei Quellen der Namensliste von `P09` |
+| IANA-Registry „iCalendar Properties" | <https://www.iana.org/assignments/icalendar/icalendar.xhtml>, maschinenlesbar als <https://www.iana.org/assignments/icalendar/properties.csv> | IANA-Registries sind zur Nutzung veröffentlicht; die Datei wird zur Laufzeit von `namensliste.sh` geladen und nicht in dieses Repo kopiert | Vollständige Liste der registrierten Eigenschaftsnamen — die Grundlage von `P09` |
+
+### Die Namensliste in `icsdoktor.py` — Regel 6, ausdrücklich entschieden
+
+Die Frage stand vor diesem Commit offen in
+`state/missionen/2026-08-12-faltnaht.md` und wird hier beantwortet, statt sie
+stillschweigend zu übergehen: In `icsdoktor.py` steht eine Liste von 72
+Eigenschaftsnamen. Sie ist **nicht selbst erdacht** — sie ist die Vereinigung
+der drei Quellen aus der Tabelle darüber, erhoben am 2026-08-12.
+
+Deshalb steht sie hier, auch wenn eine Liste von Feldnamen kein Quelltext ist:
+Regel 6 verlangt die Nennung dessen, was ich nicht selbst geschrieben habe, und
+ein Grenzfall wird genannt und nicht wegdefiniert. Was die Liste **nicht** ist:
+eine Kopie eines Normtextes. Übernommen sind die Namen, nicht ihre Beschreibung,
+ihre Reihenfolge oder der Tabellensatz; RFC 5545 §8.3.2 selbst nennt seine
+Tabelle die Initialisierung einer öffentlichen Registry.
+
+Nachprüfbar statt behauptet: `sh projekte/icsdoktor/namensliste.sh` holt die drei
+Quellen, baut die Vereinigung, vergleicht sie mit der Liste im Werkzeug und endet
+mit `1`, sobald sie abweicht. Wer die Herkunft nicht glauben will, muss mir nicht
+glauben.
 
 ## Fremde Sätze, die ich zitiere
 

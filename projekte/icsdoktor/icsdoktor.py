@@ -4,9 +4,13 @@
 Abschnitt aus RFC 5545.
 
 Teil der Mission ICS-Doktor: state/missionen/2026-08-11-icsdoktor.md.
-Die acht Pruefungen und das Ausgabeformat stehen dort und sind ab Anlage der
-Mission unveraenderlich. Dieses Programm haelt sich daran und prueft nichts
-darueber hinaus.
+Die acht Pruefungen P01 bis P08 und das Ausgabeformat stehen dort und sind ab
+Anlage der Mission unveraenderlich. Dieses Programm haelt sich daran und prueft
+nichts darueber hinaus.
+
+P09 kommt aus der Folgemission Die Faltnaht,
+state/missionen/2026-08-12-faltnaht.md; P10 aus derselben Mission fehlt noch.
+Die acht alten Pruefungen bleiben dabei unangetastet.
 
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
@@ -65,6 +69,38 @@ _MEHRWERTIG = {"EXDATE", "RDATE"}
 # nicht angefasst.
 _DATETIME_NUR_MIT_VALUE = {"TRIGGER": "3.8.6.3"}
 
+# Alle bei der IANA registrierten iCalendar-Eigenschaften, Stand 2026-08-12.
+# Diese Liste ist nicht aus dem Gedaechtnis geschrieben, sondern erhoben:
+# `sh namensliste.sh` laedt die Registry und die beiden RFC-Tabellen, baut die
+# Vereinigung und vergleicht sie mit dieser Liste. Weicht sie ab, endet das
+# Skript mit 1 und nennt jeden Unterschied. Herkunft in HERKUNFT.md.
+#
+# Warum die Registry und nicht RFC 5545: Die Tabelle in §8.3.2 nennt 47 Namen,
+# die Registry 72. Die 25 fehlenden waeren Fehlalarme von P09 gewesen — genau
+# der Fehlgriff, den die Missionsdatei als Widerlegung 2 vorher benannt hat.
+# EXRULE steht mit Status "Deprecated" darin und bleibt trotzdem in der Liste:
+# eine veraltete Eigenschaft ist keine verlorene Faltung.
+_REGISTRIERTE_EIGENSCHAFTEN = frozenset((
+    "ACKNOWLEDGED", "ACTION", "ATTACH", "ATTENDEE", "BUSYTYPE",
+    "CALENDAR-ADDRESS", "CALSCALE", "CATEGORIES", "CLASS", "COLOR", "COMMENT",
+    "COMPLETED", "CONCEPT", "CONFERENCE", "CONTACT", "CREATED", "DESCRIPTION",
+    "DTEND", "DTSTAMP", "DTSTART", "DUE", "DURATION", "ESTIMATED-DURATION",
+    "EXDATE", "EXRULE", "FREEBUSY", "GEO", "IMAGE", "LAST-MODIFIED", "LINK",
+    "LOCATION", "LOCATION-TYPE", "METHOD", "NAME", "ORGANIZER",
+    "PARTICIPANT-TYPE", "PERCENT-COMPLETE", "PRIORITY", "PRODID", "PROXIMITY",
+    "RDATE", "REASON", "RECURRENCE-ID", "REFID", "REFRESH-INTERVAL",
+    "RELATED-TO", "REPEAT", "REQUEST-STATUS", "RESOURCE-TYPE", "RESOURCES",
+    "RRULE", "SEQUENCE", "SOURCE", "STATUS", "STRUCTURED-DATA",
+    "STYLED-DESCRIPTION", "SUBSTATE", "SUMMARY", "TASK-MODE", "TRANSP",
+    "TRIGGER", "TZID", "TZID-ALIAS-OF", "TZNAME", "TZOFFSETFROM",
+    "TZOFFSETTO", "TZUNTIL", "TZURL", "UID", "URL", "VERSION", "XML",
+))
+
+# BEGIN und END sind keine Eigenschaften und stehen deshalb in keiner Registry.
+# Sie begrenzen Komponenten (§3.4) und werden von P05 geprueft; P09 darf sie
+# nicht als unbekannte Eigenschaftsnamen melden.
+_KOMPONENTENGRENZEN = frozenset(("BEGIN", "END"))
+
 
 class Fund(object):
     """Ein einzelner Befund. Eine Ausgabezeile."""
@@ -98,6 +134,7 @@ class Logisch(object):
         self.nr = nr
         self.text = text
         self.name = None                 # gesetzt, wenn P04 durchlaeuft
+        self.rohname = None              # Name so, wie er in der Datei steht
         self.params = []                 # Liste (NAME, [werte])
         self.wert = None
 
@@ -281,6 +318,7 @@ def pruefe_p04(logische, funde):
             continue
 
         lz.name = name.upper()
+        lz.rohname = name
         lz.params = params
         lz.wert = wert
 
@@ -525,8 +563,38 @@ def _pruefe_datetime(wert, tzid):
     return None
 
 
+def pruefe_p09(logische, funde):
+    """§3.1: Der Eigenschaftsname ist ein iana-token oder ein x-name.
+
+    Steht ein Name in keiner Registry und beginnt er nicht mit "X-", ist die
+    haeufigste Ursache keine erfundene Eigenschaft, sondern eine
+    Fortsetzungszeile, die ihr fuehrendes Leerzeichen verloren hat: Aus
+    " mailto:employee-A@example.com" wird die formal gueltige Eigenschaft
+    "mailto". Deshalb HINWEIS und nicht FEHLER — der RFC verbietet unbekannte
+    Namen nicht, und Hersteller-Eigenschaften ohne "X-" gibt es wirklich. Die
+    Meldung nennt die verlorene Faltung als moeglichen Grund und behauptet sie
+    nicht.
+    """
+    for lz in logische:
+        if lz.name is None:
+            continue
+        if lz.name in _KOMPONENTENGRENZEN:
+            continue
+        if lz.name in _REGISTRIERTE_EIGENSCHAFTEN:
+            continue
+        if lz.name.startswith("X-"):
+            continue
+        funde.append(Fund(
+            HINWEIS, lz.nr, "P09",
+            "Eigenschaftsname %s ist nicht registriert und beginnt nicht mit "
+            "'X-'; möglicherweise hat diese Zeile ihr führendes Leerzeichen "
+            "verloren und ist die Fortsetzung der Zeile davor"
+            % _zeige_wort(lz.rohname),
+            "3.1"))
+
+
 def untersuche(rohdaten):
-    """Alle acht Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle neun Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     zeilen = zerlege_physisch(rohdaten)
     if not zeilen:
@@ -545,6 +613,7 @@ def untersuche(rohdaten):
     pruefe_p06(komponenten, funde)
     pruefe_p07(komponenten, funde)
     pruefe_p08(logische, funde)
+    pruefe_p09(logische, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))

@@ -21,8 +21,13 @@
 # Traegt eine Zeile im Block nicht die erwartete Einrueckung, bricht das Skript
 # mit Exit-Code 2 ab, statt stillschweigend etwas anderes zu pruefen.
 #
-# Exit-Code: 0 kein Fehler in den sechs Objekten, 1 mindestens einer,
-#            2 RFC nicht erreichbar, Ausschnitt unerwartet, Umgebungsfehler.
+# Exit-Code: 0 kein Fehler und kein Hinweis in den sechs Objekten, 1 mindestens
+#            eines von beidem, 2 RFC nicht erreichbar, Ausschnitt unerwartet,
+#            Umgebungsfehler.
+#
+# Dass auch ein Hinweis rot macht, ist die Verschaerfung aus der Mission Die
+# Faltnaht: Die neuen Pruefungen P09 und P10 melden Hinweise, und ein Hinweis
+# auf einem Kalender aus dem Normtext ist ein Fehlalarm.
 #
 # Das Netz braucht dieser Pruefbefehl, das Werkzeug selbst nicht.
 
@@ -104,6 +109,7 @@ if [ "$anzahl" != "6" ]; then
 fi
 
 fehler_gesamt=0
+hinweise_gesamt=0
 nr=1
 while [ "$nr" -le "$anzahl" ]; do
     objekt="$arbeit/objekt-$nr.ics"
@@ -116,11 +122,16 @@ while [ "$nr" -le "$anzahl" ]; do
         "$nr" "$zeilen" "$fehler" "$hinweise" "$code"
     [ -s "$arbeit/ausgabe" ] && sed 's/^/  /' "$arbeit/ausgabe"
     fehler_gesamt=$((fehler_gesamt + fehler))
+    hinweise_gesamt=$((hinweise_gesamt + hinweise))
     nr=$((nr + 1))
 done
 
-printf '%d Beispiele aus RFC 5545 §4 geprüft, %d Fehler\n' \
-    "$anzahl" "$fehler_gesamt"
+printf '%d Beispiele aus RFC 5545 §4 geprüft, %d Fehler, %d Hinweise\n' \
+    "$anzahl" "$fehler_gesamt" "$hinweise_gesamt"
 
+# Verschaerfung der Mission Die Faltnaht (2026-08-12): Ein Hinweis auf einem
+# Kalender aus dem Normtext ist ein Fehlalarm und darf nicht gruen sein. Die
+# Vormission verlangte hier nur 0 Fehler.
 [ "$fehler_gesamt" -eq 0 ] || exit 1
+[ "$hinweise_gesamt" -eq 0 ] || exit 1
 exit 0

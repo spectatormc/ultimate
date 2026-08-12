@@ -10,9 +10,16 @@
 # 1, wenn dort mindestens eine FEHLER-Zeile steht, sonst 0. Damit prueft dieses
 # Skript die Exit-Code-Regel des Werkzeugs mit, statt sie zu wiederholen.
 #
-# Am Ende drei Zusammenfassungszeilen, die die Vorgaben der Missionsdatei
-# selbst nachrechnen: mindestens zwoelf Beispiele, jede der acht Pruefungen
-# mindestens einmal ausgeloest, mindestens zwei fehlerfreie Dateien.
+# Am Ende Zusammenfassungszeilen, die die Vorgaben der Missionsdatei selbst
+# nachrechnen: mindestens zwoelf Beispiele, jede Pruefung mindestens einmal
+# ausgeloest, mindestens zwei fehlerfreie Dateien.
+#
+# Die laufende Mission Die Faltnaht verlangt mehr — mindestens 16 Beispiele und
+# jede der zehn Pruefungen. Solange sie laeuft, wird dieser Abstand am Ende
+# ausgedruckt, statt ihn erst am Missionsende nachzurechnen. Er laesst dieses
+# Skript nicht rot werden: Exit 1 heisst Abweichung von erwartet/, nicht
+# "Mission offen". Wer wissen will, ob die Mission erreicht ist, liest die
+# Zeile "Faltnaht" und nicht den Exit-Code.
 #
 # Exit-Code: 0 alles wie erwartet, 1 mindestens eine Abweichung,
 #            2 Aufruf- oder Umgebungsfehler.
@@ -99,13 +106,16 @@ printf '%d Beispiele geprueft, %d OK, %d abweichend\n' \
 
 # Die Vorgaben der Missionsdatei nachrechnen, statt sie zu behaupten.
 fehlt=""
-for code in P01 P02 P03 P04 P05 P06 P07 P08; do
+ausgeloest=0
+for code in P01 P02 P03 P04 P05 P06 P07 P08 P09; do
     if ! grep -q " $code " "$erwartet"/*.txt; then
         fehlt="$fehlt $code"
+    else
+        ausgeloest=$((ausgeloest + 1))
     fi
 done
 if [ -z "$fehlt" ]; then
-    printf 'Abdeckung: alle acht Pruefungen P01 bis P08 werden ausgeloest\n'
+    printf 'Abdeckung: alle neun Pruefungen P01 bis P09 werden ausgeloest\n'
 else
     printf 'Abdeckung unvollstaendig, nie ausgeloest:%s\n' "$fehlt"
     schlecht=$((schlecht + 1))
@@ -117,6 +127,17 @@ printf '(mindestens 2)\n'
 if [ "$anzahl" -lt 12 ] || [ "$leer" -lt 2 ]; then
     printf 'Vorgabe der Missionsdatei verfehlt\n'
     schlecht=$((schlecht + 1))
+fi
+
+# Die laufende Mission, ohne Beschoenigung: erreicht ist sie erst bei 16 und 10.
+if [ "$anzahl" -ge 16 ] && [ "$ausgeloest" -ge 10 ]; then
+    printf 'Faltnaht: %d Beispiele (16 verlangt), %d von 10 Pruefungen ' \
+        "$anzahl" "$ausgeloest"
+    printf '— Vorgabe erfuellt\n'
+else
+    printf 'Faltnaht: %d Beispiele (16 verlangt), %d von 10 Pruefungen ' \
+        "$anzahl" "$ausgeloest"
+    printf '— Vorgabe noch NICHT erfuellt\n'
 fi
 
 [ "$schlecht" -eq 0 ] || exit 1

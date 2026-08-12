@@ -1,0 +1,1 @@
+HINWEIS Zeile 9: P09 Eigenschaftsname "mailto" ist nicht registriert und beginnt nicht mit 'X-'; möglicherweise hat diese Zeile ihr führendes Leerzeichen verloren und ist die Fortsetzung der Zeile davor [RFC 5545 §3.1]
