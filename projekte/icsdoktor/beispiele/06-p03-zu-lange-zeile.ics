@@ -1,0 +1,10 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//ICS-Doktor//Beispiel 06//DE
+BEGIN:VEVENT
+UID:20260812T050000Z-06@icsdoktor.example
+DTSTAMP:20260812T050000Z
+DTSTART:20260812T090000Z
+DESCRIPTION:Diese Zeile ist nicht gefaltet und deshalb deutlich laenger als die 75 Oktette, die RFC 5545 empfiehlt.
+END:VEVENT
+END:VCALENDAR

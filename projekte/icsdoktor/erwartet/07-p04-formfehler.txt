@@ -1,0 +1,4 @@
+FEHLER Zeile 7: P04 Eigenschaftsname enthält ein Leerzeichen; erlaubt sind A-Z, 0-9 und '-', danach ';' oder ':' [RFC 5545 §3.1]
+FEHLER Zeile 8: P04 Parameter "RSVP" hat kein '='; die Form ist NAME=WERT [RFC 5545 §3.1]
+FEHLER Zeile 9: P04 Parameter "CN": Anführungszeichen wird nicht geschlossen [RFC 5545 §3.1]
+FEHLER Zeile 11: P04 leere Zeile; zwischen Inhaltszeilen stehen keine Leerzeilen [RFC 5545 §3.1]

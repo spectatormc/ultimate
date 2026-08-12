@@ -1,0 +1,1 @@
+HINWEIS Zeile 8: P03 Zeile ist 81 Oktette lang; empfohlen sind höchstens 75, längere Zeilen werden gefaltet [RFC 5545 §3.1]

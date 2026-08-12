@@ -1,0 +1,3 @@
+FEHLER Zeile 9: P05 END:VTODO passt nicht zu BEGIN:VEVENT aus Zeile 4 [RFC 5545 §3.4]
+FEHLER Zeile 11: P05 äußerste Komponente ist "VEVENT"; ein iCalendar-Objekt beginnt mit BEGIN:VCALENDAR [RFC 5545 §3.4]
+FEHLER Zeile 11: P05 BEGIN:VEVENT hat kein END:VEVENT [RFC 5545 §3.4]

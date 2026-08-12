@@ -1,0 +1,4 @@
+FEHLER Zeile 1: P05 Eigenschaft "X-EXPORT" steht außerhalb jeder Komponente [RFC 5545 §3.4]
+FEHLER Zeile 1: P05 keine Komponente gefunden; ein iCalendar-Objekt beginnt mit BEGIN:VCALENDAR [RFC 5545 §3.4]
+FEHLER Zeile 2: P05 Eigenschaft "SUMMARY" steht außerhalb jeder Komponente [RFC 5545 §3.4]
+FEHLER Zeile 3: P05 Eigenschaft "DTSTART" steht außerhalb jeder Komponente [RFC 5545 §3.4]

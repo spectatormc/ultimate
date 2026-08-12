@@ -1,0 +1,5 @@
+# Die Beispiele sind byte-genau: An ihren Zeilenenden hängen die Prüfungen P01
+# und P02. Git darf sie beim Auschecken nicht umschreiben, sonst prüft ein Klon
+# etwas anderes als das Original — und Prüfbefehl 1 beginnt mit einem Klon.
+beispiele/*.ics -text
+erwartet/*.txt -text

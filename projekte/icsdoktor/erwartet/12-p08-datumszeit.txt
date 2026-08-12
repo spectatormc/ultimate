@@ -1,0 +1,6 @@
+FEHLER Zeile 6: P08 DTSTAMP: Wert "2026-08-12T05:00:00Z" ist kein DATE-TIME; erwartet wird JJJJMMTT, ein 'T' und HHMMSS, wahlweise mit 'Z' am Ende [RFC 5545 §3.3.5]
+FEHLER Zeile 7: P08 DTSTART: den 30. gibt es im Monat 02 des Jahres 2026 nicht [RFC 5545 §3.3.5]
+FEHLER Zeile 8: P08 DTEND: Stunde 25 liegt außerhalb von 00 bis 23 [RFC 5545 §3.3.5]
+FEHLER Zeile 9: P08 CREATED: Wert endet auf 'Z' und trägt zugleich den Parameter TZID=Europe/Berlin; beides zusammen ist keine der drei Formen [RFC 5545 §3.3.5]
+FEHLER Zeile 10: P08 LAST-MODIFIED: Wert "20260812T0459" ist kein DATE-TIME; erwartet wird JJJJMMTT, ein 'T' und HHMMSS, wahlweise mit 'Z' am Ende [RFC 5545 §3.3.5]
+FEHLER Zeile 14: P08 TRIGGER: Wert "20260901T1000" ist kein DATE-TIME; erwartet wird JJJJMMTT, ein 'T' und HHMMSS, wahlweise mit 'Z' am Ende [RFC 5545 §3.3.5]

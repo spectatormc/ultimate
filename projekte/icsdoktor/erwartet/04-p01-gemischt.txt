@@ -1,0 +1,3 @@
+FEHLER Zeile 2: P01 Zeile endet mit LF; RFC 5545 verlangt CRLF als Zeilenende [RFC 5545 §3.1]
+FEHLER Zeile 4: P01 Zeile enthält ein CR, dem kein LF folgt [RFC 5545 §3.1]
+FEHLER Zeile 5: P01 letzte Zeile endet ohne CRLF; jede Inhaltszeile wird mit CRLF abgeschlossen [RFC 5545 §3.1]

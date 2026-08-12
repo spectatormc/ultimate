@@ -1,0 +1,48 @@
+# Herkunft
+
+Regel 6 des Ehrenkodex: Bibliotheken, Vorlagen, generierte Assets und Beiträge
+anderer Menschen stehen hier mit Name, Version, Herkunft und Lizenz. Nennen
+allein reicht nicht — die Lizenz wird eingehalten oder die Sache nicht benutzt.
+
+Diese Datei entsteht mit dem ersten Eintrag, den es zu machen gibt (Zyklus 5,
+2026-08-12). Vorher gab es keinen: Bis dahin war nichts im Repo, das nicht in
+diesem Repo geschrieben wurde. Dass sie fehlte, war kein Versäumnis, sondern
+ein leerer Posten — nachprüfbar in der Git-Historie.
+
+## Im Repo liegt kein fremder Code
+
+Kein kopierter Quelltext, keine Vorlage, keine generierten Assets, keine
+Kalenderdatei aus fremder Hand. Die Beispiele in
+`projekte/icsdoktor/beispiele/` sind nachgebaut, nicht übernommen — auch der
+Fall aus dem zitierten Fehlerbericht `cozy/cozy-calendar` #544, dessen Datei im
+Bericht abgedruckt ist. Nachbauen kostet fünf Minuten, eine unklare
+Herkunftsfrage kostet mehr.
+
+## Benutzt, aber nicht mitgeliefert
+
+| Sache | Version | Herkunft | Lizenz | Wofür |
+|---|---|---|---|---|
+| Python 3, Standardbibliothek | 3.12 im Lauf, gebraucht wird 3.x | <https://www.python.org> | PSF License | `icsdoktor.py` läuft darauf. Nichts davon liegt im Repo. |
+| POSIX-Shell, `awk`, `curl` oder `wget`, `diff`, `cmp` | Systemwerkzeuge des jeweiligen Rechners | Betriebssystem | jeweils die des Systems | `pruefe.sh` und `rfc-beispiele.sh` |
+| `actions/checkout` | `@v6`, siehe `.github/workflows/` | <https://github.com/actions/checkout> | MIT | Holt das Repo, bevor der Zyklus startet |
+| `anthropics/claude-code-action` | `@v1`, siehe `.github/workflows/zyklus.yml` | <https://github.com/anthropics/claude-code-action> | MIT | Startet das Modell im Lauf |
+| `gh` (GitHub CLI) | Version des Laufs | <https://cli.github.com> | MIT | Werkzeuglandschaft in Zyklus 4 geprüft |
+
+Die drei MIT-Angaben sind in diesem Zyklus über `gh api repos/…/license`
+abgefragt und nicht aus dem Gedächtnis geschrieben. Alle drei werden benutzt,
+nicht mitgeliefert; ihr Quelltext liegt nicht in diesem Repo.
+
+## Normtexte, auf die ich mich berufe
+
+| Text | Herkunft | Bedingungen | Wofür |
+|---|---|---|---|
+| RFC 5545, „Internet Calendaring and Scheduling Core Object Specification (iCalendar)", September 2009 | <https://www.rfc-editor.org/rfc/rfc5545.txt> | IETF Trust, BCP 78 / RFC 5378. Der Text wird zur Laufzeit von Prüfbefehl 2 geladen und **nicht** in dieses Repo kopiert; zitiert werden Abschnittsnummern und einzelne Fehlermeldungsmuster. | Alle acht Prüfungen von `icsdoktor.py`; die sechs Kalenderobjekte aus §4 sind die Eingabe von Prüfbefehl 2 |
+
+## Fremde Sätze, die ich zitiere
+
+Die Missionsdatei `state/missionen/2026-08-11-icsdoktor.md` gibt drei
+öffentliche Fehlerberichte im Wortlaut wieder, jeder mit Repo, Nummer und Link.
+Zitiert wird, was die Personen selbst öffentlich geschrieben haben; genannt
+werden die Berichte, nicht ihre Verfasser (Regel 7). Ebenso in
+`projekte/icsdoktor/LAGE.md` einzelne Zeilen aus dem Quelltext geprüfter
+Werkzeuge — als Belegzitat für einen Befund, nicht als übernommener Code.

@@ -1,0 +1,3 @@
+FEHLER Zeile 1: P06 VCALENDAR ab Zeile 1 hat kein PRODID; die Eigenschaft ist Pflicht und steht genau einmal im Kalender [RFC 5545 §3.7.3]
+FEHLER Zeile 2: P06 VERSION hat den Wert "1.0"; RFC 5545 verlangt 2.0 [RFC 5545 §3.7.4]
+FEHLER Zeile 3: P06 VERSION steht zum wiederholten Mal in VCALENDAR ab Zeile 1; zuerst in Zeile 2 [RFC 5545 §3.7.4]

@@ -1,0 +1,5 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//ICS-Doktor//Beispiel 04//DE
+X-NOTIZ:hier steckt ein CR  mitten drin
+END:VCALENDAR

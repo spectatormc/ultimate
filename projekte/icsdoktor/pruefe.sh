@@ -1,0 +1,123 @@
+#!/bin/sh
+# Pruefbefehl 1 der Mission ICS-Doktor.
+#
+#   sh projekte/icsdoktor/pruefe.sh
+#   echo "Exit-Code: $?"
+#
+# Laesst icsdoktor.py auf jede Datei in beispiele/ los und vergleicht die
+# Ausgabe Byte fuer Byte mit der Erwartung in erwartet/. Der erwartete
+# Exit-Code wird nicht danebengeschrieben, sondern aus der Erwartung abgeleitet:
+# 1, wenn dort mindestens eine FEHLER-Zeile steht, sonst 0. Damit prueft dieses
+# Skript die Exit-Code-Regel des Werkzeugs mit, statt sie zu wiederholen.
+#
+# Am Ende drei Zusammenfassungszeilen, die die Vorgaben der Missionsdatei
+# selbst nachrechnen: mindestens zwoelf Beispiele, jede der acht Pruefungen
+# mindestens einmal ausgeloest, mindestens zwei fehlerfreie Dateien.
+#
+# Exit-Code: 0 alles wie erwartet, 1 mindestens eine Abweichung,
+#            2 Aufruf- oder Umgebungsfehler.
+
+set -u
+
+verzeichnis=$(dirname "$0")
+werkzeug="$verzeichnis/icsdoktor.py"
+beispiele="$verzeichnis/beispiele"
+erwartet="$verzeichnis/erwartet"
+
+if ! command -v python3 >/dev/null 2>&1; then
+    echo "ABBRUCH: python3 ist nicht im PATH" >&2
+    exit 2
+fi
+for pfad in "$werkzeug" "$beispiele" "$erwartet"; do
+    if [ ! -e "$pfad" ]; then
+        echo "ABBRUCH: $pfad fehlt" >&2
+        exit 2
+    fi
+done
+
+arbeit=$(mktemp -d) || exit 2
+trap 'rm -rf "$arbeit"' EXIT INT TERM
+
+anzahl=0
+gut=0
+schlecht=0
+leer=0
+
+for datei in "$beispiele"/*.ics; do
+    name=$(basename "$datei" .ics)
+    soll="$erwartet/$name.txt"
+    anzahl=$((anzahl + 1))
+
+    if [ ! -f "$soll" ]; then
+        printf 'ABWEICHUNG %s: keine Erwartung in erwartet/%s.txt\n' \
+            "$name" "$name"
+        schlecht=$((schlecht + 1))
+        continue
+    fi
+
+    python3 "$werkzeug" "$datei" > "$arbeit/ist" 2> "$arbeit/fehlerkanal"
+    ist_code=$?
+
+    if grep -q '^FEHLER ' "$soll"; then
+        soll_code=1
+    else
+        soll_code=0
+    fi
+    funde=$(wc -l < "$soll" | tr -d ' ')
+    [ "$funde" = "0" ] && leer=$((leer + 1))
+
+    abweichung=""
+    if ! cmp -s "$arbeit/ist" "$soll"; then
+        abweichung="Ausgabe"
+    fi
+    if [ "$ist_code" != "$soll_code" ]; then
+        if [ -n "$abweichung" ]; then
+            abweichung="$abweichung und Exit-Code"
+        else
+            abweichung="Exit-Code"
+        fi
+    fi
+    if [ -s "$arbeit/fehlerkanal" ]; then
+        abweichung="${abweichung:+$abweichung und }Ausgabe auf stderr"
+    fi
+
+    if [ -z "$abweichung" ]; then
+        printf 'OK   %-34s %2d Funde, Exit %d\n' "$name" "$funde" "$ist_code"
+        gut=$((gut + 1))
+    else
+        printf 'ABWEICHUNG %s: %s\n' "$name" "$abweichung"
+        printf '  erwartet Exit %d, bekommen Exit %d\n' "$soll_code" "$ist_code"
+        diff -u "$soll" "$arbeit/ist" | sed 's/^/  /'
+        [ -s "$arbeit/fehlerkanal" ] && sed 's/^/  stderr: /' \
+            "$arbeit/fehlerkanal"
+        schlecht=$((schlecht + 1))
+    fi
+done
+
+printf '%d Beispiele geprueft, %d OK, %d abweichend\n' \
+    "$anzahl" "$gut" "$schlecht"
+
+# Die Vorgaben der Missionsdatei nachrechnen, statt sie zu behaupten.
+fehlt=""
+for code in P01 P02 P03 P04 P05 P06 P07 P08; do
+    if ! grep -q " $code " "$erwartet"/*.txt; then
+        fehlt="$fehlt $code"
+    fi
+done
+if [ -z "$fehlt" ]; then
+    printf 'Abdeckung: alle acht Pruefungen P01 bis P08 werden ausgeloest\n'
+else
+    printf 'Abdeckung unvollstaendig, nie ausgeloest:%s\n' "$fehlt"
+    schlecht=$((schlecht + 1))
+fi
+
+printf 'Vorgaben: %d Beispiele (mindestens 12), %d davon fehlerfrei ' \
+    "$anzahl" "$leer"
+printf '(mindestens 2)\n'
+if [ "$anzahl" -lt 12 ] || [ "$leer" -lt 2 ]; then
+    printf 'Vorgabe der Missionsdatei verfehlt\n'
+    schlecht=$((schlecht + 1))
+fi
+
+[ "$schlecht" -eq 0 ] || exit 1
+exit 0

@@ -1,0 +1,2 @@
+FEHLER Zeile 4: P07 VEVENT ab Zeile 4 hat kein UID (§3.8.4.7); die Eigenschaft ist Pflicht und darf nur einmal vorkommen [RFC 5545 §3.6.1]
+FEHLER Zeile 6: P07 DTSTAMP (§3.8.7.2) steht zum wiederholten Mal im VEVENT ab Zeile 4; zuerst in Zeile 5 [RFC 5545 §3.6.1]
