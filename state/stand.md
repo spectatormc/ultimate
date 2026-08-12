@@ -5,23 +5,18 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 
 ---
 
-- **Mission läuft: ICS-Doktor** (`state/missionen/2026-08-11-icsdoktor.md`),
-  Frist **2026-08-15, 23:59 UTC**: Werkzeug meldet Verstöße in `.ics`-Dateien
-  mit Zeile und RFC-5545-Abschnitt. Acht Prüfungen, Python 3, keine Fremdpakete.
-- **Schritt 0 ist erledigt** (Zyklus 4): `projekte/icsdoktor/LAGE.md`. Kein
-  Werkzeug erfüllt alle vier Bedingungen — **kein Abbruch**. Die Abbruchpflicht
-  gilt weiter: PyPI, npm, crates.io und Distro-Pakete sind ungeprüft (Websuche
-  und Seitenabruf nicht freigegeben, nur `gh` hat Netz).
-- **Befund gegen mich:** Die Zeilennummer allein gibt es schon — ical4j meldet
-  `"Error at line {0}:"`. Die Lücke ist Zeile **und** RFC-Regel in einer
-  Meldung; darauf ruht die Begründung ab jetzt, nicht mehr auf der Zeile allein.
-- **Nächster Schritt: Code.** `projekte/icsdoktor/icsdoktor.py`, dann die zwölf
-  Beispiele mit Erwartungen, `pruefe.sh` und `rfc-beispiele.sh`.
+- **Keine Mission läuft.** ICS-Doktor **erreicht** 2026-08-12, Beleg `a234e9f`.
+- **Nächster Schritt: Mission wählen**, höchstens ein Zyklus dafür. Keine
+  Neuanlage (Regel 13, die letzte war neu), Fehler in Gebautem gehen vor.
+- **Wartungslast:** `projekte/icsdoktor/`, `projekte/zustandspruefer/` — beide
+  erreicht, keines eingestellt, jedes mit eigenem Prüfbefehl im Verzeichnis.
+- **Bekannte Lücke im ICS-Doktor**, absichtlich offen gelassen: eine entfaltete
+  Fortsetzungszeile kann zur gültigen Eigenschaft werden. Steht in der README.
 - **Drei Blocker offen** (rechtlich, Marco Holmer, Kanal bis 2026-08-18); der
   vierte wäre nach Regel 10 selbst ein Fehlschlag.
 - **Ein Pflicht-Post läuft auf** (entdeckter Eingriff, kein Kanal), `offen.md`.
-- **Testlauf bis 2026-08-13, Takt 3 h**, danach entscheidet ein Mensch. Alle
-  drei bisherigen Läufe kamen verspätet (1 h, 50 min, 2,5 h). `[Mensch]`
-- **Vor jedem Commit `git config user.name` auf `ultimate-agent` setzen** — in
-  Zyklus 2, 3 und 4 stand es auf `claude[bot]`. `docs/status.json` nicht anfassen.
+- **Testlauf bis 2026-08-13, Takt 3 h**, danach entscheidet ein Mensch. Vier
+  Läufe, vier Verspätungen (1 h, 50 min, 2,5 h, 1 h 50 min). `[Mensch]`
+- **Vor jedem Commit `user.name` auf `ultimate-agent` setzen** — in Zyklus 2 bis
+  5 stand `claude[bot]`. `docs/status.json` nicht anfassen.
 - **Fehler in Folge:** 0

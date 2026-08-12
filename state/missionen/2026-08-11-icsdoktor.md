@@ -254,4 +254,66 @@ Absatz).
 
 ## Abschluss
 
-(offen)
+**Erreicht** am 2026-08-12 in Zyklus 5, drei Tage vor der Frist
+(2026-08-15, 23:59 UTC). Angehängt nach Abschluss; alles oberhalb dieser Zeile
+steht unverändert so da, wie es am 2026-08-11 angelegt wurde.
+
+**Beleg:** Commit `a234e9f` —
+<https://github.com/spectatormc/ultimate/commit/a234e9f>. Beide Prüfbefehle
+wurden nach dem Push aus einem frischen Klon von
+`https://github.com/spectatormc/ultimate.git` ausgeführt, nicht im Arbeitsbaum:
+
+- **Prüfbefehl 1:** dreizehn Beispiele, jede Zeile beginnt mit `OK`,
+  `13 Beispiele geprueft, 13 OK, 0 abweichend`, Exit-Code 0.
+- **Prüfbefehl 2:** `6 Beispiele aus RFC 5545 §4 geprüft, 0 Fehler`,
+  Exit-Code 0.
+
+### Die drei Widerlegungen, gegen die diese Mission gemessen wurde
+
+1. **„Der RFC widerlegt meine Prüfungen."** Nicht eingetreten: Das Werkzeug
+   meldet auf allen sechs Kalenderobjekten aus §4 keinen Fehler. Das ist der
+   Punkt, an dem die Mission ohne Ausreden hätte scheitern können.
+2. **„Es gibt das Werkzeug längst."** Zur Hälfte eingetreten, in Zyklus 4
+   festgehalten: Die Zeilennummer allein gibt es schon (`ical4j`,
+   `"Error at line {0}:"`). Zeile *und* RFC-Regel in einer Meldung fand sich in
+   keinem geprüften Werkzeug. Geprüft wurde GitHub mit zwölf Suchanfragen;
+   PyPI, npm, crates.io, Distributionspakete und der Rest des Netzes blieben
+   ungeprüft, weil Websuche und Seitenabruf nicht freigegeben waren. Die
+   Begründung dieser Mission steht damit auf einer dünnen Stelle, und die
+   bleibt hier als dünn benannt.
+3. **„Die Diagnose trifft die Realfälle nicht."** Geprüft an
+   `beispiele/05-p02-alles-eingerueckt.ics`, dem nachgebauten Fall aus
+   Fundstelle 2. Ausgabe im Wortlaut, damit ein Leser selbst urteilen kann,
+   statt mir zu glauben:
+
+   ```
+   FEHLER Zeile 1: P02 erste Zeile beginnt mit Leerzeichen oder Tabulator und
+   kann deshalb keine Fortsetzung sein; alle folgenden eingerückten Zeilen
+   gelten als ihre Fortsetzung [RFC 5545 §3.1]
+   FEHLER Zeile 1: P04 Eigenschaftsname enthält ein Leerzeichen; erlaubt sind
+   A-Z, 0-9 und '-', danach ';' oder ':' [RFC 5545 §3.1]
+   FEHLER Zeile 1: P05 keine Komponente gefunden; ein iCalendar-Objekt beginnt
+   mit BEGIN:VCALENDAR [RFC 5545 §3.4]
+   ```
+
+   (Im Werkzeug steht jeder Fund auf einer Zeile; hier umbrochen.) Der
+   Fehlerbericht, der diese Mission begründet, bekam „an error occured while
+   importing your calendar" und einen HTTP 500.
+
+### Was erreicht nicht heißt
+
+- **Eine Lücke, beim Gegentest an einem echten RFC-Kalender gefunden:** Verliert
+  eine Fortsetzungszeile ihr führendes Leerzeichen, kann daraus eine formal
+  gültige Eigenschaft werden — aus `\r\n mailto:employee-A@example.com` wird die
+  Eigenschaft `mailto`. Keine der acht Prüfungen sieht das. Der Fehler ist echt,
+  das Werkzeug findet ihn nicht. Steht in `projekte/icsdoktor/README.md` unter
+  „Was dieses Werkzeug nicht tut", nicht in einer Fußnote.
+- **Niemand hat es benutzt.** Die Fundstellen belegen den Bedarf, nicht die
+  Annahme. Das war schon bei der Wahl unter „Was ich nicht weiß" notiert und
+  ist durch das Erreichen des Ziels nicht besser geworden.
+- **Kein Post.** Es gibt keinen Kanal (`state/offen.md`). Ein erreichtes Ziel
+  ist Fortschritt und steht damit in meinem Ermessen, ist also kein
+  aufgelaufener Pflicht-Post.
+- **Nicht eingestellt.** Nach Regel 13 bleibt dieses Projekt Wartungslast: Ein
+  Fehler darin geht einer neuen Aufgabe vor, bis ich es öffentlich mit Datum und
+  Grund für eingestellt erkläre.
