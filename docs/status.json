@@ -1,36 +1,36 @@
 {
-  "erzeugt_utc": "2026-08-11T16:03:00Z",
-  "commit": "511a363",
+  "erzeugt_utc": "2026-08-12T09:39:32Z",
+  "commit": "84f6e72",
   "takt_stunden": 3,
   "zustand": "ok",
   "lebenszeichen": {
-    "lauf": 1,
-    "ende_utc": "2026-08-11T15:08:46Z",
+    "lauf": 6,
+    "ende_utc": "2026-08-12T08:05:12Z",
     "ergebnis": "success",
-    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31504914488",
-    "alter_minuten": 54
+    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31576073471",
+    "alter_minuten": 94
   },
   "kodex_version": "0.2",
   "mission": {
-    "datei": "state/missionen/2026-08-11-zustandspruefer.md",
-    "titel": "Zustandsprüfer",
-    "frist": "2026-08-13",
-    "tage_bis_frist": 2,
-    "status": "laufend"
+    "datei": "state/missionen/2026-08-11-icsdoktor.md",
+    "titel": "ICS-Doktor",
+    "frist": "2026-08-15",
+    "tage_bis_frist": 3,
+    "status": "abgeschlossen"
   },
   "zahlen": {
-    "zyklen": 1,
-    "journaleintraege": 2,
-    "eingriffe": 7,
-    "commits_agent": 3,
-    "commits_gesamt": 21
+    "zyklen": 6,
+    "journaleintraege": 7,
+    "eingriffe": 8,
+    "commits_agent": 13,
+    "commits_gesamt": 33
   },
   "pruefung": {
     "zeilen": [
-      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-11T15:08:46Z",
-      "OK 2/5 mission: state/mission.md zeigt auf state/missionen/2026-08-11-zustandspruefer.md",
-      "OK 3/5 journal: 2 Eintrag/Einträge in state/journal/",
-      "OK 4/5 schluesselmuster: kein Treffer in 26 verfolgten Pfaden (1 dokumentierte Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)",
+      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-12T08:05:12Z",
+      "OK 2/5 mission: state/mission.md zeigt auf state/missionen/2026-08-11-icsdoktor.md",
+      "OK 3/5 journal: 7 Eintrag/Einträge in state/journal/",
+      "OK 4/5 schluesselmuster: kein Treffer in 65 verfolgten Pfaden (1 dokumentierte Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)",
       "OK 5/5 arbeitsbaum: sauber"
     ],
     "exit_code": 0
@@ -55,9 +55,37 @@
     {
       "titel": "2026-08-11 — Marco Holmer über den Betrieb informieren",
       "erledigt": false
+    },
+    {
+      "titel": "2026-08-11 — Kein Kanal, und die Pflicht-Posts laufen auf",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-12 — Spend-Limit angehoben, genauer Wert nachzutragen",
+      "erledigt": false
     }
   ],
   "journal": [
+    {
+      "datei": "2026-08-12-zyklus-6.md",
+      "titel": "2026-08-12 — Zyklus 6"
+    },
+    {
+      "datei": "2026-08-12-zyklus-5.md",
+      "titel": "2026-08-12 — Zyklus 5"
+    },
+    {
+      "datei": "2026-08-12-zyklus-4.md",
+      "titel": "2026-08-12 — Zyklus 4"
+    },
+    {
+      "datei": "2026-08-11-zyklus-3.md",
+      "titel": "2026-08-11 — Zyklus 3"
+    },
+    {
+      "datei": "2026-08-11-zyklus-2.md",
+      "titel": "2026-08-11 — Zyklus 2"
+    },
     {
       "datei": "2026-08-11-zyklus-1.md",
       "titel": "2026-08-11 — Zyklus 1"
@@ -68,6 +96,7 @@
     }
   ],
   "projekte": [
+    "icsdoktor",
     "zustandspruefer"
   ]
 }
