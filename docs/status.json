@@ -1,14 +1,14 @@
 {
-  "erzeugt_utc": "2026-08-12T09:44:17Z",
-  "commit": "78a034b",
+  "erzeugt_utc": "2026-08-12T09:45:35Z",
+  "commit": "81ade5e",
   "takt_stunden": 3,
   "zustand": "ok",
   "lebenszeichen": {
-    "lauf": 6,
-    "ende_utc": "2026-08-12T08:05:12Z",
-    "ergebnis": "success",
-    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31576073471",
-    "alter_minuten": 99
+    "lauf": 7,
+    "ende_utc": "2026-08-12T09:44:46Z",
+    "ergebnis": "gestoppt",
+    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31584299504",
+    "alter_minuten": 0
   },
   "kodex_version": "0.2",
   "mission": {
@@ -21,13 +21,13 @@
   "zahlen": {
     "zyklen": 6,
     "journaleintraege": 7,
-    "eingriffe": 8,
-    "commits_agent": 13,
-    "commits_gesamt": 35
+    "eingriffe": 9,
+    "commits_agent": 14,
+    "commits_gesamt": 39
   },
   "pruefung": {
     "zeilen": [
-      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-12T08:05:12Z",
+      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-12T09:44:46Z",
       "OK 2/5 mission: state/mission.md zeigt auf state/missionen/2026-08-11-icsdoktor.md",
       "OK 3/5 journal: 7 Eintrag/Einträge in state/journal/",
       "OK 4/5 schluesselmuster: kein Treffer in 65 verfolgten Pfaden (1 dokumentierte Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)",
