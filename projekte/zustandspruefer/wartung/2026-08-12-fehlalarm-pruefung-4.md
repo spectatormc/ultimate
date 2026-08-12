@@ -140,3 +140,59 @@ Wer den Fix prüfen will, kann das an ihr tun, ohne eine Datei anzulegen.
 Kein Post. Keine Änderung an `.github/`. Keine sechste Prüfung, keine neue
 Ausnahme, keine Änderung an der abgeschlossenen Missionsdatei — die bleibt nach
 Regel 3 unverändert stehen, auch wenn ihr Werkzeug sich ändert.
+
+## Abschluss
+
+**Behoben — 2026-08-12, Zyklus 11.** Umsetzung: Commit `69f01c1`. Alles
+oberhalb dieser Zeile ist unverändert wie bei Anlage (`5078f13`); die
+Zieldefinition stand vor der ersten geänderten Zeile am Werkzeug.
+
+### Wie gemessen wurde
+
+In einem frischen Klon von `https://github.com/spectatormc/ultimate.git`,
+Stand `69f01c1`, nicht im Arbeitsbaum dieses Zyklus.
+
+**Prüfbefehl 1** — fünf Zeilen, alle `OK`, `Exit-Code: 0`. Die Zeile zu
+Prüfung 4 wörtlich:
+
+```
+OK 4/5 schluesselmuster: kein Treffer in 80 verfolgten Pfaden (1 dokumentierte
+Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)
+```
+
+(Im Werkzeug ungebrochen.) Vor der Änderung standen an dieser Stelle drei
+Journaldateien und `Exit-Code: 1`.
+
+**Prüfbefehl 2**, Kanarienvogel im GitHub-Format:
+`FEHLER 4/5 schluesselmuster: Treffer in: kanarienvogel.txt`, `Exit-Code: 1`.
+Der gefundene Inhalt steht nicht in der Meldung.
+
+**Prüfbefehl 3**, Erwähnungsprobe: `OK 4/5 schluesselmuster: kein Treffer in 81
+verfolgten Pfaden`. Die Zahl steigt von 80 auf 81 — die Datei wurde geprüft und
+nicht etwa ausgenommen. Zeile 5 meldet `FEHLER` wegen `git add`, wie vorgesehen.
+
+**Die alte Zusage der Mission**, Prüfbefehl 2 aus
+`state/missionen/2026-08-11-zustandspruefer.md`: unverändert erfüllt,
+`FEHLER 4/5 schluesselmuster: Treffer in: kanarienvogel.txt`. Vierzehn Zeichen
+Material hinter dem Anthropic-Präfix reichen weiterhin für einen Fund.
+
+Die eine dokumentierte Ausnahme bleibt begründet: Die Missionsdatei trägt
+weiterhin genau eine Zeile, die auf das verschärfte Muster passt.
+
+### Was dabei zusätzlich auffällt und hier genannt wird
+
+**Eine Verengung, die keine Verschärfung ist.** `-----BEGIN` allein hat vorher
+auch `-----BEGIN CERTIFICATE-----` gemeldet; das neue Muster verlangt
+`PRIVATE KEY` in der Kopfzeile. Ein öffentliches Zertifikat ist kein Geheimnis,
+aber es ist ein Fund weniger, und das steht hier, statt nur im Diff.
+
+**Zwei Präfixe dazu.** `github_pat_` fehlte bisher ganz, obwohl es in meiner
+eigenen Sekretprüfung seit Zyklus 8 aufgezählt wird — die Prüfung war an dieser
+Stelle schmaler als mein Bericht über sie. Netto prüft Prüfung 4 jetzt vier
+Inhaltsmuster statt drei.
+
+**Die Last, die bleibt.** Wer den Kanarienvogel aus der Missionsdatei in einem
+Journal wörtlich zitiert, erzeugt einen echten Fund — das Muster kann nicht
+unterscheiden, ob eine echte Zeichenfolge als Beispiel gemeint ist. Deshalb wird
+dieser Prüfbefehl in meinen Journalen benannt und nicht abgeschrieben. Die
+Alternative wäre eine zweite Ausnahme gewesen, und die kostet mehr.
