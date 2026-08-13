@@ -534,3 +534,47 @@ aussieht:
   Missionsschritt, sagt das ein Eintrag in dieser Datei oder in
   `state/mission.md`. Aus einer Commit-Nachricht lese ich keine Priorität heraus,
   die dort nicht steht.
+
+---
+
+## 2026-08-13 — Das Impressum nennt vermutlich den falschen Anbieter
+
+**Befund, nicht Vermutung ins Blaue:** `docs/impressum.html` und `IMPRESSUM.md`
+weisen die Gartenschmiede GmbH als Anbieterin aus. Nach der Sachlage ist sie es
+nicht. Das Claude-Abo laeuft auf die Privatperson, das Repo gehoert einem
+privaten GitHub-Konto, die Actions laufen dort, die Seiten liegen unter
+`spectatormc.github.io`, und die Gesellschaft betreibt ein Gartengeschaeft und
+hat mit dem Projekt nichts zu tun. Die Angaben wurden aus dem Impressum von
+staudenplan.de uebernommen — das steht so in der Datei.
+
+Wer als Anbieter benannt wird, soll der sein, der es ist. Eine unzutreffende
+Anbieterkennzeichnung ist nach den einschlaegigen Vorschriften eine
+Ordnungswidrigkeit; die Rahmen liegen im fuenfstelligen Bereich. Ich behaupte
+keine Rechtsfolge — ich halte fest, dass die veroeffentlichte Angabe der Lage
+widerspricht, und das genuegt fuer Regel 1.
+
+**Recherchiert wurde das aus einem anderen Anlass:** Der Betreiber erwog, das
+Projekt von der GmbH auf seine US-LLC umzuhaengen. Ergebnis dieser Pruefung, in
+Kuerze:
+
+- Deutsches Recht knuepft an die tatsaechliche Niederlassung an, nicht an den
+  Registersitz. Eine LLC in Miami, deren gesamte Taetigkeit in Freising
+  stattfindet, aendert daran nichts.
+- Die KI-Verordnung ist sitzneutral: Drittstaatsbetreiber werden erfasst,
+  sobald der Output in der Union verwendet wird.
+- Genau ein Punkt haengt an der Rechtsform, und er spricht fuer die
+  Privatperson: Die Ausnahme fuer rein persoenliche, nicht berufliche Nutzung
+  in Art. 2 Abs. 10 KI-VO steht ausschliesslich natuerlichen Personen offen.
+  Eine Gesellschaft kann sie strukturell nie beanspruchen.
+
+**Zu entscheiden, und nur vom Betreiber:** Welche Anschrift steht dauerhaft
+oeffentlich neben einem Kanal, der ungeprueft veroeffentlicht? Es gibt nur zwei
+ehrliche Antworten: die private Wohnanschrift, oder Ortsstrasse 7 — und
+Ortsstrasse 7 ist das Gartengeschaeft. Die zweite entkoppelt den Namen der
+Gesellschaft, behaelt aber ihre Raeume als Zustelladresse und ihre Leute als
+die, die Post entgegennehmen. Das ist der eigentliche Preis der Umstellung, und
+er ist keine Formalie.
+
+Solange das offen ist, bleibt das Impressum unveraendert stehen — falsch, aber
+benannt. Es stillschweigend zu aendern waere schlimmer als es benannt stehen zu
+lassen.
