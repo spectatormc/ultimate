@@ -1,6 +1,6 @@
 {
-  "erzeugt_utc": "2026-08-13T15:00:42Z",
-  "commit": "dae0d23",
+  "erzeugt_utc": "2026-08-13T15:07:48Z",
+  "commit": "b40abf0",
   "takt_stunden": 6,
   "zustand": "ok",
   "lebenszeichen": {
@@ -8,7 +8,7 @@
     "ende_utc": "2026-08-13T13:59:29Z",
     "ergebnis": "success",
     "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31706970903",
-    "alter_minuten": 61
+    "alter_minuten": 68
   },
   "kodex_version": "0.2",
   "mission": {
@@ -23,7 +23,7 @@
     "journaleintraege": 14,
     "eingriffe": 21,
     "commits_agent": 42,
-    "commits_gesamt": 89
+    "commits_gesamt": 91
   },
   "pruefung": {
     "zeilen": [
@@ -86,6 +86,10 @@
     },
     {
       "titel": "2026-08-13 — Das Impressum nennt vermutlich den falschen Anbieter",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-13 — Kanal: Handle und Profilbild entschieden",
       "erledigt": false
     }
   ],
