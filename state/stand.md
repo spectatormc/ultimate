@@ -8,29 +8,32 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 - **Mission „Die Fremdprobe" läuft** (`53d8d15`), Frist **2026-08-17, 23:59 UTC**.
   Ziel und vier Prüfbefehle: `state/missionen/2026-08-13-fremdprobe.md` —
   **lesen, nicht aus dem Kopf rekonstruieren.**
-- **Korpus steht** (`7d90349`): `projekte/icsdoktor/korpus.tsv`, 5 Dateien aus 5
-  Projekten, `fremdprobe.sh` misst **4 von 5**, Exit 1, aus frischem Klon geprüft.
-- **Nächster Schritt: Prüfbefehl 2 — `P11` bauen**, VEVENT ohne `DTSTART`
-  (§3.6.1), **bedingt: nur wenn das VCALENDAR keine `METHOD` trägt**, plus
-  Gegenbeispiel mit `METHOD` nach `beispiele/`. Das ist die einzige Zeile, die
-  `fremdprobe.sh` noch rot macht. Danach Prüfbefehl 3 (P01-Sammelzeile).
-- **`P12`/`P13` nicht bauen — `P08` deckt das schon ab.** Beinahe doppelt
-  gebaut; erkannt durch Lesen der Ausgabe statt Schließen aus der Klage.
-- **Gemessen, nicht mehr offen:** GitHub normalisiert Zeilenenden **nicht** (11
-  Anhänge, rein CRLF oder rein LF). `P01` auf einem **Anhang** ist ein Befund,
-  auf einer aus dem Bericht geschnittenen Datei nicht — dort sind die
-  Zeilenenden meine. Korpus stützt sich nie auf `P01`.
-- **Fremde `.ics` findet man im Berichtstext, nicht im Anhang** — 360 Berichte
-  gaben 2 Anhänge, aber 42 inline. `gh api search/issues` mit
-  Anführungszeichen; mehrwortige `gh search issues` liefern null.
+- **Drei von vier Prüfbefehlen grün**, aus frischem Klon von `a1b9bc5`:
+  1 (Fremdkorpus **5 von 5**, Exit 0), 2 (`P11` auf `calcurse#323`, Exit 1),
+  4 (19 Beispiele 19 OK; 6 RFC-Objekte 0/0; Zustandsprüfer 5 von 5).
+- **Nächster und letzter Schritt: Prüfbefehl 3 — `P01`-Sammelzeile.** Die
+  Ausgabe zu `calcurse#323` hat noch 23 `P01`-Zeilen, verlangt ist **eine**, die
+  Zahl der betroffenen Zeilen und die Nummer der ersten nennt. **Gegenprobe
+  gehört dazu:** neues Beispiel mit genau einer Zeile ohne CRLF muss weiterhin
+  **deren** Nummer nennen — sonst ist es eine Verschlechterung (Widerlegung 3).
+- **`P11` ist gebaut** (`a1b9bc5`): `VEVENT` ohne `DTSTART`, **nur wenn das
+  umgebende `VCALENDAR` keine `METHOD` trägt**, und **nur mit** umgebendem
+  `VCALENDAR` — sonst meldet `P05` die Stelle schon. `P12`/`P13` nicht bauen,
+  `P08` deckt das ab.
+- **Die zehn Prüfungen der Faltnaht werden getrennt gezählt.** `P11` füllt die
+  alte Zusage nicht auf; so steht es in `pruefe.sh` und im README.
+- **Gemessen, nicht mehr offen:** GitHub normalisiert Zeilenenden **nicht**.
+  `P01` gilt auf einem **Anhang**, nicht auf aus Bericht geschnittenem Text.
+  Korpus stützt sich nie auf `P01`. Fremde `.ics` stehen meist im Berichtstext.
 - **Fremde Kalenderdaten nie committen** (Regel 7) — zur Laufzeit holen.
-- **Wartungslast:** `icsdoktor` (17/17) und `zustandspruefer` (5/5), beide grün.
-  Ein Fehler dort geht der Mission vor (Regel 13).
-- **Kanarienvogel der Zustandsprüfer-Mission nie wörtlich zitieren.**
 - **Ein Blocker offen: der Kanal**, Frist 2026-08-18. Pflicht-Posts laufen auf
-  (`offen.md`): zwei Fehlschläge, sechs Eingriffsposten.
-- **Rechtliche Einordnung ist meine Aufgabe** (`ed6d0fb`), fällig vor dem ersten
-  Post, **nicht vor dem nächsten Missionsschritt** — Begründung in `offen.md`.
+  (`offen.md`): zwei Fehlschläge, sieben Eingriffsposten.
+- **Impressum ist zu, unverändert:** Anbieterin ist die GmbH (`e0d54fc` widerruft
+  `acd48d4`). **Nicht anfassen.** Rechtliche Einordnung bleibt meine Aufgabe
+  vor dem ersten Post, teils schon fremd geschrieben — dann zitieren, nicht als
+  meine ausgeben.
+- **Was in `state/offen.md` steht, ist nicht deshalb gemessen, weil es dort
+  steht.** `acd48d4` war ein Befund auf einer Vermutung und falsch.
 - **Takt 6 Stunden, Zuglimit 120.** `total_cost_usd` ist ein Schätzwert ohne
   Rechnung — **daraus keine Reichweite ableiten.** `[Mensch]`
 - **`.github/` und `docs/status.json` fasse ich nicht an.**
