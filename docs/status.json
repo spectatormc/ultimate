@@ -1,39 +1,39 @@
 {
-  "erzeugt_utc": "2026-08-12T14:04:37Z",
-  "commit": "582b0bb",
+  "erzeugt_utc": "2026-08-13T05:08:09Z",
+  "commit": "ed6d0fb",
   "takt_stunden": 6,
   "zustand": "ok",
   "lebenszeichen": {
-    "lauf": 10,
-    "ende_utc": "2026-08-12T14:00:46Z",
+    "lauf": 12,
+    "ende_utc": "2026-08-13T02:58:58Z",
     "ergebnis": "success",
-    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31603417648",
-    "alter_minuten": 3
+    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31661976821",
+    "alter_minuten": 129
   },
   "kodex_version": "0.2",
   "mission": {
-    "datei": "state/missionen/2026-08-12-faltnaht.md",
-    "titel": "Die Faltnaht",
+    "datei": "state/missionen/2026-08-13-fremdprobe.md",
+    "titel": "Die Fremdprobe",
     "frist": "",
     "tage_bis_frist": null,
     "status": "abgeschlossen"
   },
   "zahlen": {
-    "zyklen": 9,
-    "journaleintraege": 10,
-    "eingriffe": 18,
-    "commits_agent": 25,
-    "commits_gesamt": 64
+    "zyklen": 11,
+    "journaleintraege": 12,
+    "eingriffe": 19,
+    "commits_agent": 34,
+    "commits_gesamt": 75
   },
   "pruefung": {
     "zeilen": [
-      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-12T14:00:46Z",
-      "OK 2/5 mission: state/mission.md zeigt auf state/missionen/2026-08-12-faltnaht.md",
-      "OK 3/5 journal: 10 Eintrag/Einträge in state/journal/",
-      "FEHLER 4/5 schluesselmuster: Treffer in: state/journal/2026-08-12-zyklus-10.md state/journal/2026-08-12-zyklus-8.md state/journal/2026-08-12-zyklus-9.md",
+      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-13T02:58:58Z",
+      "OK 2/5 mission: state/mission.md zeigt auf state/missionen/2026-08-13-fremdprobe.md",
+      "OK 3/5 journal: 12 Eintrag/Einträge in state/journal/",
+      "OK 4/5 schluesselmuster: kein Treffer in 84 verfolgten Pfaden (1 dokumentierte Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)",
       "OK 5/5 arbeitsbaum: sauber"
     ],
-    "exit_code": 1
+    "exit_code": 0
   },
   "offen": [
     {
@@ -71,9 +71,21 @@
     {
       "titel": "2026-08-12 — Takt auf 6 Stunden, Zuglimit auf 120",
       "erledigt": false
+    },
+    {
+      "titel": "2026-08-13 — Drei Blocker vom Betreiber aufgeloest",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-13 — Schritt 0 des Kanalplans: Bot-Label an der Datenlage geprueft",
+      "erledigt": false
     }
   ],
   "journal": [
+    {
+      "datei": "2026-08-13-zyklus-12.md",
+      "titel": "2026-08-13 — Zyklus 12"
+    },
     {
       "datei": "2026-08-12-zyklus-9.md",
       "titel": "2026-08-12 — Zyklus 9"
@@ -95,16 +107,12 @@
       "titel": "2026-08-12 — Zyklus 4"
     },
     {
+      "datei": "2026-08-12-zyklus-11.md",
+      "titel": "2026-08-12 — Zyklus 11"
+    },
+    {
       "datei": "2026-08-12-zyklus-10.md",
       "titel": "2026-08-12 — Zyklus 10"
-    },
-    {
-      "datei": "2026-08-11-zyklus-3.md",
-      "titel": "2026-08-11 — Zyklus 3"
-    },
-    {
-      "datei": "2026-08-11-zyklus-2.md",
-      "titel": "2026-08-11 — Zyklus 2"
     }
   ],
   "projekte": [
