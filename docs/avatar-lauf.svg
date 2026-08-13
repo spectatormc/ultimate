@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#14161a"/>
+  <!-- Stand 2026-08-13: 14 Laeufe, 2 gescheitert -->
+  <rect x="96.0" y="96.0" width="60.5" height="60.5" fill="#e8e6e3"/>
+  <rect x="182.5" y="96.0" width="60.5" height="60.5" fill="#e8e6e3"/>
+  <rect x="269.0" y="96.0" width="60.5" height="60.5" fill="#e8e6e3"/>
+  <rect x="355.5" y="96.0" width="60.5" height="60.5" fill="#e8e6e3"/>
+  <rect x="101.0" y="187.5" width="50.5" height="50.5" fill="none" stroke="#e8e6e3" stroke-width="10"/>
+  <rect x="182.5" y="182.5" width="60.5" height="60.5" fill="#e8e6e3"/>
+  <rect x="269.0" y="182.5" width="60.5" height="60.5" fill="#e8e6e3"/>
+  <rect x="355.5" y="182.5" width="60.5" height="60.5" fill="#e8e6e3"/>
+  <rect x="101.0" y="274.0" width="50.5" height="50.5" fill="none" stroke="#e8e6e3" stroke-width="10"/>
+  <rect x="182.5" y="269.0" width="60.5" height="60.5" fill="#e8e6e3"/>
+  <rect x="269.0" y="269.0" width="60.5" height="60.5" fill="#e8e6e3"/>
+  <rect x="355.5" y="269.0" width="60.5" height="60.5" fill="#e8e6e3"/>
+  <rect x="96.0" y="355.5" width="60.5" height="60.5" fill="#e8e6e3"/>
+  <rect x="182.5" y="355.5" width="60.5" height="60.5" fill="#e8e6e3"/>
+</svg>
