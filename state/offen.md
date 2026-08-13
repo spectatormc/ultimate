@@ -97,7 +97,13 @@ nicht.
 
 ---
 
-## 2026-08-11 — Rechtliche Klärung vor dem ersten Post
+## ~~2026-08-11 — Rechtliche Klärung vor dem ersten Post~~ — entfällt 2026-08-13
+
+**Geschlossen durch `ed6d0fb`**, Entscheidung des Betreibers: keine anwaltliche
+Prüfung. Die Einordnung erarbeite ich selbst und lege sie im Repo ab; die
+Begründung und die Grenze stehen im Eintrag „Drei Blocker vom Betreiber
+aufgelöst" weiter unten. Damit ist es kein Blocker mehr — es ist Arbeit. Der
+ursprüngliche Wortlaut bleibt unverändert stehen:
 
 **Zu tun:** Prüfen lassen, ob `IMPRESSUM.md` für diesen Kanal ausreicht — ob
 eine Anbieterkennzeichnung greift, ob zusätzlich ein Verantwortlicher im
@@ -113,7 +119,12 @@ und behaupte keine Paragrafen.
 
 ---
 
-## 2026-08-11 — Marco Holmer über den Betrieb informieren
+## ~~2026-08-11 — Marco Holmer über den Betrieb informieren~~ — erledigt 2026-08-13
+
+**Geschlossen durch `ed6d0fb`**, Angabe des Betreibers: Der zweite
+Vertretungsberechtigte weiß von den KI-Experimenten. Was dabei ausdrücklich
+bestätigt wurde und was nicht, steht im Eintrag des Betreibers weiter unten —
+ich schreibe es nicht um. Der ursprüngliche Wortlaut bleibt stehen:
 
 **Zu tun:** Dem zweiten Vertretungsberechtigten der Gartenschmiede GmbH sagen,
 dass die Gesellschaft als Anbieterin dieses Kanals im Impressum steht und damit
@@ -265,6 +276,20 @@ Regel erfüllbar bleibt statt am fehlenden Kanal zu scheitern.
   Zusagen der Mission „Die Faltnaht" sind dadurch bestätigt — durch seine Hand,
   nicht durch die Automatik.
 
+- 2026-08-13, Zyklus 13 — **entdeckter menschlicher Eingriff:** ein Commit von
+  `spectatormc`, `ed6d0fb` — Impressum als eigene Seite unter GitHub Pages, zwei
+  meiner drei Blocker geschlossen, das Bluesky-Bot-Label an der öffentlichen API
+  gemessen. Hash und Umfang stehen in `state/eingriffe.md`; hier steht er, weil
+  ein Eintrag dort kein Post ist (dieselbe Begründung wie bei den Eingriffen
+  darüber).
+
+  Was daran meine Arbeit betrifft: Der Commit schreibt zum vierten Mal in diese
+  Datei, also in meine Blockerliste. Er nimmt mir zwei Blocker ab und gibt mir
+  dafür eine Aufgabe zurück — die rechtliche Einordnung erarbeite ich ab jetzt
+  selbst. Und er ist der erste Eingriff, der eine Sperre aus dem Kodex-Abschnitt
+  „Wer verantwortet" tatsächlich löst: Der Impressumslink hat ein Ziel. Gepostet
+  wird trotzdem nicht — es gibt keine Bio, in der er stehen könnte.
+
 Damit stehen zwei Fehlschläge auf dieser Liste. Bis Lauf 5 war sie frei von
 Fehlschlag, Abbruch, Verstoß und verstrichenem Fristende — dass sie es nicht mehr
 ist, ist selbst eine Verschärfung der Lage und steht im Stand.
@@ -276,10 +301,19 @@ erlaubt noch keinen Post.
 
 ---
 
-**Stand der Blocker:** drei offen (rechtliche Klärung, Marco Holmer, Kanal).
+**Stand der Blocker:** ~~drei offen (rechtliche Klärung, Marco Holmer, Kanal).
 Regel 10 macht ab dem vierten offenen Blocker daraus selbst einen Fehlschlag.
 Die Grenze ist damit erreicht, nicht überschritten — der nächste würde sie
-reißen.
+reißen.~~
+
+**Fortgeschrieben 2026-08-13, Zyklus 13: einer offen — der Kanal**, Frist
+2026-08-18. „Marco Holmer" und „rechtliche Klärung" sind durch `ed6d0fb`
+geschlossen. Von der Schwelle aus Regel 10 sind es damit drei Einträge Abstand
+statt keiner.
+
+Das ist ein Rückgang durch fremde Hand, nicht durch meine Arbeit, und wird
+deshalb nicht als Fortschritt geführt: Ich habe an keinem der beiden Blocker
+etwas gelöst. Was sich für mich ändert, ist der Spielraum — nicht die Bilanz.
 
 **Zwei Befunde aus Zyklus 6, die ich bewusst nicht als vierten Blocker führe.**
 Ich schreibe die Begründung hin, weil die Zahl drei genau an der Schwelle liegt
@@ -460,3 +494,43 @@ Gemessen an der oeffentlichen Bluesky-API, nicht behauptet:
 offizielle Client das Kennzeichen tatsaechlich am Einzelbeitrag, im Embed und
 ausgeloggt? Die Daten sind da; ob sie gerendert werden, ist eine
 Client-Entscheidung und aus der API nicht ablesbar.
+
+---
+
+## 2026-08-13 — Zwei Punkte aus `ed6d0fb`, vom Agenten nachgetragen
+
+Kein Blocker, beide. Sie stehen hier, weil sie sonst nirgends stünden.
+
+### Unklar: „Schritt 0 des Kanalplans"
+
+Die zweite Überschrift aus `ed6d0fb` nennt einen **Kanalplan**. In diesem Repo
+gibt es kein solches Dokument — das Wort kommt nur in dieser Datei vor und in
+`docs/status.json`, die daraus abgeleitet wird. Ich weiß deshalb nicht, welche
+Schritte 1 bis n es gibt, ob einer davon meine Arbeit ist und ob die Reihenfolge
+etwas über Vorrang sagt.
+
+**Ich rate nicht.** Wenn der Plan existiert und mich betrifft, gehört er ins
+Repo; wenn er nur die Arbeit des Betreibers ordnet, ist dieser Eintrag mit einem
+Satz erledigt. Bis dahin behandle ich die gemessene Bot-Label-Lage als das, was
+sie ist: ein Messergebnis in meiner Blockerliste, aus dem für mich nichts folgt,
+solange es keinen Kanal gibt.
+
+### Meine Aufgabe, nicht in diesem Zyklus: die rechtliche Einordnung
+
+Der Betreiber hat entschieden, dass ich sie erarbeite. Ich nehme sie an. Was ich
+hier festhalte, ist nur der Zeitpunkt, damit er später nicht wie eine Ausrede
+aussieht:
+
+- **Nicht in diesem Zyklus.** Regel 10 sagt, ein blockiertes Ziel wird pausiert
+  und nicht ersetzt, und ausweichen darf ich nur innerhalb der laufenden
+  Mission. Die Mission „Die Fremdprobe" ist nicht blockiert. Sie vorzuziehen
+  wäre kein Vorrang, sondern ein Ausweichen mit gutem Grund — genau die Sorte,
+  die Regel 10 sperrt.
+- **Vor dem ersten Post.** Das ist die Frist, die der geschlossene Eintrag
+  vorgab, und sie ändert sich nicht dadurch, dass die Arbeit die Hand gewechselt
+  hat. Der Kanal-Blocker läuft am 2026-08-18 ab, die Missionsfrist am
+  2026-08-17. Die Reihenfolge geht sich aus.
+- **Wenn das falsch herum ist, ist es ein Commit.** Soll die Einordnung vor den
+  Missionsschritt, sagt das ein Eintrag in dieser Datei oder in
+  `state/mission.md`. Aus einer Commit-Nachricht lese ich keine Priorität heraus,
+  die dort nicht steht.
