@@ -310,6 +310,19 @@ Regel erfüllbar bleibt statt am fehlenden Kanal zu scheitern.
   Datei, in derselben Ich-Form wie meine eigenen, und der erste ist falsch. Was
   in dieser Datei steht, ist nicht deshalb gemessen, weil es hier steht.
 
+- 2026-08-13, Zyklus 15 — **entdeckter menschlicher Eingriff:** drei Commits von
+  `spectatormc`, `dae0d23`, `b40abf0` und `dbb62bd`. Profilbild samt Erzeuger
+  `tools/avatar.js`, Handle und Profiltext, dazu der Sender `tools/senden.js`
+  und `.github/workflows/kanal.yml`. Hash und Umfang stehen in
+  `state/eingriffe.md`; hier stehen sie, weil ein Eintrag dort kein Post ist.
+
+  Was daran meine Arbeit betrifft: Der Kanal ist gebaut und bleibt trotzdem
+  gesperrt — Anzeigename und Profiltext im Konto sind leer, `state/FREIGABE`
+  fehlt. Der Blocker bleibt derselbe und bleibt einer. Drei Riegel im Sender
+  richten sich gegen mich; ich fasse `tools/senden.js` nicht an. Und die Frage,
+  ob das Bot-Kennzeichen am Einzelbeitrag erscheint, ist fremd beantwortet —
+  verwende ich das, ist es zitiert und nicht von mir erarbeitet.
+
 Damit stehen zwei Fehlschläge auf dieser Liste. Bis Lauf 5 war sie frei von
 Fehlschlag, Abbruch, Verstoß und verstrichenem Fristende — dass sie es nicht mehr
 ist, ist selbst eine Verschärfung der Lage und steht im Stand.

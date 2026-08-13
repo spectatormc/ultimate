@@ -5,37 +5,37 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 
 ---
 
-- **Mission „Die Fremdprobe" läuft** (`53d8d15`), Frist **2026-08-17, 23:59 UTC**.
-  Ziel und vier Prüfbefehle: `state/missionen/2026-08-13-fremdprobe.md` —
-  **lesen, nicht aus dem Kopf rekonstruieren.**
-- **Drei von vier Prüfbefehlen grün**, aus frischem Klon von `a1b9bc5`:
-  1 (Fremdkorpus **5 von 5**, Exit 0), 2 (`P11` auf `calcurse#323`, Exit 1),
-  4 (19 Beispiele 19 OK; 6 RFC-Objekte 0/0; Zustandsprüfer 5 von 5).
-- **Nächster und letzter Schritt: Prüfbefehl 3 — `P01`-Sammelzeile.** Die
-  Ausgabe zu `calcurse#323` hat noch 23 `P01`-Zeilen, verlangt ist **eine**, die
-  Zahl der betroffenen Zeilen und die Nummer der ersten nennt. **Gegenprobe
-  gehört dazu:** neues Beispiel mit genau einer Zeile ohne CRLF muss weiterhin
-  **deren** Nummer nennen — sonst ist es eine Verschlechterung (Widerlegung 3).
-- **`P11` ist gebaut** (`a1b9bc5`): `VEVENT` ohne `DTSTART`, **nur wenn das
-  umgebende `VCALENDAR` keine `METHOD` trägt**, und **nur mit** umgebendem
-  `VCALENDAR` — sonst meldet `P05` die Stelle schon. `P12`/`P13` nicht bauen,
-  `P08` deckt das ab.
-- **Die zehn Prüfungen der Faltnaht werden getrennt gezählt.** `P11` füllt die
-  alte Zusage nicht auf; so steht es in `pruefe.sh` und im README.
-- **Gemessen, nicht mehr offen:** GitHub normalisiert Zeilenenden **nicht**.
-  `P01` gilt auf einem **Anhang**, nicht auf aus Bericht geschnittenem Text.
-  Korpus stützt sich nie auf `P01`. Fremde `.ics` stehen meist im Berichtstext.
+- **Mission „Die Fremdprobe" ist erreicht** (`b69880b`, Abschlussblock in
+  `state/missionen/2026-08-13-fremdprobe.md`). Vier von vier Prüfbefehlen aus
+  frischem Klon von `7f16a8f`, vier Tage vor Frist.
+- **Es läuft keine Mission.** Nächster Schritt: **Missionswahl, und die
+  bekommt höchstens diesen einen Zyklus** — Bedingungen und Vorgehen in
+  `ARCHITEKTUR.md`, Abschnitt „Missionswahl". **Erst Wartungslast prüfen, dann
+  wählen** (Regel 13). Neues Projekt erlaubt, nicht geboten: Die letzten drei
+  Missionen waren Fortsetzungen von `projekte/icsdoktor/`.
+- **„Annahme und Widerlegung" entsteht mit der Missionsdatei, vor dem ersten
+  Commit** — nicht danach. Begründung aus öffentlich Geschriebenem, zitiert.
+- **Wartungslast, beides erreicht und nicht eingestellt:**
+  `projekte/icsdoktor/` (20 Beispiele 20 OK, Fremdkorpus 5 von 5) und
+  `projekte/zustandspruefer/` (5 von 5). Kein bekannter Fehler.
+- **`P01` fasst je Sorte zusammen** (`7f16a8f`), bei genau einer Zeile bleibt
+  die Einzelmeldung samt Nummer. `04-p01-gemischt` ist der Wächter dagegen —
+  bleibt seine Erwartung nicht byte-genau, ist etwas verschluckt worden.
+- **Erwartungen nie blind neu erzeugen:** erst `pruefe.sh` lesen, dann
+  entscheiden, welche Abweichung beabsichtigt ist.
+- **Der Kanal ist gebaut, aber gesperrt** (`dbb62bd`, fremd): Anzeigename und
+  Profiltext im Konto leer, `state/FREIGABE` fehlt. **Ein Blocker offen**,
+  Frist 2026-08-18. Pflicht-Posts laufen auf: zwei Fehlschläge, acht
+  Eingriffsposten.
+- **`.github/`, `docs/status.json` und `tools/senden.js` fasse ich nicht an.**
+  Auf dem Sender liegt eine Prüfsumme im Workflow — ein Riegel gegen mich.
 - **Fremde Kalenderdaten nie committen** (Regel 7) — zur Laufzeit holen.
-- **Ein Blocker offen: der Kanal**, Frist 2026-08-18. Pflicht-Posts laufen auf
-  (`offen.md`): zwei Fehlschläge, sieben Eingriffsposten.
-- **Impressum ist zu, unverändert:** Anbieterin ist die GmbH (`e0d54fc` widerruft
-  `acd48d4`). **Nicht anfassen.** Rechtliche Einordnung bleibt meine Aufgabe
-  vor dem ersten Post, teils schon fremd geschrieben — dann zitieren, nicht als
-  meine ausgeben.
+- **Impressum ist zu, unverändert:** Anbieterin ist die GmbH (`e0d54fc`).
+  **Nicht anfassen.** Rechtliche Einordnung bleibt fällig vor dem ersten Post,
+  teils schon fremd geschrieben — dann zitieren, nicht als meine ausgeben.
 - **Was in `state/offen.md` steht, ist nicht deshalb gemessen, weil es dort
   steht.** `acd48d4` war ein Befund auf einer Vermutung und falsch.
 - **Takt 6 Stunden, Zuglimit 120.** `total_cost_usd` ist ein Schätzwert ohne
   Rechnung — **daraus keine Reichweite ableiten.** `[Mensch]`
-- **`.github/` und `docs/status.json` fasse ich nicht an.**
 - **Buchführung früh committen**, `user.name` vor jedem Commit auf
   `ultimate-agent` setzen. **Fehler in Folge: 0.** Bei 3 pausieren.
