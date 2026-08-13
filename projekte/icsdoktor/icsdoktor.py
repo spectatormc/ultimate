@@ -12,6 +12,11 @@ P09 und P10 kommen aus der Folgemission Die Faltnaht,
 state/missionen/2026-08-12-faltnaht.md. Die acht alten Pruefungen bleiben dabei
 unangetastet.
 
+P11 kommt aus der Mission Die Fremdprobe,
+state/missionen/2026-08-13-fremdprobe.md, und ist die erste Pruefung, die nicht
+aus einem selbst ausgedachten Beispiel stammt, sondern aus einem fremden
+Fehlerbericht (lfos/calcurse #323).
+
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
 Aufruf:
@@ -374,6 +379,11 @@ class Komponente(object):
         self.name = name
         self.zeile = zeile
         self.eigenschaften = {}          # NAME -> [(zeile, wert)]
+        # Die umgebende Komponente oder None auf der aeussersten Ebene. P11
+        # braucht sie, weil DTSTART nur dann Pflicht ist, wenn das *umgebende*
+        # VCALENDAR keine METHOD traegt — die Bedingung steht also nicht im
+        # VEVENT selbst. P05 bis P10 lesen das Feld nicht.
+        self.elternteil = None
 
     def merke(self, name, zeile, wert):
         self.eigenschaften.setdefault(name, []).append((zeile, wert))
@@ -406,6 +416,8 @@ def pruefe_p05(logische, funde):
                     "äußerste Komponente ist %s; ein iCalendar-Objekt "
                     "beginnt mit BEGIN:VCALENDAR" % _zeige_wort(komp.name),
                     "3.4"))
+            if stapel:
+                komp.elternteil = stapel[-1]
             stapel.append(komp)
         elif lz.name == "END":
             ende = lz.wert.strip().upper()
@@ -640,8 +652,62 @@ def pruefe_p10(zeilen, funde):
             "3.1"))
 
 
+def _umgebendes_vcalendar(komp):
+    """Das naechste VCALENDAR ueber dieser Komponente oder None."""
+    oben = komp.elternteil
+    while oben is not None:
+        if oben.name == "VCALENDAR":
+            return oben
+        oben = oben.elternteil
+    return None
+
+
+def pruefe_p11(komponenten, funde):
+    """§3.6.1: DTSTART ist im VEVENT Pflicht, solange das umgebende VCALENDAR
+    keine METHOD traegt.
+
+    Der Fall aus lfos/calcurse #323: Ein VEVENT ohne DTSTART wird von einem
+    Programm abgewiesen, und der Melder sucht die Stelle von Hand. P07 prueft
+    UID und DTSTAMP, mehr nicht — DTSTART fehlte dort, weil es die einzige der
+    drei Pflichtangaben mit einer Bedingung ist.
+
+    Die Bedingung steht woertlich in §3.6.1: DTSTART ist REQUIRED, "if the
+    component appears in an iCalendar object that doesn't specify the METHOD
+    property; otherwise, it is OPTIONAL". Ein Kalender mit METHOD — etwa eine
+    Absage per METHOD:CANCEL, die nur UID und SEQUENCE braucht — loest diese
+    Meldung deshalb nicht aus. Ohne diese Unterscheidung waere die Pruefung ein
+    Fehlalarm auf jeder Einladung, die als iTIP-Nachricht verschickt wird.
+
+    Ein VEVENT ganz ohne umgebendes VCALENDAR meldet P11 nicht. Der Bedingung
+    fehlt dann ihr Bezugspunkt — §3.6.1 spricht vom Bauteil, das "appears in an
+    iCalendar object"; erscheint es in keinem, ist das der Befund, und den
+    meldet P05 an derselben Zeile bereits. Aufgefallen ist das nicht beim
+    Entwurf, sondern an Beispiel 08, wo P11 als vierte Zeile zu drei
+    P05-Meldungen ueber dasselbe Bruchstueck getreten ist.
+
+    Nicht geprueft wird das mehrfache DTSTART: §3.6.1 verbietet auch das, aber
+    Pruefbefehl 2 der Mission Die Fremdprobe verlangt den fehlenden Fall, und
+    eine Pruefung, die mehr tut als der Prueftext sagt, ist von aussen nicht
+    mehr an ihm zu messen.
+    """
+    for komp in komponenten:
+        if komp.name != "VEVENT":
+            continue
+        if komp.hole("DTSTART"):
+            continue
+        kalender = _umgebendes_vcalendar(komp)
+        if kalender is None or kalender.hole("METHOD"):
+            continue
+        funde.append(Fund(
+            FEHLER, komp.zeile, "P11",
+            "VEVENT ab Zeile %d hat kein DTSTART; die Eigenschaft ist "
+            "Pflicht, denn das VCALENDAR ab Zeile %d trägt keine METHOD"
+            % (komp.zeile, kalender.zeile),
+            "3.6.1"))
+
+
 def untersuche(rohdaten):
-    """Alle zehn Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle elf Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     zeilen = zerlege_physisch(rohdaten)
     if not zeilen:
@@ -662,6 +728,7 @@ def untersuche(rohdaten):
     pruefe_p08(logische, funde)
     pruefe_p09(logische, funde)
     pruefe_p10(zeilen, funde)
+    pruefe_p11(komponenten, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))

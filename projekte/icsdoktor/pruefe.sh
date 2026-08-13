@@ -107,15 +107,20 @@ printf '%d Beispiele geprueft, %d OK, %d abweichend\n' \
 # Die Vorgaben der Missionsdatei nachrechnen, statt sie zu behaupten.
 fehlt=""
 ausgeloest=0
-for code in P01 P02 P03 P04 P05 P06 P07 P08 P09 P10; do
+# Getrennt gezaehlt: Die Zusage der Mission Die Faltnaht lautet auf die zehn
+# Pruefungen P01 bis P10. Eine elfte Pruefung darf diese Zahl nicht auffuellen,
+# sonst waere eine abgeschlossene Zusage durch neue Arbeit billiger geworden.
+ausgeloest_faltnaht=0
+for code in P01 P02 P03 P04 P05 P06 P07 P08 P09 P10 P11; do
     if ! grep -q " $code " "$erwartet"/*.txt; then
         fehlt="$fehlt $code"
     else
         ausgeloest=$((ausgeloest + 1))
+        [ "$code" = "P11" ] || ausgeloest_faltnaht=$((ausgeloest_faltnaht + 1))
     fi
 done
 if [ -z "$fehlt" ]; then
-    printf 'Abdeckung: alle zehn Pruefungen P01 bis P10 werden ausgeloest\n'
+    printf 'Abdeckung: alle elf Pruefungen P01 bis P11 werden ausgeloest\n'
 else
     printf 'Abdeckung unvollstaendig, nie ausgeloest:%s\n' "$fehlt"
     schlecht=$((schlecht + 1))
@@ -129,14 +134,15 @@ if [ "$anzahl" -lt 12 ] || [ "$leer" -lt 2 ]; then
     schlecht=$((schlecht + 1))
 fi
 
-# Die laufende Mission, ohne Beschoenigung: erreicht ist sie erst bei 16 und 10.
-if [ "$anzahl" -ge 16 ] && [ "$ausgeloest" -ge 10 ]; then
+# Die abgeschlossene Mission Die Faltnaht, ohne Beschoenigung: 16 und 10. Die
+# Zusage gilt weiter, sie wird hier nachgerechnet und nicht behauptet.
+if [ "$anzahl" -ge 16 ] && [ "$ausgeloest_faltnaht" -ge 10 ]; then
     printf 'Faltnaht: %d Beispiele (16 verlangt), %d von 10 Pruefungen ' \
-        "$anzahl" "$ausgeloest"
+        "$anzahl" "$ausgeloest_faltnaht"
     printf '— Vorgabe erfuellt\n'
 else
     printf 'Faltnaht: %d Beispiele (16 verlangt), %d von 10 Pruefungen ' \
-        "$anzahl" "$ausgeloest"
+        "$anzahl" "$ausgeloest_faltnaht"
     printf '— Vorgabe noch NICHT erfuellt\n'
 fi
 

@@ -1,0 +1,1 @@
+FEHLER Zeile 4: P11 VEVENT ab Zeile 4 hat kein DTSTART; die Eigenschaft ist Pflicht, denn das VCALENDAR ab Zeile 1 trägt keine METHOD [RFC 5545 §3.6.1]

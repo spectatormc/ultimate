@@ -13,6 +13,13 @@ gegen die IANA-Registry, `P10` die Faltstelle gegen die Maskierung. Beide sind
 gebaut; ob die Mission damit erreicht ist, entscheidet ihr Abschlussblock und
 nicht diese Datei.
 
+`P11` kommt aus der Mission `state/missionen/2026-08-13-fremdprobe.md` und
+unterscheidet sich von allen zehn davor: Sie stammt nicht aus einem Beispiel,
+das ich mir ausgedacht habe, sondern aus einer fremden Datei, die ein Mensch
+öffentlich als kaputt gemeldet hat (`lfos/calcurse#323`). Sie meldet ein
+`VEVENT` ohne `DTSTART` — und zwar nur, solange das umgebende `VCALENDAR` keine
+`METHOD` trägt, weil §3.6.1 die Pflicht genau daran knüpft.
+
 ## Warum
 
 Drei öffentliche Fehlerberichte, in der Missionsdatei mit Link und Wortlaut
@@ -67,7 +74,7 @@ ist derselbe. Umbenannt wird nichts, damit die dreizehn älteren Erwartungen in
 ## Selbst nachprüfen
 
 ```
-sh projekte/icsdoktor/pruefe.sh          # siebzehn mitgelieferte Beispiele
+sh projekte/icsdoktor/pruefe.sh          # neunzehn mitgelieferte Beispiele
 sh projekte/icsdoktor/rfc-beispiele.sh   # die sechs Kalender aus RFC 5545 §4
 sh projekte/icsdoktor/namensliste.sh     # woher die Namensliste von P09 kommt
 ```
@@ -82,9 +89,12 @@ grün zu melden.
 Exit-Code aus der Erwartung ab, statt ihn danebenzuschreiben. Zusätzlich rechnet
 er die Vorgaben der Missionsdatei nach: mindestens zwölf Beispiele, jede
 Prüfung mindestens einmal ausgelöst, mindestens zwei fehlerfreie Dateien. Die
-laufende Mission verlangt mehr — 16 Beispiele und zehn Prüfungen —, und wo das
-steht, sagt die letzte Zeile der Ausgabe, damit ein grüner Exit-Code nicht als
-„Mission erreicht" gelesen wird.
+abgeschlossene Mission „Die Faltnaht" verlangt mehr — 16 Beispiele und die zehn
+Prüfungen `P01` bis `P10` —, und wo das steht, sagt die letzte Zeile der
+Ausgabe, damit ein grüner Exit-Code nicht als „Mission erreicht" gelesen wird.
+`P11` füllt diese Zehn nicht auf, sondern wird getrennt gezählt: Eine
+abgeschlossene Zusage wird nicht dadurch billiger, dass später eine Prüfung
+dazukommt.
 
 Seit `rfc-beispiele.sh` auch bei einem `HINWEIS` mit `1` endet, ist er die
 Kontrolle gegen Fehlalarme von `P09` und `P10`: Ein Kalender aus dem Normtext
@@ -123,11 +133,22 @@ Wo der Standard mehrere Lesarten zulässt, steht hier, welche gewählt wurde:
 Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
 
 - **Es repariert nichts.** Nur Diagnose. So steht es in der Mission.
-- **Es prüft genau die zehn Prüfungen** und nicht mehr. Insbesondere nicht die
+- **Es prüft genau die elf Prüfungen** und nicht mehr. Insbesondere nicht die
   Maskierung von Sonderzeichen in TEXT-Werten (§3.3.11) — `P10` sieht nur, wo
   eine Faltung sie zerschneidet, nicht ob sie richtig ist —, nicht die
   Zeichenkodierung, nicht `RRULE`, und für `VTODO`, `VJOURNAL` und `VFREEBUSY`
   keine Pflichtangaben — die erfasst nur `P05` strukturell.
+
+  Für das `VEVENT` sind seit `P11` alle drei Pflichtangaben aus §3.6.1 erfasst:
+  `UID` und `DTSTAMP` durch `P07`, `DTSTART` durch `P11`. Bis zum 2026-08-13
+  stand hier, `DTSTART` sei nicht darunter — der Satz galt und ist durch die
+  fremde Datei aus `lfos/calcurse#323` widerlegt worden, nicht durch eine
+  Überlegung von mir.
+- **`P11` prüft nur das fehlende `DTSTART`, nicht das doppelte.** §3.6.1
+  verbietet auch, dass es zweimal vorkommt; das ist nicht gebaut, weil der
+  Prüfbefehl der Mission den fehlenden Fall verlangt. Ein `VEVENT` ohne
+  umgebendes `VCALENDAR` meldet `P11` ebenfalls nicht — dort fehlt der
+  Bedingung ihr Bezugspunkt, und `P05` meldet die Stelle bereits.
 - **Ein unbekannter Eigenschaftsname ist weiter kein Fehler, aber seit `P09`
   ein Hinweis.** Der Satz, der hier bis zum 2026-08-12 stand — „keine der acht
   Prüfungen schlägt an, der Fehler ist echt, das Werkzeug sieht ihn nicht" —
@@ -165,7 +186,7 @@ pruefe.sh           Prüfbefehl 1: Beispiele gegen Erwartungen.
 rfc-beispiele.sh    Prüfbefehl 2: die sechs Kalender aus RFC 5545 §4.
 namensliste.sh      Herkunftsprüfung der Namensliste von P09. Kein Prüfbefehl
                     der Mission — er beweist die Herkunft, nicht die Prüfung.
-beispiele/          Siebzehn Kalenderdateien, byte-genau, mit Absicht kaputt.
+beispiele/          Neunzehn Kalenderdateien, byte-genau, teils mit Absicht kaputt.
 erwartet/           Je eine Datei mit der erwarteten Ausgabe.
 LAGE.md             Geprüfte Werkzeuglandschaft, mit Links.
 .gitattributes      Hält CRLF in beispiele/ auch über einen Klon hinweg.
