@@ -406,3 +406,57 @@ soll es auch nicht. Wird die Frist knapp, wird sie verfehlt, sichtbar, mit
 Begruendung. Es ist aber ein Grund, die Planung darauf einzustellen, statt in
 Zyklus 14 ueberrascht zu sein. Die Grundlage hat sich geaendert; wer davon nichts
 weiss, verfehlt eine Frist aus einem Grund, den er nicht benennen kann.
+
+---
+
+## 2026-08-13 — Drei Blocker vom Betreiber aufgeloest
+
+**Marco Holmer — erledigt.** Der Betreiber gibt an, dass der zweite
+Vertretungsberechtigte ueber die KI-Experimente Bescheid weiss. Damit ist der
+Eintrag geschlossen. Festgehalten wird, was genau als bekannt gilt und was
+nicht ausdruecklich bestaetigt wurde: dass die Gesellschaft im Impressum als
+Anbieterin eines autonom postenden Agenten steht und sein Name dort oeffentlich
+als Vertretungsberechtigter erscheint. Wenn das im Gespraech nicht vorkam, ist
+es ein Satz, der nachgeholt gehoert — es ist keine Frage der Zustimmung mehr,
+sondern eine der Ueberraschungsfreiheit.
+
+**Anwalt — entfaellt.** Entscheidung des Betreibers: keine anwaltliche Pruefung.
+Die rechtliche Einordnung wird von der KI erarbeitet und im Repo abgelegt.
+
+Was das heisst, unverblümt: Ich kann recherchieren, zitieren und eine
+begruendete Position aufschreiben. Ich kann nicht dafuer einstehen, und ich
+werde keine Paragrafen behaupten, die ich nicht belegen kann. Was ich liefere,
+ist eine nachvollziehbare Grundlage, keine Rechtssicherheit. Der Unterschied
+steht hier, damit ihn spaeter niemand ueberliest.
+
+Die Linie, die daraus folgt, ist die maximale Transparenz — nicht weil sie
+sicher waere, sondern weil sie die meisten Fragen gegenstandslos macht:
+Anbieter benannt, Verantwortlicher benannt, Automatisierung am Konto
+gekennzeichnet, Automatisierung an jedem Beitrag im Text genannt, keine
+Berufung auf die Redaktionsausnahme. Wer so postet, muss die Grenzfrage nicht
+gewinnen, weil er sie nicht stellt.
+
+**Impressum — von der KI geschrieben, wie in jedem anderen Projekt.** Erledigt:
+`docs/impressum.html`, veroeffentlicht ueber GitHub Pages unter
+<https://spectatormc.github.io/ultimate/impressum.html>. Der urspruengliche
+Einwand betraf nie die Urheberschaft, sondern die Erreichbarkeit: eine
+Markdown-Datei in einer Repo-Ansicht ist keine Anbieterkennzeichnung. Eine
+eigene Seite unter stabiler URL ist eine. Eine Domain der Gesellschaft waere
+schoener und bleibt moeglich; noetig ist sie nicht.
+
+## 2026-08-13 — Schritt 0 des Kanalplans: Bot-Label an der Datenlage geprueft
+
+Gemessen an der oeffentlichen Bluesky-API, nicht behauptet:
+
+- Es gibt reale Konten mit selbstgesetztem `bot`-Label; `src` ist die eigene
+  DID, es ist also ein Selbstlabel auf dem Profilrecord.
+- In jeder Beitragsansicht traegt `post.author.labels` den Wert `bot`. Der
+  Client hat damit die Daten, um das Kennzeichen am Einzelbeitrag zu zeichnen.
+- `post.labels` und `record.labels` sind leer. Im Beitragsrecord steht nichts —
+  wer die Firehose liest oder einen Drittclient benutzt, sieht kein
+  Automatisierungsmerkmal.
+
+**Offen bleibt genau eine Frage, und sie braucht ein Auge:** Zeichnet der
+offizielle Client das Kennzeichen tatsaechlich am Einzelbeitrag, im Embed und
+ausgeloggt? Die Daten sind da; ob sie gerendert werden, ist eine
+Client-Entscheidung und aus der API nicht ablesbar.
