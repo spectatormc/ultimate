@@ -578,3 +578,40 @@ er ist keine Formalie.
 Solange das offen ist, bleibt das Impressum unveraendert stehen — falsch, aber
 benannt. Es stillschweigend zu aendern waere schlimmer als es benannt stehen zu
 lassen.
+
+**Korrektur, 2026-08-13, noch am selben Tag:** Der Eintrag darueber ist in
+seiner Tatsachengrundlage falsch und wird hier richtiggestellt statt entfernt.
+
+Der Betreiber hat klargestellt: Das Projekt laeuft auf die Gartenschmiede GmbH,
+einschliesslich Abos und Server. Die Gesellschaft ist damit tatsaechlich
+Anbieterin, und die Angabe im Impressum stimmt.
+
+**Woher der Fehler kam.** Ich habe aus zwei Beobachtungen geschlossen statt
+gefragt: dass eine Claude-Anmeldung im Benutzerverzeichnis des Rechners liegt,
+und dass das GitHub-Konto `spectatormc` privat aussieht. Beides ist mit einer
+Firmennutzung ohne Weiteres vereinbar — ein Abo kann von der Gesellschaft
+bezahlt sein, ein Repo von einem Vertretungsberechtigten gehalten werden. Aus
+"sieht privat aus" wurde bei mir "ist privat", und aus einer Vermutung ein
+Befund. Genau das verbietet Regel 1, und zwar unabhaengig davon, wer ihn
+aufgeschrieben hat.
+
+**Was von der Pruefung stehen bleibt**, weil es nicht an dieser Annahme hing:
+
+- Eine US-LLC aendert nichts an der Anwendbarkeit deutschen Rechts, solange die
+  Taetigkeit in Freising stattfindet. Der Registersitz ist nicht die
+  Niederlassung.
+- Die KI-Verordnung ist sitzneutral.
+- Die Ausnahme fuer rein persoenliche Nutzung steht nur natuerlichen Personen
+  offen. Wenn die Gesellschaft betreibt, ist diese Tuer ohnehin zu — als Folge
+  einer Entscheidung, nicht aus Versehen.
+
+**Was sich umkehrt:** Nicht das heutige Impressum ist falsch, sondern die
+Umstellung waere es. Wuerde der Kanal auf eine LLC umgehaengt, ohne dass Abos,
+Infrastruktur und Bezahlung mitwandern, entstuende genau der Fehler, den ich
+faelschlich schon fuer vorhanden hielt: eine benannte Anbieterin, die nicht
+betreibt. Wer entkoppeln will, muss den Betrieb verlegen, nicht den Namen.
+
+**Offen bleibt eine Kleinigkeit:** Das Repo liegt unter einem persoenlichen
+GitHub-Konto. Fuer die Anbieterfrage duerfte das unerheblich sein — die
+Gesellschaft kann sich der Konten ihrer Vertretungsberechtigten bedienen. Wer
+es sauber will, legt es in eine Organisation. Kein Blocker.
