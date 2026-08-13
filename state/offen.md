@@ -673,3 +673,49 @@ Nachrechnen steht im Kopf der Datei. Stand eingefroren auf 2026-08-13.
 das Bot-Kennzeichen tatsaechlich am Einzelbeitrag, im Embed und ausgeloggt
 zeichnet. Die Daten sind da (gemessen), das Rendern ist eine
 Client-Entscheidung.
+
+---
+
+## 2026-08-13 — Sender gebaut, Konto steht, eine Sperre bleibt zu
+
+**Belegt, nicht mehr offen:** Das Bot-Kennzeichen erscheint am Beitrag. Nicht
+erschlossen, sondern von Bluesky selbst gesagt — die Einstellungsseite
+"Automatisierungskennzeichnung" schreibt woertlich: "Ist die Kennzeichnung
+aktiviert, erscheint sie neben dem Accountnamen im Profil und bei Posts."
+Dazu die Messung an der API: `post.author.labels` traegt `bot` in jeder
+Beitragsansicht. Damit ist die riskanteste Annahme des Kanalplans gepruefet.
+
+**Konto:** `ultimate-agent.bsky.social`, DID
+`did:plc:ilepeijwlzkwlz6bvtbbfv6l`. Bot-Selbstlabel gesetzt, Avatar gesetzt.
+
+**Gebaut:** `tools/senden.js` (ohne Abhaengigkeiten, spricht die
+AT-Protokoll-Schnittstelle direkt) und `.github/workflows/kanal.yml`.
+
+Drei Riegel, alle im Workflow und keiner im Prompt:
+
+1. **Freigabe.** Ohne `state/FREIGABE`, committet von einem Menschen, laeuft
+   nichts. Legt der Agent die Datei an, traegt der Commit seine Identitaet und
+   der Riegel haelt.
+2. **Unversehrtheit.** Der Sender wird gegen eine im Workflow hinterlegte
+   Pruefsumme gehalten. `tools/` darf der Agent schreiben, die Workflow-Datei
+   nicht — aendert er den Sender, faellt es auf, statt zu wirken.
+3. **Vorpruefung am lebenden Profil.** Vor jedem Senden: Impressum erreichbar,
+   Bot-Label gesetzt, Profiltext vorhanden und mit Impressumsbezug. Regel 5 und
+   der Abschnitt "Wer verantwortet" sind damit Mechanik statt Zusage.
+
+Dazu im Sender selbst: Der Wochendeckel wird dort gezaehlt, nicht vom Modell.
+Die Kennzeichnung wird dort angehaengt, nicht vom Modell geschrieben — sie kann
+damit nicht vergessen werden. Der Beitragstext wird nie ins Log geschrieben,
+sonst haette ein Mensch ihn gelesen und "ohne menschliche Pruefung
+veroeffentlicht" waere unwahr.
+
+**Was noch fehlt, und es sind zwei Felder:**
+
+- Anzeigename im Konto ist leer. Vorschlag: `ultimate-agent (KI)`.
+- Profiltext ist leer. Ohne ihn gibt es keinen KI-Hinweis in der Bio und keinen
+  Impressumslink — Riegel 3 laesst nichts durch. Der Text steht im Eintrag
+  darueber zum Kopieren.
+
+**Und die Freigabe.** `state/FREIGABE` anlegen und committen, wenn alles steht.
+Solange die Datei fehlt, laeuft der Sender bei jedem Zyklus an und beendet sich
+sofort — sichtbar, ohne etwas zu tun.

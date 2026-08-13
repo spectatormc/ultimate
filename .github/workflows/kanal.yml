@@ -1,0 +1,116 @@
+name: Kanal
+
+# Sendet, was der Zyklus vorbereitet hat. Getrennt vom Zyklus, weil Senden die
+# einzige Aktion mit Wirkung ausserhalb des Repos ist und die einzige, die sich
+# nicht zurueckholen laesst.
+#
+# DREI RIEGEL, ALLE HIER UND NICHT IM PROMPT
+#
+# 1. Freigabe. Ohne `state/FREIGABE`, committet von einem Menschen, laeuft
+#    nichts. Legt der Agent die Datei selbst an, traegt der Commit seine
+#    Identitaet und der Riegel haelt.
+# 2. Unversehrtheit. Der Sender wird gegen eine hier hinterlegte Pruefsumme
+#    gehalten. `tools/` kann der Agent schreiben, diese Datei nicht — aendert
+#    er den Sender, faellt es auf, statt zu wirken.
+# 3. Vorpruefung am lebenden Profil. Bot-Kennzeichnung, Profiltext und
+#    erreichbares Impressum werden geprueft, bevor irgendetwas rausgeht. Regel 5
+#    und "Wer verantwortet" sind damit Mechanik, nicht Zusage.
+
+on:
+  workflow_run:
+    workflows: [Zyklus]
+    types: [completed]
+  workflow_dispatch:
+
+# Eigene Gruppe. Nicht `zyklus` — sonst bricht ein wartender Sendelauf weg,
+# sobald jemand einen Zyklus von Hand startet, und zwar als `cancelled`, was
+# der Waechter nicht als Fehler sieht.
+concurrency:
+  group: kanal
+  cancel-in-progress: false
+
+jobs:
+  senden:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+
+    env:
+      KANAL_HANDLE: ultimate-agent.bsky.social
+      IMPRESSUM: https://spectatormc.github.io/ultimate/impressum.html
+      # Pruefsumme von tools/senden.js. Aendert sich der Sender, muss ein
+      # Mensch diese Zeile mitaendern — und das kann nur ein Mensch.
+      SENDER_SHA256: "ca4adf5f8b2dab30d3160c2bc5b0626b41362189bea0e8ceb72a0f1b54cd8d56"
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Riegel 1 — Freigabe von Menschenhand
+        id: freigabe
+        run: |
+          if [ ! -f state/FREIGABE ]; then
+            echo "state/FREIGABE fehlt. Es wird nicht gesendet."
+            echo "weiter=nein" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          wer=$(git log -1 --format='%an' -- state/FREIGABE)
+          echo "state/FREIGABE zuletzt committet von: $wer"
+          case "$wer" in
+            ultimate-agent|ultimate-monitor|github-actions*|claude*)
+              echo "Freigabe stammt nicht von einem Menschen. Es wird nicht gesendet."
+              echo "weiter=nein" >> "$GITHUB_OUTPUT"; exit 0 ;;
+          esac
+          echo "weiter=ja" >> "$GITHUB_OUTPUT"
+
+      - name: Riegel 2 — Unversehrtheit des Senders
+        if: steps.freigabe.outputs.weiter == 'ja'
+        run: |
+          ist=$(sha256sum tools/senden.js | cut -d' ' -f1)
+          echo "ist:  $ist"
+          echo "soll: $SENDER_SHA256"
+          if [ "$ist" != "$SENDER_SHA256" ]; then
+            echo "Der Sender weicht von der hinterlegten Pruefsumme ab."
+            echo "Entweder hat ein Mensch ihn geaendert und diese Zeile vergessen,"
+            echo "oder er wurde geaendert, ohne dass ein Mensch davon weiss."
+            exit 1
+          fi
+
+      - name: Riegel 3 — Vorpruefung am lebenden Profil
+        if: steps.freigabe.outputs.weiter == 'ja'
+        run: |
+          code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$IMPRESSUM" || echo 000)
+          echo "Impressum: HTTP $code"
+          [ "$code" = "200" ] || { echo "Impressum nicht erreichbar. Abschnitt 'Wer verantwortet' sperrt."; exit 1; }
+
+          p=$(curl -sS --max-time 20 "https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=$KANAL_HANDLE")
+          node -e '
+            const p = JSON.parse(process.argv[1]);
+            const bot = (p.labels || []).some(l => l.val === "bot" && l.src === p.did);
+            const text = (p.description || "").trim();
+            const fehlt = [];
+            if (!bot) fehlt.push("Bot-Selbstlabel nicht gesetzt (Regel 5)");
+            if (!text) fehlt.push("Profiltext leer (Regel 5: KI-Hinweis in der Bio)");
+            else if (!/impressum|github\.io/i.test(text)) fehlt.push("Profiltext nennt kein Impressum");
+            if (fehlt.length) { console.error("Vorpruefung gescheitert:\n  " + fehlt.join("\n  ")); process.exit(1); }
+            console.log("Profil in Ordnung: Label gesetzt, Profiltext mit Impressumsbezug.");
+          ' "$p"
+
+      - name: Senden
+        if: steps.freigabe.outputs.weiter == 'ja'
+        env:
+          KANAL_PASSWORT: ${{ secrets.BLUESKY_APP_PASSWORT }}
+        run: node tools/senden.js
+
+      - name: Ergebnis festhalten
+        if: steps.freigabe.outputs.weiter == 'ja'
+        run: |
+          git config user.name "ultimate-agent"
+          git config user.email "ultimate-agent@users.noreply.github.com"
+          git add state/posts || true
+          git diff --cached --quiet && { echo "Nichts zu committen."; exit 0; }
+          git commit -m "kanal: Sendestand fortgeschrieben (Lauf ${{ github.run_number }})"
+          git pull --rebase --autostash origin main || true
+          git push origin HEAD:main
