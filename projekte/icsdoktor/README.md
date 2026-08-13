@@ -127,6 +127,18 @@ Wo der Standard mehrere Lesarten zulässt, steht hier, welche gewählt wurde:
   Diagnose.
 - **Fehlt der Datei am Ende das CRLF, ist das ein `P01`-Fehler** — §3.1
   schließt jede Inhaltszeile mit CRLF ab, auch die letzte.
+- **`P01` meldet je Sorte einmal, nicht je Zeile.** Eine Datei, die durchgehend
+  LF benutzt, ist ein Befund über die ganze Datei; als 23 gleichlautende Zeilen
+  verdeckt er jeden anderen Fund. Die Sammelzeile steht auf der ersten
+  betroffenen Zeile und nennt die Zahl der betroffenen Zeilen sowie ihre
+  Nummern, höchstens fünf davon und dann „und N weitere". Zusammengefasst wird
+  nur **innerhalb** einer Sorte: „endet mit LF", „endet ohne CRLF" und „enthält
+  ein CR ohne LF" sind drei Befunde und bleiben getrennt. Ist von einer Sorte
+  genau eine Zeile betroffen, steht dort unverändert die Einzelmeldung mit
+  **deren** Zeilennummer — der Preis des Zusammenfassens darf nicht die
+  Fundstelle sein. Prüfbar an `beispiele/04-p01-gemischt.ics` (drei Sorten, je
+  eine Zeile, drei Einzelmeldungen) und
+  `beispiele/20-p01-eine-zeile-ohne-crlf.ics`.
 
 ## Was dieses Werkzeug nicht tut
 

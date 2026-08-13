@@ -164,25 +164,72 @@ def zerlege_physisch(rohdaten):
     return zeilen
 
 
+def _zeilenliste(nummern, hoechstens=5):
+    """'Zeilen 1, 2, 3, 4, 5 und 18 weitere'.
+
+    Die Fundstellen bleiben lesbar, ohne dass eine Sammelzeile mit der
+    Dateigroesse waechst. Wer alle Nummern braucht, hat mit der ersten den
+    Einstieg und mit der Zahl das Ausmass.
+    """
+    gezeigt = nummern[:hoechstens]
+    text = "Zeilen " + ", ".join(str(n) for n in gezeigt)
+    rest = len(nummern) - len(gezeigt)
+    if rest > 0:
+        text += " und %d weitere" % rest
+    return text
+
+
+# Die drei Sorten von P01, je Sorte der Wortlaut fuer einen Einzelfall und der
+# fuer eine Sammelmeldung. Zusammengefasst wird nur innerhalb einer Sorte:
+# "durchgehend LF" und "ein CR mitten in einer Zeile" sind verschiedene
+# Befunde, und der zweite darf nicht im ersten verschwinden.
+_P01_SORTEN = (
+    ("Zeile endet mit LF; RFC 5545 verlangt CRLF als Zeilenende",
+     "%d Zeilen enden mit LF statt CRLF (%s); RFC 5545 verlangt CRLF als "
+     "Zeilenende"),
+    ("letzte Zeile endet ohne CRLF; jede Inhaltszeile wird mit CRLF "
+     "abgeschlossen",
+     "%d Zeilen enden ohne CRLF (%s); jede Inhaltszeile wird mit CRLF "
+     "abgeschlossen"),
+    ("Zeile enthält ein CR, dem kein LF folgt",
+     "%d Zeilen enthalten ein CR, dem kein LF folgt (%s)"),
+)
+
+
 def pruefe_p01(zeilen, funde):
-    """§3.1: Zeilen sind durch CRLF getrennt."""
+    """§3.1: Zeilen sind durch CRLF getrennt.
+
+    Eine Meldung je Sorte, nicht je Zeile. Eine Datei, die durchgehend LF
+    benutzt, ist ein Befund ueber die ganze Datei; als 23 gleichlautende Zeilen
+    verdeckt er jeden anderen Fund und macht die Ausgabe unbrauchbar — so
+    geschehen auf der ersten fremden Datei, die das Werkzeug gesehen hat
+    (lfos/calcurse #323).
+
+    Bei genau einer betroffenen Zeile bleibt der Wortlaut der Einzelmeldung
+    unveraendert. Das ist keine Kosmetik, sondern die Bedingung, unter der
+    Zusammenfassen erlaubt ist: Die Fundstelle darf es nicht kosten.
+    """
+    lf = []
+    ohne_abschluss = []
+    cr_innen = []
     for z in zeilen:
         if z.abschluss == b"\n":
-            funde.append(Fund(
-                FEHLER, z.nr, "P01",
-                "Zeile endet mit LF; RFC 5545 verlangt CRLF als Zeilenende",
-                "3.1"))
+            lf.append(z.nr)
         elif z.abschluss == b"":
-            funde.append(Fund(
-                FEHLER, z.nr, "P01",
-                "letzte Zeile endet ohne CRLF; jede Inhaltszeile wird mit CRLF "
-                "abgeschlossen",
-                "3.1"))
+            # Nur die letzte Zeile kann hier landen — hoechstens eine.
+            ohne_abschluss.append(z.nr)
         if b"\r" in z.rohbytes:
-            funde.append(Fund(
-                FEHLER, z.nr, "P01",
-                "Zeile enthält ein CR, dem kein LF folgt",
-                "3.1"))
+            cr_innen.append(z.nr)
+
+    for nummern, (einzeln, sammel) in zip(
+            (lf, ohne_abschluss, cr_innen), _P01_SORTEN):
+        if not nummern:
+            continue
+        if len(nummern) == 1:
+            text = einzeln
+        else:
+            text = sammel % (len(nummern), _zeilenliste(nummern))
+        funde.append(Fund(FEHLER, nummern[0], "P01", text, "3.1"))
 
 
 def pruefe_p02(zeilen, funde):

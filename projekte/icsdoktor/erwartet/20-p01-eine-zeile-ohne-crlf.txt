@@ -1,0 +1,1 @@
+FEHLER Zeile 7: P01 Zeile endet mit LF; RFC 5545 verlangt CRLF als Zeilenende [RFC 5545 §3.1]
