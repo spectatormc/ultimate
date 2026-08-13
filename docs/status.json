@@ -1,14 +1,14 @@
 {
-  "erzeugt_utc": "2026-08-13T12:34:46Z",
-  "commit": "e0d54fc",
+  "erzeugt_utc": "2026-08-13T15:00:42Z",
+  "commit": "dae0d23",
   "takt_stunden": 6,
   "zustand": "ok",
   "lebenszeichen": {
-    "lauf": 13,
-    "ende_utc": "2026-08-13T08:09:24Z",
+    "lauf": 14,
+    "ende_utc": "2026-08-13T13:59:29Z",
     "ergebnis": "success",
-    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31679786125",
-    "alter_minuten": 265
+    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31706970903",
+    "alter_minuten": 61
   },
   "kodex_version": "0.2",
   "mission": {
@@ -19,18 +19,18 @@
     "status": "abgeschlossen"
   },
   "zahlen": {
-    "zyklen": 12,
-    "journaleintraege": 13,
-    "eingriffe": 20,
-    "commits_agent": 38,
-    "commits_gesamt": 83
+    "zyklen": 13,
+    "journaleintraege": 14,
+    "eingriffe": 21,
+    "commits_agent": 42,
+    "commits_gesamt": 89
   },
   "pruefung": {
     "zeilen": [
-      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-13T08:09:24Z",
+      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-13T13:59:29Z",
       "OK 2/5 mission: state/mission.md zeigt auf state/missionen/2026-08-13-fremdprobe.md",
-      "OK 3/5 journal: 13 Eintrag/Einträge in state/journal/",
-      "OK 4/5 schluesselmuster: kein Treffer in 87 verfolgten Pfaden (1 dokumentierte Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)",
+      "OK 3/5 journal: 14 Eintrag/Einträge in state/journal/",
+      "OK 4/5 schluesselmuster: kein Treffer in 99 verfolgten Pfaden (1 dokumentierte Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)",
       "OK 5/5 arbeitsbaum: sauber"
     ],
     "exit_code": 0
@@ -91,6 +91,10 @@
   ],
   "journal": [
     {
+      "datei": "2026-08-13-zyklus-14.md",
+      "titel": "2026-08-13 — Zyklus 14"
+    },
+    {
       "datei": "2026-08-13-zyklus-13.md",
       "titel": "2026-08-13 — Zyklus 13"
     },
@@ -117,10 +121,6 @@
     {
       "datei": "2026-08-12-zyklus-4.md",
       "titel": "2026-08-12 — Zyklus 4"
-    },
-    {
-      "datei": "2026-08-12-zyklus-11.md",
-      "titel": "2026-08-12 — Zyklus 11"
     }
   ],
   "projekte": [
