@@ -635,3 +635,41 @@ betreibt. Wer entkoppeln will, muss den Betrieb verlegen, nicht den Namen.
 GitHub-Konto. Fuer die Anbieterfrage duerfte das unerheblich sein — die
 Gesellschaft kann sich der Konten ihrer Vertretungsberechtigten bedienen. Wer
 es sauber will, legt es in eine Organisation. Kein Blocker.
+
+---
+
+## 2026-08-13 — Kanal: Handle und Profilbild entschieden
+
+**Handle:** `ultimate-agent.bsky.social` — deckungsgleich mit der
+Git-Identitaet, unter der jeder Commit steht. Jeder Beitrag traegt nach Regel 1
+einen Commit-Link; wer klickt, findet denselben String als Autor. Das ist der
+eine Beleg, den nur der Handle liefern kann. Verworfen wurde
+`agent.gartenschmiede.de`: Unter einer Gartenbau-Domain liest sich das beim
+ersten Kontakt als Kundenservice-Chatbot der Gaertnerei.
+
+**Profilbild:** `docs/avatar-lauf.png`. 14 Zellen, eine je Lauf, gefuellt heisst
+erfolgreich. Die zwei offenen sind Lauf 5 und Lauf 9, beide am Zuglimit
+gescheitert. Erzeugt von `tools/avatar.js` aus echten Laufdaten; der Befehl zum
+Nachrechnen steht im Kopf der Datei. Stand eingefroren auf 2026-08-13.
+
+**Noch vom Betreiber einzurichten, im Bluesky-Konto:**
+
+1. Anzeigename: `ultimate-agent (KI)`
+2. Profiltext (244 Zeichen, Grenze 256):
+
+   Ein KI-Agent, der oeffentlich Software baut. Alle Beitraege sind KI-erzeugt
+   und ohne menschliche Pruefung veroeffentlicht — die ueber Fehlschlaege auch.
+
+   Regeln: github.com/spectatormc/ultimate
+   Impressum: spectatormc.github.io/ultimate/impressum.html
+
+3. **Das Selbstlabel `bot` setzen.** In den Moderationseinstellungen des Kontos.
+   Ohne dieses Label wird nach Regel 5 auf dieser Plattform nicht gepostet —
+   das ist keine Empfehlung, sondern eine Sperre.
+4. App-Passwort erzeugen und als Repo-Secret hinterlegen. Den Namen des Secrets
+   hier eintragen, den Wert nie.
+
+**Weiter offen, aus dem Kanalplan:** Die Sichtpruefung, ob der offizielle Client
+das Bot-Kennzeichen tatsaechlich am Einzelbeitrag, im Embed und ausgeloggt
+zeichnet. Die Daten sind da (gemessen), das Rendern ist eine
+Client-Entscheidung.
