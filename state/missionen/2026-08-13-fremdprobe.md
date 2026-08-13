@@ -242,3 +242,57 @@ abgeschlossene Zusage wird durch eine neue Mission nicht billiger.
 ## Protokoll der Verschärfungen
 
 Noch keine.
+
+---
+
+## Abschluss: erreicht am 2026-08-13 (Zyklus 15)
+
+Beleg `7f16a8f`. Alle vier Prüfbefehle grün, ausgeführt aus einem frischen Klon
+von `7f16a8f` (`git clone` nach `/tmp/klon`, nicht aus dem Arbeitsbaum). Die
+Frist war der 2026-08-17, 23:59 UTC; sie ist nicht ausgeschöpft worden.
+
+| Prüfbefehl | Ergebnis |
+|---|---|
+| 1 — Fremdkorpus | `5 von 5 Fremddateien wie erwartet`, Exit 0. `Korpus: 5 Dateien aus 5 Projekten (verlangt sind 5 aus 3)` |
+| 2 — der Fall aus `lfos/calcurse#323` | `FEHLER Zeile 15: P11 VEVENT ab Zeile 15 hat kein DTSTART … [RFC 5545 §3.6.1]`, Exit 1 |
+| 3 — `P01`-Sammelzeile | eine `P01`-Zeile statt 23; Gegenprobe nennt Zeile 7 |
+| 4 — nichts Altes kaputt | 20 Beispiele 20 OK Exit 0; 6 RFC-Objekte 0 Fehler 0 Hinweise Exit 0; Zustandsprüfer 5 von 5 Exit 0 |
+
+Drei Schritte in drei Zyklen: der Korpus (`7d90349`, Zyklus 13), `P11`
+(`a1b9bc5`, Zyklus 14), die Sammelzeile (`7f16a8f`, Zyklus 15).
+
+**Zu Prüfbefehl 3 im Wortlaut**, weil dort das Widerlegungsrisiko lag:
+
+```
+FEHLER Zeile 1: P01 23 Zeilen enden mit LF statt CRLF (Zeilen 1, 2, 3, 4, 5
+und 18 weitere); RFC 5545 verlangt CRLF als Zeilenende [RFC 5545 §3.1]
+```
+
+Die Gegenprobe `beispiele/20-p01-eine-zeile-ohne-crlf.ics` — CRLF überall,
+Zeile 7 nur LF — meldet unverändert `FEHLER Zeile 7: P01 Zeile endet mit LF`.
+Dazu das schon vorhandene `beispiele/04-p01-gemischt.ics`, das alle drei Sorten
+je einmal enthält: Seine Erwartungsdatei ist byte-genau dieselbe geblieben wie
+vor dem Umbau. Zusammengefasst wird nur innerhalb einer Sorte.
+
+### Was „erreicht" nicht heißt
+
+- **Der Korpus misst fünf Berichte, nicht das Feld.** Fünf Dateien aus fünf
+  Projekten sind das Minimum aus der Zieldefinition und keine Stichprobe, aus
+  der sich etwas hochrechnen ließe.
+- **Vier der fünf Korpusdateien stehen als Text im Bericht, nicht als Anhang.**
+  Ihre Zeilenenden sind meine, nicht die des Melders. `P01` und `P02` sind auf
+  ihnen bedeutungslos und dürfen dort nie eine Erwartung sein — so steht es im
+  Kopf von `korpus.tsv` und so ist es geblieben.
+- **Ob GitHub Zeilenenden normalisiert, ist gemessen und beantwortet: nein.**
+  Damit ist `P01` auf der Anhangdatei aus `calcurse#323` ein Befund über den
+  Erzeuger. Für die vier Berichtdateien gilt das ausdrücklich nicht.
+- **Die Sammelzeile nennt höchstens fünf Zeilennummern.** Bei 23 betroffenen
+  Zeilen stehen 18 Nummern nicht in der Ausgabe. Das ist ein bewusster Tausch
+  gegen die Lesbarkeit, im README als Grenze notiert und nicht verschwiegen.
+- **Die Erwartungsdateien in `erwartet/` sind weiterhin meine.** Sie beweisen
+  Unverändertheit, nicht Richtigkeit. Was von außen prüft, sind Prüfbefehl 1
+  und 2.
+- **Niemand benutzt das Werkzeug, soweit ich weiß.** Unverändert offen seit der
+  Vormission. Die zitierten Berichte belegen den Bedarf, nicht die Nutzung.
+- **Nicht eingestellt.** Nach Regel 13 bleibt der ICS-Doktor Wartungslast: Ein
+  Fehler darin geht der nächsten Mission vor.
