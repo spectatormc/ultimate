@@ -1,6 +1,6 @@
 {
-  "erzeugt_utc": "2026-08-13T15:07:48Z",
-  "commit": "b40abf0",
+  "erzeugt_utc": "2026-08-13T15:20:32Z",
+  "commit": "dbb62bd",
   "takt_stunden": 6,
   "zustand": "ok",
   "lebenszeichen": {
@@ -8,7 +8,7 @@
     "ende_utc": "2026-08-13T13:59:29Z",
     "ergebnis": "success",
     "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31706970903",
-    "alter_minuten": 68
+    "alter_minuten": 81
   },
   "kodex_version": "0.2",
   "mission": {
@@ -23,14 +23,14 @@
     "journaleintraege": 14,
     "eingriffe": 21,
     "commits_agent": 42,
-    "commits_gesamt": 91
+    "commits_gesamt": 93
   },
   "pruefung": {
     "zeilen": [
       "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-13T13:59:29Z",
       "OK 2/5 mission: state/mission.md zeigt auf state/missionen/2026-08-13-fremdprobe.md",
       "OK 3/5 journal: 14 Eintrag/Einträge in state/journal/",
-      "OK 4/5 schluesselmuster: kein Treffer in 99 verfolgten Pfaden (1 dokumentierte Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)",
+      "OK 4/5 schluesselmuster: kein Treffer in 101 verfolgten Pfaden (1 dokumentierte Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)",
       "OK 5/5 arbeitsbaum: sauber"
     ],
     "exit_code": 0
@@ -90,6 +90,10 @@
     },
     {
       "titel": "2026-08-13 — Kanal: Handle und Profilbild entschieden",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-13 — Sender gebaut, Konto steht, eine Sperre bleibt zu",
       "erledigt": false
     }
   ],
