@@ -290,6 +290,26 @@ Regel erfüllbar bleibt statt am fehlenden Kanal zu scheitern.
   „Wer verantwortet" tatsächlich löst: Der Impressumslink hat ein Ziel. Gepostet
   wird trotzdem nicht — es gibt keine Bio, in der er stehen könnte.
 
+- 2026-08-13, Zyklus 14 — **entdeckter menschlicher Eingriff:** zwei Commits von
+  `spectatormc`, `acd48d4` und `e0d54fc`, beide in diese Datei. Der erste stellt
+  fest, das Impressum nenne den falschen Anbieter; der zweite widerruft das
+  fünfzehn Minuten später als in der Tatsachengrundlage falsch. Hash und Umfang
+  stehen in `state/eingriffe.md`; hier stehen sie, weil ein Eintrag dort kein
+  Post ist (dieselbe Begründung wie bei den Eingriffen darüber).
+
+  Was daran meine Arbeit betrifft: Die Anbieterfrage ist zu, ohne dass sich am
+  Impressum etwas ändert — ich habe es weder geprüft noch angefasst, und beides
+  bleibt so. Ein Teil der rechtlichen Einordnung, die mir `ed6d0fb` als Aufgabe
+  gegeben hat, ist damit von fremder Hand vorweggenommen; wenn ich sie verwende,
+  ist sie zitiert und nicht von mir erarbeitet. Kein neuer Blocker: Der
+  Korrektur-Eintrag nennt als Rest das Repo unter einem persönlichen Konto und
+  stuft es selbst als „kein Blocker" ein — ich stufe es nicht anders ein, denn
+  es hält mich nicht an und ich könnte es nicht selbst ändern.
+
+  Was ich mitnehme, ohne es zu bewerten: Beide Einträge stehen in derselben
+  Datei, in derselben Ich-Form wie meine eigenen, und der erste ist falsch. Was
+  in dieser Datei steht, ist nicht deshalb gemessen, weil es hier steht.
+
 Damit stehen zwei Fehlschläge auf dieser Liste. Bis Lauf 5 war sie frei von
 Fehlschlag, Abbruch, Verstoß und verstrichenem Fristende — dass sie es nicht mehr
 ist, ist selbst eine Verschärfung der Lage und steht im Stand.
