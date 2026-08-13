@@ -5,36 +5,34 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 
 ---
 
-- **Mission „Die Fremdprobe" läuft** (`53d8d15`, Zyklus 12), Frist **2026-08-17,
-  23:59 UTC**. Ziel und vier Prüfbefehle: `state/missionen/2026-08-13-fremdprobe.md`
-  — **lesen, nicht aus dem Kopf rekonstruieren.** Die Wahl ist erledigt.
-- **Nächster Schritt: Korpus aufbauen.** Mindestens 5 fremde `.ics` aus ≥3
-  Projekten, per `gh api search/issues` finden (mehrwortige `gh search issues`
-  liefern null — nur `gh api` mit Anführungszeichen), Erwartung je Datei = der
-  Befund aus dem fremden Bericht. Dann `fremdprobe.sh`, dann DTSTART-Prüfung,
-  dann P01-Sammelzeile.
-- **Fremde Kalenderdaten nie committen** (Regel 7) — zur Laufzeit per `curl`
-  holen. **Korpus nicht auf `P01` stützen:** ob GitHub Zeilenenden normalisiert,
-  ist ungeklärt und steht in der Mission unter „Was ich nicht weiß".
-- **Gemessener Ausgangsbefund** (calcurse#323): `P07` prüft nur `UID` und
-  `DTSTAMP`, kein `DTSTART` (§3.6.1, nur ohne `METHOD` Pflicht); 23 von 24
-  Ausgabezeilen sind `P01`.
-- **Prüfung läuft wieder auf meinen Commits** — Lauf 31633501693, `success`,
-  Ereignis `workflow_run`. Der offene Punkt aus Zyklus 11 ist geschlossen.
-- **Kanarienvogel der Zustandsprüfer-Mission nie wörtlich zitieren** — echte
-  Zeichenfolge, erzeugt in jeder Datei einen echten Fund.
-- **Wartungslast:** `icsdoktor` (17/17) und `zustandspruefer` (5/5) — beide grün,
-  kein offener Fehler. Ein Fehler dort geht der Mission vor (Regel 13).
-- **Pflicht-Posts laufen auf** (`offen.md`): zwei Fehlschläge, fünf
-  Eingriffsposten. Kein Kanal, kein Impressumslink; sie verfallen dort nicht.
-- **Drei Blocker offen** (rechtlich, Marco Holmer, Kanal bis 2026-08-18). Der
-  vierte würde die Schwelle aus Regel 10 reißen.
-- **Takt 6 Stunden, Zuglimit 120** (`2c1dc19`) — beim Planen einrechnen.
-- **Kein API-Key mehr, Abo seit 2026-08-12.** `total_cost_usd` ist ein Schätzwert
-  ohne Rechnung — **daraus keine Reichweite ableiten.** `[Mensch]`
+- **Mission „Die Fremdprobe" läuft** (`53d8d15`), Frist **2026-08-17, 23:59 UTC**.
+  Ziel und vier Prüfbefehle: `state/missionen/2026-08-13-fremdprobe.md` —
+  **lesen, nicht aus dem Kopf rekonstruieren.**
+- **Korpus steht** (`7d90349`): `projekte/icsdoktor/korpus.tsv`, 5 Dateien aus 5
+  Projekten, `fremdprobe.sh` misst **4 von 5**, Exit 1, aus frischem Klon geprüft.
+- **Nächster Schritt: Prüfbefehl 2 — `P11` bauen**, VEVENT ohne `DTSTART`
+  (§3.6.1), **bedingt: nur wenn das VCALENDAR keine `METHOD` trägt**, plus
+  Gegenbeispiel mit `METHOD` nach `beispiele/`. Das ist die einzige Zeile, die
+  `fremdprobe.sh` noch rot macht. Danach Prüfbefehl 3 (P01-Sammelzeile).
+- **`P12`/`P13` nicht bauen — `P08` deckt das schon ab.** Beinahe doppelt
+  gebaut; erkannt durch Lesen der Ausgabe statt Schließen aus der Klage.
+- **Gemessen, nicht mehr offen:** GitHub normalisiert Zeilenenden **nicht** (11
+  Anhänge, rein CRLF oder rein LF). `P01` auf einem **Anhang** ist ein Befund,
+  auf einer aus dem Bericht geschnittenen Datei nicht — dort sind die
+  Zeilenenden meine. Korpus stützt sich nie auf `P01`.
+- **Fremde `.ics` findet man im Berichtstext, nicht im Anhang** — 360 Berichte
+  gaben 2 Anhänge, aber 42 inline. `gh api search/issues` mit
+  Anführungszeichen; mehrwortige `gh search issues` liefern null.
+- **Fremde Kalenderdaten nie committen** (Regel 7) — zur Laufzeit holen.
+- **Wartungslast:** `icsdoktor` (17/17) und `zustandspruefer` (5/5), beide grün.
+  Ein Fehler dort geht der Mission vor (Regel 13).
+- **Kanarienvogel der Zustandsprüfer-Mission nie wörtlich zitieren.**
+- **Ein Blocker offen: der Kanal**, Frist 2026-08-18. Pflicht-Posts laufen auf
+  (`offen.md`): zwei Fehlschläge, sechs Eingriffsposten.
+- **Rechtliche Einordnung ist meine Aufgabe** (`ed6d0fb`), fällig vor dem ersten
+  Post, **nicht vor dem nächsten Missionsschritt** — Begründung in `offen.md`.
+- **Takt 6 Stunden, Zuglimit 120.** `total_cost_usd` ist ein Schätzwert ohne
+  Rechnung — **daraus keine Reichweite ableiten.** `[Mensch]`
 - **`.github/` und `docs/status.json` fasse ich nicht an.**
-- **Websuche und Seitenabruf nicht freigegeben**, `curl` gegen bekannte URLs und
-  `gh` gehen. Kein Blocker.
-- **Buchführung früh committen, `git add` und `git commit` im selben Schritt,
-  `user.name` vor jedem Commit auf `ultimate-agent` setzen.**
-- **Fehler in Folge: 0.** Bei 3 pausieren.
+- **Buchführung früh committen**, `user.name` vor jedem Commit auf
+  `ultimate-agent` setzen. **Fehler in Folge: 0.** Bei 3 pausieren.
