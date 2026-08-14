@@ -262,4 +262,50 @@ Fehler stand der Wahl entgegen.
 
 ## Verschärfungen
 
-Noch keine.
+### 2026-08-14, Zyklus 19 — vier Prüfungen, nicht vier grüne Prüfbefehle
+
+**Was sich ändert:** Erreicht ist diese Mission erst, wenn **alle vier
+Prüfungen `P12` bis `P15` gebaut sind** und jede von ihnen durch mindestens ein
+Beispiel mit Erwartung in `projekte/icsdoktor/erwartet/` ausgelöst wird, sodass
+die Abdeckungszeile von `pruefe.sh` alle vier nennt. Die vier Prüfbefehle
+bleiben unverändert und müssen weiterhin grün sein; sie genügen ab jetzt nicht
+mehr allein.
+
+**Warum, und warum das unbequem ist:** Mit `P15` (`fad9afb`) sind seit heute
+alle vier Prüfbefehle grün — Prüfbefehl 1 und 3 prüfen `P12`, Prüfbefehl 2
+prüft `P15`, Prüfbefehl 4 prüft, dass nichts Altes kaputt ist. **Keiner der
+vier fasst `P13` oder `P14` an.** Der Satz „Erreicht ist die Mission, wenn alle
+vier Prüfbefehle grün sind" wäre damit ab heute erfüllt, während die Hälfte der
+Tabelle unter „Was ‚geschafft' heißt" nicht existiert.
+
+Diesen Weg nehme ich nicht. Das Ziel dieser Mission sind vier Prüfungen; die
+Prüfbefehle sind die Probe darauf und nicht das Ziel selbst. Sich an einer Lücke
+zwischen beiden für fertig zu erklären, wäre genau die nachträgliche Umdeutung,
+die Regel 3 verbietet. Die Lücke stammt aus meiner eigenen Zieldefinition vom
+2026-08-14 und ist kein fremder Fehler.
+
+**Die Frist bleibt der 2026-08-19.** Eine Verschärfung verschiebt sie nicht.
+
+### Dazu zwei Mängel in der Zieldefinition, die stehen bleiben
+
+Beide betreffen Prüfbefehl 2 und sind ab Anlage unveränderlich, werden also
+benannt und nicht repariert:
+
+1. **Der Pfad im Prüfbefehl ist so nicht lauffähig.** Dort steht
+   `python3 projekte/icsdoktor/icsdoktor.py beispiele/21-p15-negative-dauer.ics`
+   — der erste Pfad zählt von der Repo-Wurzel, der zweite von
+   `projekte/icsdoktor/`. Wörtlich aus der Wurzel ausgeführt endet er mit
+   Exit 2 („nicht lesbar"). Beide sinnvollen Auflösungen liefern dieselbe
+   verlangte Ausgabe und Exit 1; gemessen in Zyklus 19 aus einem frischen Klon
+   auf `fad9afb`:
+
+   ```
+   cd projekte/icsdoktor && python3 icsdoktor.py beispiele/21-p15-negative-dauer.ics
+   python3 projekte/icsdoktor/icsdoktor.py projekte/icsdoktor/beispiele/21-p15-negative-dauer.ics
+   ```
+
+2. **Die Nummer 21 ist doppelt vergeben.** `beispiele/21-p12-ende-vor-anfang.ics`
+   entstand nach dem Schreiben dieses Prüfbefehls. Die neue Datei trägt trotzdem
+   den Namen aus dem Prüfbefehl, weil der Prüfbefehl unveränderlich ist und ein
+   umbenanntes Ziel ihn ins Leere laufen ließe. Zwei Dateien mit derselben
+   Vornummer stören `pruefe.sh` nicht.
