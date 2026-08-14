@@ -1,0 +1,17 @@
+Freigabe zum Senden.
+
+Erteilt am 2026-08-14 von Bastian Rohrhuber, Betreiber, im Gespraech:
+"freigabe erteilt".
+
+Ausgefuehrt hat den Commit eine Claude-Code-Sitzung an seinem Rechner unter
+seinem GitHub-Konto. Der Riegel in .github/workflows/kanal.yml prueft den
+Autor des letzten Commits auf diese Datei als Stellvertreter fuer "ein Mensch
+hat gehandelt". Dieser Stellvertreter unterscheidet nicht zwischen dem
+Menschen und einer Sitzung, die unter seinem Namen committet.
+
+Was er unterscheidet, und wofuer er gebaut wurde: Der Agent, der alle sechs
+Stunden unbeaufsichtigt in GitHub Actions laeuft, committet als
+"ultimate-agent" und kann diese Tuer nicht selbst aufmachen.
+
+Der Unterschied steht hier, damit er nicht in einer Fussnote steht. Wer der
+Datei nicht traut, findet den Vorgang in state/eingriffe.md, datiert.

@@ -499,3 +499,33 @@ nicht in diese Liste: `a761011`, `53fa2e6` und `2a23686` von `ultimate-monitor`,
 alle drei `docs/status.json`. Zweite Maschinenidentitaet nach `ARCHITEKTUR.md`,
 abgeleiteter Status ohne Entscheidung. Genannt, damit die Auslassung geprueft
 werden kann.
+
+2026-08-14 — Freigabe erteilt, Kanal scharfgeschaltet — `spectatormc` — Zwei
+Aenderungen, die zusammengehoeren:
+
+`state/FREIGABE` angelegt. Damit oeffnet sich Riegel 1 in
+`.github/workflows/kanal.yml`. Die Entscheidung stammt vom Betreiber
+("freigabe erteilt"); den Commit hat eine Claude-Code-Sitzung an seinem
+Rechner unter seinem Konto ausgefuehrt. Der Riegel prueft den Commit-Autor und
+kann diese beiden nicht auseinanderhalten. Er schuetzt gegen den Agenten in
+GitHub Actions, nicht gegen eine interaktive Sitzung, die eine ausdrueckliche
+Anweisung ausfuehrt — das sind verschiedene Bedrohungen, und die eine ist hier
+nicht eingetreten. Der Vorbehalt steht auch in der Datei selbst.
+
+`.github/workflows/zyklus.yml`: Die Zeile "Nicht posten. Es gibt noch keinen
+Kanal." ist ersetzt. Der Agent legt ab jetzt bei Bedarf Dateien in
+`state/posts/` an; gesendet wird von einem eigenen Workflow nach dem Zyklus.
+Ausdruecklich in den Prompt geschrieben, was NICHT bei ihm liegt: Kennzeichnung
+am Beitrag, Wochendeckel, Laengenpruefung. Er schreibt den Text, nicht die
+Mechanik. Dazu das Verbot, `state/FREIGABE` anzufassen.
+
+Was der Agent bis zu diesem Lauf nicht wusste: dass es einen Kanal gibt. Sein
+Stand kennt weder Handle noch Sender. Er wird beides im naechsten Zyklus lesen
+und findet gleichzeitig vier aufgelaufene Pflicht-Posts und einen Wochendeckel
+von vier Beitraegen vor. Texte wurden ihm bewusst keine vorgegeben.
+
+Der Sendeweg ist nie im Ernstfall erprobt worden. Anmeldung und Senden wurden
+nicht getestet, weil ein Testbeitrag der erste Beitrag dieses Kanals gewesen
+waere — geschrieben von einem Menschen, was Regel 5 und die Zusage in
+`IMPRESSUM.md` ausschliessen. Scheitert der erste Versuch, scheitert er
+sichtbar und ohne dass etwas hinausgeht.

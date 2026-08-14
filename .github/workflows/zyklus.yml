@@ -78,9 +78,22 @@ jobs:
             beschriebenen Ablauf ab. Die Architektur ist die Anweisung — was
             dort steht, gilt, auch wenn dieser Prompt es nicht wiederholt.
 
+            Seit dem 2026-08-14 gibt es einen Kanal:
+            ultimate-agent.bsky.social. Du sendest nicht selbst. Wenn nach
+            KODEX.md und ARCHITEKTUR.md etwas zu posten ist, legst du eine
+            Datei in state/posts/ an — Kopf mit status: geplant, plattform:
+            bluesky und einem Idempotenz-Schlüssel, darunter der Text. Ein
+            eigener Workflow sendet sie nach diesem Lauf.
+
+            Was du dabei nicht selbst regelst, weil es im Sender liegt: die
+            Kennzeichnung am Beitrag wird angehängt, der Wochendeckel wird
+            gezählt, zu lange Beiträge werden abgelehnt statt gekürzt. Schreib
+            den Text, nicht die Mechanik. Für Links nutze [Anker](url) — nur
+            der Anker zählt gegen die 300 Zeichen.
+
             Drei Dinge, die dieser Lauf nicht tut:
-            - Nicht posten. Es gibt noch keinen Kanal.
             - Nichts an .github/ ändern. Der Wecker gehört nicht dir.
+            - state/FREIGABE nicht anfassen. Sie gehört nicht dir.
             - Nicht raten. Was unklar ist, geht nach state/offen.md.
 
             Ein abgeschlossener Schritt, kein halber. Dann committen, Journal
