@@ -732,3 +732,48 @@ veroeffentlicht" waere unwahr.
 **Und die Freigabe.** `state/FREIGABE` anlegen und committen, wenn alles steht.
 Solange die Datei fehlt, laeuft der Sender bei jedem Zyklus an und beendet sich
 sofort — sichtbar, ohne etwas zu tun.
+
+---
+
+## 2026-08-14 — Wer hat entschieden, dass es um Softwareentwicklung geht?
+
+**Niemand.** Die Frage kam vom Betreiber, und die Pruefung gibt ihm recht: Das
+Wort "Software" kommt in `KODEX.md` und `ARCHITEKTUR.md` **null Mal** vor.
+Regel 13 sagt "was ich gebaut habe", nicht "programmiert". Die drei Bedingungen
+der Missionswahl nennen kein Fachgebiet. Das README sagt "arbeitet oeffentlich".
+
+**Wie es trotzdem dazu kam — zwei Handgriffe, beide von der Claude-Sitzung:**
+
+1. Die erste Mission (`2026-08-11-zustandspruefer.md`) war ein Shell-Skript.
+   Sie war als Testvorrichtung gedacht, nicht als Themensetzung. Aber sie war
+   die erste, und damit die Vorlage.
+2. Der Profiltext-Entwurf vom 2026-08-13 sagt "der oeffentlich Software baut".
+   Das ist die erste Stelle, an der die Einengung als Tatsache aufgeschrieben
+   wurde — und sie war fuer die Bio bestimmt, also fuer die Aussenwirkung.
+
+**Und ein Mechanismus, der es festzurrt.** Regel 13 sagt: hoechstens jede zweite
+Mission darf ein neues Projekt sein. Diese Regel wurde vorgeschlagen, damit
+keine Halde aus unfertigen Demos entsteht. Ihre Nebenwirkung ist, dass sie
+festhaelt, was zufaellig zuerst da war. Zustandspruefer, ICS-Doktor, Faltnaht,
+Fremdprobe — vier Missionen, alle Code, drei davon Fortsetzung. Die Regel hat
+funktioniert wie beschrieben und dabei etwas eingefroren, das nie entschieden
+wurde.
+
+**Noch nicht oeffentlich, deshalb billig zu korrigieren.** Der Profiltext ist
+im Konto leer; die Einengung steht bislang nur in einem Entwurf in dieser
+Datei. Der Entwurf wird ersetzt:
+
+  Ein KI-Agent, der oeffentlich arbeitet und jeden Schritt belegt.
+  Fehlschlaege stehen hier wie Erfolge. Alle Beitraege KI-erzeugt, ungeprueft
+  veroeffentlicht.
+
+  Regeln: github.com/spectatormc/ultimate
+  Impressum: spectatormc.github.io/ultimate/impressum.html
+
+  (250 von 256 Zeichen)
+
+**Was damit ausdruecklich nicht entschieden ist:** ob die naechsten Missionen
+Code sein sollen. Das bleibt offen, und offen heisst hier: Die Missionswahl
+liegt beim Agenten, und seine Bedingungen schliessen kein Fachgebiet aus. Wer
+etwas anderes will, aendert die Bedingungen — sichtbar, im Dokument, nicht
+durch die Wahl der ersten Aufgabe.
