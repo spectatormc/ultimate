@@ -28,6 +28,17 @@ später liegen als `DTSTART`. §3.8.2.2 sagt „later in time", nicht „not ear
 Zeitzonendatenbank nicht zu führen ist, meldet `P12` nichts; die drei Fälle
 stehen unten unter „Was dieses Werkzeug nicht tut".
 
+`P15` stammt aus derselben Mission und meldet eine **negative `DURATION`**:
+§3.8.2.5 nennt die Eigenschaft „a positive duration of time". Der Anlass ist
+fremd — `bitfireAT/synctools#147` benennt die negative Dauer neben dem Ende vor
+dem Anfang und stellt selbst fest, dass der Standard beide verbietet;
+`bitfireAT/davx5-ose#1850` ist der ausgelöste Absturz, mit dem Wert `P-1W` im
+Klartext der Fehlermeldung. Genau diese Form steht in
+`beispiele/21-p15-negative-dauer.ics`. Dass die Kennung `P15` vor `P13` und
+`P14` gebaut ist, hat einen Grund und keinen Zufall: Die Nummern stammen aus der
+Missionsdatei und sind dort seit Anlage unveränderlich, die Reihenfolge des
+Bauens ist es nicht.
+
 ## Warum
 
 Drei öffentliche Fehlerberichte, in der Missionsdatei mit Link und Wortlaut
@@ -82,7 +93,7 @@ ist derselbe. Umbenannt wird nichts, damit die dreizehn älteren Erwartungen in
 ## Selbst nachprüfen
 
 ```
-sh projekte/icsdoktor/pruefe.sh          # neunzehn mitgelieferte Beispiele
+sh projekte/icsdoktor/pruefe.sh          # die mitgelieferten Beispiele
 sh projekte/icsdoktor/rfc-beispiele.sh   # die sechs Kalender aus RFC 5545 §4
 sh projekte/icsdoktor/namensliste.sh     # woher die Namensliste von P09 kommt
 ```
@@ -100,9 +111,12 @@ Prüfung mindestens einmal ausgelöst, mindestens zwei fehlerfreie Dateien. Die
 abgeschlossene Mission „Die Faltnaht" verlangt mehr — 16 Beispiele und die zehn
 Prüfungen `P01` bis `P10` —, und wo das steht, sagt die letzte Zeile der
 Ausgabe, damit ein grüner Exit-Code nicht als „Mission erreicht" gelesen wird.
-`P11` und `P12` füllen diese Zehn nicht auf, sondern werden getrennt gezählt:
-Eine abgeschlossene Zusage wird nicht dadurch billiger, dass später eine Prüfung
-dazukommt.
+`P11`, `P12` und `P15` füllen diese Zehn nicht auf, sondern werden getrennt
+gezählt: Eine abgeschlossene Zusage wird nicht dadurch billiger, dass später
+eine Prüfung dazukommt. Die Abdeckungsliste nennt, was gebaut ist — `P13` und
+`P14` stehen noch nicht darin, weil ein Prüfskript nicht rot werden soll für
+Arbeit, die aussteht. Ob die laufende Mission erreicht ist, sagt ihre
+Missionsdatei und nicht dieser Exit-Code.
 
 Seit `rfc-beispiele.sh` auch bei einem `HINWEIS` mit `1` endet, ist er die
 Kontrolle gegen Fehlalarme von `P09` und `P10`: Ein Kalender aus dem Normtext
@@ -153,8 +167,8 @@ Wo der Standard mehrere Lesarten zulässt, steht hier, welche gewählt wurde:
 Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
 
 - **Es repariert nichts.** Nur Diagnose. So steht es in der Mission.
-- **Es prüft genau die elf Prüfungen** und nicht mehr. Insbesondere nicht die
-  Maskierung von Sonderzeichen in TEXT-Werten (§3.3.11) — `P10` sieht nur, wo
+- **Es prüft genau die dreizehn Prüfungen** und nicht mehr. Insbesondere nicht
+  die Maskierung von Sonderzeichen in TEXT-Werten (§3.3.11) — `P10` sieht nur, wo
   eine Faltung sie zerschneidet, nicht ob sie richtig ist —, nicht die
   Zeichenkodierung, nicht `RRULE`, und für `VTODO`, `VJOURNAL` und `VFREEBUSY`
   keine Pflichtangaben — die erfasst nur `P05` strukturell.
@@ -180,6 +194,27 @@ Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
   muss stumm bleiben. Der dritte Fall ist keine Lücke, sondern die
   Zuständigkeit von `P13` aus derselben Mission — bis die steht, bleibt er
   unbemerkt.
+- **`P15` meldet die negative Dauer und sonst nichts an `DURATION`.** Drei
+  Grenzen, alle drei bewusst:
+
+  - **Ein negativer `TRIGGER` ist kein Fund.** Das ist eine andere Eigenschaft,
+    und §3.8.6.3 erlaubt ihr das Vorzeichen ausdrücklich — ein Wecker, der
+    fünfzehn Minuten vor dem Termin klingelt, trägt `TRIGGER:-PT15M`. Wer das
+    meldet, meldet den Normalfall.
+    `beispiele/25-sauber-p15-trigger-negativ.ics` hält ihn fest und muss stumm
+    bleiben.
+  - **Die Dauer null wird nicht gemeldet.** „Positive" schließt `PT0S` dem
+    Wortsinn nach aus. Die Missionsdatei sagt aber „`DURATION` ist negativ", und
+    das ist etwas anderes als „nicht positiv". Die Lücke steht hier, statt durch
+    eine eigene Auslegung geschlossen zu werden.
+  - **Die Form nach §3.3.6 prüft niemand.** `DURATION:morgen` trägt kein Minus
+    und geht durch. Es gibt in diesem Werkzeug keine Prüfung für die Grammatik
+    des Wertetyps DURATION, und `P15` erfindet sie nicht nebenbei.
+
+  Gemeldet werden zwei Schreibweisen: `-PT1H` (das Vorzeichen, wo §3.3.6 es
+  vorsieht) und `P-1W` (das Minus hinter dem `P` — grammatisch gar keine Dauer,
+  aber genau der Wert, an dem der zitierte Absturz hängt). Die zweite Meldung
+  sagt den Unterschied dazu, statt beide Fälle gleich aussehen zu lassen.
 - **Auch bei gleicher `TZID` kann `P12` in genau einer Stunde im Jahr irren.**
   Verglichen wird die Ortszeit. Fällt der Zeitraum in die doppelte Stunde der
   Zeitumstellung, läuft sie rückwärts, während die tatsächliche Zeit vorwärts
@@ -222,7 +257,7 @@ pruefe.sh           Prüfbefehl 1: Beispiele gegen Erwartungen.
 rfc-beispiele.sh    Prüfbefehl 2: die sechs Kalender aus RFC 5545 §4.
 namensliste.sh      Herkunftsprüfung der Namensliste von P09. Kein Prüfbefehl
                     der Mission — er beweist die Herkunft, nicht die Prüfung.
-beispiele/          Neunzehn Kalenderdateien, byte-genau, teils mit Absicht kaputt.
+beispiele/          26 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
 erwartet/           Je eine Datei mit der erwarteten Ausgabe.
 LAGE.md             Geprüfte Werkzeuglandschaft, mit Links.
 .gitattributes      Hält CRLF in beispiele/ auch über einen Klon hinweg.

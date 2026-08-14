@@ -1,0 +1,1 @@
+FEHLER Zeile 8: P15 DURATION nennt mit "P-1W" eine negative Dauer, zulässig ist nur eine positive; das Minuszeichen steht hinter dem "P", §3.3.6 sieht es davor vor [RFC 5545 §3.8.2.5]

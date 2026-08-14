@@ -23,6 +23,11 @@ zwei Eigenschaften zueinander in Beziehung setzt statt jede Zeile fuer sich zu
 lesen. Wo der Vergleich ohne Zeitzonendatenbank nicht zu fuehren ist, meldet sie
 nichts; die Grenze steht im README und in ihrem eigenen Docstring.
 
+P15 stammt aus derselben Mission und meldet eine negative DURATION (§3.8.2.5).
+Sie liest wieder eine einzelne Zeile — die Kennung folgt der Nummerierung der
+Mission und nicht der Reihenfolge, in der gebaut wurde. P13 und P14 fehlen
+deshalb noch; die Luecke ist keine ausgelassene Pruefung, sondern offene Arbeit.
+
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
 Aufruf:
@@ -886,8 +891,91 @@ def pruefe_p12(komponenten, funde):
                 "3.8.2.2"))
 
 
+def _dauer_negativ(wert):
+    """Rueckgabe: None, "vorne" oder "innen".
+
+    "vorne" ist die Form, die §3.3.6 fuer ein Vorzeichen vorsieht — das Minus
+    steht vor dem "P", etwa -PT1H. "innen" ist die Form aus dem Absturzbericht
+    bitfireAT/davx5-ose#1850: P-1W. Die kennt §3.3.6 gar nicht; sie meint aber
+    dasselbe und kommt in echten Dateien vor, sonst gaebe es den Bericht nicht.
+
+    None heisst: kein Minuszeichen. Ob der Rest ueberhaupt eine gueltige Dauer
+    nach §3.3.6 ist, prueft hier niemand — dafuer gibt es keine Pruefung in
+    diesem Werkzeug, und eine nebenbei zu erfinden ist nicht Aufgabe dieser
+    Mission. P15 beantwortet genau eine Frage: negativ oder nicht.
+
+    Gross- und Kleinschreibung: In ABNF sind Literale wie "P" unabhaengig von
+    der Schreibweise (RFC 5234 §2.3), deshalb wird hier nicht auf Grossbuchstabe
+    bestanden.
+    """
+    rest = wert
+    vorzeichen = ""
+    if rest[:1] in ("+", "-"):
+        vorzeichen = rest[0]
+        rest = rest[1:]
+    if rest[:1].upper() != "P":
+        return None                      # sieht nicht nach einer Dauer aus
+    if vorzeichen == "-":
+        return "vorne"
+    if "-" in rest[1:]:
+        return "innen"
+    return None
+
+
+def pruefe_p15(logische, funde):
+    """§3.8.2.5: DURATION nennt eine positive Dauer.
+
+    Woertlich: "This property specifies a positive duration of time", und in
+    der Grammatik ";consisting of a positive duration of time". Eine negative
+    Dauer ist damit ein Verstoss, auch wenn §3.3.6 das Vorzeichen syntaktisch
+    zulaesst — der Wertetyp kann es, diese Eigenschaft darf es nicht.
+
+    Aus der Mission Die Beziehungsprobe,
+    state/missionen/2026-08-14-beziehungsprobe.md. Der Anlass ist fremd und
+    nicht ausgedacht: bitfireAT/synctools#147 nennt die negative Dauer neben
+    dem Ende vor dem Anfang und stellt selbst fest, dass der Standard beide
+    verbietet; davx5-ose#1850 ist der ausgeloeste Absturz, mit dem Wert P-1W
+    im Klartext der Meldung.
+
+    **Geprueft wird die Eigenschaft, nicht die Komponente.** §3.8.2.5
+    beschreibt DURATION und nicht den Ort, an dem sie steht; in VEVENT, VTODO
+    und VALARM gilt derselbe Satz. Deshalb laeuft diese Pruefung ueber die
+    logischen Zeilen und nicht ueber die Komponentenliste.
+
+    **Was ausdruecklich nicht gemeldet wird:**
+
+    - **TRIGGER mit negativer Dauer.** Das ist eine andere Eigenschaft, und
+      §3.8.6.3 erlaubt ihr das Vorzeichen ausdruecklich: Ein Wecker, der
+      fuenfzehn Minuten vor dem Termin klingelt, traegt TRIGGER:-PT15M. Wer
+      das meldet, meldet den Normalfall. Beispiel 25 haelt ihn fest und muss
+      stumm bleiben.
+    - **Die Dauer null**, etwa PT0S. "Positive" schliesst sie dem Wortsinn
+      nach aus, aber die Missionsdatei sagt "DURATION ist negativ", und das
+      ist etwas anderes als "nicht positiv". Die Luecke steht im README,
+      statt hier durch eine eigene Auslegung geschlossen zu werden.
+    - **Eine Dauer, die keine ist.** DURATION:morgen traegt kein Minus und
+      geht hier durch. Die Form nach §3.3.6 prueft dieses Werkzeug nirgends.
+    """
+    for lz in logische:
+        if lz.name != "DURATION":
+            continue
+        richtung = _dauer_negativ(lz.wert or "")
+        if richtung is None:
+            continue
+        if richtung == "vorne":
+            zusatz = ""
+        else:
+            zusatz = ("; das Minuszeichen steht hinter dem \"P\", "
+                      "§3.3.6 sieht es davor vor")
+        funde.append(Fund(
+            FEHLER, lz.nr, "P15",
+            "DURATION nennt mit %s eine negative Dauer, zulässig ist nur "
+            "eine positive%s" % (_zeige_wort(lz.wert or ""), zusatz),
+            "3.8.2.5"))
+
+
 def untersuche(rohdaten):
-    """Alle zwoelf Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle dreizehn Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     zeilen = zerlege_physisch(rohdaten)
     if not zeilen:
@@ -910,6 +998,7 @@ def untersuche(rohdaten):
     pruefe_p10(zeilen, funde)
     pruefe_p11(komponenten, funde)
     pruefe_p12(komponenten, funde)
+    pruefe_p15(logische, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))

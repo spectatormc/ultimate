@@ -112,19 +112,24 @@ ausgeloest=0
 # sonst waere eine abgeschlossene Zusage durch neue Arbeit billiger geworden.
 # Dasselbe gilt ab P12 fuer jede weitere.
 ausgeloest_faltnaht=0
-for code in P01 P02 P03 P04 P05 P06 P07 P08 P09 P10 P11 P12; do
+# P13 und P14 stehen hier noch nicht: Die Liste nennt, was gebaut ist, und wird
+# mit jeder Pruefung erweitert. Sie vorab einzutragen hiesse, dieses Skript rot
+# zu faerben fuer Arbeit, die noch aussteht — der Missionsstand steht in der
+# Missionsdatei und nicht im Exit-Code eines Pruefskripts.
+for code in P01 P02 P03 P04 P05 P06 P07 P08 P09 P10 P11 P12 P15; do
     if ! grep -q " $code " "$erwartet"/*.txt; then
         fehlt="$fehlt $code"
     else
         ausgeloest=$((ausgeloest + 1))
         case "$code" in
-            P11|P12) ;;
+            P11|P12|P15) ;;
             *) ausgeloest_faltnaht=$((ausgeloest_faltnaht + 1)) ;;
         esac
     fi
 done
 if [ -z "$fehlt" ]; then
-    printf 'Abdeckung: alle zwoelf Pruefungen P01 bis P12 werden ausgeloest\n'
+    printf 'Abdeckung: alle %d Pruefungen bis P15 werden ausgeloest\n' \
+        "$ausgeloest"
 else
     printf 'Abdeckung unvollstaendig, nie ausgeloest:%s\n' "$fehlt"
     schlecht=$((schlecht + 1))

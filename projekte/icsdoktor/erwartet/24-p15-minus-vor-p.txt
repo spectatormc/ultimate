@@ -1,0 +1,1 @@
+FEHLER Zeile 8: P15 DURATION nennt mit "-PT1H" eine negative Dauer, zulässig ist nur eine positive [RFC 5545 §3.8.2.5]
