@@ -1,0 +1,1 @@
+FEHLER Zeile 8: P12 DTEND liegt nicht später als das DTSTART aus Zeile 7 ("20251211T093000" gegen "20260108T093000") [RFC 5545 §3.8.2.2]

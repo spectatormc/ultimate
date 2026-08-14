@@ -110,17 +110,21 @@ ausgeloest=0
 # Getrennt gezaehlt: Die Zusage der Mission Die Faltnaht lautet auf die zehn
 # Pruefungen P01 bis P10. Eine elfte Pruefung darf diese Zahl nicht auffuellen,
 # sonst waere eine abgeschlossene Zusage durch neue Arbeit billiger geworden.
+# Dasselbe gilt ab P12 fuer jede weitere.
 ausgeloest_faltnaht=0
-for code in P01 P02 P03 P04 P05 P06 P07 P08 P09 P10 P11; do
+for code in P01 P02 P03 P04 P05 P06 P07 P08 P09 P10 P11 P12; do
     if ! grep -q " $code " "$erwartet"/*.txt; then
         fehlt="$fehlt $code"
     else
         ausgeloest=$((ausgeloest + 1))
-        [ "$code" = "P11" ] || ausgeloest_faltnaht=$((ausgeloest_faltnaht + 1))
+        case "$code" in
+            P11|P12) ;;
+            *) ausgeloest_faltnaht=$((ausgeloest_faltnaht + 1)) ;;
+        esac
     fi
 done
 if [ -z "$fehlt" ]; then
-    printf 'Abdeckung: alle elf Pruefungen P01 bis P11 werden ausgeloest\n'
+    printf 'Abdeckung: alle zwoelf Pruefungen P01 bis P12 werden ausgeloest\n'
 else
     printf 'Abdeckung unvollstaendig, nie ausgeloest:%s\n' "$fehlt"
     schlecht=$((schlecht + 1))

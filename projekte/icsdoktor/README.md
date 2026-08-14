@@ -20,6 +20,14 @@ das ich mir ausgedacht habe, sondern aus einer fremden Datei, die ein Mensch
 `VEVENT` ohne `DTSTART` — und zwar nur, solange das umgebende `VCALENDAR` keine
 `METHOD` trägt, weil §3.6.1 die Pflicht genau daran knüpft.
 
+`P12` kommt aus der Mission `state/missionen/2026-08-14-beziehungsprobe.md` und
+ist die erste Prüfung, die **zwei Eigenschaften zueinander** in Beziehung setzt
+statt jede Zeile für sich zu lesen: Das Ende (`DTEND`, im `VTODO` `DUE`) muss
+später liegen als `DTSTART`. §3.8.2.2 sagt „later in time", nicht „not earlier"
+— Gleichstand ist deshalb ebenfalls ein Verstoß. Wo der Vergleich ohne
+Zeitzonendatenbank nicht zu führen ist, meldet `P12` nichts; die drei Fälle
+stehen unten unter „Was dieses Werkzeug nicht tut".
+
 ## Warum
 
 Drei öffentliche Fehlerberichte, in der Missionsdatei mit Link und Wortlaut
@@ -92,8 +100,8 @@ Prüfung mindestens einmal ausgelöst, mindestens zwei fehlerfreie Dateien. Die
 abgeschlossene Mission „Die Faltnaht" verlangt mehr — 16 Beispiele und die zehn
 Prüfungen `P01` bis `P10` —, und wo das steht, sagt die letzte Zeile der
 Ausgabe, damit ein grüner Exit-Code nicht als „Mission erreicht" gelesen wird.
-`P11` füllt diese Zehn nicht auf, sondern wird getrennt gezählt: Eine
-abgeschlossene Zusage wird nicht dadurch billiger, dass später eine Prüfung
+`P11` und `P12` füllen diese Zehn nicht auf, sondern werden getrennt gezählt:
+Eine abgeschlossene Zusage wird nicht dadurch billiger, dass später eine Prüfung
 dazukommt.
 
 Seit `rfc-beispiele.sh` auch bei einem `HINWEIS` mit `1` endet, ist er die
@@ -161,6 +169,22 @@ Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
   Prüfbefehl der Mission den fehlenden Fall verlangt. Ein `VEVENT` ohne
   umgebendes `VCALENDAR` meldet `P11` ebenfalls nicht — dort fehlt der
   Bedingung ihr Bezugspunkt, und `P05` meldet die Stelle bereits.
+- **`P12` schweigt, wo es ohne Zeitzonendatenbank raten müsste.** Drei Fälle,
+  alle drei vor dem ersten Commit festgelegt und nicht hinterher entdeckt:
+  zwei **verschiedene** `TZID`; eine Zeit mit `TZID` gegen eine in UTC; und
+  abweichende Wertetypen (`DATE` gegen `DATE-TIME`). Der erste Fall ist der
+  wichtigste: Ein Anfang um 23:30 in `Europe/Berlin` und ein Ende um 18:00 in
+  `America/New_York` laufen **örtlich rückwärts und tatsächlich vorwärts**. Wer
+  das ohne Zonendaten vergleicht, meldet einen Fehlalarm auf einer gültigen
+  Datei. `beispiele/22-sauber-p12-zwei-zonen.ics` hält diesen Fall fest und
+  muss stumm bleiben. Der dritte Fall ist keine Lücke, sondern die
+  Zuständigkeit von `P13` aus derselben Mission — bis die steht, bleibt er
+  unbemerkt.
+- **Auch bei gleicher `TZID` kann `P12` in genau einer Stunde im Jahr irren.**
+  Verglichen wird die Ortszeit. Fällt der Zeitraum in die doppelte Stunde der
+  Zeitumstellung, läuft sie rückwärts, während die tatsächliche Zeit vorwärts
+  läuft. Das ist ein bekannter Fehlalarm und steht hier, statt durch Raten
+  geschlossen zu werden.
 - **Ein unbekannter Eigenschaftsname ist weiter kein Fehler, aber seit `P09`
   ein Hinweis.** Der Satz, der hier bis zum 2026-08-12 stand — „keine der acht
   Prüfungen schlägt an, der Fehler ist echt, das Werkzeug sieht ihn nicht" —

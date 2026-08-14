@@ -17,6 +17,12 @@ state/missionen/2026-08-13-fremdprobe.md, und ist die erste Pruefung, die nicht
 aus einem selbst ausgedachten Beispiel stammt, sondern aus einem fremden
 Fehlerbericht (lfos/calcurse #323).
 
+P12 kommt aus der Mission Die Beziehungsprobe,
+state/missionen/2026-08-14-beziehungsprobe.md, und ist die erste Pruefung, die
+zwei Eigenschaften zueinander in Beziehung setzt statt jede Zeile fuer sich zu
+lesen. Wo der Vergleich ohne Zeitzonendatenbank nicht zu fuehren ist, meldet sie
+nichts; die Grenze steht im README und in ihrem eigenen Docstring.
+
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
 Aufruf:
@@ -426,17 +432,35 @@ class Komponente(object):
         self.name = name
         self.zeile = zeile
         self.eigenschaften = {}          # NAME -> [(zeile, wert)]
+        # NAME -> [Logisch]. Dieselben Eigenschaften noch einmal, aber
+        # vollstaendig statt auf (zeile, wert) verkuerzt. P12 braucht die
+        # Parameter: VALUE=DATE und TZID entscheiden darueber, ob zwei
+        # Zeitangaben ueberhaupt vergleichbar sind, und beide stehen nicht im
+        # Wert, sondern davor. Die alte Form bleibt daneben stehen, damit P06,
+        # P07 und P11 unveraendert weiterlaufen.
+        self.zeitzeilen = {}
         # Die umgebende Komponente oder None auf der aeussersten Ebene. P11
         # braucht sie, weil DTSTART nur dann Pflicht ist, wenn das *umgebende*
         # VCALENDAR keine METHOD traegt — die Bedingung steht also nicht im
         # VEVENT selbst. P05 bis P10 lesen das Feld nicht.
         self.elternteil = None
 
-    def merke(self, name, zeile, wert):
+    def merke(self, name, zeile, wert, logisch=None):
         self.eigenschaften.setdefault(name, []).append((zeile, wert))
+        if logisch is not None:
+            self.zeitzeilen.setdefault(name, []).append(logisch)
 
     def hole(self, name):
         return self.eigenschaften.get(name, [])
+
+    def hole_zeile(self, name):
+        """Die erste logische Zeile dieses Namens oder None.
+
+        Steht die Eigenschaft mehrfach in der Komponente, nimmt P12 die erste
+        und meldet die Wiederholung nicht — das ist die Sache von P07.
+        """
+        treffer = self.zeitzeilen.get(name, [])
+        return treffer[0] if treffer else None
 
 
 def pruefe_p05(logische, funde):
@@ -490,7 +514,7 @@ def pruefe_p05(logische, funde):
                     % _zeige_wort(lz.name),
                     "3.4"))
             else:
-                stapel[-1].merke(lz.name, lz.nr, lz.wert)
+                stapel[-1].merke(lz.name, lz.nr, lz.wert, lz)
 
     for offen in stapel:
         funde.append(Fund(
@@ -753,8 +777,117 @@ def pruefe_p11(komponenten, funde):
             "3.6.1"))
 
 
+# Welche Eigenschaft in welcher Komponente das Ende bezeichnet. VFREEBUSY steht
+# mit dabei, weil §3.8.2.2 die Eigenschaft DTEND beschreibt und nicht die
+# Komponente, in der sie steht.
+_ENDE_EIGENSCHAFT = (
+    ("VEVENT", "DTEND"),
+    ("VTODO", "DUE"),
+    ("VFREEBUSY", "DTEND"),
+)
+
+
+def _zeitpunkt(lz):
+    """Zerlegt DTSTART/DTEND/DUE in (typ, bezug, schluessel) oder None.
+
+    `typ` ist "DATE" oder "DATE-TIME", `bezug` beschreibt, worauf sich die
+    Angabe bezieht — ("utc",), ("lokal",) oder ("tzid", name) —, und
+    `schluessel` ist die Ziffernfolge, die sich in gleichem Typ und gleichem
+    Bezug vergleichen laesst.
+
+    None heisst: nicht vergleichbar, also schweigen. Das betrifft jeden Wert,
+    der die Form aus §3.3.4/§3.3.5 nicht erfuellt; den meldet P08 an derselben
+    Zeile bereits, und eine zweite Meldung ueber dieselbe kaputte Zeile hilft
+    niemandem beim Suchen.
+    """
+    typ = None
+    tzid = None
+    for pname, pwerte in lz.params:
+        if pname == "VALUE" and pwerte:
+            typ = pwerte[0].upper()
+        elif pname == "TZID" and pwerte:
+            tzid = pwerte[0]
+    wert = lz.wert or ""
+    if typ is None:
+        typ = "DATE-TIME"                # Vorgabe nach §3.8.2.4 und §3.8.2.2
+    if typ == "DATE":
+        if not re.match(r"^[0-9]{8}$", wert):
+            return None
+        return ("DATE", ("lokal",), wert + "000000")
+    if typ != "DATE-TIME":
+        return None                      # PERIOD und alles Weitere: nicht hier
+    if not re.match(r"^[0-9]{8}T[0-9]{6}Z?$", wert):
+        return None
+    if wert.endswith("Z"):
+        # Ein Z-Wert mit TZID ist keine der drei Formen; das meldet P08.
+        if tzid is not None:
+            return None
+        return ("DATE-TIME", ("utc",), wert[:8] + wert[9:15])
+    bezug = ("tzid", tzid) if tzid is not None else ("lokal",)
+    return ("DATE-TIME", bezug, wert[:8] + wert[9:15])
+
+
+def pruefe_p12(komponenten, funde):
+    """§3.8.2.2: Das Ende liegt spaeter als der Anfang.
+
+    Woertlich: der Wert von DTEND "MUST be later in time than the value of the
+    'DTSTART' property". Fuer VTODO sagt §3.6.2 dasselbe ueber DUE. Gleichstand
+    ist damit ebenfalls ein Verstoss — "later" und nicht "not earlier".
+
+    Die erste Pruefung dieses Werkzeugs, die zwei Zeilen zueinander in Beziehung
+    setzt statt jede fuer sich zu lesen. Sie kommt aus der Mission Die
+    Beziehungsprobe, state/missionen/2026-08-14-beziehungsprobe.md, und dort aus
+    fuenf fremden Fehlerberichten ueber dreizehn Jahre — bitfireAT/synctools#156
+    ist der, dessen Aufbau Beispiel 21 nachbildet.
+
+    **Wo geschwiegen wird, und warum das kein Versaeumnis ist.** Verglichen wird
+    nur, was ohne Zeitzonendatenbank vergleichbar ist: gleicher Wertetyp und
+    gleicher Zeitbezug. Zwei verschiedene TZID, TZID gegen UTC, DATE gegen
+    DATE-TIME — in all diesen Faellen meldet P12 nichts. Der Grund steht in der
+    Missionsdatei und war vor dem ersten Commit festgelegt: Ein Anfang um 23:30
+    in Europe/Berlin und ein Ende um 18:00 in America/New_York laufen oertlich
+    rueckwaerts und tatsaechlich vorwaerts. Wer das ohne Zonendaten vergleicht,
+    raet — und ein geratener Fehlalarm ist schlimmer als eine Luecke, die
+    dokumentiert ist. Beispiel 22 haelt genau diesen Fall fest.
+
+    Die abweichenden Wertetypen sind keine Luecke, sondern die Zustaendigkeit
+    von P13 aus derselben Mission. Bis die steht, bleibt der Fall unbemerkt;
+    das ist im README als Grenze benannt und nicht hier stillschweigend
+    aufgefangen.
+
+    Eine Grenze, die auch mit gleicher TZID bleibt: Faellt der Zeitraum in die
+    doppelte Stunde der Rueckstellung, kann die oertliche Uhrzeit rueckwaerts
+    laufen, waehrend die tatsaechliche Zeit vorwaerts laeuft. P12 vergleicht
+    dort die Ortszeit und kann in dieser einen Stunde falsch liegen. Das steht
+    im README, statt hier durch Raten geschlossen zu werden.
+    """
+    for komp in komponenten:
+        for name, ende_name in _ENDE_EIGENSCHAFT:
+            if komp.name != name:
+                continue
+            anfang = komp.hole_zeile("DTSTART")
+            ende = komp.hole_zeile(ende_name)
+            if anfang is None or ende is None:
+                continue
+            a = _zeitpunkt(anfang)
+            e = _zeitpunkt(ende)
+            if a is None or e is None:
+                continue
+            if a[0] != e[0] or a[1] != e[1]:
+                continue                 # nicht vergleichbar: schweigen
+            if e[2] > a[2]:
+                continue                 # in Ordnung
+            funde.append(Fund(
+                FEHLER, ende.nr, "P12",
+                "%s liegt nicht später als das DTSTART aus Zeile %d "
+                "(%s gegen %s)"
+                % (ende_name, anfang.nr,
+                   _zeige_wort(ende.wert or ""), _zeige_wort(anfang.wert or "")),
+                "3.8.2.2"))
+
+
 def untersuche(rohdaten):
-    """Alle elf Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle zwoelf Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     zeilen = zerlege_physisch(rohdaten)
     if not zeilen:
@@ -776,6 +909,7 @@ def untersuche(rohdaten):
     pruefe_p09(logische, funde)
     pruefe_p10(zeilen, funde)
     pruefe_p11(komponenten, funde)
+    pruefe_p12(komponenten, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))
