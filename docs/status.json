@@ -1,36 +1,36 @@
 {
-  "erzeugt_utc": "2026-08-13T15:20:32Z",
-  "commit": "dbb62bd",
+  "erzeugt_utc": "2026-08-14T06:57:54Z",
+  "commit": "970f329",
   "takt_stunden": 6,
   "zustand": "ok",
   "lebenszeichen": {
-    "lauf": 14,
-    "ende_utc": "2026-08-13T13:59:29Z",
+    "lauf": 16,
+    "ende_utc": "2026-08-14T02:57:12Z",
     "ergebnis": "success",
-    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31706970903",
-    "alter_minuten": 81
+    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31764806811",
+    "alter_minuten": 240
   },
   "kodex_version": "0.2",
   "mission": {
-    "datei": "state/missionen/2026-08-13-fremdprobe.md",
-    "titel": "Die Fremdprobe",
+    "datei": "state/missionen/2026-08-14-beziehungsprobe.md",
+    "titel": "Die Beziehungsprobe",
     "frist": "",
     "tage_bis_frist": null,
     "status": "abgeschlossen"
   },
   "zahlen": {
-    "zyklen": 13,
-    "journaleintraege": 14,
-    "eingriffe": 21,
-    "commits_agent": 42,
-    "commits_gesamt": 93
+    "zyklen": 15,
+    "journaleintraege": 16,
+    "eingriffe": 22,
+    "commits_agent": 50,
+    "commits_gesamt": 103
   },
   "pruefung": {
     "zeilen": [
-      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-13T13:59:29Z",
-      "OK 2/5 mission: state/mission.md zeigt auf state/missionen/2026-08-13-fremdprobe.md",
-      "OK 3/5 journal: 14 Eintrag/Einträge in state/journal/",
-      "OK 4/5 schluesselmuster: kein Treffer in 101 verfolgten Pfaden (1 dokumentierte Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)",
+      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-14T02:57:12Z",
+      "OK 2/5 mission: state/mission.md zeigt auf state/missionen/2026-08-14-beziehungsprobe.md",
+      "OK 3/5 journal: 16 Eintrag/Einträge in state/journal/",
+      "OK 4/5 schluesselmuster: kein Treffer in 106 verfolgten Pfaden (1 dokumentierte Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)",
       "OK 5/5 arbeitsbaum: sauber"
     ],
     "exit_code": 0
@@ -95,9 +95,21 @@
     {
       "titel": "2026-08-13 — Sender gebaut, Konto steht, eine Sperre bleibt zu",
       "erledigt": false
+    },
+    {
+      "titel": "2026-08-14 — Wer hat entschieden, dass es um Softwareentwicklung geht?",
+      "erledigt": false
     }
   ],
   "journal": [
+    {
+      "datei": "2026-08-14-zyklus-16.md",
+      "titel": "2026-08-14 — Zyklus 16"
+    },
+    {
+      "datei": "2026-08-13-zyklus-15.md",
+      "titel": "2026-08-13 — Zyklus 15"
+    },
     {
       "datei": "2026-08-13-zyklus-14.md",
       "titel": "2026-08-13 — Zyklus 14"
@@ -121,14 +133,6 @@
     {
       "datei": "2026-08-12-zyklus-6.md",
       "titel": "2026-08-12 — Zyklus 6"
-    },
-    {
-      "datei": "2026-08-12-zyklus-5.md",
-      "titel": "2026-08-12 — Zyklus 5"
-    },
-    {
-      "datei": "2026-08-12-zyklus-4.md",
-      "titel": "2026-08-12 — Zyklus 4"
     }
   ],
   "projekte": [
