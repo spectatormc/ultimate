@@ -11,17 +11,26 @@
 # KEINE fremden Kalenderdaten in diesem Repo (Regel 7). Hier steht die Quelle,
 # nicht der Inhalt; fremdprobe.sh holt jede Datei zur Laufzeit.
 #
-# Zwei Quellsorten, weil die Berichte zwei Sorten kennen:
+# Drei Quellsorten, weil die Berichte drei Sorten kennen:
 #   anhang   — der Melder hat die Datei angehaengt. Byte fuer Byte das
 #              Original, Zeilenenden inklusive.
 #   bericht  — der Melder hat sie in den Text gesetzt. fremdprobe.sh schneidet
 #              den ersten BEGIN:VCALENDAR-Block heraus und entfernt die
 #              Einrueckung, mit der Markdown ihn umgibt.
+#   block    — der Melder hat nur eine Komponente in den Text gesetzt, ohne
+#              BEGIN:VCALENDAR darum. fremdprobe.sh schneidet die erste
+#              Komponente heraus und laesst den fehlenden Rahmen fehlen.
 #
-# FOLGE DARAUS, DIE MAN NICHT UEBERSEHEN DARF: Bei "bericht" sind die
-# Zeilenenden meine, nicht die des Melders. P01 und P02 sind auf diesen
+# FOLGE DARAUS, DIE MAN NICHT UEBERSEHEN DARF: Bei "bericht" und "block" sind
+# die Zeilenenden meine, nicht die des Melders. P01 und P02 sind auf diesen
 # Dateien deshalb bedeutungslos und duerfen nie eine Erwartung sein. Die
 # Missionsdatei verbietet P01 als Erwartung ohnehin fuer den ganzen Korpus.
+#
+# ZWEITE FOLGE, nur bei "block": Die Datei ist kein iCalendar-Objekt, weil im
+# Bericht keins steht. Der ICS-Doktor meldet dort immer P05 mit. Das ist wahr
+# und trotzdem nicht der Befund, um den es geht — P05 darf auf einer
+# "block"-Zeile nie die Erwartung sein, sonst prueft die Zeile meinen
+# Zuschnitt statt das Werkzeug.
 #
 # id	typ	fundstelle	quelle	kennung	beleg	abschnitt	klage
 calcurse-323	anhang	lfos/calcurse#323	https://github.com/lfos/calcurse/files/5453140/test.ics.txt	P11	DTSTART	3.6.1	It says that DTSTART could not be found for VEVENT.
@@ -29,3 +38,4 @@ vagov-23608	bericht	department-of-veterans-affairs/va.gov-team#23608	https://api
 simplecal-1983	bericht	SimpleMobileTools/Simple-Calendar#1983	https://api.github.com/repos/SimpleMobileTools/Simple-Calendar/issues/1983	P08	EXDATE	3.3.5	`EXDATE` property requires `VALUE=DATE` attribute when its value is only a date (without time)
 icaljs-620	bericht	kewisch/ical.js#620	https://api.github.com/repos/kewisch/ical.js/issues/620	P08	DTSTART	3.3.5	DTSTART/DTEND with incorrect DATE-TIME should fail hard on parse instead of serializing to `T::`
 fossify-1102	bericht	FossifyOrg/Calendar#1102	https://api.github.com/repos/FossifyOrg/Calendar/issues/1102	P08	EXDATE	3.3.5	ics export EXDATE invalid date-time
+synctools-156	block	bitfireAT/synctools#156	https://api.github.com/repos/bitfireAT/synctools/issues/156	P12	DTEND	3.8.2.2	User reported event has DTEND before DTSTART in the main event.
