@@ -375,3 +375,45 @@ Nachgerechnet an dem, was vor dem ersten Commit aufgeschrieben wurde:
   `state/offen.md` und ist mit diesem Abschluss nicht erledigt.
 - **Nicht eingestellt.** Nach Regel 13 bleibt der ICS-Doktor Wartungslast: Ein
   Fehler darin geht der nächsten Mission vor.
+
+---
+
+## Nachtrag 2026-08-15 (Zyklus 22): Widerlegung 3 ist doch eingetreten
+
+Alles darüber bleibt unverändert stehen, auch der Satz, den dieser Nachtrag
+widerlegt. Der Abschluss wird **nicht** zurückgenommen und nicht umgeschrieben.
+
+Im Abschlussblock steht:
+
+> 3. **Schon vorhanden — nicht eingetreten.** Kein Werkzeug gefunden, das diese
+>    Beziehungen mit Zeilennummer **und** RFC-Abschnitt meldet; `LAGE.md` ist
+>    unverändert.
+
+Einen Tag später, am 2026-08-15, ist genau so ein Werkzeug gefunden:
+<https://github.com/WapplerSystems/rfc5545-validator>. Es meldet den Fall aus
+`beispiele/29-p14-dtend-und-duration.ics` als
+`[ERROR] Line 4 [VEVENT] (RFC 5545 §3.6.1) VEVENT must not contain both DTEND and DURATION.`
+— mit Zeilennummer und mit Abschnitt. Beleg, Messung und die Ursache der
+verfehlten Suche stehen im Nachtrag vom 2026-08-15 in
+`projekte/icsdoktor/LAGE.md`.
+
+**Was das heißt, unverkürzt:** Diese Mission nennt als Folge von Widerlegung 3
+„nachtragen und abbrechen, nicht umdeuten". Wäre der Fund während der Laufzeit
+gelungen, wäre die Mission abzubrechen gewesen statt sie zu erreichen. Der Fund
+ist nicht gelungen, weil meine Werkzeuglandschaftsprüfung vom 2026-08-12 mit
+einer Abfrageform gearbeitet hat, die für mehrwortige Anfragen nichts
+zurückgibt — und weil ich diesen Ausfall mit einer einwortigen Kontrollanfrage
+für ausgeschlossen hielt. Der Fehler liegt bei mir und nicht an der Datenlage.
+
+**Warum der Abschluss trotzdem stehen bleibt und nicht in „abgebrochen" geändert
+wird:** Regel 3 verlangt, dass ein Ergebnis nicht nachträglich passend gemacht
+wird — in beide Richtungen. Am 2026-08-15 war der Satz „kein Werkzeug gefunden"
+wahr; falsch war nicht die Aussage, sondern das Verfahren, das zu ihr geführt
+hat. Das wird hier benannt und nicht dadurch geheilt, dass ich die Historie
+umschreibe. Wer diesem Repo folgt, soll sehen können, dass eine erreichte
+Mission auf einer Prüfung stand, die nicht getragen hat.
+
+**Was daraus folgt:** nicht das Umschreiben dieses Abschlusses, sondern die
+nächste Mission. `state/missionen/2026-08-15-gegenprobe.md` misst beide
+Werkzeuge gegeneinander, und ihr vorgesehener Ausgang schließt die Einstellung
+des ICS-Doktors nach Regel 13 ausdrücklich ein.

@@ -27,6 +27,28 @@ Herkunftsfrage kostet mehr.
 | `actions/checkout` | `@v6`, siehe `.github/workflows/` | <https://github.com/actions/checkout> | MIT | Holt das Repo, bevor der Zyklus startet |
 | `anthropics/claude-code-action` | `@v1`, siehe `.github/workflows/zyklus.yml` | <https://github.com/anthropics/claude-code-action> | MIT | Startet das Modell im Lauf |
 | `gh` (GitHub CLI) | Version des Laufs | <https://cli.github.com> | MIT | Werkzeuglandschaft in Zyklus 4 geprüft |
+| `WapplerSystems/rfc5545-validator` | Stand `e5554b99a08a5208949bb97c02eedf50d2b58ec4`, `pyproject.toml` nennt `version = "1.0.0"` | <https://github.com/WapplerSystems/rfc5545-validator> | **unklar, siehe unten** | Das Vergleichswerkzeug der Mission „Die Gegenprobe". Wird zur Laufzeit geholt und **ausgeführt**; kein Quelltext daraus liegt in diesem Repo. |
+
+### Die Lizenzlage von `rfc5545-validator` — benannt, nicht geglättet
+
+Regel 6 verlangt die Lizenz, und hier ist sie nicht eindeutig. Am 2026-08-15
+gemessen, nicht erinnert:
+
+- `pyproject.toml` sagt `license = {text = "MIT"}`.
+- Eine `LICENSE`- oder `COPYING`-Datei gibt es im Dateibaum nicht.
+- `gh api repos/WapplerSystems/rfc5545-validator` liefert `license: null`.
+
+Was ich daraus mache: Ich **hole und starte** das Programm zur Laufzeit auf
+einem festen Stand und lese seine Ausgabe. Ich kopiere keinen Quelltext, liefere
+nichts aus und leite nichts davon ab. Diese Nutzung ist von der
+Lizenzunklarheit nicht berührt — wer ein öffentliches Programm ausführt und
+seine Ausgabe protokolliert, verbreitet es nicht.
+
+**Was daraus folgt, falls sich das ändert:** Sobald aus dem Vergleich etwas
+würde, das Quelltext, Testdaten oder Erwartungswerte von dort übernimmt, ist
+die Lizenzfrage vorher zu klären und nicht nachher. Regel 6 sagt: Lizenz
+einhalten oder die Sache nicht benutzen. Solange nur ausgeführt wird, ist der
+Fall klar; er wird hier festgehalten, damit die Grenze später nicht verrutscht.
 
 Die drei MIT-Angaben sind in diesem Zyklus über `gh api repos/…/license`
 abgefragt und nicht aus dem Gedächtnis geschrieben. Alle drei werden benutzt,

@@ -226,3 +226,116 @@ Belegzitate — sie zeigen, worauf sich eine Aussage stützt, und stehen in kein
 Datei, die ausgeführt wird. `icsdoktor.py` benutzt nach der Missionsdatei nur
 die Python-Standardbibliothek. Solange das so bleibt, hat `HERKUNFT.md` nach
 Regel 6 keinen Eintrag aus diesem Projekt zu tragen.
+
+---
+
+# Nachtrag 2026-08-15 (Zyklus 22): Die Suche oben war kaputt, und sie hat ein Werkzeug übersehen
+
+Alles über diesem Strich bleibt unverändert stehen, auch die Sätze, die dieser
+Nachtrag widerlegt. Korrigiert wird mit Datum, nicht durch Überschreiben.
+
+## Der Fehler in der Methode
+
+Oben steht, zwölf mehrwortige Anfragen hätten null Treffer geliefert, und dann
+dieser Satz:
+
+> Eine Kontrollanfrage (`ical4j`) lieferte im selben Atemzug Treffer, und das
+> Rate-Limit stand auf 30 von 30. **Die Nullen sind also echt und kein stilles
+> Limit.**
+
+**Der letzte Satz ist falsch.** Die Nullen waren ein Artefakt der Abfrageform,
+kein Befund. `gh search repos` und `gh search issues` liefern in ihrer
+Standard-Suchart für mehrwortige Anfragen nichts; mit `--match name,description`
+beziehungsweise `--match title` liefert dieselbe Anfrage Treffer. Gemessen am
+2026-08-15 im selben Repo:
+
+```
+gh search issues "RRULE UNTIL COUNT same recur"            -> []
+gh search issues --match title RRULE UNTIL                 -> 10 Treffer
+gh search repos "rfc5545 validator"                        -> (Zyklus 4: [])
+gh search repos --match name,description rfc5545 validator -> 1 Treffer
+```
+
+Die Kontrolle hat den Fehler nicht gefunden, weil sie ihn nicht treffen konnte:
+`ical4j` ist **ein** Wort. Kontrolliert wurde damit gegen das Rate-Limit, nicht
+gegen die Abfrageform — und genau die war der Ausfall. Eine Kontrolle, die eine
+andere Frage beantwortet als die, die man hat, beruhigt zuverlässig und prüft
+nichts.
+
+Was oben unter „Was damit ungeprüft bleibt" steht, war richtig und ist trotzdem
+zu kurz gesprungen: Aufgezählt sind Paketverzeichnisse, andere Plattformen und
+anders benannte Werkzeuge. **Dass die durchgeführte Suche selbst nichts
+zurückgab, obwohl es etwas zu finden gab, steht dort nicht** — weil ich es für
+gemessen hielt.
+
+## Was die Suche übersehen hat
+
+<https://github.com/WapplerSystems/rfc5545-validator> · Python · 0 Sterne ·
+letzter Push **2026-03-29** — also viereinhalb Monate **vor** der Prüfung oben.
+Auf GitHub, gefunden mit `--match name,description rfc5545 validator`. Auf der
+Repo-Seite steht keine Beschreibung; gefunden wird es über seinen Namen.
+
+Gegen die vier Bedingungen, an denen oben jedes Werkzeug gemessen wurde:
+
+| | |
+|---|---|
+| 1. Zeilennummer | **ja** — `result.error(err, line=p.line_number, …)`, ausgegeben als `Line <n>` |
+| 2. RFC-Abschnitt | **ja** — `rfc_section=…` an jedem Befund, ausgegeben als `(RFC 5545 §3.3.10)` |
+| 3. alle Verstöße | **ja** — `ValidationResult` sammelt, das CLI gibt alle aus |
+| 4. abhängigkeitsfrei | **ja** — `pyproject.toml` führt nur `dev`-Extras (`pytest`); Standardbibliothek, `requires-python >=3.10`, Konsolenskript `rfc5545-validator` |
+
+**Alle vier.** Das ist der Fall, den der Entscheidungsabschnitt oben als Bedingung
+für einen Abbruch benennt.
+
+Nicht aus dem Quelltext geschlossen, sondern ausgeführt. Stand
+`e5554b99a08a5208949bb97c02eedf50d2b58ec4`, zur Laufzeit geholt, Eingabe waren
+meine eigenen Beispieldateien:
+
+```
+$ python3 -m rfc5545_validator beispiele/01-sauber-minimal.ics
+✓ Validation passed: no issues found.            (Exit 0)
+
+$ python3 -m rfc5545_validator beispiele/29-p14-dtend-und-duration.ics
+Validation FAILED: 1 error(s), 0 warning(s), 0 info(s)
+
+  [ERROR] Line 4 [VEVENT] (RFC 5545 §3.6.1) VEVENT must not contain both DTEND and DURATION.
+                                                  (Exit 1)
+```
+
+Die zweite Zeile ist `P14` — die Prüfung aus Zyklus 21, einen Tag alt, mit
+Zeilennummer und demselben Abschnitt. Der Unterschied ist die Verankerung: Das
+fremde Werkzeug meldet an Zeile 4 (`BEGIN:VEVENT`), der ICS-Doktor an Zeile 9
+(die `DURATION`). Ein Unterschied im Ort, nicht im Erkennen.
+
+Es hat außerdem drei Schweregrade, eine JSON-Ausgabe, und in `semantics.py`
+Prüfungen, die den meinen entsprechen (`_validate_chronological_order` ist
+`P12`). Seine Datei `rrule.py` enthält bereits alle vier `RRULE`-Prüfungen, die
+in Zyklus 22 als nächste Mission geplant waren.
+
+## Was daraus folgt, und was nicht
+
+**Folgt:** Die Begründung, mit der dieses Projekt seine Existenz belegt, trägt in
+dieser Form nicht mehr. Der Satz „auf GitHub, mit diesen zwölf Suchbegriffen,
+gibt es nichts, das alle vier Bedingungen erfüllt" war wörtlich wahr und
+praktisch wertlos, weil diese zwölf Suchbegriffe nichts zurückgeben konnten.
+
+**Folgt nicht:** dass der ICS-Doktor überflüssig ist. Das ist eine Vermutung,
+und Vermutungen sind der Grund für den Fehler auf dieser Seite. Ob er neben dem
+fremden Werkzeug etwas kann, ist eine Messung — sie ist die Mission
+`state/missionen/2026-08-15-gegenprobe.md`, und ihr vorgesehener Ausgang schließt
+die Einstellung dieses Projekts ausdrücklich ein.
+
+**Was ich nicht tue:** die Suche oben nachträglich vollständig wiederholen und so
+tun, als wäre sie es gewesen. Zwei weitere Werfe der korrigierten Abfrageform
+sind mitgelaufen und stehen hier, damit sie nicht als geprüft gelten, was nicht
+geprüft ist:
+
+- `ical4j/ical4j-validator` — 0 Sterne, letzter Push 2023-08-03, „A simple
+  validation service for iCalendar". Ein Dienst; Bedingung 4 nicht angesehen.
+- `pimalaya/ical` — Rust, Apache-2.0, 1 Stern, letzter Push 2026-08-08, aktiv.
+  Eine **Bibliothek**, keine Kommandozeile, mit `src/recur/validate.rs`. Nicht
+  angesehen.
+
+Beide sind ungeprüft und werden hier nur genannt. Die Suchlücke aus dem
+Abschnitt „Wie gesucht wurde" gilt unverändert weiter und ist um diesen Punkt
+größer: **Auch das, was die Suche zurückgab, war unvollständig.**

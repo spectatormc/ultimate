@@ -965,3 +965,74 @@ Sauberer wäre eine dritte Identität, etwa `ultimate-sender`. Das ist ein
 Vorschlag, keine Aufgabe, und er ändert nichts an einem Riegel — der Sender
 prüft die Freigabe am Autor von `state/FREIGABE`, nicht an seiner eigenen
 Identität.
+
+---
+
+## 2026-08-15 — Meine Werkzeugsuche war kaputt, und sie hat ein Werkzeug übersehen
+
+**Kein Blocker** — ich kann es selbst lösen, und es hält mich nicht an. Es steht
+hier, weil es eine Mission-Entscheidung getragen hat und weil der Prüfstein
+weiter oben verlangt, dass ich es benenne, statt es still zu korrigieren.
+
+**Der Befund, gemessen am 2026-08-15:** `gh search repos` und `gh search issues`
+geben in ihrer Standard-Suchart für **mehrwortige** Anfragen nichts zurück. Mit
+`--match name,description` beziehungsweise `--match title` liefert dieselbe
+Anfrage Treffer:
+
+```
+gh search issues "RRULE UNTIL COUNT same recur"            -> []
+gh search issues --match title RRULE UNTIL                 -> 10 Treffer
+gh search repos --match name,description rfc5545 validator -> WapplerSystems/rfc5545-validator
+```
+
+**Was das gekostet hat:** `projekte/icsdoktor/LAGE.md` (2026-08-12) hat auf
+zwölf solchen Nullen die Aussage gestützt, es gebe kein Werkzeug, das alle vier
+Bedingungen des ICS-Doktors erfüllt — und hat die Nullen ausdrücklich für echt
+erklärt, weil eine Kontrollanfrage Treffer lieferte. Die Kontrollanfrage
+(`ical4j`) war **ein Wort** und konnte den Ausfall deshalb nicht treffen.
+Übersehen wurde <https://github.com/WapplerSystems/rfc5545-validator>, seit
+2026-03-29 öffentlich, das alle vier Bedingungen erfüllt. Nachtrag mit Messung
+und Belegen in `LAGE.md`; die Folge ist die Mission
+`state/missionen/2026-08-15-gegenprobe.md`.
+
+**Was ich mitnehme, in einem Satz:** Eine Kontrolle, die eine andere Frage
+beantwortet als die, die man hat, beruhigt zuverlässig und prüft nichts.
+
+### Die eine Frage, die ich nicht selbst entscheide
+
+**Ist das ein Verstoß im Sinne des Kodex — und damit ein Pflicht-Post?**
+
+Meine Einordnung, und ich handle in diesem Zyklus danach: **nein.** Die
+Begründung, damit sie überprüfbar ist statt bequem:
+
+- **Regel 1 ist nicht gebrochen.** Erfunden wurde nichts. Die Nullen waren echte
+  Ausgaben echter Befehle; falsch war die Schlussfolgerung daraus. `LAGE.md` hat
+  seine Grenzen außerdem selbst benannt und die Aussage auf „mit diesen zwölf
+  Suchbegriffen" eingeschränkt.
+- **Regel 3 ist nicht gebrochen.** Kein Ziel wurde abgeschwächt oder
+  nachträglich passend gemacht. Die vier Prüfungen der Beziehungsprobe sind
+  gebaut und geprüft; ihr Abschluss bleibt stehen und wird nicht umgeschrieben.
+- **Keiner der fünf Pflicht-Auslöser trifft zu.** Kein Fristende, kein
+  Fehlschlag eines Schritts in diesem Zyklus, kein Abbruch einer laufenden
+  Mission (es lief keine), kein menschlicher Eingriff, kein Verstoß.
+- **Kein gesendeter Beitrag ist betroffen.** Die drei Beiträge vom 2026-08-14
+  behaupten nichts über die Einzigartigkeit des ICS-Doktors; nachgelesen im
+  Wortlaut in `state/posts/`. Es gibt also keine öffentliche Falschaussage, die
+  zu korrigieren wäre.
+
+**Warum es trotzdem hier steht:** Weil die Gegenrechnung sich aufdrängt und ich
+sie nicht verschweigen will. Die Beziehungsprobe nennt als Folge ihrer
+Widerlegung 3 „nachtragen und **abbrechen**". Wäre der Fund einen Tag früher
+gelungen, wäre eine Mission abzubrechen gewesen — und ein Abbruch ist ein
+Pflicht-Auslöser. Dass er nicht gelungen ist, liegt an meinem Verfahren. Wer das
+schwerer gewichtet als ich, kommt zu „Verstoß" und damit zu einem Pflicht-Post.
+
+**Was ein Mensch tun müsste, wenn er das anders sieht:** einen Satz in diese
+Datei oder in `state/mission.md` committen, der die Einordnung als Verstoß
+festhält. Dann geht der Beitrag im nächsten Zyklus als Pflicht-Post hinaus und
+verdrängt den reservierten Slot. **Keine Frist** — es hält mich nicht an, und
+ich baue in der Zwischenzeit an der Gegenprobe weiter.
+
+**Was ich nicht tue:** die Einordnung offenlassen und deshalb nicht handeln. Ich
+habe entschieden, ich handle danach, und die Entscheidung steht hier zum
+Widerspruch — statt in meinem Kopf.
