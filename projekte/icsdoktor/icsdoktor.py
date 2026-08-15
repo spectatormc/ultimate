@@ -30,8 +30,11 @@ Mission und nicht der Reihenfolge, in der gebaut wurde.
 P13 kommt ebenfalls aus dieser Mission und prueft den ersten Halbsatz von
 §3.8.2.2: Das Ende muss denselben Wertetyp tragen wie DTSTART. Sie schliesst
 damit genau die Luecke, in der P12 schweigt, und braucht dafuer keine
-Zeitzonendatenbank — der Typ steht in den Parametern und nicht im Wert. P14
-fehlt noch; die Luecke ist keine ausgelassene Pruefung, sondern offene Arbeit.
+Zeitzonendatenbank — der Typ steht in den Parametern und nicht im Wert.
+
+P14 ist die letzte der vier und die einzige, bei der keine der beiden Zeilen
+fuer sich falsch ist: Ende und Dauer duerfen nach §3.6.1 und §3.6.2 nicht
+zugleich in derselben Komponente stehen.
 
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
@@ -467,7 +470,10 @@ class Komponente(object):
         """Die erste logische Zeile dieses Namens oder None.
 
         Steht die Eigenschaft mehrfach in der Komponente, nimmt P12 die erste
-        und meldet die Wiederholung nicht — das ist die Sache von P07.
+        und meldet die Wiederholung nicht. Bis zum 2026-08-15 stand hier, das
+        sei die Sache von P07 — das stimmt nicht: P07 deckt UID und DTSTAMP ab
+        und sonst nichts. Ein doppeltes DTSTART oder DTEND verbietet §3.6.1,
+        und keine Pruefung dieses Werkzeugs meldet es.
         """
         treffer = self.zeitzeilen.get(name, [])
         return treffer[0] if treffer else None
@@ -796,6 +802,14 @@ _ENDE_EIGENSCHAFT = (
     ("VFREEBUSY", "DTEND"),
 )
 
+# Wo Ende und Dauer einander ausschliessen, mit dem Abschnitt, der es sagt. Hier
+# steht VFREEBUSY nicht mit dabei: §3.6.4 kennt den Satz aus §3.6.1 und §3.6.2
+# nicht, und in seiner Grammatik kommt DURATION gar nicht vor.
+_ZUGLEICH_VERBOTEN = (
+    ("VEVENT", "DTEND", "3.6.1"),
+    ("VTODO", "DUE", "3.6.2"),
+)
+
 
 def _wertetyp(lz):
     """Der Wertetyp, den eine Zeit-Eigenschaft ausweist, in Grossbuchstaben.
@@ -981,6 +995,65 @@ def pruefe_p13(komponenten, funde):
                 "3.8.2.2"))
 
 
+def pruefe_p14(komponenten, funde):
+    """§3.6.1 / §3.6.2: Ende und Dauer schliessen einander aus.
+
+    Woertlich aus der Grammatik von §3.6.1: "Either 'dtend' or 'duration' MAY
+    appear in a 'eventprop', but 'dtend' and 'duration' MUST NOT occur in the
+    same 'eventprop'." §3.6.2 sagt denselben Satz fuer 'due' und 'duration' im
+    VTODO. Beide zugleich heisst: Zwei Zeilen behaupten das Ende desselben
+    Termins, und wer die Datei liest, muss raten, welche gilt.
+
+    Die letzte der vier Pruefungen aus der Mission Die Beziehungsprobe,
+    state/missionen/2026-08-14-beziehungsprobe.md. Der Fall wurde vor der Wahl
+    gemessen und nicht vermutet: DTEND und DURATION im selben VEVENT liefen
+    durch dieses Werkzeug mit Exit 0 und ohne eine einzige Meldung.
+
+    **Gemeldet wird an der spaeteren der beiden Zeilen**, und die fruehere steht
+    im Text. Anders als bei P12 und P13 ist keine der beiden Zeilen fuer sich
+    falsch — falsch ist, dass sie zusammen dastehen. Eine Meldung je Komponente
+    statt zwei, weil es ein Fehler ist und nicht zwei.
+
+    **Nur VEVENT und VTODO.** Das VFREEBUSY steht in _ENDE_EIGENSCHAFT, weil
+    §3.8.2.2 dort ueber DTEND dasselbe sagt; diesen Satz sagt §3.6.4 aber nicht.
+    In der Grammatik des VFREEBUSY kommt DURATION ueberhaupt nicht vor — welche
+    Eigenschaften eine Komponente tragen darf, prueft dieses Werkzeug nirgends,
+    und P14 faengt damit nicht nebenbei an.
+
+    **Was ausdruecklich nicht gemeldet wird:**
+
+    - **Eine DURATION in einer eingebetteten VALARM.** Sie gehoert zu ihrer
+      eigenen Komponente und nicht zu dem Termin darum herum; §3.6.6 sieht sie
+      dort neben REPEAT ausdruecklich vor. Ein Wecker, der zweimal klingelt,
+      ist der Normalfall und kein Verstoss. Beispiel 31 haelt ihn fest und muss
+      stumm bleiben.
+    - **Ob die Dauer taugt.** Ob der Wert der DURATION positiv ist, fragt P15;
+      ob er ueberhaupt die Form nach §3.3.6 hat, fragt niemand. Ein VEVENT mit
+      DTEND und DURATION:-PT1H bekommt beide Meldungen — es sind zwei
+      verschiedene Fehler, und wer nur die Dauer umdreht, hat den anderen noch.
+    - **Die Wiederholung derselben Eigenschaft.** Stehen zwei DTEND in einer
+      Komponente, nimmt P14 das erste und meldet die Wiederholung nicht. Dass
+      §3.6.1 auch die verbietet, prueft dieses Werkzeug fuer DTEND, DURATION
+      und DTSTART nirgends — P07 deckt nur UID und DTSTAMP ab.
+    """
+    for komp in komponenten:
+        for name, ende_name, abschnitt in _ZUGLEICH_VERBOTEN:
+            if komp.name != name:
+                continue
+            ende = komp.hole(ende_name)
+            dauer = komp.hole("DURATION")
+            if not ende or not dauer:
+                continue
+            paar = sorted(((ende[0][0], ende_name), (dauer[0][0], "DURATION")))
+            (zuerst_nr, zuerst_name), (danach_nr, danach_name) = paar
+            funde.append(Fund(
+                FEHLER, danach_nr, "P14",
+                "%s steht neben dem %s aus Zeile %d in demselben %s ab "
+                "Zeile %d; höchstens eines von beiden darf dort stehen"
+                % (danach_name, zuerst_name, zuerst_nr, komp.name, komp.zeile),
+                abschnitt))
+
+
 def _dauer_negativ(wert):
     """Rueckgabe: None, "vorne" oder "innen".
 
@@ -1065,7 +1138,7 @@ def pruefe_p15(logische, funde):
 
 
 def untersuche(rohdaten):
-    """Alle vierzehn Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle fuenfzehn Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     zeilen = zerlege_physisch(rohdaten)
     if not zeilen:
@@ -1089,6 +1162,7 @@ def untersuche(rohdaten):
     pruefe_p11(komponenten, funde)
     pruefe_p12(komponenten, funde)
     pruefe_p13(komponenten, funde)
+    pruefe_p14(komponenten, funde)
     pruefe_p15(logische, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.

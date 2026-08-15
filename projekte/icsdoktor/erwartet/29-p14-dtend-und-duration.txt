@@ -1,0 +1,1 @@
+FEHLER Zeile 9: P14 DURATION steht neben dem DTEND aus Zeile 8 in demselben VEVENT ab Zeile 4; höchstens eines von beiden darf dort stehen [RFC 5545 §3.6.1]

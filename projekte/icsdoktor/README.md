@@ -48,6 +48,15 @@ die Lücke, in der `P12` schweigt, und sie braucht dafür **keine
 Zeitzonendatenbank**: Der Wertetyp steht in den Parametern und nicht im Wert.
 Beide können deshalb nie zugleich anschlagen.
 
+`P14` ist die letzte der vier aus dieser Mission und die einzige, bei der
+**keine der beiden Zeilen für sich falsch ist**: §3.6.1 sagt in der Grammatik
+des `VEVENT` „`dtend` and `duration` MUST NOT occur in the same `eventprop`",
+§3.6.2 denselben Satz über `DUE` und `DURATION` im `VTODO`. Stehen beide da,
+behaupten zwei Zeilen das Ende desselben Termins, und wer die Datei liest, muss
+raten, welche gilt. Gemeldet wird an der späteren der beiden Zeilen, die frühere
+steht im Text — eine Meldung je Komponente, weil es ein Fehler ist und nicht
+zwei.
+
 ## Warum
 
 Drei öffentliche Fehlerberichte, in der Missionsdatei mit Link und Wortlaut
@@ -120,12 +129,11 @@ Prüfung mindestens einmal ausgelöst, mindestens zwei fehlerfreie Dateien. Die
 abgeschlossene Mission „Die Faltnaht" verlangt mehr — 16 Beispiele und die zehn
 Prüfungen `P01` bis `P10` —, und wo das steht, sagt die letzte Zeile der
 Ausgabe, damit ein grüner Exit-Code nicht als „Mission erreicht" gelesen wird.
-`P11`, `P12`, `P13` und `P15` füllen diese Zehn nicht auf, sondern werden
-getrennt gezählt: Eine abgeschlossene Zusage wird nicht dadurch billiger, dass
-später eine Prüfung dazukommt. Die Abdeckungsliste nennt, was gebaut ist — `P14`
-steht noch nicht darin, weil ein Prüfskript nicht rot werden soll für Arbeit,
-die aussteht. Ob die laufende Mission erreicht ist, sagt ihre Missionsdatei und
-nicht dieser Exit-Code.
+`P11` bis `P15` füllen diese Zehn nicht auf, sondern werden getrennt gezählt:
+Eine abgeschlossene Zusage wird nicht dadurch billiger, dass später eine Prüfung
+dazukommt. Die Abdeckungsliste nennt, was gebaut ist; seit dem 2026-08-15 steht
+`P14` mit darin und damit alle fünfzehn. Ob die laufende Mission erreicht ist,
+sagt ihre Missionsdatei und nicht dieser Exit-Code.
 
 Seit `rfc-beispiele.sh` auch bei einem `HINWEIS` mit `1` endet, ist er die
 Kontrolle gegen Fehlalarme von `P09` und `P10`: Ein Kalender aus dem Normtext
@@ -176,7 +184,9 @@ Wo der Standard mehrere Lesarten zulässt, steht hier, welche gewählt wurde:
 Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
 
 - **Es repariert nichts.** Nur Diagnose. So steht es in der Mission.
-- **Es prüft genau die dreizehn Prüfungen** und nicht mehr. Insbesondere nicht
+- **Es prüft genau die fünfzehn Prüfungen** und nicht mehr. Bis zum 2026-08-15
+  stand hier „dreizehn"; die Zahl war seit `P13` um eine zu klein und ist keine
+  weggefallene Prüfung, sondern ein nicht nachgezogener Satz. Insbesondere nicht
   die Maskierung von Sonderzeichen in TEXT-Werten (§3.3.11) — `P10` sieht nur, wo
   eine Faltung sie zerschneidet, nicht ob sie richtig ist —, nicht die
   Zeichenkodierung, nicht `RRULE`, und für `VTODO`, `VJOURNAL` und `VFREEBUSY`
@@ -248,6 +258,30 @@ Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
   vorsieht) und `P-1W` (das Minus hinter dem `P` — grammatisch gar keine Dauer,
   aber genau der Wert, an dem der zitierte Absturz hängt). Die zweite Meldung
   sagt den Unterschied dazu, statt beide Fälle gleich aussehen zu lassen.
+- **`P14` sieht nur `VEVENT` und `VTODO`, und nur je die erste Zeile.** Drei
+  Grenzen:
+
+  - **Kein `VFREEBUSY`.** Es steht bei `P12` und `P13` mit dabei, weil §3.8.2.2
+    die Eigenschaft `DTEND` beschreibt und nicht die Komponente. Den Satz aus
+    §3.6.1 und §3.6.2 sagt §3.6.4 aber nicht, und in seiner Grammatik kommt
+    `DURATION` überhaupt nicht vor. Welche Eigenschaften eine Komponente tragen
+    darf, prüft dieses Werkzeug nirgends — `P14` fängt damit nicht nebenbei an.
+  - **Eine `DURATION` in einer eingebetteten `VALARM` ist kein Fund.** Sie
+    gehört zu ihrer eigenen Komponente und nicht zu dem Termin darum herum;
+    §3.6.6 sieht sie dort neben `REPEAT` ausdrücklich vor. Ein Wecker, der
+    zweimal klingelt, ist der Normalfall.
+    `beispiele/31-sauber-p14-dauer-im-wecker.ics` hält ihn fest und muss stumm
+    bleiben.
+  - **Die Wiederholung derselben Eigenschaft meldet niemand.** Stehen zwei
+    `DTEND` in einer Komponente, nimmt `P14` das erste. Dass §3.6.1 auch das
+    verbietet, prüft dieses Werkzeug für `DTEND`, `DURATION` und `DTSTART`
+    nirgends; `P07` deckt `UID` und `DTSTAMP` ab und sonst nichts. Bis zum
+    2026-08-15 stand im Quelltext, das sei die Sache von `P07` — das war falsch
+    und ist dort jetzt richtiggestellt.
+
+  Ob die Dauer taugt, fragt `P14` nicht: Ein `VEVENT` mit `DTEND` und
+  `DURATION:-PT1H` bekommt `P14` und `P15`. Es sind zwei verschiedene Fehler,
+  und wer nur die Dauer umdreht, hat den anderen noch.
 - **Auch bei gleicher `TZID` kann `P12` in genau einer Stunde im Jahr irren.**
   Verglichen wird die Ortszeit. Fällt der Zeitraum in die doppelte Stunde der
   Zeitumstellung, läuft sie rückwärts, während die tatsächliche Zeit vorwärts
@@ -290,7 +324,7 @@ pruefe.sh           Prüfbefehl 1: Beispiele gegen Erwartungen.
 rfc-beispiele.sh    Prüfbefehl 2: die sechs Kalender aus RFC 5545 §4.
 namensliste.sh      Herkunftsprüfung der Namensliste von P09. Kein Prüfbefehl
                     der Mission — er beweist die Herkunft, nicht die Prüfung.
-beispiele/          29 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
+beispiele/          32 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
 erwartet/           Je eine Datei mit der erwarteten Ausgabe.
 LAGE.md             Geprüfte Werkzeuglandschaft, mit Links.
 .gitattributes      Hält CRLF in beispiele/ auch über einen Klon hinweg.

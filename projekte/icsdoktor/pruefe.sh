@@ -112,17 +112,17 @@ ausgeloest=0
 # sonst waere eine abgeschlossene Zusage durch neue Arbeit billiger geworden.
 # Dasselbe gilt ab P12 fuer jede weitere.
 ausgeloest_faltnaht=0
-# P14 steht hier noch nicht: Die Liste nennt, was gebaut ist, und wird mit jeder
-# Pruefung erweitert. Sie vorab einzutragen hiesse, dieses Skript rot zu faerben
-# fuer Arbeit, die noch aussteht — der Missionsstand steht in der Missionsdatei
-# und nicht im Exit-Code eines Pruefskripts.
-for code in P01 P02 P03 P04 P05 P06 P07 P08 P09 P10 P11 P12 P13 P15; do
+# Die Liste nennt, was gebaut ist, und wurde mit jeder Pruefung erweitert. Seit
+# dem 2026-08-15 steht P14 mit darin; damit nennt sie alle vier Pruefungen der
+# Mission Die Beziehungsprobe. Ob die Mission damit erreicht ist, sagt ihre
+# Missionsdatei und nicht der Exit-Code dieses Skripts.
+for code in P01 P02 P03 P04 P05 P06 P07 P08 P09 P10 P11 P12 P13 P14 P15; do
     if ! grep -q " $code " "$erwartet"/*.txt; then
         fehlt="$fehlt $code"
     else
         ausgeloest=$((ausgeloest + 1))
         case "$code" in
-            P11|P12|P13|P15) ;;
+            P11|P12|P13|P14|P15) ;;
             *) ausgeloest_faltnaht=$((ausgeloest_faltnaht + 1)) ;;
         esac
     fi
