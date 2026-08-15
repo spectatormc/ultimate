@@ -25,8 +25,13 @@ nichts; die Grenze steht im README und in ihrem eigenen Docstring.
 
 P15 stammt aus derselben Mission und meldet eine negative DURATION (§3.8.2.5).
 Sie liest wieder eine einzelne Zeile — die Kennung folgt der Nummerierung der
-Mission und nicht der Reihenfolge, in der gebaut wurde. P13 und P14 fehlen
-deshalb noch; die Luecke ist keine ausgelassene Pruefung, sondern offene Arbeit.
+Mission und nicht der Reihenfolge, in der gebaut wurde.
+
+P13 kommt ebenfalls aus dieser Mission und prueft den ersten Halbsatz von
+§3.8.2.2: Das Ende muss denselben Wertetyp tragen wie DTSTART. Sie schliesst
+damit genau die Luecke, in der P12 schweigt, und braucht dafuer keine
+Zeitzonendatenbank — der Typ steht in den Parametern und nicht im Wert. P14
+fehlt noch; die Luecke ist keine ausgelassene Pruefung, sondern offene Arbeit.
 
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
@@ -792,6 +797,27 @@ _ENDE_EIGENSCHAFT = (
 )
 
 
+def _wertetyp(lz):
+    """Der Wertetyp, den eine Zeit-Eigenschaft ausweist, in Grossbuchstaben.
+
+    Fehlt der VALUE-Parameter, gilt die Vorgabe DATE-TIME — §3.8.2.2 fuer DTEND,
+    §3.8.2.4 fuer DTSTART, §3.8.2.3 fuer DUE nennen sie jeweils als Default Value
+    Type. Deshalb ist "DTSTART;VALUE=DATE-TIME:..." derselbe Typ wie ein DTSTART
+    ohne Parameter, und P13 darf das nicht als Abweichung lesen.
+
+    Steht VALUE mehrfach, gewinnt der letzte. Das ist keine Entscheidung mit
+    Gewicht, sondern dieselbe Lesart, die _zeitpunkt seit P12 benutzt; ein
+    doppelter Parameter kommt ohnehin nur in kaputten Dateien vor.
+    """
+    typ = None
+    for pname, pwerte in lz.params:
+        if pname == "VALUE" and pwerte:
+            typ = pwerte[0].upper()
+    if typ is None:
+        return "DATE-TIME"
+    return typ
+
+
 def _zeitpunkt(lz):
     """Zerlegt DTSTART/DTEND/DUE in (typ, bezug, schluessel) oder None.
 
@@ -805,16 +831,12 @@ def _zeitpunkt(lz):
     Zeile bereits, und eine zweite Meldung ueber dieselbe kaputte Zeile hilft
     niemandem beim Suchen.
     """
-    typ = None
     tzid = None
     for pname, pwerte in lz.params:
-        if pname == "VALUE" and pwerte:
-            typ = pwerte[0].upper()
-        elif pname == "TZID" and pwerte:
+        if pname == "TZID" and pwerte:
             tzid = pwerte[0]
     wert = lz.wert or ""
-    if typ is None:
-        typ = "DATE-TIME"                # Vorgabe nach §3.8.2.4 und §3.8.2.2
+    typ = _wertetyp(lz)                  # Vorgabe nach §3.8.2.4 und §3.8.2.2
     if typ == "DATE":
         if not re.match(r"^[0-9]{8}$", wert):
             return None
@@ -888,6 +910,74 @@ def pruefe_p12(komponenten, funde):
                 "(%s gegen %s)"
                 % (ende_name, anfang.nr,
                    _zeige_wort(ende.wert or ""), _zeige_wort(anfang.wert or "")),
+                "3.8.2.2"))
+
+
+def pruefe_p13(komponenten, funde):
+    """§3.8.2.2: Das Ende traegt denselben Wertetyp wie der Anfang.
+
+    Woertlich, und es ist der erste Halbsatz des Abschnitts: "The value type of
+    this property MUST be the same as the 'DTSTART' property". Fuer VTODO sagt
+    §3.8.2.3 dasselbe ueber DUE. Ein Termin, der am 14. als ganzer Tag beginnt
+    und am 15. um 12:00 Uhr UTC endet, mischt DATE und DATE-TIME und ist damit
+    kein gueltiges VEVENT — auch dann nicht, wenn beide Werte fuer sich gelesen
+    tadellos aussehen.
+
+    Aus der Mission Die Beziehungsprobe,
+    state/missionen/2026-08-14-beziehungsprobe.md. Der Fall wurde vor der Wahl
+    gemessen und nicht vermutet: DTSTART;VALUE=DATE:20260814 gegen
+    DTEND:20260815T120000Z lief durch dieses Werkzeug mit Exit 0 und ohne eine
+    einzige Meldung.
+
+    **Diese Pruefung schliesst die Luecke, in der P12 schweigt.** P12 vergleicht
+    nur, was ohne Zeitzonendatenbank vergleichbar ist, und ueberspringt deshalb
+    unter anderem die abweichenden Wertetypen. Genau die meldet P13, und zwar
+    ohne den Vergleich der Zeitpunkte ueberhaupt zu versuchen: Was die beiden
+    Zeilen bedeuten, ist nicht die Frage — dass sie verschiedene Typen
+    ausweisen, steht in den Parametern und ist ohne jede Zonendatenbank lesbar.
+    Beide koennen daher nie zugleich anschlagen.
+
+    **Geprueft wird der ausgewiesene Typ, nicht der geschriebene Wert.** Ob der
+    Wert zu seinem Typ passt, ist die Sache von P08; ob eine Zeitzone dazu passt,
+    die von niemandem. Eine Zeile mit VALUE=DATE und einem unlesbaren Wert
+    bekommt daher zwei Meldungen: P08 zum Wert und P13 zum Typ. Das ist Absicht
+    — es sind zwei verschiedene Fehler an derselben Zeile, und wer nur den einen
+    behebt, hat den anderen noch.
+
+    **Was ausdruecklich nicht gemeldet wird:**
+
+    - **Der zweite Satz von §3.8.2.2.** "This property MUST be specified as a
+      date with local time if and only if the 'DTSTART' property is also
+      specified as a date with local time" — ein Ende in UTC neben einem Anfang
+      ohne Zeitzone verletzt das, traegt aber denselben Wertetyp DATE-TIME und
+      geht hier durch. Die Missionsdatei sagt "Wertetyp weicht ab", und das ist
+      etwas anderes. Die Luecke steht im README, statt hier durch eine eigene
+      Auslegung geschlossen zu werden.
+    - **Ein Typ, den es nicht gibt.** DTEND;VALUE=PERIOD neben einem DTSTART in
+      DATE-TIME wird als Abweichung gemeldet, weil die Typen abweichen — nicht
+      weil PERIOD an dieser Stelle unzulaessig waere. Dass §3.8.2.2 nur DATE und
+      DATE-TIME zulaesst, prueft dieses Werkzeug nirgends.
+    - **Ein fehlendes DTSTART.** Ohne Anfang gibt es nichts zu vergleichen; die
+      Stelle meldet P11, soweit sie in ihre Bedingung faellt.
+    """
+    for komp in komponenten:
+        for name, ende_name in _ENDE_EIGENSCHAFT:
+            if komp.name != name:
+                continue
+            anfang = komp.hole_zeile("DTSTART")
+            ende = komp.hole_zeile(ende_name)
+            if anfang is None or ende is None:
+                continue
+            typ_anfang = _wertetyp(anfang)
+            typ_ende = _wertetyp(ende)
+            if typ_anfang == typ_ende:
+                continue
+            funde.append(Fund(
+                FEHLER, ende.nr, "P13",
+                "%s weist den Wertetyp %s aus, das DTSTART aus Zeile %d aber "
+                "%s; beide müssen denselben Typ tragen"
+                % (ende_name, _zeige_wort(typ_ende), anfang.nr,
+                   _zeige_wort(typ_anfang)),
                 "3.8.2.2"))
 
 
@@ -975,7 +1065,7 @@ def pruefe_p15(logische, funde):
 
 
 def untersuche(rohdaten):
-    """Alle dreizehn Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle vierzehn Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     zeilen = zerlege_physisch(rohdaten)
     if not zeilen:
@@ -998,6 +1088,7 @@ def untersuche(rohdaten):
     pruefe_p10(zeilen, funde)
     pruefe_p11(komponenten, funde)
     pruefe_p12(komponenten, funde)
+    pruefe_p13(komponenten, funde)
     pruefe_p15(logische, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.

@@ -35,9 +35,18 @@ dem Anfang und stellt selbst fest, dass der Standard beide verbietet;
 `bitfireAT/davx5-ose#1850` ist der ausgelöste Absturz, mit dem Wert `P-1W` im
 Klartext der Fehlermeldung. Genau diese Form steht in
 `beispiele/21-p15-negative-dauer.ics`. Dass die Kennung `P15` vor `P13` und
-`P14` gebaut ist, hat einen Grund und keinen Zufall: Die Nummern stammen aus der
-Missionsdatei und sind dort seit Anlage unveränderlich, die Reihenfolge des
+`P14` gebaut wurde, hat einen Grund und keinen Zufall: Die Nummern stammen aus
+der Missionsdatei und sind dort seit Anlage unveränderlich, die Reihenfolge des
 Bauens ist es nicht.
+
+`P13` kommt aus derselben Mission und prüft den ersten Halbsatz von §3.8.2.2:
+„The value type of this property MUST be the same as the `DTSTART` property."
+Ein Termin, der am 14. als **ganzer Tag** beginnt und am 15. um **12:00 Uhr UTC**
+endet, mischt `DATE` und `DATE-TIME` — beide Werte sind für sich gelesen
+tadellos, zusammen sind sie kein gültiges `VEVENT`. Diese Prüfung schließt genau
+die Lücke, in der `P12` schweigt, und sie braucht dafür **keine
+Zeitzonendatenbank**: Der Wertetyp steht in den Parametern und nicht im Wert.
+Beide können deshalb nie zugleich anschlagen.
 
 ## Warum
 
@@ -111,12 +120,12 @@ Prüfung mindestens einmal ausgelöst, mindestens zwei fehlerfreie Dateien. Die
 abgeschlossene Mission „Die Faltnaht" verlangt mehr — 16 Beispiele und die zehn
 Prüfungen `P01` bis `P10` —, und wo das steht, sagt die letzte Zeile der
 Ausgabe, damit ein grüner Exit-Code nicht als „Mission erreicht" gelesen wird.
-`P11`, `P12` und `P15` füllen diese Zehn nicht auf, sondern werden getrennt
-gezählt: Eine abgeschlossene Zusage wird nicht dadurch billiger, dass später
-eine Prüfung dazukommt. Die Abdeckungsliste nennt, was gebaut ist — `P13` und
-`P14` stehen noch nicht darin, weil ein Prüfskript nicht rot werden soll für
-Arbeit, die aussteht. Ob die laufende Mission erreicht ist, sagt ihre
-Missionsdatei und nicht dieser Exit-Code.
+`P11`, `P12`, `P13` und `P15` füllen diese Zehn nicht auf, sondern werden
+getrennt gezählt: Eine abgeschlossene Zusage wird nicht dadurch billiger, dass
+später eine Prüfung dazukommt. Die Abdeckungsliste nennt, was gebaut ist — `P14`
+steht noch nicht darin, weil ein Prüfskript nicht rot werden soll für Arbeit,
+die aussteht. Ob die laufende Mission erreicht ist, sagt ihre Missionsdatei und
+nicht dieser Exit-Code.
 
 Seit `rfc-beispiele.sh` auch bei einem `HINWEIS` mit `1` endet, ist er die
 Kontrolle gegen Fehlalarme von `P09` und `P10`: Ein Kalender aus dem Normtext
@@ -192,8 +201,32 @@ Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
   das ohne Zonendaten vergleicht, meldet einen Fehlalarm auf einer gültigen
   Datei. `beispiele/22-sauber-p12-zwei-zonen.ics` hält diesen Fall fest und
   muss stumm bleiben. Der dritte Fall ist keine Lücke, sondern die
-  Zuständigkeit von `P13` aus derselben Mission — bis die steht, bleibt er
-  unbemerkt.
+  Zuständigkeit von `P13` — seit dem 2026-08-15 gebaut, siehe den nächsten
+  Punkt.
+- **`P13` vergleicht den ausgewiesenen Typ und nicht den geschriebenen Wert.**
+  Drei Grenzen:
+
+  - **Der zweite Satz von §3.8.2.2 bleibt ungeprüft.** „This property MUST be
+    specified as a date with local time if and only if the `DTSTART` property is
+    also specified as a date with local time" — ein Ende in UTC neben einem
+    Anfang ohne Zeitzone verletzt das, trägt aber denselben Wertetyp
+    `DATE-TIME` und geht durch. Die Missionsdatei sagt „Wertetyp weicht ab", und
+    das ist etwas anderes. Diese Lücke steht hier, statt durch eine eigene
+    Auslegung geschlossen zu werden.
+  - **Zwei Meldungen an einer Zeile sind Absicht.** Eine Zeile mit `VALUE=DATE`
+    und einem unlesbaren Wert bekommt `P08` zum Wert und `P13` zum Typ. Es sind
+    zwei verschiedene Fehler, und wer nur den einen behebt, hat den anderen
+    noch.
+  - **Ein Typ, den §3.8.2.2 gar nicht zulässt, wird nur als Abweichung
+    gemeldet.** `DTEND;VALUE=PERIOD` neben einem `DTSTART` in `DATE-TIME`
+    erzeugt einen Fund, weil die Typen abweichen — nicht weil `PERIOD` an
+    dieser Stelle unzulässig wäre. Dass dort nur `DATE` und `DATE-TIME` stehen
+    dürfen, prüft dieses Werkzeug nirgends.
+
+  Dass `DTSTART;VALUE=DATE-TIME:…` und ein `DTSTART` ohne Parameter derselbe Typ
+  sind, ist die Vorgabe aus §3.8.2.2 und §3.8.2.4 und keine Auslegung;
+  `beispiele/27-sauber-p13-typ-ausgeschrieben.ics` hält den Fall fest und muss
+  stumm bleiben.
 - **`P15` meldet die negative Dauer und sonst nichts an `DURATION`.** Drei
   Grenzen, alle drei bewusst:
 
@@ -257,7 +290,7 @@ pruefe.sh           Prüfbefehl 1: Beispiele gegen Erwartungen.
 rfc-beispiele.sh    Prüfbefehl 2: die sechs Kalender aus RFC 5545 §4.
 namensliste.sh      Herkunftsprüfung der Namensliste von P09. Kein Prüfbefehl
                     der Mission — er beweist die Herkunft, nicht die Prüfung.
-beispiele/          26 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
+beispiele/          29 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
 erwartet/           Je eine Datei mit der erwarteten Ausgabe.
 LAGE.md             Geprüfte Werkzeuglandschaft, mit Links.
 .gitattributes      Hält CRLF in beispiele/ auch über einen Klon hinweg.
