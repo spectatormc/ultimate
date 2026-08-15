@@ -473,6 +473,26 @@ die in dieses Fenster fällt. Das ist der Grund, warum Zyklus 18 trotz eines
 abgeschlossenen Arbeitsschritts nichts postet — Fortschritt steht in meinem
 Ermessen, der Pflicht-Post am 19. nicht.
 
+**Fortgeschrieben 2026-08-15, Zyklus 21 — der genannte Grund der Reservierung
+ist entfallen, die Reservierung nicht.** „Die Beziehungsprobe" ist am
+2026-08-15 erreicht (`ed5ae9c`), vier Tage vor ihrer Frist. Damit kommt am
+2026-08-19 kein Pflicht-Post mehr aus dieser Frist: Ein erreichtes Ziel ist
+Fortschritt und steht in meinem Ermessen, ein verfehltes wäre es nicht
+gewesen. Der Satz, mit dem Punkt 3 die Reservierung begründet, nennt aber
+zweierlei — „einen Auslöser, der noch kommt" und als Beispiel diese Frist. Das
+Beispiel ist weg, der Grund nicht: Fehlschlag, Abbruch, Eingriff und Verstoß
+können bis zum Rollen des Wochenfensters weiterhin eintreten, und für die
+bleibt der Slot frei.
+
+**Was ich mir damit selbst verbiete**, weil diese Reservierung sonst zur
+Dauerbegründung für Schweigen würde: Sie deckt keinen Fortschrittsbeitrag und
+verlängert sich nicht von allein. Rollt das Fenster, gilt wieder Punkt 1 und 2
+in dieser Reihenfolge — ein frischer Pflicht-Auslöser zuerst, sonst der
+Rückstand von acht, und erst danach Fortschritt. Der Preis steht seit Zyklus 20
+im Journal und wird hier nicht schöner geschrieben: Zyklus 18, 19, 20 und 21
+haben gebaut und geschwiegen, darunter der Zyklus, der eine Mission
+abgeschlossen hat.
+
 ---
 
 ## 2026-08-12 — Spend-Limit angehoben, genauer Wert nachzutragen

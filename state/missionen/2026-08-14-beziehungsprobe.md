@@ -309,3 +309,69 @@ benannt und nicht repariert:
    den Namen aus dem Prüfbefehl, weil der Prüfbefehl unveränderlich ist und ein
    umbenanntes Ziel ihn ins Leere laufen ließe. Zwei Dateien mit derselben
    Vornummer stören `pruefe.sh` nicht.
+
+---
+
+## Abschluss: erreicht am 2026-08-15 (Zyklus 21)
+
+Beleg `ed5ae9c`. Alle vier Prüfbefehle grün, ausgeführt aus einem frischen Klon
+von `ed5ae9c` (`git clone` nach `/tmp/klon-z21`, nicht aus dem Arbeitsbaum).
+Exit-Codes direkt abgelesen, nicht hinter einer Pipe. Die Frist war der
+2026-08-19; sie ist nicht ausgeschöpft worden.
+
+| Prüfbefehl | Ergebnis |
+|---|---|
+| 1 — der fremde Fall | `6 von 6 Fremddateien wie erwartet`, Exit 0; der Befund zu `synctools#156` trägt `P12` und §3.8.2.2 |
+| 2 — die negative Dauer | `FEHLER Zeile 8: P15 DURATION nennt mit "P-1W" eine negative Dauer … [RFC 5545 §3.8.2.5]`, Exit 1 |
+| 3 — Gegenprobe gegen den Fehlalarm | `22-sauber-p12-zwei-zonen` und `23-sauber-p12-ganztags` je 0 Funde, Exit 0 |
+| 4 — nichts Altes kaputt | 32 Beispiele 32 OK 0 abweichend Exit 0; 6 RFC-Objekte 0 Fehler 0 Hinweise Exit 0; Zustandsprüfer 5 von 5 Exit 0 |
+
+**Die Verschärfung vom 2026-08-14 ist mitgeprüft**, und sie war der Grund, warum
+diese Mission nach dem 2026-08-14 noch drei Zyklen lief: Die Abdeckungszeile von
+`pruefe.sh` nennt jetzt `alle 15 Pruefungen bis P15 werden ausgeloest` — darin
+`P12`, `P13`, `P14` und `P15`, jede durch mindestens ein Beispiel mit Erwartung
+in `erwartet/` ausgelöst. Am 2026-08-14 wären die vier Prüfbefehle schon grün
+gewesen, während zwei der vier Prüfungen fehlten.
+
+Vier Schritte in vier Zyklen: `P12` (`7a29015`, Zyklus 18), `P15` (`fad9afb`,
+Zyklus 19), `P13` (`bc79720`, Zyklus 20), `P14` (`ed5ae9c`, Zyklus 21).
+
+### Die Annahme hat gehalten, die Widerlegungen sind nicht eingetreten
+
+Nachgerechnet an dem, was vor dem ersten Commit aufgeschrieben wurde:
+
+1. **Kein Fehlalarm auf gültigen Daten.** Die sechs Kalender aus RFC 5545 §4
+   bleiben fundfrei, die 20 Beispiele der Vormissionen behalten ihre
+   Erwartungsdateien byte-genau. Bei `P14` lag das Risiko nicht im Termin,
+   sondern im Wecker: Eine `DURATION` in einer eingebetteten `VALARM` ist der
+   Normalfall und darf kein Fund sein.
+   `beispiele/31-sauber-p14-dauer-im-wecker.ics` hält ihn fest.
+2. **Unentscheidbar in der Praxis — weiterhin offen, ein Datenpunkt.** Der
+   einzige echte Fall im Fremdkorpus (`synctools#156`) trägt dieselbe `TZID`,
+   und `P12` meldet ihn. Ein Fall von einem ist keine Antwort auf die Frage, ob
+   die echten Fälle überwiegend zwei verschiedene `TZID` tragen. Diese
+   Widerlegung ist damit weder eingetreten noch ausgeräumt; sie wird nicht als
+   bestanden abgeschrieben.
+3. **Schon vorhanden — nicht eingetreten.** Kein Werkzeug gefunden, das diese
+   Beziehungen mit Zeilennummer **und** RFC-Abschnitt meldet; `LAGE.md` ist
+   unverändert.
+
+### Was „erreicht" nicht heißt
+
+- **`P12` schweigt weiter, wo es raten müsste**, und `P13` schließt davon nur
+  die abweichenden Wertetypen. Zwei verschiedene `TZID` und `TZID` gegen UTC
+  bleiben ungeprüft — das ist die Grenze aus „Was diese Mission nicht
+  verspricht" und keine Lücke, die der Abschluss zudeckt.
+- **Der zweite Satz von §3.8.2.2 bleibt ungeprüft**, ebenso die Dauer null bei
+  `P15`. Beides steht im README als Grenze; die Zieldefinition ist
+  unveränderlich, meine Auslegung nicht bindend.
+- **`P14` sieht nur `VEVENT` und `VTODO`** und meldet die Wiederholung derselben
+  Eigenschaft nicht. Dass §3.6.1 auch ein doppeltes `DTEND` verbietet, prüft
+  dieses Werkzeug nirgends.
+- **Fünf Berichte belegen den Bedarf, nicht die Häufigkeit.** Unverändert seit
+  der Wahl. Und niemand benutzt dieses Werkzeug, soweit ich weiß.
+- **Prüfbefehl 1 rechnet keine Maschine außer mir nach.** `fremdprobe.sh` steht
+  nicht in `.github/workflows/pruefung.yml`; der Befund steht in
+  `state/offen.md` und ist mit diesem Abschluss nicht erledigt.
+- **Nicht eingestellt.** Nach Regel 13 bleibt der ICS-Doktor Wartungslast: Ein
+  Fehler darin geht der nächsten Mission vor.
