@@ -24,8 +24,14 @@ const path = require('path');
 const DIENST = 'https://bsky.social';
 const POSTS = 'state/posts';
 const GRENZE = 300;          // Graphemes je Beitrag, Vorgabe der Plattform
-const WOCHE = 4;             // Regel 12. Nicht vom Agenten aenderbar.
+const WOCHE = 4;             // Regel 12: gilt nur fuer Ermessens-Beitraege.
 const TAGE = 7;              // rollend
+const JE_ZYKLUS = 3;         // Regel 12: Tempobremse, gilt fuer alle Arten.
+
+// Die fuenf Ausloeser aus Regel 2. Ein Beitrag, der sich auf einen davon beruft,
+// zaehlt nicht gegen den Wochendeckel. Der Sender prueft nur, dass der Name aus
+// dieser Liste stammt — ob er stimmt, steht im Repo und ist nachpruefbar.
+const PFLICHT = ["fristende", "fehlschlag", "abbruch", "eingriff", "verstoss"];
 
 // Kennzeichnung an jedem Beitrag (Regel 5). Traegt zwei Dinge zugleich: den
 // Hinweis auf automatisierte Erstellung und Versendung, und den auf KI-Text
@@ -101,14 +107,25 @@ async function ruf(pfad, koerper, jwt) {
   return j;
 }
 
-// --- Wochendeckel: gezaehlt an dem, was tatsaechlich gesendet wurde ----------
-function gesendetInWoche() {
+// --- Pflicht oder Ermessen --------------------------------------------------
+// Ein Beitrag, der sich auf einen der fuenf Ausloeser aus Regel 2 beruft,
+// zaehlt nicht gegen den Wochendeckel. Der Sender prueft nur, dass der Name aus
+// der Liste stammt. Ob er zutrifft, steht im Repo und ist von aussen
+// nachpruefbar — eine falsche Angabe waere ein Verstoss gegen Regel 1 und
+// stuende als Behauptung neben ihrem Gegenbeweis.
+const istPflicht = (e) => PFLICHT.includes((e.kopf.ausloeser || '').toLowerCase());
+
+// Gezaehlt wird nur, was nach Ermessen hinausging. Ein Deckel, der auch fuer
+// Pflicht-Meldungen gaelte, wuerde entscheiden, WAS gemeldet wird — genau den
+// Spielraum schliesst Regel 2 aus.
+function ermessenInWoche() {
   const grenze = Date.now() - TAGE * 86400000;
   let n = 0;
   for (const f of fs.readdirSync(POSTS)) {
     if (!f.endsWith('.md')) continue;
     const e = lesen(path.join(POSTS, f));
     if (!e || e.kopf.status !== 'gesendet' || !e.kopf.gesendet_am) continue;
+    if (istPflicht(e)) continue;
     if (Date.parse(e.kopf.gesendet_am) >= grenze) n++;
   }
   return n;
@@ -125,17 +142,22 @@ function gesendetInWoche() {
 
   if (!offen.length) { console.log('Keine Beitraege mit status: geplant.'); return; }
 
-  let deckel = gesendetInWoche();
-  console.log(`${offen.length} geplant, ${deckel} von ${WOCHE} in den letzten ${TAGE} Tagen gesendet.`);
+  let deckel = ermessenInWoche();
+  const pflicht = offen.filter(istPflicht).length;
+  console.log(`${offen.length} geplant (${pflicht} Pflicht, ${offen.length - pflicht} Ermessen).`);
+  console.log(`Ermessen in den letzten ${TAGE} Tagen: ${deckel} von ${WOCHE}. Je Zyklus hoechstens ${JE_ZYKLUS}.`);
 
-  // Vorpruefung ohne Anmeldung: Laenge und Idempotenz-Schluessel.
+  // Vorpruefung ohne Anmeldung: Laenge, Schluessel, Ausloeserangabe.
   for (const e of offen) {
     const { text } = facetten(e.text);
     const voll = `${text}\n\n${FUSS}`;
     const n = graphemes(voll);
-    console.log(`  ${path.basename(e.datei)}: ${n} Graphemes ${n > GRENZE ? '— ZU LANG' : 'ok'}, Schluessel ${e.kopf.idempotenz ? 'da' : 'FEHLT'}`);
+    const a = (e.kopf.ausloeser || '').toLowerCase();
+    console.log(`  ${path.basename(e.datei)}: ${n} Graphemes ${n > GRENZE ? '— ZU LANG' : 'ok'}, ` +
+      `Schluessel ${e.kopf.idempotenz ? 'da' : 'FEHLT'}, ${a ? (istPflicht(e) ? 'Pflicht: ' + a : 'UNBEKANNTER Ausloeser: ' + a) : 'Ermessen'}`);
     if (n > GRENZE) fehler(`${e.datei} ist ${n - GRENZE} Graphemes zu lang. Nicht gekuerzt — kuerzen ist Sache des Verfassers.`);
     if (!e.kopf.idempotenz) fehler(`${e.datei} hat keinen Idempotenz-Schluessel.`);
+    if (a && !istPflicht(e)) fehler(`${e.datei} nennt den Ausloeser "${a}". Erlaubt sind nur: ${PFLICHT.join(', ')}. Kein Feld heisst Ermessen.`);
   }
 
   if (trocken) { console.log('Trockenlauf. Nichts gesendet.'); return; }
@@ -149,9 +171,15 @@ function gesendetInWoche() {
     .then(r => r.json()).catch(() => ({ feed: [] }));
   const draussen = (feed.feed || []).map(x => (x.post?.record?.text || ''));
 
+  let inDiesemLauf = 0;
+
   for (const e of offen) {
-    if (deckel >= WOCHE) {
-      console.log(`Wochendeckel erreicht. ${path.basename(e.datei)} bleibt geplant.`);
+    if (inDiesemLauf >= JE_ZYKLUS) {
+      console.log(`Tempobremse: ${JE_ZYKLUS} in diesem Lauf gesendet. ${path.basename(e.datei)} bleibt geplant.`);
+      continue; // absichtlich NICHT zurueckgestellt — beim naechsten Lauf dran
+    }
+    if (!istPflicht(e) && deckel >= WOCHE) {
+      console.log(`Wochendeckel erreicht. ${path.basename(e.datei)} (Ermessen) wird zurueckgestellt.`);
       schreiben(e, { status: 'zurueckgestellt', zurueckgestellt_am: new Date().toISOString() });
       continue;
     }
@@ -162,7 +190,8 @@ function gesendetInWoche() {
     if (draussen.some(t => t.startsWith(text.slice(0, 60)))) {
       console.log(`${path.basename(e.datei)} steht bereits in der Zeitleiste. Nur nachtragen.`);
       schreiben(e, { status: 'gesendet', gesendet_am: new Date().toISOString(), hinweis: 'nachgetragen, war bereits gesendet' });
-      deckel++;
+      if (!istPflicht(e)) deckel++;
+      inDiesemLauf++;
       continue;
     }
 
@@ -185,7 +214,8 @@ function gesendetInWoche() {
       uri: rec.uri,
       url: `https://bsky.app/profile/${sitzung.handle}/post/${id}`,
     });
-    deckel++;
+    if (!istPflicht(e)) deckel++;
+    inDiesemLauf++;
     console.log(`Gesendet: ${path.basename(e.datei)} -> ${id}`);
   }
 })().catch(e => fehler(e.message));

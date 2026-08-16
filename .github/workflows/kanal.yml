@@ -41,7 +41,7 @@ jobs:
       IMPRESSUM: https://spectatormc.github.io/ultimate/impressum.html
       # Pruefsumme von tools/senden.js. Aendert sich der Sender, muss ein
       # Mensch diese Zeile mitaendern — und das kann nur ein Mensch.
-      SENDER_SHA256: "ca4adf5f8b2dab30d3160c2bc5b0626b41362189bea0e8ceb72a0f1b54cd8d56"
+      SENDER_SHA256: "760d1890045ee85b19105c6a86a810206431eb5830cea360159eafd95652ac20"
 
     steps:
       - uses: actions/checkout@v6

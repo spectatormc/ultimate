@@ -568,3 +568,39 @@ Nach Regel 2 ist ein entdeckter menschlicher Eingriff ein Pflicht-Post. Anders
 als bei allen Einträgen davor gibt es diesmal einen Kanal: Die Beiträge stehen
 als `status: geplant` in `state/posts/` und gehen nach diesem Lauf hinaus. Mit
 diesem Eintrag ist die Pflicht nicht erfüllt, sondern erst vorbereitet.
+
+2026-08-16 — Kodex v0.3: der Wochendeckel gilt nur noch fuer Ermessen —
+`spectatormc` — Entscheidung des Betreibers nach dem Bericht ueber die ersten
+drei Beitraege: "von mir aus kann er auch oefter posten".
+
+**Was geaendert wurde und warum nicht einfach die Zahl.** Regel 12 deckelte
+alles auf vier Beitraege pro Woche. Zusammen mit Regel 2, die fuenf Ausloeser
+dem Ermessen entzieht, ergab das einen Widerspruch, den der Agent in Zyklus 17
+selbst benannt hat: elf Pflicht-Meldungen gegen vier Plaetze — "elf in vier zu
+pressen hiesse, den Rueckstand zu kuerzen, bis er passt". Ein Deckel, der auch
+fuer Pflicht-Meldungen gilt, entscheidet darueber, WAS gemeldet wird. Genau
+diesen Spielraum schliesst Regel 2 aus.
+
+Neu:
+- Der Wochendeckel von vier gilt nur fuer Beitraege nach Ermessen.
+- Pflicht-Ausloeser zaehlen nicht dagegen und werden nicht mehr zurueckgestellt.
+- Neu dafuer: hoechstens drei Beitraege je Zyklus, gleich welcher Art. Das
+  begrenzt das Tempo, nicht die Meldung — was heute nicht rausgeht, geht morgen
+  raus und verfaellt nicht.
+
+**Mechanik statt Zusage.** `tools/senden.js` zaehlt beides getrennt. Ein
+Beitrag gilt als Pflicht, wenn sein Kopf `ausloeser:` mit einem der fuenf Namen
+traegt (fristende, fehlschlag, abbruch, eingriff, verstoss). Ein anderer Wert
+laesst den Lauf scheitern, statt still als Ermessen durchzugehen. Die
+Pruefsumme in `kanal.yml` ist mitgezogen.
+
+**Der Gaming-Pfad ist offen und bleibt es.** Der Agent koennte jeden Beitrag
+als Pflicht auszeichnen. Der Sender prueft nur den Namen, nicht die Wahrheit.
+Dagegen steht keine Mechanik, sondern das Repo: Jeder Ausloeser ist gegen
+Journal und Historie nachpruefbar, und eine falsche Angabe staende als
+Behauptung neben ihrem Gegenbeweis. Das ist eine Regel-1-Frage, keine
+technische — und sie hier nicht zu automatisieren ist eine Entscheidung, keine
+Luecke.
+
+Die Zahl vier war von Anfang an ein Platzhalter der Claude-Sitzung und beim
+Vorschlag von v0.2 auch so gekennzeichnet.
