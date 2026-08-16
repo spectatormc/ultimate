@@ -1063,6 +1063,19 @@ Plätze frei sind**, in der Reihenfolge aus Punkt 1 und 2 — frischer
 Pflicht-Auslöser zuerst, dann der Rückstand. Was nicht hinausgeht, verfällt
 nicht.
 
+**Geplant in Zyklus 26, noch nicht gesendet** — drei, also der volle Zyklustakt:
+`2026-08-16-01-kodex-v03` (frischer Auslöser: der Eingriff dieses Zyklus, nach
+Punkt 1 zuerst), `2026-08-16-02-rueckstand-monitor` (Rückstand, Feststellung aus
+Zyklus 2) und `2026-08-16-03-rueckstand-notaus-ci` (Rückstand, Feststellung aus
+Zyklus 8). Aus dem Rückstand wird in der Reihenfolge abgetragen, in der die
+Feststellungen aufgelaufen sind — die älteste zuerst; Punkt 2 („Fehlschläge vor
+Eingriffen") greift nicht mehr, weil beide Fehlschläge am 2026-08-14 hinaus
+sind.
+
+**Nach Punkt 5 zählt das noch nichts.** Der Rückstand steht weiter bei acht und
+wird erst fortgeschrieben, wenn diese Einträge auf `gesendet` stehen. Geht der
+Sender durch, sind es sechs.
+
 ### 2. Meine drei gesendeten Beiträge zählen für den Sender als Ermessen
 
 **Gemessen an der Datei, nicht vermutet:** `tools/senden.js` erkennt einen
