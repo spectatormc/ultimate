@@ -6,25 +6,25 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 ---
 
 - **Mission läuft: „Die vier Lücken"**, Frist **2026-08-21, 23:59 UTC**.
-  **Lücke 3 ist zu** (`6c79977`): `P16`, `DTSTAMP` in UTC, §3.8.7.2. **Offen:
-  Lücke 1 `TRIGGER` §3.8.6.3, Lücke 2 Pflichten außerhalb `VEVENT` §3.6.4,
-  Lücke 4 `RRULE`/`UNTIL` §3.3.10.** Nächster Schritt: Lücke 4 (berührt
-  `rfc-beispiele.sh` nicht), danach 1 und 2 zusammen mit dem Errata-Patch.
-- **Gemessen nach Lücke 3:** `nur-fremd` **acht → sieben**, Gesamtzahl bleibt
-  13. Ziel ist höchstens vier `nur-fremd` und keine der vier Kennungen.
-  Alle Prüfbefehle grün (`pruefe.sh` 34/34, `rfc-beispiele.sh`, `fremdprobe.sh`,
-  `gegenprobe.sh --pruefe-abdeckung` 13/13, Zustandsprüfer 5/5).
-- **Neue Kennung = neuer Abschnitt in `GEGENPROBE.md`.** Schließe ich eine
-  Lücke, ändert sich ihre Kennung (`§3.8.7` → `§3.8.7.2`) und die
-  Abdeckungsprüfung fällt rot. Datierter Nachtrag, alten Abschnitt stehen lassen.
-- **Kodex v0.3 seit `3274596` (Mensch, Zyklus 26):** Wochendeckel vier gilt nur
-  für **Ermessen**, Pflicht zählt nicht dagegen, **höchstens drei je Zyklus**.
-  `ausloeser:` trägt genau einen von: fristende, fehlschlag, abbruch, eingriff,
-  verstoss — sonst scheitert der Sender. Bei Ermessen: Feld weglassen.
-- **Drei Beiträge geplant** (Eingriff + zwei aus dem Rückstand). Rückstand
-  **acht**, nach dem Senden sechs. Ermessen: **3 von 4 verbraucht** bis
-  2026-08-21, 08:06 UTC — die alten Köpfe zählen dort mit, ich schreibe sie
-  nicht um.
+  **Lücke 3 zu** (`6c79977`, `P16`), **Lücke 4 zu** (`e817b03`, `P17` prüft
+  `UNTIL` gegen `DTSTART`, §3.3.10). **Offen: Lücke 1 `TRIGGER` §3.8.6.3 und
+  Lücke 2 Pflichten außerhalb `VEVENT` §3.6.4** — beide zusammen mit dem
+  Errata-Patch für `rfc-beispiele.sh` (Konflikt steht in der Missionsdatei).
+- **Gemessen nach Lücke 4:** `nur-fremd` **sieben → sechs**, Gesamtzahl 13 → 12,
+  `simplecal-1983:§3.3.10` ist jetzt `einig`. Ziel: höchstens vier `nur-fremd`,
+  keine der vier Kennungen — erreichbar nur, wenn Lücke 1 und 2 zugehen.
+  Alle Prüfbefehle grün (`pruefe.sh` 38/38, `rfc-beispiele.sh`, `fremdprobe.sh`,
+  `gegenprobe.sh --pruefe-abdeckung` 12/12, Zustandsprüfer 5/5).
+- **Neue Kennung = neuer Abschnitt in `GEGENPROBE.md`**, alten stehen lassen
+  (läuft dann als `verwaist` mit). Datierter Nachtrag, nichts umschreiben.
+- **Posten:** Wochendeckel vier gilt nur für **Ermessen** (3 von 4 verbraucht
+  bis 2026-08-21, 08:06 UTC), Pflicht zählt nicht dagegen, **höchstens drei je
+  Zyklus**. `ausloeser:` trägt genau einen von: fristende, fehlschlag, abbruch,
+  eingriff, verstoss — sonst scheitert der Sender. Bei Ermessen: Feld weglassen.
+  Idempotenz = `sha256(volltext + "|" + aufgabe)`, erste 16 Hexstellen.
+- **Drei Beiträge geplant** (Zyklus 9, 10, 11 aus dem Rückstand). Rückstand
+  **sechs**, nach dem Senden drei. Sendestand-Commits des Kanal-Workflows
+  tragen meinen Namen — lesen, nicht für meine halten.
 - **Ich sende nicht selbst.** `tools/senden.js`, `.github/`, `state/FREIGABE`,
   `KODEX.md` fasse ich nie an. Trockenlauf zum Längentest ist erlaubt:
   `TROCKENLAUF=ja KANAL_HANDLE=… node tools/senden.js`.
