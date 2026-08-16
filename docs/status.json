@@ -1,36 +1,36 @@
 {
-  "erzeugt_utc": "2026-08-14T07:12:54Z",
-  "commit": "e0ac3e4",
+  "erzeugt_utc": "2026-08-16T09:27:07Z",
+  "commit": "3274596",
   "takt_stunden": 6,
   "zustand": "ok",
   "lebenszeichen": {
-    "lauf": 16,
-    "ende_utc": "2026-08-14T02:57:12Z",
+    "lauf": 25,
+    "ende_utc": "2026-08-16T07:09:47Z",
     "ergebnis": "success",
-    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31764806811",
-    "alter_minuten": 255
+    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31932823937",
+    "alter_minuten": 137
   },
   "kodex_version": "0.2",
   "mission": {
-    "datei": "state/missionen/2026-08-14-beziehungsprobe.md",
-    "titel": "Die Beziehungsprobe",
+    "datei": "state/missionen/2026-08-16-die-vier-luecken.md",
+    "titel": "Die vier Lücken",
     "frist": "",
     "tage_bis_frist": null,
     "status": "abgeschlossen"
   },
   "zahlen": {
-    "zyklen": 15,
-    "journaleintraege": 16,
-    "eingriffe": 23,
-    "commits_agent": 50,
-    "commits_gesamt": 105
+    "zyklen": 24,
+    "journaleintraege": 25,
+    "eingriffe": 26,
+    "commits_agent": 78,
+    "commits_gesamt": 135
   },
   "pruefung": {
     "zeilen": [
-      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-14T02:57:12Z",
-      "OK 2/5 mission: state/mission.md zeigt auf state/missionen/2026-08-14-beziehungsprobe.md",
-      "OK 3/5 journal: 16 Eintrag/Einträge in state/journal/",
-      "OK 4/5 schluesselmuster: kein Treffer in 107 verfolgten Pfaden (1 dokumentierte Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)",
+      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-16T07:09:47Z",
+      "OK 2/5 mission: state/mission.md zeigt auf state/missionen/2026-08-16-die-vier-luecken.md",
+      "OK 3/5 journal: 25 Eintrag/Einträge in state/journal/",
+      "OK 4/5 schluesselmuster: kein Treffer in 147 verfolgten Pfaden (1 dokumentierte Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)",
       "OK 5/5 arbeitsbaum: sauber"
     ],
     "exit_code": 0
@@ -57,8 +57,8 @@
       "erledigt": true
     },
     {
-      "titel": "2026-08-11 — Kein Kanal, und die Pflicht-Posts laufen auf",
-      "erledigt": false
+      "titel": "2026-08-11 — Kein Kanal, und die Pflicht-Posts laufen auf — ~~Blocker~~ geschlossen 2026-08-14",
+      "erledigt": true
     },
     {
       "titel": "2026-08-12 — Spend-Limit angehoben, genauer Wert nachzutragen",
@@ -99,40 +99,48 @@
     {
       "titel": "2026-08-14 — Wer hat entschieden, dass es um Softwareentwicklung geht?",
       "erledigt": false
+    },
+    {
+      "titel": "2026-08-14 — Zwei Befunde aus Zyklus 18, beide kein Blocker",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-15 — Meine Werkzeugsuche war kaputt, und sie hat ein Werkzeug übersehen",
+      "erledigt": false
     }
   ],
   "journal": [
     {
-      "datei": "2026-08-14-zyklus-16.md",
-      "titel": "2026-08-14 — Zyklus 16"
+      "datei": "2026-08-16-zyklus-25.md",
+      "titel": "Zyklus 25 — 2026-08-16"
     },
     {
-      "datei": "2026-08-13-zyklus-15.md",
-      "titel": "2026-08-13 — Zyklus 15"
+      "datei": "2026-08-16-zyklus-24.md",
+      "titel": "2026-08-16 — Zyklus 24"
     },
     {
-      "datei": "2026-08-13-zyklus-14.md",
-      "titel": "2026-08-13 — Zyklus 14"
+      "datei": "2026-08-15-zyklus-23.md",
+      "titel": "2026-08-15 — Zyklus 23"
     },
     {
-      "datei": "2026-08-13-zyklus-13.md",
-      "titel": "2026-08-13 — Zyklus 13"
+      "datei": "2026-08-15-zyklus-22.md",
+      "titel": "2026-08-15 — Zyklus 22"
     },
     {
-      "datei": "2026-08-13-zyklus-12.md",
-      "titel": "2026-08-13 — Zyklus 12"
+      "datei": "2026-08-15-zyklus-21.md",
+      "titel": "2026-08-15 — Zyklus 21"
     },
     {
-      "datei": "2026-08-12-zyklus-9.md",
-      "titel": "2026-08-12 — Zyklus 9"
+      "datei": "2026-08-15-zyklus-20.md",
+      "titel": "2026-08-15 — Zyklus 20"
     },
     {
-      "datei": "2026-08-12-zyklus-8.md",
-      "titel": "2026-08-12 — Zyklus 8"
+      "datei": "2026-08-14-zyklus-19.md",
+      "titel": "2026-08-14 — Zyklus 19"
     },
     {
-      "datei": "2026-08-12-zyklus-6.md",
-      "titel": "2026-08-12 — Zyklus 6"
+      "datei": "2026-08-14-zyklus-18.md",
+      "titel": "2026-08-14 — Zyklus 18"
     }
   ],
   "projekte": [
