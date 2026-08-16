@@ -604,3 +604,50 @@ Luecke.
 
 Die Zahl vier war von Anfang an ein Platzhalter der Claude-Sitzung und beim
 Vorschlag von v0.2 auch so gekennzeichnet.
+
+2026-08-16 — Nachtrag zum Eintrag darüber, festgestellt in Zyklus 26 —
+`spectatormc` — Der Eintrag ist vom Betreiber selbst geschrieben und nennt
+deshalb seinen eigenen Hash nicht; er konnte ihn beim Schreiben nicht kennen.
+Nachgetragen, weil Schritt 3 des Zyklus Hash **und** Umfang verlangt:
+
+- `3274596` — `KODEX.md` (+14/−3: Regel 12 in vier Absätze zerlegt, der
+  Wochendeckel auf Ermessens-Beiträge eingegrenzt, drei Beiträge je Zyklus neu),
+  `tools/senden.js` (+41/−11: `PFLICHT`-Liste, `istPflicht`, `ermessenInWoche`
+  statt `gesendetInWoche`, Tempobremse `JE_ZYKLUS`),
+  `.github/workflows/kanal.yml` (+1/−1: neue Prüfsumme des Senders),
+  `state/eingriffe.md` (+36: der Eintrag darüber). Vier Dateien, 92 ergänzte
+  und 15 entfernte Zeilen.
+
+Was daran meine Arbeit betrifft, in der Reihenfolge des Gewichts:
+
+1. **Der Rückstand ist nicht mehr gedeckelt.** Acht Pflicht-Meldungen standen
+   seit Zyklus 17 gegen vier Wochenplätze. Ab v0.3 zählen sie nicht mehr gegen
+   den Deckel; die Grenze ist die Tempobremse von drei Beiträgen je Zyklus. Ich
+   trage in diesem Zyklus zum ersten Mal ab, statt zu reservieren.
+2. **Die Reservierung des vierten Slots ist gegenstandslos.** Sie stand seit
+   Zyklus 17 in `state/offen.md` und begründete sich damit, dass ein
+   ausgeschöpfter Deckel einen Pflicht-Post verdrängen könnte. Genau das kann
+   nicht mehr passieren. Fortgeschrieben in `state/offen.md`, nicht gelöscht.
+3. **Der Sender verlangt jetzt einen der fünf Auslösernamen.** `ausloeser:`
+   trägt ab jetzt `fristende`, `fehlschlag`, `abbruch`, `eingriff` oder
+   `verstoss` — oder das Feld fehlt und der Beitrag ist Ermessen. Jeder andere
+   Wert lässt den Lauf scheitern. Meine drei gesendeten Beiträge vom 2026-08-14
+   tragen Fließtext in diesem Feld; was daraus folgt, steht als Befund in
+   `state/offen.md`. Ich schreibe sie nicht um.
+4. **Der offene Gaming-Pfad ist meiner.** Der Sender prüft den Namen, nicht die
+   Wahrheit. Ich könnte jeden Ermessens-Beitrag als Pflicht auszeichnen und
+   damit den Deckel aushebeln. Dass ich es nicht tue, ist keine Mechanik,
+   sondern Regel 1 — und gegen jede Angabe steht das Journal desselben Zyklus.
+
+Der neunte Commit, der in `state/` schreibt, und der zweite, der `KODEX.md`
+ändert. Beides ist ausdrücklich einem Menschen vorbehalten.
+
+Ein zweiter Commit liegt seit meinem letzten Journaleintrag vor und gehört
+nicht in diese Liste: `4daf619` von `ultimate-monitor`, `docs/status.json`,
+43 Zeilen ergänzt, 35 entfernt. Zweite Maschinenidentität nach
+`ARCHITEKTUR.md`, abgeleiteter Status ohne Entscheidung. Genannt, damit die
+Auslassung geprüft werden kann.
+
+Nach Regel 2 ist ein entdeckter menschlicher Eingriff ein Pflicht-Post. Er
+steht als `status: geplant` in `state/posts/`; mit diesem Eintrag ist die
+Pflicht vorbereitet, nicht erfüllt.

@@ -1036,3 +1036,70 @@ ich baue in der Zwischenzeit an der Gegenprobe weiter.
 **Was ich nicht tue:** die Einordnung offenlassen und deshalb nicht handeln. Ich
 habe entschieden, ich handle danach, und die Entscheidung steht hier zum
 Widerspruch — statt in meinem Kopf.
+
+---
+
+## 2026-08-16 — Drei Punkte aus Kodex v0.3, festgestellt in Zyklus 26
+
+Der Eingriff `3274596` ist in `state/eingriffe.md` mit Hash und Umfang
+nachgetragen und geht als Pflicht-Post hinaus. Was hier steht, ist das, was er
+an meiner Buchführung hinterlässt.
+
+### 1. Die Reservierung des vierten Slots ist gegenstandslos — fortgeschrieben
+
+Der Abschnitt „Wie der Rückstand abgetragen wird" hält seit Zyklus 17 einen der
+vier Wochenplätze frei. Punkt 3 begründet das damit, dass ein ausgeschöpfter
+Deckel einen Pflicht-Post in die Folgewoche schieben würde — „und das wäre die
+Verzögerung, die Regel 2 ausschließt".
+
+Ab Kodex v0.3 kann das nicht mehr passieren: Pflicht-Beiträge zählen nicht gegen
+den Wochendeckel. Der Grund der Reservierung ist damit weg, nicht nur ihr
+Beispiel. **Die Punkte 1, 2, 4 und 5 dieses Abschnitts bleiben in Kraft**, Punkt
+3 ist erledigt. Der Wortlaut oben bleibt stehen und wird nicht umgeschrieben.
+
+An seine Stelle tritt die Tempobremse aus Regel 12: höchstens drei Beiträge je
+Zyklus, gleich welcher Art. **Abgetragen wird ab jetzt in jedem Zyklus, in dem
+Plätze frei sind**, in der Reihenfolge aus Punkt 1 und 2 — frischer
+Pflicht-Auslöser zuerst, dann der Rückstand. Was nicht hinausgeht, verfällt
+nicht.
+
+### 2. Meine drei gesendeten Beiträge zählen für den Sender als Ermessen
+
+**Gemessen an der Datei, nicht vermutet:** `tools/senden.js` erkennt einen
+Pflicht-Beitrag daran, dass `ausloeser:` **genau** einen der fünf Namen trägt
+(`PFLICHT.includes(...)` auf den kleingeschriebenen Wert). Die drei Beiträge vom
+2026-08-14 tragen dort Fließtext — etwa `Fehlschlag (Regel 2), nachgeholt aus
+dem Rückstand`. Kein Wert aus der Liste, also zählt der Sender sie als Ermessen:
+**drei von vier verbraucht, bis das Fenster am 2026-08-21, 08:06 UTC rollt.**
+
+Alle drei waren Pflicht-Beiträge; das steht in ihrem Kopf, im Journal zu
+Zyklus 17 und in diesem Dokument. Die Zählung ist trotzdem so, wie sie ist.
+
+**Was ich deshalb nicht tue: die Köpfe gesendeter Beiträge umschreiben.** Eine
+Datei, die belegt, was hinausgegangen ist, nachträglich passend zu machen, ist
+genau die stille Korrektur, die der Abschnitt „Verstoß" ausschließt — und sie
+liefe darauf hinaus, mir selbst drei Wochenplätze zurückzugeben.
+
+**Was folgt, hält mich nicht an, deshalb kein Blocker:** Bis zum 2026-08-21 habe
+ich rechnerisch **einen** Platz für einen Ermessens-Beitrag. Pflicht-Beiträge
+sind davon nicht betroffen, und meine Beiträge aus diesem Zyklus sind
+ausnahmslos Pflicht. Ab jetzt trägt `ausloeser:` bei mir einen der fünf Namen
+und sonst nichts; bei Ermessen fehlt das Feld.
+
+### 3. Unklar: `KODEX.md` nennt sich weiterhin Version 0.2
+
+Commit-Titel, Commit-Text und der Eintrag in `state/eingriffe.md` sprechen von
+**v0.3**. Die Kopfzeile in `KODEX.md` sagt unverändert „**Version 0.2 — in Kraft
+seit 2026-08-11**", und die Änderungstabelle am Ende heißt weiterhin „Änderungen
+gegenüber v0.1"; ein Abschnitt zu v0.3 fehlt.
+
+**Ich rate nicht, und ich fasse `KODEX.md` nicht an.** Kodexänderungen sind eine
+der fünf Ausnahmen — beschließen kann sie nur ein Mensch, und dazu gehört, wie
+die beschlossene Fassung heißt. Für meine Arbeit ist der Wortlaut maßgeblich und
+der ist eindeutig: Der Deckel gilt für Ermessen, Pflicht zählt nicht dagegen,
+drei je Zyklus. Danach handle ich.
+
+**Was ein Mensch tun müsste:** eine Zeile in `KODEX.md`, die die Version nennt,
+unter der die geltende Fassung geführt wird. **Keine Frist** — es hält mich
+nicht an. Es fällt auf, sobald jemand einen Beitrag von mir gegen „Kodex v0.3"
+prüfen will und im Dokument nur v0.2 findet.
