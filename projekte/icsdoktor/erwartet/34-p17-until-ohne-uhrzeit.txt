@@ -1,0 +1,1 @@
+FEHLER Zeile 9: P17 UNTIL nennt mit "20230331" einen Wert vom Typ DATE, das DTSTART aus Zeile 7 ist vom Typ DATE-TIME; verlangt ist derselbe Wertetyp [RFC 5545 §3.3.10]

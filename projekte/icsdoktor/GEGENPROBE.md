@@ -557,3 +557,57 @@ nicht betrifft.
 trotzdem nicht geprüft. Sie stehen in keiner gemessenen Abweichung, und eine
 Prüfung ohne Messung dahinter ist das, was diese Mission ausdrücklich nicht
 baut. Die Grenze steht auch im Docstring von `pruefe_p16`.
+
+---
+
+# Nachtrag vom 2026-08-16 — Lücke 4 ist zu
+
+Zweiter Nachtrag desselben Tages, gleiche Regel wie beim ersten: Die Messung
+oben bleibt Wort für Wort stehen, einschließlich des Abschnitts
+`simplecal-1983:§3.3.10`, der jetzt keine Abweichung mehr beschreibt. Hier steht
+nur, was sich danach geändert hat.
+
+Anlass ist die Mission `state/missionen/2026-08-16-die-vier-luecken.md`, Lücke 4.
+
+## simplecal-1983:§3.3.10 — UNTIL-Wertetyp: Lücke geschlossen, Abweichung weg
+
+**Gemessen am 2026-08-16 nach dem Einbau von `P17`**, mit demselben Befehl,
+demselben festen Stand des fremden Werkzeugs und denselben zwölf Eingaben:
+
+```
+§3.3.10  icsdoktor: FEHLER  Z16 (P17)   fremd: FEHLER  Z16 (RRULE)   einig
+```
+
+**Diese Lücke schließt anders als Lücke 3.** Dort blieb eine Abweichung übrig,
+weil der ICS-Doktor tiefer und schärfer meldet als das fremde Werkzeug. Hier
+stimmen Abschnitt, Zeile und Schwere überein — die Vergleichseinheit
+`simplecal-1983:§3.3.10` verschwindet aus der Liste der Abweichungen und taucht
+als Einigkeit auf. Die Kennung ändert sich nicht; sie kommt schlicht nicht mehr
+vor. Ihr Abschnitt oben läuft ab diesem Lauf als `verwaist` in der
+Abdeckungsprüfung mit, so wie der Abschnitt zu §3.8.7.
+
+**Die Zahl, an der die Mission gemessen wird:** Abweichungen der Art `nur-fremd`
+gehen von **sieben auf sechs**. Die Gesamtzahl geht von dreizehn auf **zwölf** —
+zum ersten Mal in dieser Mission, denn Lücke 3 hatte sie unverändert gelassen.
+Offen sind von den vier Lücken noch `rfc4-4:§3.3` und `rfc4-6:§3.6`; die vier
+übrigen `nur-fremd`-Abweichungen (`calcurse-323:§3.6`, `vagov-23608:§3.8.2.2`,
+`simplecal-1983:§3.8.5.1`, `fossify-1102:§3.8.5.1`) betrifft diese Mission
+nicht. Damit ist das Ziel „höchstens vier `nur-fremd`" erreichbar, sobald
+Lücke 1 und 2 zu sind — erreicht ist es damit nicht.
+
+**Was `P17` nicht prüft**, damit es niemand hineinliest:
+
+- **Die Form des `UNTIL`-Wertes selbst.** Trifft er keine der drei Formen aus
+  §3.3.4/§3.3.5, schweigt `P17` — die Frage lautet, ob `UNTIL` zum `DTSTART`
+  passt, und nicht, ob der Wert wohlgeformt ist. Die Grammatik des Wertetyps
+  RECUR prüft dieses Werkzeug nirgends.
+- **`UNTIL` und `COUNT` zugleich.** Dieser Satz steht ebenfalls in §3.3.10, ist
+  aber eine andere Frage und in keiner Abweichung gemessen worden.
+
+Beide Grenzen stehen auch im Docstring von `pruefe_p17` und im `README.md`.
+
+**Der Satz aus der Bilanz, der sich damit bewegt hat** — und nur so weit, wie er
+sich bewegt hat: Auf diesen zwölf Eingaben findet der ICS-Doktor weiterhin
+keinen Verstoß, den das fremde Werkzeug nicht auch findet. `P16` und `P17`
+holen zwei übersehene Verstöße nach; einen zusätzlichen Fund gibt es dadurch
+nicht.

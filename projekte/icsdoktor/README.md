@@ -77,6 +77,23 @@ meldet und der ICS-Doktor schweigt; die Auflösung am Normtext steht in
 Meldungen bekommen, eine je Frage. Was `P16` nicht prüft, steht unten unter „Was
 dieses Werkzeug nicht tut".
 
+`P17` stammt aus derselben Mission und derselben Messung (Kennung
+`simplecal-1983:§3.3.10`) und prüft, dass der **`UNTIL`-Regelteil einer `RRULE`
+zum `DTSTART` derselben Komponente passt** (§3.3.10): derselbe Wertetyp, und
+wenn `DTSTART` in UTC steht oder einen Zeitzonenbezug trägt, muss `UNTIL` in UTC
+stehen. Eine Serie, die am 1. März um 09:00 UTC beginnt und mit `UNTIL=20230331`
+endet, mischt `DATE-TIME` und `DATE` — genau der Fall aus der Fremddatei zu
+`SimpleMobileTools/Simple-Calendar#1983`, und `jkbrzt/rrule#440` (offen seit
+2020) zeigt denselben Fehler von der anderen Seite: „Note the absence of 'Z' in
+UNTIL."
+
+Sie liest zwei Zeilen zueinander wie `P12` bis `P14`, holt den zweiten Wert aber
+nicht aus einer eigenen Eigenschaft, sondern aus einem **Regelteil innerhalb
+eines Eigenschaftswertes**. Wo der Vergleich nicht zu führen ist — kein
+`DTSTART`, ein unlesbares `DTSTART`, ein `UNTIL`, das keine der drei Formen
+trifft —, meldet sie nichts; die Fälle stehen unten unter „Was dieses Werkzeug
+nicht tut".
+
 ## Warum
 
 Drei öffentliche Fehlerberichte, in der Missionsdatei mit Link und Wortlaut
@@ -149,10 +166,10 @@ Prüfung mindestens einmal ausgelöst, mindestens zwei fehlerfreie Dateien. Die
 abgeschlossene Mission „Die Faltnaht" verlangt mehr — 16 Beispiele und die zehn
 Prüfungen `P01` bis `P10` —, und wo das steht, sagt die letzte Zeile der
 Ausgabe, damit ein grüner Exit-Code nicht als „Mission erreicht" gelesen wird.
-`P11` bis `P15` füllen diese Zehn nicht auf, sondern werden getrennt gezählt:
+`P11` bis `P17` füllen diese Zehn nicht auf, sondern werden getrennt gezählt:
 Eine abgeschlossene Zusage wird nicht dadurch billiger, dass später eine Prüfung
-dazukommt. Die Abdeckungsliste nennt, was gebaut ist; seit dem 2026-08-15 steht
-`P14` mit darin und damit alle fünfzehn. Ob die laufende Mission erreicht ist,
+dazukommt. Die Abdeckungsliste nennt, was gebaut ist; seit dem 2026-08-16 steht
+`P17` mit darin und damit alle siebzehn. Ob die laufende Mission erreicht ist,
 sagt ihre Missionsdatei und nicht dieser Exit-Code.
 
 Seit `rfc-beispiele.sh` auch bei einem `HINWEIS` mit `1` endet, ist er die
@@ -204,14 +221,20 @@ Wo der Standard mehrere Lesarten zulässt, steht hier, welche gewählt wurde:
 Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
 
 - **Es repariert nichts.** Nur Diagnose. So steht es in der Mission.
-- **Es prüft genau die sechzehn Prüfungen** und nicht mehr. Bis zum 2026-08-15
+- **Es prüft genau die siebzehn Prüfungen** und nicht mehr. Bis zum 2026-08-15
   stand hier „dreizehn"; die Zahl war seit `P13` um eine zu klein und ist keine
   weggefallene Prüfung, sondern ein nicht nachgezogener Satz. Seit dem
-  2026-08-16 ist `P16` dazugekommen. Insbesondere nicht
+  2026-08-16 sind `P16` und `P17` dazugekommen. Insbesondere nicht
   die Maskierung von Sonderzeichen in TEXT-Werten (§3.3.11) — `P10` sieht nur, wo
   eine Faltung sie zerschneidet, nicht ob sie richtig ist —, nicht die
-  Zeichenkodierung, nicht `RRULE`, und für `VTODO`, `VJOURNAL` und `VFREEBUSY`
+  Zeichenkodierung, und für `VTODO`, `VJOURNAL` und `VFREEBUSY`
   keine Pflichtangaben — die erfasst nur `P05` strukturell.
+
+  Bis zum 2026-08-16 stand in dieser Aufzählung auch `RRULE`. Der Satz ist
+  seit `P17` nicht mehr richtig und wird deshalb nicht stehen gelassen: Geprüft
+  wird ab jetzt der `UNTIL`-Regelteil gegen `DTSTART`, und sonst nichts an
+  einer `RRULE` — die Grammatik des Wertetyps RECUR aus §3.3.10 bleibt
+  ungeprüft.
 
   Für das `VEVENT` sind seit `P11` alle drei Pflichtangaben aus §3.6.1 erfasst:
   `UID` und `DTSTAMP` durch `P07`, `DTSTART` durch `P11`. Bis zum 2026-08-13
@@ -349,6 +372,28 @@ Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
   deshalb zwei Meldungen, und das ist Absicht. Der Fall ist real: Die Fremddatei
   aus `department-of-veterans-affairs/va.gov-team#23608` trägt
   `DTSTAMP:NaNNaNNaNTNaNNaNNaN` und bekommt `P08` **und** `P16`.
+- **`P17` prüft `UNTIL` gegen `DTSTART` und sonst nichts an einer `RRULE`.**
+  Drei Grenzen, alle vor dem ersten Commit festgelegt:
+
+  - **Die Form des `UNTIL`-Wertes bleibt ungeprüft.** `UNTIL=morgen` oder
+    `UNTIL=20201220T14` treffen keine der drei Formen aus §3.3.4/§3.3.5, und
+    `P17` schweigt dazu. Sie fragt, ob `UNTIL` zum `DTSTART` passt, nicht ob der
+    Wert wohlgeformt ist — und keine andere Prüfung fängt das auf, weil `P08`
+    nur ganze Eigenschaftswerte liest und nicht in einen `RRULE`-Wert hinein.
+  - **`UNTIL` und `COUNT` zugleich** verbietet §3.3.10 im selben Abschnitt. Das
+    ist eine andere Frage, in keiner Abweichung gemessen, und deshalb nicht
+    gebaut.
+  - **Ohne vergleichbares `DTSTART` kein Vergleich.** Fehlt es in der Komponente
+    oder trifft sein Wert keine der drei Formen, meldet `P17` nichts; der zweite
+    Fall steht bereits als `P08` an seiner eigenen Zeile. Dieselbe Zurückhaltung
+    wie bei `P12` und aus demselben Grund: Ein geratener Fehlalarm ist schlimmer
+    als eine benannte Lücke.
+
+  Dass ein `DTSTART` in Ortszeit ein `UNTIL` in Ortszeit **verlangt** und ein
+  `Z` dort ein Verstoß ist, steht so im Normtext und ist keine Auslegung;
+  `beispiele/36-sauber-p17-beide-ortszeit.ics` hält den zulässigen Fall fest und
+  muss stumm bleiben, `beispiele/37-p17-until-utc-bei-ortszeit.ics` den
+  umgekehrten.
 
 ## Dateien
 
@@ -358,7 +403,7 @@ pruefe.sh           Prüfbefehl 1: Beispiele gegen Erwartungen.
 rfc-beispiele.sh    Prüfbefehl 2: die sechs Kalender aus RFC 5545 §4.
 namensliste.sh      Herkunftsprüfung der Namensliste von P09. Kein Prüfbefehl
                     der Mission — er beweist die Herkunft, nicht die Prüfung.
-beispiele/          34 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
+beispiele/          38 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
 erwartet/           Je eine Datei mit der erwarteten Ausgabe.
 LAGE.md             Geprüfte Werkzeuglandschaft, mit Links.
 .gitattributes      Hält CRLF in beispiele/ auch über einen Klon hinweg.

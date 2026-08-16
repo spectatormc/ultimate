@@ -42,6 +42,13 @@ nicht aus einem Fehlerbericht stammt, sondern aus einer Messung gegen ein
 fremdes Werkzeug: DTSTAMP muss in UTC stehen (§3.8.7.2). Die Luecke ist am
 2026-08-16 mit gegenprobe.sh gemessen worden.
 
+P17 stammt aus derselben Mission und derselben Messung (Kennung
+"simplecal-1983:§3.3.10"): Der UNTIL-Regelteil einer RRULE muss zum DTSTART
+derselben Komponente passen — gleicher Wertetyp, und bei UTC oder
+Zeitzonenbezug im DTSTART zwingend UTC im UNTIL (§3.3.10). Sie liest zwei
+Zeilen zueinander wie P12 bis P14, holt den zweiten Wert aber aus einem
+Regelteil innerhalb eines Eigenschaftswertes.
+
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
 Aufruf:
@@ -1203,8 +1210,133 @@ def pruefe_p16(logische, funde):
                 "3.8.7.2"))
 
 
+# Die drei Formen, die ein UNTIL-Wert nach §3.3.10 haben kann, jeweils mit dem
+# Wertetyp und dem Zeitbezug, den sie ausweist. Die Reihenfolge ist bedeutungslos,
+# die Ausdruecke sind ueberschneidungsfrei.
+_UNTIL_FORMEN = (
+    (re.compile(r"^[0-9]{8}$"), ("DATE", "lokal")),
+    (re.compile(r"^[0-9]{8}T[0-9]{6}Z$"), ("DATE-TIME", "utc")),
+    (re.compile(r"^[0-9]{8}T[0-9]{6}$"), ("DATE-TIME", "lokal")),
+)
+
+
+def _until_wert(wert):
+    """Der Wert des UNTIL-Regelteils aus einem RRULE-Wert, oder None.
+
+    Der Wertetyp RECUR ist nach §3.3.10 eine Liste aus "teil=wert", getrennt
+    durch Semikolon; die Namen der Regelteile sind gross geschrieben, werden
+    hier aber tolerant gelesen. Steht UNTIL mehrfach, gewinnt der erste — das
+    ist dieselbe Lesart wie bei hole_zeile und betrifft ohnehin nur Werte, die
+    die Grammatik schon verletzen ("The rule parts are not ordered and MUST NOT
+    occur more than once").
+    """
+    for teil in (wert or "").split(";"):
+        name, gleich, rest = teil.partition("=")
+        if gleich and name.strip().upper() == "UNTIL":
+            return rest.strip()
+    return None
+
+
+def _until_form(wert):
+    """(typ, bezug) eines UNTIL-Wertes oder None, wenn er keine Form trifft."""
+    for muster, form in _UNTIL_FORMEN:
+        if muster.match(wert):
+            return form
+    return None
+
+
+def pruefe_p17(komponenten, funde):
+    """§3.3.10: UNTIL passt zum DTSTART derselben Komponente.
+
+    Woertlich, unter "Description": "The value of the UNTIL rule part MUST have
+    the same value type as the 'DTSTART' property. Furthermore, if the
+    'DTSTART' property is specified as a date with local time, then the UNTIL
+    rule part MUST also be specified as a date with local time. If the
+    'DTSTART' property is specified as a date with UTC time or a date with
+    local time and time zone reference, then the UNTIL rule part MUST be
+    specified as a date with UTC time."
+
+    Zwei Saetze, zwei Meldungen: der Wertetyp und der Zeitbezug. Sie schliessen
+    einander aus — wo der Typ schon abweicht, ist der Bezug keine zweite Frage,
+    sondern dieselbe.
+
+    Vierte und letzte Pruefung aus der Mission Die vier Luecken,
+    state/missionen/2026-08-16-die-vier-luecken.md, und die einzige der vier,
+    die schon einmal fallengelassen wurde: Am 2026-08-15 stand sie auf einer
+    Mission und wurde gestrichen, weil das fremde Werkzeug sie hat. Zurueck ist
+    sie nicht, weil ich sie schoen finde, sondern weil gegenprobe.sh sie am
+    2026-08-16 unter der Kennung "simplecal-1983:§3.3.10" an einer echten
+    Fremddatei als Luecke ausgewiesen hat. Dass der Fall in echter Software
+    vorkommt, steht in jkbrzt/rrule Nr. 440, offen seit 2020.
+
+    **Die Pruefung liest zwei Zeilen zueinander**, wie P12 bis P14, aber ueber
+    eine Grenze hinweg, die es dort nicht gibt: Der zu vergleichende Wert steckt
+    nicht in einer eigenen Eigenschaft, sondern in einem Regelteil innerhalb des
+    RRULE-Wertes.
+
+    **Wo geschwiegen wird, und warum das kein Versaeumnis ist:**
+
+    - **Kein DTSTART in der Komponente.** Dann gibt es nichts zu vergleichen.
+      Ob es fehlen darf, fragt P11 fuer VEVENT; hier waere jede Meldung geraten.
+    - **Ein DTSTART, das keine der drei Formen aus §3.3.4/§3.3.5 trifft.** Das
+      meldet P08 an seiner eigenen Zeile. Eine kaputte Anfangszeit macht jeden
+      Vergleich mit ihr wertlos, nicht falsch.
+    - **Ein UNTIL, das keine der drei Formen trifft** — etwa UNTIL=morgen oder
+      UNTIL=20201220T14. Die Grammatik von RECUR prueft dieses Werkzeug
+      nirgends, und diese Pruefung faengt sie nicht nebenbei auf: Sie
+      beantwortet, ob UNTIL zum DTSTART passt, und nicht, ob der Wert
+      wohlgeformt ist. Die Luecke steht im README.
+    - **Ein RRULE ohne UNTIL.** Auch der Satz "UNTIL und COUNT duerfen nicht
+      zugleich vorkommen" steht in §3.3.10 und wird hier nicht geprueft — er
+      ist eine andere Frage und nicht gemessen worden.
+    """
+    for komp in komponenten:
+        anfang = komp.hole_zeile("DTSTART")
+        if anfang is None:
+            continue
+        start = _zeitpunkt(anfang)
+        if start is None:
+            continue                     # nicht vergleichbar: schweigen
+        start_typ = start[0]
+        start_bezug = start[1][0]        # "utc", "tzid" oder "lokal"
+        for rrule in komp.zeitzeilen.get("RRULE", []):
+            roh = _until_wert(rrule.wert)
+            if roh is None:
+                continue
+            form = _until_form(roh)
+            if form is None:
+                continue                 # keine der drei Formen: schweigen
+            until_typ, until_bezug = form
+            if until_typ != start_typ:
+                funde.append(Fund(
+                    FEHLER, rrule.nr, "P17",
+                    "UNTIL nennt mit %s einen Wert vom Typ %s, das DTSTART aus "
+                    "Zeile %d ist vom Typ %s; verlangt ist derselbe Wertetyp"
+                    % (_zeige_wort(roh), until_typ, anfang.nr, start_typ),
+                    "3.3.10"))
+                continue
+            if until_typ != "DATE-TIME":
+                continue                 # DATE gegen DATE: kein Zeitbezug
+            if start_bezug in ("utc", "tzid") and until_bezug != "utc":
+                wie = ("in UTC" if start_bezug == "utc"
+                       else "mit Zeitzonenbezug")
+                funde.append(Fund(
+                    FEHLER, rrule.nr, "P17",
+                    "UNTIL steht mit %s in Ortszeit, das DTSTART aus Zeile %d "
+                    "steht %s; dann muss UNTIL in UTC stehen, mit 'Z' am Ende"
+                    % (_zeige_wort(roh), anfang.nr, wie),
+                    "3.3.10"))
+            elif start_bezug == "lokal" and until_bezug != "lokal":
+                funde.append(Fund(
+                    FEHLER, rrule.nr, "P17",
+                    "UNTIL steht mit %s in UTC, das DTSTART aus Zeile %d steht "
+                    "in Ortszeit; dann muss UNTIL ebenfalls in Ortszeit stehen"
+                    % (_zeige_wort(roh), anfang.nr),
+                    "3.3.10"))
+
+
 def untersuche(rohdaten):
-    """Alle sechzehn Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle siebzehn Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     zeilen = zerlege_physisch(rohdaten)
     if not zeilen:
@@ -1231,6 +1363,7 @@ def untersuche(rohdaten):
     pruefe_p14(komponenten, funde)
     pruefe_p15(logische, funde)
     pruefe_p16(logische, funde)
+    pruefe_p17(komponenten, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))

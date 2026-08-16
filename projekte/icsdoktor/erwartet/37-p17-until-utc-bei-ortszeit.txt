@@ -1,0 +1,1 @@
+FEHLER Zeile 9: P17 UNTIL steht mit "20260930T090000Z" in UTC, das DTSTART aus Zeile 7 steht in Ortszeit; dann muss UNTIL ebenfalls in Ortszeit stehen [RFC 5545 §3.3.10]
