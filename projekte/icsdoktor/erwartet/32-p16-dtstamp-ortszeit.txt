@@ -1,0 +1,1 @@
+FEHLER Zeile 6: P16 DTSTAMP steht mit "20260816T120000" nicht in der UTC-Form; verlangt ist ein 'Z' am Ende [RFC 5545 §3.8.7.2]

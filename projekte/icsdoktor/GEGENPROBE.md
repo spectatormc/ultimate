@@ -508,3 +508,52 @@ an denen ich seine Fundstelle oder Schwere für unzutreffend halte
 Schwerefragen an einem Werkzeug, das den jeweiligen Verstoß gefunden hat. Ob
 daraus ein öffentlicher Hinweis wird, ist nach der Missionsdatei ausdrücklich
 nicht Teil der Zieldefinition und wird hier nicht mitentschieden.
+
+---
+
+# Nachtrag vom 2026-08-16 — Lücke 3 ist zu
+
+Dieser Nachtrag ändert nichts an der Messung oben. Sie ist am 2026-08-16 mit dem
+damaligen Stand des ICS-Doktors gemacht worden und bleibt Wort für Wort stehen,
+einschließlich des Abschnitts `vagov-23608:§3.8.7`, der jetzt keine Abweichung
+mehr beschreibt. Hier steht, was sich danach geändert hat und warum die
+Abweichung eine neue Kennung trägt.
+
+Anlass ist die Mission `state/missionen/2026-08-16-die-vier-luecken.md`, Lücke 3.
+
+## vagov-23608:§3.8.7.2 — DTSTAMP nicht in UTC: Lücke geschlossen
+
+**Gemessen am 2026-08-16 nach dem Einbau von `P16`**, mit demselben Befehl,
+demselben festen Stand des fremden Werkzeugs und denselben zwölf Eingaben:
+
+```
+§3.8.7.2 ~ §3.8.7  icsdoktor: FEHLER Z9 (P16)   fremd: HINWEIS Z9 (DTSTAMP)
+                   ABWEICHUNG vagov-23608:§3.8.7.2 (abschnittstiefe+schwere)
+```
+
+**Die Kennung hat sich geändert, nicht die Stelle.** Solange nur das fremde
+Werkzeug meldete, hieß die Abweichung `vagov-23608:§3.8.7` — nach dem Abschnitt,
+den es nennt. Jetzt melden beide dieselbe Zeile, und `gegenprobe.sh` paart nach
+dem tieferen der beiden Abschnitte: §3.8.7.2. Die alte Kennung steht in diesem
+Lauf als `verwaist` in der Abdeckungsprüfung; das ist der vorgesehene Weg und
+kein Fehler.
+
+**Was übrig bleibt, und es ist keine Lücke mehr:** `abschnittstiefe` (das fremde
+Werkzeug nennt §3.8.7, der ICS-Doktor §3.8.7.2) und `schwere` (es meldet eine
+Warnung mit einem `SHOULD`, das der Normtext nicht trägt; §3.8.7.2 sagt „The
+value MUST be specified in the UTC time format", und der ICS-Doktor meldet
+deshalb einen Fehler). Beides war in der Missionsdatei unter „Wie sich die
+Abweichungsklassen nach dem Schließen verteilen" vorher benannt — genau dieser
+Fall, genau an dieser Lücke.
+
+**Die Zahl, an der die Mission gemessen wird:** Abweichungen der Art `nur-fremd`
+gehen von **acht auf sieben**. Die Gesamtzahl bleibt bei dreizehn, wie
+vorhergesagt. Was noch offen ist: `rfc4-4:§3.3`, `rfc4-6:§3.6`,
+`simplecal-1983:§3.3.10` von den vier Lücken, dazu die vier, die diese Mission
+nicht betrifft.
+
+**Was `P16` nicht prüft**, damit es niemand hineinliest: `CREATED` und
+`LAST-MODIFIED` tragen in §3.8.7.1 und §3.8.7.3 denselben UTC-Satz und werden
+trotzdem nicht geprüft. Sie stehen in keiner gemessenen Abweichung, und eine
+Prüfung ohne Messung dahinter ist das, was diese Mission ausdrücklich nicht
+baut. Die Grenze steht auch im Docstring von `pruefe_p16`.

@@ -57,6 +57,26 @@ raten, welche gilt. Gemeldet wird an der späteren der beiden Zeilen, die frühe
 steht im Text — eine Meldung je Komponente, weil es ein Fehler ist und nicht
 zwei.
 
+`P16` kommt aus der Mission `state/missionen/2026-08-16-die-vier-luecken.md` und
+prüft, dass **`DTSTAMP` in UTC steht** (§3.8.7.2): „The value MUST be specified
+in the UTC time format." Sie meldet zwei Formen desselben Verstoßes — einen Wert
+ohne `Z` am Ende und einen Wert mit `TZID`-Parameter, also mit Zeitzonenbezug
+statt in UTC.
+
+Ihre Herkunft unterscheidet sie von allen fünfzehn davor: Sie stammt weder aus
+einem ausgedachten Beispiel noch aus einem Fehlerbericht, sondern aus einer
+**Messung gegen ein fremdes Werkzeug**. `gegenprobe.sh` hat am 2026-08-16 unter
+der Kennung `vagov-23608:§3.8.7` gezeigt, dass
+[rfc5545-validator](https://github.com/WapplerSystems/rfc5545-validator) hier
+meldet und der ICS-Doktor schweigt; die Auflösung am Normtext steht in
+`GEGENPROBE.md`. Dass der Fall in echter Software vorkommt, belegt
+`deni-zen/qcal#19` — offen seit 2014.
+
+`P16` beantwortet **genau eine Frage**: Steht der Wert in der UTC-Form? Ob er
+überhaupt ein `DATE-TIME` ist, fragt `P08`. Eine Zeile kann deshalb zwei
+Meldungen bekommen, eine je Frage. Was `P16` nicht prüft, steht unten unter „Was
+dieses Werkzeug nicht tut".
+
 ## Warum
 
 Drei öffentliche Fehlerberichte, in der Missionsdatei mit Link und Wortlaut
@@ -184,9 +204,10 @@ Wo der Standard mehrere Lesarten zulässt, steht hier, welche gewählt wurde:
 Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
 
 - **Es repariert nichts.** Nur Diagnose. So steht es in der Mission.
-- **Es prüft genau die fünfzehn Prüfungen** und nicht mehr. Bis zum 2026-08-15
+- **Es prüft genau die sechzehn Prüfungen** und nicht mehr. Bis zum 2026-08-15
   stand hier „dreizehn"; die Zahl war seit `P13` um eine zu klein und ist keine
-  weggefallene Prüfung, sondern ein nicht nachgezogener Satz. Insbesondere nicht
+  weggefallene Prüfung, sondern ein nicht nachgezogener Satz. Seit dem
+  2026-08-16 ist `P16` dazugekommen. Insbesondere nicht
   die Maskierung von Sonderzeichen in TEXT-Werten (§3.3.11) — `P10` sieht nur, wo
   eine Faltung sie zerschneidet, nicht ob sie richtig ist —, nicht die
   Zeichenkodierung, nicht `RRULE`, und für `VTODO`, `VJOURNAL` und `VFREEBUSY`
@@ -315,6 +336,19 @@ Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
   Gegenprobe). Ob der maskierte Buchstabe dahinter überhaupt einer ist, den
   §3.3.11 kennt, prüft `P10` nicht — das wäre eine Prüfung der Maskierung und
   steht in keiner Mission.
+- **`P16` prüft den UTC-Zwang nur an `DTSTAMP`.** `CREATED` (§3.8.7.1) und
+  `LAST-MODIFIED` (§3.8.7.3) tragen im Normtext denselben Satz und werden
+  trotzdem nicht geprüft. Der Grund ist keine Nachlässigkeit, sondern die
+  Herkunft dieser Prüfung: Sie schließt eine **gemessene** Lücke, und gemessen
+  ist `DTSTAMP`. Die beiden anderen wären eine Prüfung, die ich mir ausgedacht
+  habe, während die Mission ausdrücklich nach Messungen gebaut wird. Wer sie
+  will, bekommt sie mit einer Messung, die sie zeigt.
+
+  Ebenfalls nicht geprüft: dass `DTSTAMP` überhaupt ein wohlgeformtes
+  `DATE-TIME` ist — das ist `P08`. Auf einem Wert, der beides verletzt, stehen
+  deshalb zwei Meldungen, und das ist Absicht. Der Fall ist real: Die Fremddatei
+  aus `department-of-veterans-affairs/va.gov-team#23608` trägt
+  `DTSTAMP:NaNNaNNaNTNaNNaNNaN` und bekommt `P08` **und** `P16`.
 
 ## Dateien
 
@@ -324,7 +358,7 @@ pruefe.sh           Prüfbefehl 1: Beispiele gegen Erwartungen.
 rfc-beispiele.sh    Prüfbefehl 2: die sechs Kalender aus RFC 5545 §4.
 namensliste.sh      Herkunftsprüfung der Namensliste von P09. Kein Prüfbefehl
                     der Mission — er beweist die Herkunft, nicht die Prüfung.
-beispiele/          32 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
+beispiele/          34 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
 erwartet/           Je eine Datei mit der erwarteten Ausgabe.
 LAGE.md             Geprüfte Werkzeuglandschaft, mit Links.
 .gitattributes      Hält CRLF in beispiele/ auch über einen Klon hinweg.

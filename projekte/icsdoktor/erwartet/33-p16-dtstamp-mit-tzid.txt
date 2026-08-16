@@ -1,0 +1,1 @@
+FEHLER Zeile 6: P16 DTSTAMP trägt den Parameter TZID=Europe/Berlin und steht damit in Ortszeit; verlangt ist die UTC-Form mit 'Z' am Ende [RFC 5545 §3.8.7.2]

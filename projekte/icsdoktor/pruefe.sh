@@ -116,19 +116,19 @@ ausgeloest_faltnaht=0
 # dem 2026-08-15 steht P14 mit darin; damit nennt sie alle vier Pruefungen der
 # Mission Die Beziehungsprobe. Ob die Mission damit erreicht ist, sagt ihre
 # Missionsdatei und nicht der Exit-Code dieses Skripts.
-for code in P01 P02 P03 P04 P05 P06 P07 P08 P09 P10 P11 P12 P13 P14 P15; do
+for code in P01 P02 P03 P04 P05 P06 P07 P08 P09 P10 P11 P12 P13 P14 P15 P16; do
     if ! grep -q " $code " "$erwartet"/*.txt; then
         fehlt="$fehlt $code"
     else
         ausgeloest=$((ausgeloest + 1))
         case "$code" in
-            P11|P12|P13|P14|P15) ;;
+            P11|P12|P13|P14|P15|P16) ;;
             *) ausgeloest_faltnaht=$((ausgeloest_faltnaht + 1)) ;;
         esac
     fi
 done
 if [ -z "$fehlt" ]; then
-    printf 'Abdeckung: alle %d Pruefungen bis P15 werden ausgeloest\n' \
+    printf 'Abdeckung: alle %d Pruefungen bis P16 werden ausgeloest\n' \
         "$ausgeloest"
 else
     printf 'Abdeckung unvollstaendig, nie ausgeloest:%s\n' "$fehlt"

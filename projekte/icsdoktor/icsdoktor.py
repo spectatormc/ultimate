@@ -36,6 +36,12 @@ P14 ist die letzte der vier und die einzige, bei der keine der beiden Zeilen
 fuer sich falsch ist: Ende und Dauer duerfen nach §3.6.1 und §3.6.2 nicht
 zugleich in derselben Komponente stehen.
 
+P16 kommt aus der Mission Die vier Luecken,
+state/missionen/2026-08-16-die-vier-luecken.md, und ist die erste Pruefung, die
+nicht aus einem Fehlerbericht stammt, sondern aus einer Messung gegen ein
+fremdes Werkzeug: DTSTAMP muss in UTC stehen (§3.8.7.2). Die Luecke ist am
+2026-08-16 mit gegenprobe.sh gemessen worden.
+
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
 Aufruf:
@@ -1137,8 +1143,68 @@ def pruefe_p15(logische, funde):
             "3.8.2.5"))
 
 
+def pruefe_p16(logische, funde):
+    """§3.8.7.2: DTSTAMP steht in der UTC-Form.
+
+    Woertlich, unter "Description": "The value MUST be specified in the UTC
+    time format." Das ist ein MUST und keine Empfehlung. Errata-ID 3038
+    (gemeldet 2011-11-30, Status "Held for Document Update") will diese
+    Anforderung aus der Beschreibung in die Werttyp-Zeile hochziehen, weil sie
+    dort leichter zu uebersehen ist — ein Beleg dafuer, dass sie als
+    verbindlich gelesen wird, und keiner fuer ein SHOULD.
+
+    Erste der vier Pruefungen aus der Mission Die vier Luecken,
+    state/missionen/2026-08-16-die-vier-luecken.md. Der Anlass ist eine
+    Messung und kein Einfall: gegenprobe.sh hat am 2026-08-16 unter der
+    Kennung "vagov-23608:§3.8.7" gezeigt, dass ein fremdes Werkzeug hier
+    meldet und der ICS-Doktor schweigt. Dass es zu mild meldet — Warnung
+    statt Fehler, mit einem SHOULD im Text —, aendert daran nichts: zu mild
+    ist mehr als gar nicht. Dass der Fall real vorkommt, steht in deni-zen/qcal
+    Nr. 19, offen seit 2014.
+
+    **Genau eine Frage.** Steht der Wert in der UTC-Form? Ob er ueberhaupt ein
+    DATE-TIME ist, fragt P08 und nicht diese Pruefung. Eine Zeile kann deshalb
+    zwei Meldungen bekommen — P08 zur Form des Wertes, P16 zur fehlenden
+    UTC-Angabe. Das ist dieselbe Aufteilung wie bei P08 und P13 auf Beispiel 12
+    und Absicht: Zwei Saetze der Norm, zwei Befunde, jeder fuer sich richtig.
+    Wer nur "kein DATE-TIME" liest, weiss nicht, dass ihm ausserdem die
+    Zeitzone fehlt.
+
+    **Was ausdruecklich nicht gemeldet wird:**
+
+    - **Ortszeit in DTSTART, DTEND, DUE.** Dort ist sie erlaubt (§3.3.5,
+      Form 2 und 3). Der UTC-Zwang steht in §3.8.7.2 und gilt fuer DTSTAMP;
+      CREATED und LAST-MODIFIED tragen denselben Satz und bekommen ihn
+      trotzdem nicht von dieser Pruefung — sie stehen in keiner der vier
+      gemessenen Luecken, und eine Pruefung ohne Messung dahinter ist genau
+      das, was diese Mission nicht baut. Die Grenze steht im README.
+    - **Ein DTSTAMP, das ganz fehlt oder doppelt steht.** Das meldet P07.
+    """
+    for lz in logische:
+        if lz.name != "DTSTAMP":
+            continue
+        tzid = None
+        for pname, pwerte in lz.params:
+            if pname == "TZID" and pwerte:
+                tzid = pwerte[0]
+        wert = lz.wert or ""
+        if tzid is not None:
+            funde.append(Fund(
+                FEHLER, lz.nr, "P16",
+                "DTSTAMP trägt den Parameter TZID=%s und steht damit in "
+                "Ortszeit; verlangt ist die UTC-Form mit 'Z' am Ende" % tzid,
+                "3.8.7.2"))
+            continue
+        if not wert.endswith("Z"):
+            funde.append(Fund(
+                FEHLER, lz.nr, "P16",
+                "DTSTAMP steht mit %s nicht in der UTC-Form; verlangt ist ein "
+                "'Z' am Ende" % _zeige_wort(wert),
+                "3.8.7.2"))
+
+
 def untersuche(rohdaten):
-    """Alle fuenfzehn Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle sechzehn Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     zeilen = zerlege_physisch(rohdaten)
     if not zeilen:
@@ -1164,6 +1230,7 @@ def untersuche(rohdaten):
     pruefe_p13(komponenten, funde)
     pruefe_p14(komponenten, funde)
     pruefe_p15(logische, funde)
+    pruefe_p16(logische, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))
