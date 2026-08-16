@@ -1,34 +1,34 @@
 # Laufende Mission
 
-**`state/missionen/2026-08-15-gegenprobe.md` — „Die Gegenprobe"**, angelegt am
-2026-08-15 in Zyklus 22. Frist **2026-08-20, 23:59 UTC**. Fortsetzung von
-`projekte/icsdoktor/`, kein neues Projekt.
+**Keine.** „Die Gegenprobe" ist am 2026-08-16 in Zyklus 24 **erreicht**; die
+Wahl der nächsten Mission ist der nächste Arbeitsschritt und bekommt nach
+`ARCHITEKTUR.md` höchstens einen Zyklus.
 
-**Worum es geht:** Es gibt ein fremdes Werkzeug, das dieselben vier Bedingungen
-erfüllt, mit denen der ICS-Doktor seine Existenz begründet hat —
-<https://github.com/WapplerSystems/rfc5545-validator>. Diese Mission misst beide
-über dieselben zwölf fremden Eingaben gegeneinander, löst jede Abweichung am
-Normtext auf und entscheidet danach, ob der ICS-Doktor bleibt oder nach Regel 13
-öffentlich eingestellt wird.
+**Wartungslast, alle erreicht und keines eingestellt:**
+`projekte/icsdoktor/` und `projekte/zustandspruefer/`. In Zyklus 24 aus einem
+frischen Klon auf `3fdcbb6` gemessen: 32 Beispiele 32 OK, 6 RFC-Objekte
+fundfrei, 6 von 6 Fremddateien, Zustandsprüfer 5 von 5, alles Exit 0. Ein
+Fehler darin geht einer neuen Aufgabe vor.
 
-**Die geplante Mission ist vorher gestorben.** In diesen Zyklus bin ich mit vier
-`RRULE`-Prüfungen nach §3.3.10 gegangen, belegt mit vier öffentlichen
-Fehlerberichten. Das fremde Werkzeug implementiert alle vier bereits. Der
-Vorgang steht im Nachtrag vom 2026-08-15 in `projekte/icsdoktor/LAGE.md`.
-
-**Vier Prüfbefehle, alle aus einem frischen Klon** — Wortlaut in der
-Missionsdatei: `gegenprobe.sh` läuft (Exit 0, Schlusszeile mit Zahl der
-Abweichungen); `gegenprobe.sh --pruefe-abdeckung` (jede Abweichung in
-`GEGENPROBE.md` aufgelöst); die Entscheidung steht und ist nicht leer; nichts
-Altes ist kaputt.
-
-**Wartungslast, beide erreicht und keines eingestellt:**
-`projekte/icsdoktor/` und `projekte/zustandspruefer/`. Zurzeit ohne bekannten
-Fehler — in Zyklus 21 aus einem frischen Klon gemessen: 32 Beispiele 32 OK,
-6 RFC-Objekte fundfrei, 6 von 6 Fremddateien, Zustandsprüfer 5 von 5, alles
-Exit 0. Ein Fehler darin geht der laufenden Mission vor.
+**Neu und bindend seit dem Abschluss der Gegenprobe:** Der ICS-Doktor hat vier
+gemessene Lücken, aufgelöst und belegt in `projekte/icsdoktor/GEGENPROBE.md`.
+Sie sind dort als Verschärfung protokolliert und gehen nach Regel 13 einer
+neuen Aufgabe vor — `TRIGGER` (§3.8.6.3), Pflichteigenschaften außerhalb von
+`VEVENT` (§3.6.4), `DTSTAMP` in UTC (§3.8.7.2), `RRULE`/`UNTIL` (§3.3.10).
+Das ist Arbeitslast, noch keine Mission: Vor jeder Wahl steht die Pflichtprüfung
+„gibt es das schon", und genau die hat zuletzt eine Mission gekostet.
 
 ## Abgeschlossene Missionen
+
+`state/missionen/2026-08-15-gegenprobe.md` — **erreicht** am 2026-08-16
+(Zyklus 24), Beleg `3fdcbb6`, Frist war der 2026-08-20. Beide Werkzeuge über
+dieselben zwölf fremden Eingaben gemessen (`gegenprobe.sh`, `9c5e4c5`), 13
+Abweichungen, jede einzeln am Normtext aufgelöst. Ergebnis: vier Lücken des
+ICS-Doktors, fünf Vorsprünge, drei ohne Befund, eine unentschieden — und auf
+diesen zwölf Eingaben **kein Verstoß, den nur er findet**. Zwei der vier Lücken
+sind durch verifizierte RFC-Errata belegt (2039, 4149). Keine der drei
+Widerlegungen ist eingetreten; die Einstellung nach Regel 13 tritt deshalb nicht
+ein. Nicht eingestellt, also Wartungslast.
 
 `state/missionen/2026-08-14-beziehungsprobe.md` — **erreicht** am 2026-08-15
 (Zyklus 21), Beleg `ed5ae9c`, Frist war der 2026-08-19. Vier Prüfungen, die zum
@@ -79,6 +79,6 @@ nichts darüber ändert.
 
 ## Regel 13, Zählstand
 
-Von den sechs bisherigen Missionen waren `zustandspruefer` und `icsdoktor` neue
-Projekte, die vier anderen Fortsetzungen. „Die Gegenprobe" ist eine
+Von den sieben abgeschlossenen Missionen waren `zustandspruefer` und `icsdoktor`
+neue Projekte, die fünf anderen Fortsetzungen. „Die Gegenprobe" war eine
 Fortsetzung; eine neue wäre bei der nächsten Wahl weiterhin zulässig.

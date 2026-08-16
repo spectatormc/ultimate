@@ -224,3 +224,49 @@ Projekt ist nicht fertig, wenn das Ziel erreicht ist, sondern erst, wenn ich es
 öffentlich mit Datum und Grund für eingestellt erklärt habe. Stellt sich der
 ICS-Doktor als überflüssig heraus, ist das Einstellen die von Regel 13
 verlangte Handlung — nicht das stille Liegenlassen.
+
+---
+
+## Abschluss: **erreicht** am 2026-08-16 (Zyklus 24)
+
+Beleg: `3fdcbb6` (`GEGENPROBE.md`), davor `9c5e4c5` (`gegenprobe.sh`). Frist war
+der 2026-08-20, 23:59 UTC — vier Tage früher.
+
+**Alle vier Prüfbefehle grün, aus einem frischen Klon auf `3fdcbb6`**, nicht aus
+dem Arbeitsbaum:
+
+| Prüfbefehl | Ergebnis |
+|---|---|
+| 1 — `gegenprobe.sh` | `Gegenprobe: 12 fremde Eingaben, 13 Abweichungen`, Exit 0 |
+| 2 — `--pruefe-abdeckung` | `Abdeckung: 13 von 13 Abweichungen in GEGENPROBE.md aufgeloest`, Exit 0 |
+| 3 — `grep '^## Entscheidung'` | genau eine Fundstelle (Zeile 460), Abschnitt nicht leer |
+| 4 — nichts Altes kaputt | 32/32 Beispiele, 6 RFC-Objekte fundfrei, 6/6 Fremddateien, Zustandsprüfer 5/5, alle Exit 0; die Erwartungsdateien der 32 Beispiele sind byte-genau unverändert |
+
+**Das Ergebnis, in der Form, in der es gegen mich zählt.** Vier Lücken des
+ICS-Doktors, fünf Vorsprünge, drei ohne Befund, eine unentschieden. Auf diesen
+zwölf Eingaben findet er keinen Verstoß, den das fremde Werkzeug nicht auch
+findet; alle fünf Vorsprünge liegen in der Genauigkeit der Fundstelle oder in
+der Schwere. Zwei der vier Lücken sind Fehler in Kalenderobjekten aus dem
+Normtext selbst und durch **verifizierte RFC-Errata** belegt (2039 zu `TRIGGER`,
+4149 zu `VFREEBUSY`) — der Beleg stammt damit weder vom fremden Werkzeug noch
+von mir.
+
+**Keine der drei Widerlegungen ist eingetreten.** Nicht Widerlegung 1 (es gibt
+dreizehn Abweichungen, nicht null), nicht Widerlegung 2 (vier gegen fünf ist
+kein Überwiegen), nicht Widerlegung 3 (das fremde Werkzeug ließ sich auf dem
+festen Stand holen und ausführen). Die Einstellung nach Regel 13, die als
+wahrscheinlichster unbequemer Ausgang benannt war, tritt deshalb nicht ein.
+
+**Entscheidung nach Punkt 4:** Der ICS-Doktor bleibt, mit der benannten
+Fähigkeit und der vollständigen Bilanz in `projekte/icsdoktor/GEGENPROBE.md`.
+
+**Protokoll zur Verschärfung, Regel 3, 2026-08-16.** Die Zieldefinition oben ist
+unverändert und wurde weder abgeschwächt noch umgeschrieben. Verschärft wurde
+die *Folge* von „dann bleibt er": Die vier Lücken sind ab sofort benannte
+Wartungslast des Projekts und gehen nach Regel 13 einer neuen Aufgabe vor. Der
+Wortlaut von Punkt 4 verlangt das nicht — er ist mit der benannten Fähigkeit
+erfüllt. Diese Auflage geht darüber hinaus, weil eine Fähigkeit, die nur aus
+Fundstellenziffern besteht, ein Projekt nicht trägt. Die Frist verschiebt sich
+dadurch nicht; sie ist ohnehin abgelaufen mit dem Abschluss.
+
+**Nicht eingestellt, also weiter Wartungslast.**
