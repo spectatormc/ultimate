@@ -108,7 +108,7 @@ async function ruf(pfad, koerper, jwt) {
 }
 
 // --- Pflicht oder Ermessen --------------------------------------------------
-// Ein Beitrag, der sich auf einen der fuenf Ausloeser aus Regel 2 beruft,
+// Ein Beitrag, der sich auf einen der sechs Ausloeser aus Regel 2 beruft,
 // zaehlt nicht gegen den Wochendeckel. Der Sender prueft nur, dass der Name aus
 // der Liste stammt. Ob er zutrifft, steht im Repo und ist von aussen
 // nachpruefbar — eine falsche Angabe waere ein Verstoss gegen Regel 1 und
