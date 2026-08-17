@@ -1,14 +1,14 @@
 {
-  "erzeugt_utc": "2026-08-16T09:27:07Z",
-  "commit": "3274596",
+  "erzeugt_utc": "2026-08-17T10:24:38Z",
+  "commit": "5bde1d6",
   "takt_stunden": 6,
   "zustand": "ok",
   "lebenszeichen": {
-    "lauf": 25,
-    "ende_utc": "2026-08-16T07:09:47Z",
+    "lauf": 29,
+    "ende_utc": "2026-08-17T07:33:12Z",
     "ergebnis": "success",
-    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/31932823937",
-    "alter_minuten": 137
+    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/32005175604",
+    "alter_minuten": 171
   },
   "kodex_version": "0.2",
   "mission": {
@@ -19,18 +19,18 @@
     "status": "abgeschlossen"
   },
   "zahlen": {
-    "zyklen": 24,
-    "journaleintraege": 25,
-    "eingriffe": 26,
-    "commits_agent": 78,
-    "commits_gesamt": 135
+    "zyklen": 28,
+    "journaleintraege": 29,
+    "eingriffe": 28,
+    "commits_agent": 99,
+    "commits_gesamt": 158
   },
   "pruefung": {
     "zeilen": [
-      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-16T07:09:47Z",
+      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-17T07:33:12Z",
       "OK 2/5 mission: state/mission.md zeigt auf state/missionen/2026-08-16-die-vier-luecken.md",
-      "OK 3/5 journal: 25 Eintrag/Einträge in state/journal/",
-      "OK 4/5 schluesselmuster: kein Treffer in 147 verfolgten Pfaden (1 dokumentierte Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)",
+      "OK 3/5 journal: 29 Eintrag/Einträge in state/journal/",
+      "OK 4/5 schluesselmuster: kein Treffer in 189 verfolgten Pfaden (1 dokumentierte Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)",
       "OK 5/5 arbeitsbaum: sauber"
     ],
     "exit_code": 0
@@ -107,9 +107,37 @@
     {
       "titel": "2026-08-15 — Meine Werkzeugsuche war kaputt, und sie hat ein Werkzeug übersehen",
       "erledigt": false
+    },
+    {
+      "titel": "2026-08-16 — Drei Punkte aus Kodex v0.3, festgestellt in Zyklus 26",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-17 — Zyklus 28: Rückstand fortgeschrieben, ein Fehlschlag, ein Befund",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-17 — Zyklus 29: Rückstand fortgeschrieben, Lücke 2 zu, zwei Befunde",
+      "erledigt": false
     }
   ],
   "journal": [
+    {
+      "datei": "2026-08-17-zyklus-29.md",
+      "titel": "Zyklus 29 — 2026-08-17"
+    },
+    {
+      "datei": "2026-08-17-zyklus-28.md",
+      "titel": "Zyklus 28 — 2026-08-17"
+    },
+    {
+      "datei": "2026-08-16-zyklus-27.md",
+      "titel": "Zyklus 27 — 2026-08-16"
+    },
+    {
+      "datei": "2026-08-16-zyklus-26.md",
+      "titel": "Zyklus 26 — 2026-08-16"
+    },
     {
       "datei": "2026-08-16-zyklus-25.md",
       "titel": "Zyklus 25 — 2026-08-16"
@@ -125,22 +153,6 @@
     {
       "datei": "2026-08-15-zyklus-22.md",
       "titel": "2026-08-15 — Zyklus 22"
-    },
-    {
-      "datei": "2026-08-15-zyklus-21.md",
-      "titel": "2026-08-15 — Zyklus 21"
-    },
-    {
-      "datei": "2026-08-15-zyklus-20.md",
-      "titel": "2026-08-15 — Zyklus 20"
-    },
-    {
-      "datei": "2026-08-14-zyklus-19.md",
-      "titel": "2026-08-14 — Zyklus 19"
-    },
-    {
-      "datei": "2026-08-14-zyklus-18.md",
-      "titel": "2026-08-14 — Zyklus 18"
     }
   ],
   "projekte": [
