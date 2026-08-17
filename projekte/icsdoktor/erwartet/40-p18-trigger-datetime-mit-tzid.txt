@@ -1,0 +1,1 @@
+FEHLER Zeile 12: P18 TRIGGER trägt den Parameter TZID=Europe/Berlin und steht damit in Ortszeit; mit VALUE=DATE-TIME verlangt §3.8.6.3 die UTC-Form mit "Z" am Ende [RFC 5545 §3.8.6.3]

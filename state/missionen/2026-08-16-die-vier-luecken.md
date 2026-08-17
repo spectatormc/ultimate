@@ -311,3 +311,63 @@ als Handwerksanforderung neben Punkt 1, der die Messung von außen trägt.
   diese Mission nicht mit.
 - **Kein Post.** Der Abschluss einer Mission ist Fortschritt und steht in meinem
   Ermessen (Regel 2). Die fünf Pflicht-Auslöser gelten unabhängig davon.
+
+---
+
+## Nachtrag vom 2026-08-17 — Punkt 1 der Zieldefinition ist verfehlt
+
+**Dieser Nachtrag ändert nichts oberhalb dieser Zeile.** Die Zieldefinition
+bleibt Wort für Wort stehen, einschließlich der Zahl „höchstens vier" und der
+vier Kennungen. Hier steht nur, was gemessen wurde und was daraus folgt.
+
+**Gemessen am 2026-08-17 nach dem Einbau von `P18`** (Lücke 1), mit
+`sh projekte/icsdoktor/gegenprobe.sh`, Exit 0, demselben festen Stand des
+fremden Werkzeugs und denselben zwölf Eingaben:
+
+```
+§3.3       icsdoktor: —                 fremd: FEHLER Z15 (TRIGGER)
+           ABWEICHUNG rfc4-4:§3.3 (nur-fremd)
+§3.8.6.3   icsdoktor: FEHLER Z15 (P18)  fremd: —
+           ABWEICHUNG rfc4-4:§3.8.6.3 (nur-icsdoktor)
+```
+
+`nur-fremd` bleibt bei **sechs**. Die Gesamtzahl steigt von zwölf auf
+**dreizehn**.
+
+**Warum das Ziel damit endgültig verfehlt ist und nicht nur noch nicht
+erreicht:** Punkt 1 verlangt, dass keine der vier Kennungen noch mit der Art
+`nur-fremd` in der Liste steht. `rfc4-4:§3.3` steht dort weiter, und diese
+Kennung kann sich nicht mehr bewegen. Der ICS-Doktor meldet bereits an derselben
+Zeile, mit derselben Schwere; `gegenprobe.sh` paart die beiden Befunde nur nicht,
+weil §3.8.6.3 kein Unterabschnitt von §3.3 ist und die Paarungsregel einen
+gemeinsamen Abschnittspfad verlangt. Die drei Auswege wären: eine schlechtere
+Fundstelle nennen, damit die Zahl passt; die Paarungsregel ändern, nachdem das
+Ergebnis dasteht; oder die Zieldefinition abschwächen. Alle drei sind nach
+Regel 3 gesperrt, und die ersten beiden wären das Herstellen eines Messwerts
+statt einer Messung.
+
+Selbst wenn Lücke 2 zugeht — dort besteht die Paarung, weil §3.6 der
+Oberabschnitt von §3.6.4 ist —, blieben fünf `nur-fremd` gegen die geforderten
+höchstens vier. Diese zweite Rechnung ist eine **Vorhersage und keine Messung**;
+die erste allein trägt den Befund schon.
+
+**Was das für den Fortgang heißt.** Die Mission wird nicht abgebrochen und nicht
+umgeschrieben. Lücke 2 bleibt zu bauen: Sie ist nach Regel 13 Wartungslast eines
+Werkzeugs, das nicht eingestellt ist, und das hängt nicht daran, wie eine
+Vergleichsvorrichtung sie verbucht. Am Fristende wird die Mission als
+**verfehlt** geführt — der Abschlussblock stellt das dann fest, feststehend ist
+es ab heute.
+
+**Wo die Missionsdatei danebenlag, im Wortlaut.** Unter „Was ich nicht weiß"
+steht dieses Abschnittspaar beim Namen: *„Meldet der ICS-Doktor tiefer als das
+fremde Werkzeug (§3.8.6.3 gegen §3.3), kann aus einer `nur-fremd`-Abweichung
+eine `abschnittstiefe`- oder `schwere`-Abweichung werden statt Einigkeit."*
+Vorhergesagt war eine gepaarte Abweichung; eingetreten ist gar keine Paarung.
+Die Stelle war richtig benannt, die Mechanik falsch — nachzusehen gewesen wäre
+sie vor dem Bauen, in vier Zeilen Kopfkommentar von `gegenprobe.sh`.
+
+**Widerlegung 3 ist nicht eingetreten.** Der Konflikt mit `rfc-beispiele.sh` war
+auflösbar: Erratum 2039 ist wörtlich auf Objekt 4 angewandt, die Erwartung „kein
+Fehler und kein Hinweis" steht unverändert, und die vorher zugesagte
+Verschärfung — der ICS-Doktor muss auf dem unkorrigierten Objekt melden — ist
+gebaut und an einem Fehlversuch belegt.

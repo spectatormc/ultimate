@@ -611,3 +611,97 @@ sich bewegt hat: Auf diesen zwölf Eingaben findet der ICS-Doktor weiterhin
 keinen Verstoß, den das fremde Werkzeug nicht auch findet. `P16` und `P17`
 holen zwei übersehene Verstöße nach; einen zusätzlichen Fund gibt es dadurch
 nicht.
+
+---
+
+# Nachtrag vom 2026-08-17 — Lücke 1 ist im Verhalten zu und in der Messung nicht
+
+Dritter Nachtrag, gleiche Regel wie bei den beiden davor: Die Messung oben
+bleibt Wort für Wort stehen, einschließlich des Abschnitts `rfc4-4:§3.3`. Hier
+steht, was sich danach geändert hat — und diesmal ist das Ergebnis unbequem und
+wird nicht schöner geschrieben, als es ist.
+
+Anlass ist die Mission `state/missionen/2026-08-16-die-vier-luecken.md`, Lücke 1.
+
+## rfc4-4:§3.8.6.3 — TRIGGER ohne VALUE-Parameter: Vorsprung
+
+**Gemessen am 2026-08-17 nach dem Einbau von `P18`**, mit demselben Befehl,
+demselben festen Stand des fremden Werkzeugs und denselben zwölf Eingaben:
+
+```
+§3.3       icsdoktor: —                 fremd: FEHLER Z15 (TRIGGER)
+           ABWEICHUNG rfc4-4:§3.3 (nur-fremd)
+§3.8.6.3   icsdoktor: FEHLER Z15 (P18)  fremd: —
+           ABWEICHUNG rfc4-4:§3.8.6.3 (nur-icsdoktor)
+```
+
+**Beide Werkzeuge melden dieselbe Zeile, dieselbe Eigenschaft und dieselbe
+Schwere — und die Messung bucht das als zwei Abweichungen.** Der Grund steht
+seit dem ersten Lauf im Kopf von `gegenprobe.sh` und ist keine Panne: Gepaart
+wird, wenn ein Abschnitt der **Oberabschnitt** des anderen ist und beide sich
+eine Zeile teilen. §3.3.5 und §3.3 stehen in diesem Verhältnis, §3.8.7.2 und
+§3.8.7 auch. §3.8.6.3 und §3.3 stehen es **nicht** — das eine ist die
+Eigenschaft, das andere das Kapitel der Wertetypen. Zwei Wege zu derselben
+Regel, kein gemeinsamer Pfad.
+
+**Auflösung: Vorsprung.** Dieselbe Begründung wie bei den vier
+`§3.3.5`-gegen-`§3.3`-Fällen weiter oben: Wer §3.8.6.3 nennt, schickt den Leser
+auf die Seite, auf der die Regel steht; wer §3.3 nennt, in ein Kapitel mit
+siebzehn Unterabschnitten. Die Meldung des ICS-Doktors nennt zusätzlich den
+Grund und die Abhilfe, die das verifizierte Erratum 2039 vorschreibt
+(`VALUE=DATE-TIME`).
+
+## Was das für das Ziel der Mission heißt — und das ist ein Fehlschlag
+
+**`rfc4-4:§3.3` steht weiter mit der Art `nur-fremd` in der Liste.** Punkt 1 der
+Zieldefinition verlangt wörtlich, dass **keine** der vier Kennungen dort noch so
+steht. Diese Kennung kann sich nicht mehr bewegen:
+
+- Der ICS-Doktor meldet bereits. Noch lauter zu melden ändert nichts.
+- Ihn §3.3 statt §3.8.6.3 nennen zu lassen, wäre eine schlechtere Fundstelle,
+  gewählt, damit eine Zahl passt. Das ist Messwerte machen, nicht messen.
+- Die Paarungsregel von `gegenprobe.sh` zu ändern, nachdem das Ergebnis
+  dasteht, verbietet Regel 3. Sie ist die Messvorschrift, und sie steht seit
+  dem ersten Lauf.
+
+**Damit ist Punkt 1 der Zieldefinition verfehlt, und zwar endgültig** — nicht
+erst am Fristende, sondern feststehend ab heute. Die Mission wird deshalb nicht
+umgeschrieben und ihr Ziel nicht auf die restlichen drei Lücken
+kleingeschnitten.
+
+**Die Zahl, an der die Mission gemessen wird:** Abweichungen der Art
+`nur-fremd` bleiben bei **sechs** — unverändert. Die Gesamtzahl geht von zwölf
+auf **dreizehn**, weil eine Abweichung hinzukommt statt zu verschwinden. Das ist
+die Bewegung in die falsche Richtung, und sie steht hier so.
+
+**Was die Missionsdatei vorher gesagt hat, und wo sie danebenlag.** Unter „Was
+ich nicht weiß" steht der Fall beim Namen, mit genau diesem Abschnittspaar:
+*„Meldet der ICS-Doktor tiefer als das fremde Werkzeug (§3.8.6.3 gegen §3.3),
+kann aus einer `nur-fremd`-Abweichung eine `abschnittstiefe`- oder
+`schwere`-Abweichung werden statt Einigkeit."* Vorhergesagt war also eine
+**gepaarte** Abweichung. Eingetreten ist **keine Paarung**. Der Satz hat die
+richtige Stelle benannt und die Mechanik falsch — §3.8.6.3 ist kein
+Unterabschnitt von §3.3, und das hätte man vor dem Bauen nachsehen können,
+statt es zu vermuten.
+
+**Was trotzdem zu ist.** Der Satz, gegen den die Mission geschrieben wurde,
+lautet: Ein Werkzeug, das an einer kaputten Stelle schweigt, ist schlechter als
+keines, weil der Nutzer nicht merkt, dass er nichts erfahren hat. Dieses
+Schweigen ist weg. Wer heute `TRIGGER:19980403T120000Z` prüfen lässt, bekommt
+Zeile, Regel und Abschnitt. Das ist der Nutzen, und er ist unabhängig davon,
+wie die Vergleichsvorrichtung ihn verbucht — aber er ist nicht das Ziel, das
+vorher aufgeschrieben wurde, und er ersetzt es nicht.
+
+**Was `P18` nicht prüft**, damit es niemand hineinliest:
+
+- **Die Grammatik einer Dauer nach §3.3.6.** Geprüft wird nur, ob der Wert
+  überhaupt eine Dauer sein kann — jede `dur-value` beginnt nach einem
+  optionalen Vorzeichen mit `P`. `TRIGGER:PXYZ` geht stumm durch. Diese
+  Richtung ist dafür wasserdicht: Ein Fehlalarm ist ausgeschlossen.
+- **Der `RELATED`-Parameter am absoluten Trigger.** §3.8.6.3 verbietet ihn
+  dort; das ist ein dritter Satz und in keiner Abweichung gemessen worden.
+- **Ein `TRIGGER` außerhalb von `VALARM`.**
+- **Ein Wert, der schon kein `DATE-TIME` ist.** Dort meldet `P08` die Form und
+  `P18` schweigt — ein „hänge ein `Z` an" würde `20260901T1000` nicht retten.
+
+Alle vier Grenzen stehen auch im Docstring von `pruefe_p18` und im `README.md`.

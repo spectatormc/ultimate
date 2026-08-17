@@ -1,0 +1,1 @@
+FEHLER Zeile 12: P18 TRIGGER steht mit "20260901T100000" nicht in der UTC-Form; mit VALUE=DATE-TIME ist ein "Z" am Ende verlangt [RFC 5545 §3.8.6.3]

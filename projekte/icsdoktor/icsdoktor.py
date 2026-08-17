@@ -49,6 +49,11 @@ Zeitzonenbezug im DTSTART zwingend UTC im UNTIL (§3.3.10). Sie liest zwei
 Zeilen zueinander wie P12 bis P14, holt den zweiten Wert aber aus einem
 Regelteil innerhalb eines Eigenschaftswertes.
 
+P18 stammt aus derselben Mission (Kennung "rfc4-4:§3.3"): TRIGGER traegt ohne
+VALUE=DATE-TIME eine DURATION, mit diesem Parameter einen DATE-TIME in UTC
+(§3.8.6.3). Sie ist die erste Pruefung, deren Beleg ein verifiziertes Erratum
+des RFC-Editors ist (Errata-ID 2039) und nicht nur der Normtext selbst.
+
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
 Aufruf:
@@ -1335,8 +1340,130 @@ def pruefe_p17(komponenten, funde):
                     "3.3.10"))
 
 
+def _sieht_aus_wie_zeitpunkt(wert):
+    """True, wenn der Wert die Gestalt eines DATE oder DATE-TIME hat.
+
+    Nur fuer den Zusatzsatz von P18 gedacht: Wer einen absoluten Zeitpunkt
+    hinschreibt, wo eine Dauer stehen muss, braucht einen anderen Hinweis als
+    wer sich vertippt hat. Ob der Zeitpunkt gueltig ist, entscheidet diese
+    Funktion nicht — das ist die Frage von P08.
+    """
+    return re.match(r"^[0-9]{8}(T[0-9]{6}Z?)?$", wert or "") is not None
+
+
+def pruefe_p18(logische, funde):
+    """§3.8.6.3: TRIGGER traegt eine DURATION, oder mit VALUE=DATE-TIME UTC.
+
+    Woertlich, unter "Value Type": "The default value type is DURATION. The
+    value type can be set to a DATE-TIME value type, in which case the value
+    MUST specify a UTC-formatted DATE-TIME value." Die Beschreibung sagt es
+    ein zweites Mal: "If a value type of DATE-TIME is specified, then the
+    property value MUST be specified in the UTC time format."
+
+    Zwei Saetze, zwei Zweige — und sie schliessen einander aus, weil der
+    VALUE-Parameter entscheidet, welcher gilt.
+
+    Dritte Pruefung aus der Mission Die vier Luecken,
+    state/missionen/2026-08-16-die-vier-luecken.md, Luecke 1. Der Anlass ist
+    eine Messung: gegenprobe.sh hat am 2026-08-16 unter der Kennung
+    "rfc4-4:§3.3" gezeigt, dass ein fremdes Werkzeug hier meldet und der
+    ICS-Doktor schweigt. Der Beleg kommt weder von ihm noch von mir, sondern
+    vom RFC-Editor — Errata-ID 2039, Status Verified, gemeldet 2010-02-10,
+    bestaetigt 2010-02-15. Es korrigiert genau die Zeile
+    "TRIGGER:19980403T120000Z" im vierten Kalenderobjekt aus §4 zu
+    "TRIGGER;VALUE=DATE-TIME:19980403T120000Z". Dass der Fall in echter
+    Software vorkommt, steht in derekantrican/GAS-ICS-Sync Nr. 475, offen seit
+    2025: Ein Erzeuger schreibt den absoluten Zeitpunkt ohne Parameter, und
+    der Verbraucher zerbricht daran, weil er nach der Norm eine DURATION lesen
+    muss.
+
+    **Der erste Zweig ist bewusst nur halb scharf, und das ist keine
+    Nachlaessigkeit.** Geprueft wird, ob der Wert ueberhaupt eine Dauer sein
+    *kann*: Jede dur-value nach §3.3.6 beginnt nach einem optionalen Vorzeichen
+    mit "P". Fehlt dieses "P", ist der Wert sicher keine Dauer — diese Richtung
+    ist wasserdicht, ein Fehlalarm ist ausgeschlossen. Was hinter dem "P" steht,
+    prueft niemand: "TRIGGER:PXYZ" geht stumm durch. Die Grammatik von §3.3.6
+    prueft dieses Werkzeug an keiner Stelle, auch nicht bei DURATION selbst
+    (siehe pruefe_p15), und sie hier fuer eine einzige Eigenschaft nebenbei zu
+    erfinden waere eine Pruefung ohne Messung dahinter. Die Grenze steht im
+    README.
+
+    **Was ausdruecklich nicht gemeldet wird:**
+
+    - **Ein VALUE-Parameter, der weder DURATION noch DATE-TIME nennt.** Die
+      ABNF laesst nur diese beiden zu; welche Werte der VALUE-Parameter tragen
+      darf, prueft dieses Werkzeug aber nirgends. Bei "TRIGGER;VALUE=DATE:..."
+      schweigt P18 deshalb ganz, statt den Wert an einem Typ zu messen, den die
+      Zeile gar nicht behauptet.
+    - **Der RELATED-Parameter am absoluten Trigger.** §3.8.6.3 verbietet ihn
+      dort ("The trigger relationship property parameter MUST only be
+      specified when the value type is DURATION"). Das ist ein dritter Satz und
+      steht in keiner gemessenen Abweichung; die Mission baut ihn nicht.
+    - **Ein TRIGGER ausserhalb von VALARM.** Die Conformance-Zeile verlangt ihn
+      dort; welche Eigenschaft in welche Komponente gehoert, prueft dieses
+      Werkzeug nur fuer die Pflichtfaelle P06, P07 und P11.
+    - **Ein Wert, der schon kein DATE-TIME ist.** Bei
+      "TRIGGER;VALUE=DATE-TIME:20260901T1000" meldet P08 die Form, und P18
+      schweigt: Ein 'Z' ans Ende zu haengen wuerde diesen Wert nicht retten,
+      und ein Rat, der nicht traegt, ist schlechter als keiner. Das ist
+      dieselbe Aufteilung wie bei P17 — wo der Typ schon abweicht, ist der
+      Zeitbezug keine zweite Frage. **P16 macht es an dieser Stelle anders**
+      und meldet auch auf einem kaputten DTSTAMP das fehlende 'Z'; der
+      Unterschied ist gesehen und in state/offen.md festgehalten, statt hier
+      still angeglichen zu werden.
+    """
+    for lz in logische:
+        if lz.name != "TRIGGER":
+            continue
+        typ = None
+        tzid = None
+        for pname, pwerte in lz.params:
+            if pname == "VALUE" and pwerte:
+                typ = pwerte[0].upper()
+            elif pname == "TZID" and pwerte:
+                tzid = pwerte[0]
+        wert = lz.wert or ""
+
+        if typ is None or typ == "DURATION":
+            rest = wert[1:] if wert[:1] in ("+", "-") else wert
+            if rest[:1].upper() == "P":
+                continue                 # kann eine Dauer sein: schweigen
+            if _sieht_aus_wie_zeitpunkt(wert):
+                zusatz = ("; als absoluter Zeitpunkt braucht die Zeile den "
+                          "Parameter VALUE=DATE-TIME")
+            else:
+                zusatz = ""
+            funde.append(Fund(
+                FEHLER, lz.nr, "P18",
+                "TRIGGER nennt mit %s keine Dauer; ohne VALUE=DATE-TIME ist "
+                "der Standardwerttyp DURATION, und die beginnt nach §3.3.6 "
+                "mit \"P\"%s" % (_zeige_wort(wert), zusatz),
+                "3.8.6.3"))
+            continue
+
+        if typ != "DATE-TIME":
+            continue                     # anderer Typ: nicht diese Pruefung
+        if tzid is not None:
+            funde.append(Fund(
+                FEHLER, lz.nr, "P18",
+                "TRIGGER trägt den Parameter TZID=%s und steht damit in "
+                "Ortszeit; mit VALUE=DATE-TIME verlangt §3.8.6.3 die UTC-Form "
+                "mit \"Z\" am Ende" % tzid,
+                "3.8.6.3"))
+            continue
+        if _pruefe_datetime(wert, None) is not None:
+            continue                     # kein DATE-TIME: das meldet P08
+        if not wert.endswith("Z"):
+            funde.append(Fund(
+                FEHLER, lz.nr, "P18",
+                "TRIGGER steht mit %s nicht in der UTC-Form; mit "
+                "VALUE=DATE-TIME ist ein \"Z\" am Ende verlangt"
+                % _zeige_wort(wert),
+                "3.8.6.3"))
+
+
 def untersuche(rohdaten):
-    """Alle siebzehn Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle achtzehn Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     zeilen = zerlege_physisch(rohdaten)
     if not zeilen:
@@ -1364,6 +1491,7 @@ def untersuche(rohdaten):
     pruefe_p15(logische, funde)
     pruefe_p16(logische, funde)
     pruefe_p17(komponenten, funde)
+    pruefe_p18(logische, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))

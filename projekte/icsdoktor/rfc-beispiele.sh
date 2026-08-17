@@ -21,9 +21,42 @@
 # Traegt eine Zeile im Block nicht die erwartete Einrueckung, bricht das Skript
 # mit Exit-Code 2 ab, statt stillschweigend etwas anderes zu pruefen.
 #
+# ERRATA, seit 2026-08-17 — der wichtigste Absatz dieser Datei.
+#
+# Der Satz oben ("Ein Kalender aus dem RFC verstoesst nicht gegen den RFC") ist
+# fuer zwei der sechs Objekte falsch, und zwar nicht nach meiner Auslegung,
+# sondern nach verifizierten Errata des RFC-Editors. Objekt 4 traegt
+# "TRIGGER:19980403T120000Z", wo der Standardwerttyp eine DURATION verlangt
+# (§3.8.6.3); Errata-ID 2039, Status Verified, korrigiert genau diese Zeile.
+#
+# Entschieden wurde das nicht hier und nicht jetzt, sondern vorher, in
+# state/missionen/2026-08-16-die-vier-luecken.md unter "Der Konflikt, der schon
+# feststeht": Dieses Skript wendet die verifizierten Errata auf die Eingabe an,
+# woertlich und mit der Errata-ID daneben, bevor es prueft. Die Erwartung "kein
+# Fehler und kein Hinweis" bleibt damit Wort fuer Wort dieselbe und behaelt ihre
+# Bedeutung. Verworfen wurde die naheliegende Alternative, auf Objekt 4 und 6
+# Befunde zu erlauben — das waere eine Abschwaechung der Messvorschrift,
+# nachdem das Ergebnis dasteht.
+#
+# Damit der Errata-Patch kein Versteck wird, verlangt dasselbe Skript zweierlei:
+#   - Die Originalzeile muss im Ausschnitt genau einmal vorkommen. Findet der
+#     Patch sie nicht, endet das Skript mit 2 statt stillschweigend nichts zu
+#     tun.
+#   - Auf dem UNKORRIGIERTEN Objekt muss der ICS-Doktor melden. Ein Werkzeug,
+#     das nach dem Patch schweigt, weil es ueberhaupt schweigt, faellt damit
+#     auf. Auch das steht so in der Missionsdatei.
+#
+# Angewandt wird bisher nur Erratum 2039 auf Objekt 4. Erratum 4149 ergaenzt in
+# Objekt 6 das fehlende UID und DTSTAMP des VFREEBUSY (§3.6.4) und gehoert zu
+# Luecke 2 derselben Mission; solange der ICS-Doktor Pflichteigenschaften nur in
+# VEVENT prueft, wuerde die Verschaerfung oben fuer Objekt 6 fehlschlagen — zu
+# Recht, denn er schweigt dort. Es fehlt hier also nicht aus Versehen, sondern
+# weil die Pruefung dahinter noch nicht gebaut ist.
+#
 # Exit-Code: 0 kein Fehler und kein Hinweis in den sechs Objekten, 1 mindestens
-#            eines von beidem, 2 RFC nicht erreichbar, Ausschnitt unerwartet,
-#            Umgebungsfehler.
+#            eines von beidem oder ein stummer ICS-Doktor auf einem
+#            unkorrigierten Objekt, 2 RFC nicht erreichbar, Ausschnitt oder
+#            Errata-Fundstelle unerwartet, Umgebungsfehler.
 #
 # Dass auch ein Hinweis rot macht, ist die Verschaerfung aus der Mission Die
 # Faltnaht: Die neuen Pruefungen P09 und P10 melden Hinweise, und ein Hinweis
@@ -108,6 +141,59 @@ if [ "$anzahl" != "6" ]; then
     exit 2
 fi
 
+# --- Errata anwenden, mit Verschaerfung davor -------------------------------
+#
+# Eine Zeile je Erratum, tabulatorgetrennt:
+#   Objektnummer <TAB> Errata-ID <TAB> Originalzeile <TAB> korrigierte Zeile
+#
+# Original- und Ersatztext sind woertlich die des RFC-Editors, nachzulesen
+# unter https://www.rfc-editor.org/errata_search.php?rfc=5545.
+
+errata_stumm=0
+while IFS='	' read -r e_nr e_id e_alt e_neu; do
+    case "$e_nr" in ''|'#'*) continue ;; esac
+    objekt="$arbeit/objekt-$e_nr.ics"
+
+    # Verschaerfung: Auf dem unkorrigierten Objekt muss etwas gemeldet werden.
+    python3 "$werkzeug" "$objekt" > "$arbeit/vorher" 2>&1
+    vorher=$(grep -c '^FEHLER \|^HINWEIS ' "$arbeit/vorher" || true)
+    if [ "$vorher" -eq 0 ]; then
+        printf 'STUMM: Objekt %s ist nach Erratum %s fehlerhaft, der ' \
+            "$e_nr" "$e_id"
+        printf 'ICS-Doktor meldet dort aber nichts.\n'
+        errata_stumm=$((errata_stumm + 1))
+    else
+        printf 'Erratum %s, Objekt %s: unkorrigiert %d Befund(e) — ' \
+            "$e_id" "$e_nr" "$vorher"
+        printf 'die Verschaerfung greift\n'
+    fi
+
+    # Patchen. Die Originalzeile muss genau einmal vorkommen.
+    python3 - "$objekt" "$e_id" "$e_alt" "$e_neu" <<'PY' || exit 2
+import sys
+pfad, e_id, alt, neu = sys.argv[1:5]
+with open(pfad, "rb") as f:
+    daten = f.read()
+alt_z = (alt + "\r\n").encode("utf-8")
+neu_z = (neu + "\r\n").encode("utf-8")
+anzahl = daten.count(alt_z)
+if anzahl != 1:
+    sys.stderr.write(
+        "ABBRUCH: Erratum %s findet seine Originalzeile %dmal in %s, "
+        "erwartet genau einmal.\n" % (e_id, anzahl, pfad))
+    sys.stderr.write("  gesucht: %s\n" % alt)
+    sys.stderr.write(
+        "Ein Patch, der nichts trifft, prueft stillschweigend den "
+        "unkorrigierten Text.\n")
+    sys.exit(2)
+with open(pfad, "wb") as f:
+    f.write(daten.replace(alt_z, neu_z))
+PY
+    printf 'Erratum %s auf Objekt %s angewandt: %s\n' "$e_id" "$e_nr" "$e_neu"
+done <<'ERRATA'
+4	2039	TRIGGER:19980403T120000Z	TRIGGER;VALUE=DATE-TIME:19980403T120000Z
+ERRATA
+
 fehler_gesamt=0
 hinweise_gesamt=0
 nr=1
@@ -134,4 +220,8 @@ printf '%d Beispiele aus RFC 5545 §4 geprüft, %d Fehler, %d Hinweise\n' \
 # Vormission verlangte hier nur 0 Fehler.
 [ "$fehler_gesamt" -eq 0 ] || exit 1
 [ "$hinweise_gesamt" -eq 0 ] || exit 1
+# Verschaerfung der Mission Die vier Luecken (2026-08-17): Ein Objekt, das nach
+# einem verifizierten Erratum fehlerhaft ist, muss vor dem Patch einen Befund
+# ausloesen. Sonst ist die 0 oben nur die Stille des Werkzeugs.
+[ "$errata_stumm" -eq 0 ] || exit 1
 exit 0

@@ -94,6 +94,35 @@ eines Eigenschaftswertes**. Wo der Vergleich nicht zu führen ist — kein
 trifft —, meldet sie nichts; die Fälle stehen unten unter „Was dieses Werkzeug
 nicht tut".
 
+`P18` stammt aus derselben Mission und derselben Messung (Kennung `rfc4-4:§3.3`)
+und prüft **`TRIGGER`** (§3.8.6.3): „The default value type is DURATION. The
+value type can be set to a DATE-TIME value type, in which case the value MUST
+specify a UTC-formatted DATE-TIME value." Zwei Sätze, zwei Zweige — ohne
+`VALUE=DATE-TIME` muss der Wert eine Dauer sein, mit diesem Parameter ein
+`DATE-TIME` in UTC.
+
+Ihr Beleg ist der einzige im Werkzeug, der weder vom Normtext allein noch aus
+einem Fehlerbericht kommt, sondern vom **RFC-Editor**: Errata-ID **2039**,
+Status *Verified*, korrigiert die Zeile `TRIGGER:19980403T120000Z` im vierten
+Kalenderobjekt aus §4 zu `TRIGGER;VALUE=DATE-TIME:19980403T120000Z`. Dass der
+Fall in echter Software vorkommt, zeigt `derekantrican/GAS-ICS-Sync#475` (offen
+seit 2025): Ein Erzeuger schreibt den absoluten Zeitpunkt ohne Parameter, der
+Verbraucher zerbricht daran — „invalid duration value".
+
+**Der erste Zweig ist bewusst nur halb scharf.** Geprüft wird, ob der Wert eine
+Dauer sein *kann*: Jede `dur-value` nach §3.3.6 beginnt nach einem optionalen
+Vorzeichen mit `P`. Fehlt dieses `P`, ist der Wert sicher keine Dauer — ein
+Fehlalarm ist in dieser Richtung ausgeschlossen. Was hinter dem `P` steht, prüft
+dieses Werkzeug nirgends, auch bei `DURATION` selbst nicht. Die Grenzen stehen
+unten unter „Was dieses Werkzeug nicht tut".
+
+**Ehrlichkeitshalber, weil die Zahl es nicht zeigt:** `P18` schließt die
+gemessene Lücke im Verhalten, aber nicht in der Messung. Beide Werkzeuge melden
+danach dieselbe Zeile, `gegenprobe.sh` paart sie trotzdem nicht — §3.8.6.3 ist
+kein Unterabschnitt von §3.3. Die Abweichung `rfc4-4:§3.3` bleibt deshalb
+`nur-fremd`, und das Ziel der Mission ist an diesem Punkt verfehlt. Der ganze
+Vorgang steht im Nachtrag vom 2026-08-17 in `GEGENPROBE.md`.
+
 ## Warum
 
 Drei öffentliche Fehlerberichte, in der Missionsdatei mit Link und Wortlaut
@@ -159,6 +188,24 @@ Werkzeug dort einen Fehler, hat das Werkzeug unrecht. Er braucht Netz; ist
 `rfc-editor.org` nicht erreichbar, endet er mit Exit-Code 2 und sagt das, statt
 grün zu melden.
 
+**Für zwei der sechs Objekte stimmt dieser Satz nicht**, und zwar nicht nach
+meiner Auslegung, sondern nach **verifizierten Errata des RFC-Editors**: Objekt
+4 trägt `TRIGGER:19980403T120000Z`, wo §3.8.6.3 eine `DURATION` verlangt
+(Errata-ID 2039), Objekt 6 einem `VFREEBUSY` ohne `UID` und `DTSTAMP`
+(Errata-ID 4149). Seit dem 2026-08-17 wendet `rfc-beispiele.sh` deshalb die
+verifizierten Errata auf die **Eingabe** an, wörtlich und mit der Errata-ID
+daneben, bevor es prüft — statt die Erwartung „kein Fehler und kein Hinweis"
+aufzuweichen, nachdem das Ergebnis dasteht. Diese Erwartung steht Wort für Wort
+unverändert.
+
+Damit der Patch kein Versteck wird, verlangt dasselbe Skript zweierlei: Die
+Originalzeile muss im Ausschnitt **genau einmal** vorkommen (sonst Exit 2 —
+ein Patch, der nichts trifft, prüft stillschweigend den alten Text), und auf dem
+**unkorrigierten** Objekt muss der ICS-Doktor melden (sonst Exit 1 — sonst wäre
+die Null nur seine eigene Stille). Angewandt ist bisher nur Erratum 2039;
+Erratum 4149 gehört zu einer Prüfung, die noch nicht gebaut ist, und fehlt
+deshalb ausdrücklich statt versehentlich.
+
 `pruefe.sh` vergleicht Byte für Byte gegen `erwartet/` und leitet den erwarteten
 Exit-Code aus der Erwartung ab, statt ihn danebenzuschreiben. Zusätzlich rechnet
 er die Vorgaben der Missionsdatei nach: mindestens zwölf Beispiele, jede
@@ -166,7 +213,7 @@ Prüfung mindestens einmal ausgelöst, mindestens zwei fehlerfreie Dateien. Die
 abgeschlossene Mission „Die Faltnaht" verlangt mehr — 16 Beispiele und die zehn
 Prüfungen `P01` bis `P10` —, und wo das steht, sagt die letzte Zeile der
 Ausgabe, damit ein grüner Exit-Code nicht als „Mission erreicht" gelesen wird.
-`P11` bis `P17` füllen diese Zehn nicht auf, sondern werden getrennt gezählt:
+`P11` bis `P18` füllen diese Zehn nicht auf, sondern werden getrennt gezählt:
 Eine abgeschlossene Zusage wird nicht dadurch billiger, dass später eine Prüfung
 dazukommt. Die Abdeckungsliste nennt, was gebaut ist; seit dem 2026-08-16 steht
 `P17` mit darin und damit alle siebzehn. Ob die laufende Mission erreicht ist,
@@ -221,10 +268,11 @@ Wo der Standard mehrere Lesarten zulässt, steht hier, welche gewählt wurde:
 Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
 
 - **Es repariert nichts.** Nur Diagnose. So steht es in der Mission.
-- **Es prüft genau die siebzehn Prüfungen** und nicht mehr. Bis zum 2026-08-15
+- **Es prüft genau die achtzehn Prüfungen** und nicht mehr. Bis zum 2026-08-15
   stand hier „dreizehn"; die Zahl war seit `P13` um eine zu klein und ist keine
   weggefallene Prüfung, sondern ein nicht nachgezogener Satz. Seit dem
-  2026-08-16 sind `P16` und `P17` dazugekommen. Insbesondere nicht
+  2026-08-16 sind `P16` und `P17` dazugekommen, seit dem 2026-08-17 `P18`.
+  Insbesondere nicht
   die Maskierung von Sonderzeichen in TEXT-Werten (§3.3.11) — `P10` sieht nur, wo
   eine Faltung sie zerschneidet, nicht ob sie richtig ist —, nicht die
   Zeichenkodierung, und für `VTODO`, `VJOURNAL` und `VFREEBUSY`
@@ -394,6 +442,27 @@ Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
   `beispiele/36-sauber-p17-beide-ortszeit.ics` hält den zulässigen Fall fest und
   muss stumm bleiben, `beispiele/37-p17-until-utc-bei-ortszeit.ics` den
   umgekehrten.
+- **`P18` prüft `TRIGGER` an zwei Sätzen und nicht an vieren.** Vier Grenzen,
+  alle vor dem ersten Commit festgelegt:
+
+  - **Die Grammatik einer Dauer bleibt ungeprüft.** `TRIGGER:PXYZ` beginnt mit
+    `P` und geht deshalb stumm durch. Geprüft wird nur, ob der Wert eine Dauer
+    sein *kann*; diese Richtung ist dafür wasserdicht.
+  - **Der `RELATED`-Parameter am absoluten Trigger** ist nach §3.8.6.3 dort
+    verboten („MUST only be specified when the value type is DURATION"). Ein
+    dritter Satz, in keiner Abweichung gemessen, nicht gebaut.
+  - **Ein `TRIGGER` außerhalb von `VALARM`** verstößt gegen die
+    Conformance-Zeile desselben Abschnitts und wird nicht gemeldet.
+  - **Ein `VALUE`-Parameter, der weder `DURATION` noch `DATE-TIME` nennt**,
+    lässt `P18` ganz schweigen, statt den Wert an einem Typ zu messen, den die
+    Zeile nicht behauptet.
+
+  Bei einem Wert, der schon kein `DATE-TIME` ist, meldet `P08` die Form und
+  `P18` schweigt — bei `TRIGGER;VALUE=DATE-TIME:20260901T1000` würde ein
+  angehängtes `Z` nichts retten, und ein Rat, der nicht trägt, ist schlechter
+  als keiner. **`P16` macht das an derselben Stelle anders** und meldet auch auf
+  einem kaputten `DTSTAMP` das fehlende `Z`. Der Unterschied ist gesehen, nicht
+  übersehen; er steht in `state/offen.md` und wird nicht still angeglichen.
 
 ## Dateien
 
@@ -403,7 +472,7 @@ pruefe.sh           Prüfbefehl 1: Beispiele gegen Erwartungen.
 rfc-beispiele.sh    Prüfbefehl 2: die sechs Kalender aus RFC 5545 §4.
 namensliste.sh      Herkunftsprüfung der Namensliste von P09. Kein Prüfbefehl
                     der Mission — er beweist die Herkunft, nicht die Prüfung.
-beispiele/          38 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
+beispiele/          42 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
 erwartet/           Je eine Datei mit der erwarteten Ausgabe.
 LAGE.md             Geprüfte Werkzeuglandschaft, mit Links.
 .gitattributes      Hält CRLF in beispiele/ auch über einen Klon hinweg.

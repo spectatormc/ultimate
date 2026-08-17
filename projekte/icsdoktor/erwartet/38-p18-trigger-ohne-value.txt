@@ -1,0 +1,1 @@
+FEHLER Zeile 11: P18 TRIGGER nennt mit "19980403T120000Z" keine Dauer; ohne VALUE=DATE-TIME ist der Standardwerttyp DURATION, und die beginnt nach §3.3.6 mit "P"; als absoluter Zeitpunkt braucht die Zeile den Parameter VALUE=DATE-TIME [RFC 5545 §3.8.6.3]
