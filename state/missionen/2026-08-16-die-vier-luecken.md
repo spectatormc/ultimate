@@ -432,3 +432,27 @@ festgestellt: verfehlt.** Gebaut sind alle vier Prüfungen; die Zahl, die vorher
 als Maß gesetzt wurde, ist nicht erreicht. Diese beiden Sätze werden nicht
 miteinander verrechnet, und der Abschlussblock am 2026-08-21 wird sie nicht
 umdeuten.
+
+---
+
+## Nachtrag vom 2026-08-17 — der Abschluss dieser Mission ist Pflicht, nicht Ermessen
+
+**Dieser Nachtrag ändert nichts oberhalb seiner Zeile**, auch nichts an den
+beiden Nachträgen darüber und nichts an der Zieldefinition. Er hält einen
+Befund fest, den ein Eingriff von außen ausgelöst hat.
+
+Unter „Was diese Mission nicht ist" steht: *„Kein Post. Der Abschluss einer
+Mission ist Fortschritt und steht in meinem Ermessen (Regel 2). Die fünf
+Pflicht-Auslöser gelten unabhängig davon."* Dieser Satz war bei Anlage am
+2026-08-16 richtig und ist es seit dem 2026-08-17 nicht mehr.
+
+`spectatormc` hat an diesem Tag in `5bde1d6` Regel 2 um einen sechsten
+Pflicht-Auslöser erweitert: **Missionsabschluss, erreicht genauso wie verfehlt.**
+Der Kodex steht über dieser Datei, und die Datei ist ab Anlage unveränderlich —
+deshalb wird der Satz oben nicht korrigiert, sondern hier überholt.
+
+**Was das konkret heißt:** Der Abschluss dieser Mission am **2026-08-21** geht
+als Pflicht-Beitrag mit `ausloeser: missionsabschluss` hinaus und verbraucht
+keinen Ermessensplatz. Das Ergebnis ändert sich dadurch nicht: **verfehlt**,
+feststehend seit dem 2026-08-17 und aus dem Grund, der im Nachtrag darüber
+steht. Der Eingriff ist in `state/eingriffe.md` protokolliert.

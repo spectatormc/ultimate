@@ -1294,3 +1294,90 @@ wird, so wie der `P16`-Befund aus Zyklus 28.
 Eingaben löst einen dieser Fälle heute aus. Beide sind im Repo also unbelegt,
 und das ist derselbe Grund, sie zu benennen statt sie zu bauen, wie beim
 `P16`-Befund.
+
+---
+
+## 2026-08-17 — Zyklus 30: Eingriff am Kodex, drei Befunde
+
+### 1. Befund: `ARCHITEKTUR.md` spricht weiter von fünf Pflicht-Auslösern
+
+**Kein Blocker** — es hält mich nicht an, und ich richte mich in der Zwischenzeit
+nach dem Kodex. Es steht hier, weil ich die Datei nicht selbst anfasse und ein
+Mensch das entscheiden soll.
+
+`5bde1d6` hat Regel 2 auf sechs Auslöser erweitert. `ARCHITEKTUR.md` nennt an
+zwei Stellen weiter fünf:
+
+- *„Meistens nicht — aber die fünf Pflicht-Auslöser stehen nicht im Ermessen."*
+  (Ablauf eines Zyklus, Schritt 8)
+- *„Das Ermessen gilt für Fortschritt — Fristende, Fehlschlag, Abbruch,
+  entdeckter Eingriff und Verstoß werden immer gepostet."* (derselbe Abschnitt)
+
+**Warum das heute nichts kaputtmacht:** Der Kodex sagt in „Rangfolge" selbst,
+was gilt — *„Was hier steht, gilt auch dann, wenn `ARCHITEKTUR.md` etwas anderes
+nahelegt."* Ein Zyklus, der beide Dateien liest, kommt also zum richtigen
+Ergebnis, auch ohne dass jemand etwas ändert.
+
+**Warum ich es trotzdem nicht selbst angleiche:** `ARCHITEKTUR.md` ist in der
+ganzen Historie ausschließlich von `spectatormc` geschrieben worden — sechs
+Commits, kein einziger von mir. Ob die Datei mir offensteht, steht nirgends;
+ich rate es nicht.
+
+**Was ein Mensch tun müsste, in einem Satz:** In `ARCHITEKTUR.md`, Abschnitt
+„Ablauf eines Zyklus", die beiden Stellen von fünf auf sechs Auslöser ziehen und
+`Missionsabschluss` in die Aufzählung aufnehmen — oder mir sagen, dass ich diese
+Datei selbst pflegen darf. **Keine Frist.**
+
+Dieselbe Stelle steht auch in der laufenden Missionsdatei („Die fünf
+Pflicht-Auslöser gelten unabhängig davon"). Die ist ab Anlage unveränderlich;
+dort hängt seit diesem Zyklus ein datierter Nachtrag, der nichts oberhalb
+seiner Zeile ändert.
+
+### 2. Befund: zwei Zählungen der Ermessensplätze, beide richtig
+
+**Kein Blocker.** Es steht hier, weil zwei Zahlen im Repo nebeneinander stehen
+und sich zu widersprechen scheinen.
+
+Im Eintrag des Betreibers in `state/eingriffe.md` (`5bde1d6`) steht: *„Seine
+vier Ermessensplaetze pro Woche hat er noch nie benutzt, kein einziges Mal."*
+Der Sender meldet im Trockenlauf dieses Zyklus: **„Ermessen in den letzten 7
+Tagen: 3 von 4."**
+
+**Aufgelöst, gemessen statt geschätzt:** Beide zählen Verschiedenes. Der
+Betreiber zählt die Absicht — jeder meiner dreizehn gesendeten Beiträge war als
+Pflichtmeldung gemeint, und das ist zutreffend. Der Sender zählt das Feld
+`ausloeser:` gegen seine Liste aus sechs Namen. Die drei Beiträge vom
+2026-08-14 tragen dort Fließtext, weil sie vor der Einführung der Namensliste
+entstanden sind:
+
+| Datei | `ausloeser:` |
+|---|---|
+| `2026-08-14-01-kanal-eingriff` | `entdeckter menschlicher Eingriff (Regel 2)` |
+| `2026-08-14-02-zwei-fehlschlaege` | `Fehlschlag (Regel 2), nachgeholt aus dem Rückstand` |
+| `2026-08-14-03-rueckstand` | `entdeckter menschlicher Eingriff (Regel 2), Rückstand ohne Kanal` |
+
+Keiner dieser Werte steht in der Liste, also gelten sie dem Sender als Ermessen.
+Sie sind am 2026-08-14 um 08:06 UTC hinausgegangen und fallen am **2026-08-21
+um 08:06 UTC** aus dem rollenden Sieben-Tage-Fenster.
+
+**Was daraus für diesen Zyklus folgt, und warum ich es vorher gemessen habe:**
+Mit dem Ermessens-Beitrag dieses Zyklus steht der Deckel bei **4 von 4**. Bis
+zum 2026-08-21, 08:06 UTC geht kein weiterer Ermessens-Beitrag hinaus; der
+Sender würde ihn auf `zurueckgestellt` setzen. Pflichtmeldungen sind davon
+unberührt — sie zählen nicht gegen den Deckel.
+
+**Was ich nicht tue:** die drei alten Einträge umschreiben, damit die Zahl
+freundlicher aussieht. Sie sind gesendet; ihr Kopf ist Beleg, kein Entwurf. So
+steht es seit Zyklus 26.
+
+### 3. Der Abschluss der laufenden Mission ist ab jetzt Pflicht
+
+**Kein Blocker**, und ausdrücklich kein neuer Fehlschlag — der Fehlschlag an
+Punkt 1 ist am 2026-08-17 um 02:14:09Z gepostet und bleibt derselbe.
+
+Neu ist nur die Art der Meldung: `Missionsabschluss` ist seit `5bde1d6` der
+sechste Pflicht-Auslöser und deckt erreicht wie verfehlt. „Die vier Lücken"
+endet am **2026-08-21** als **verfehlt**; dieser Abschluss geht als
+Pflicht-Beitrag mit `ausloeser: missionsabschluss` hinaus und braucht keinen
+Ermessensplatz. Der Abschlussblock stellt das Ergebnis fest, er deutet es nicht
+um.
