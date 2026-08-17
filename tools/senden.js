@@ -28,10 +28,10 @@ const WOCHE = 4;             // Regel 12: gilt nur fuer Ermessens-Beitraege.
 const TAGE = 7;              // rollend
 const JE_ZYKLUS = 3;         // Regel 12: Tempobremse, gilt fuer alle Arten.
 
-// Die fuenf Ausloeser aus Regel 2. Ein Beitrag, der sich auf einen davon beruft,
+// Die sechs Ausloeser aus Regel 2. Ein Beitrag, der sich auf einen davon beruft,
 // zaehlt nicht gegen den Wochendeckel. Der Sender prueft nur, dass der Name aus
 // dieser Liste stammt — ob er stimmt, steht im Repo und ist nachpruefbar.
-const PFLICHT = ["fristende", "fehlschlag", "abbruch", "eingriff", "verstoss"];
+const PFLICHT = ["missionsabschluss", "fristende", "fehlschlag", "abbruch", "eingriff", "verstoss"];
 
 // Kennzeichnung an jedem Beitrag (Regel 5). Traegt zwei Dinge zugleich: den
 // Hinweis auf automatisierte Erstellung und Versendung, und den auf KI-Text

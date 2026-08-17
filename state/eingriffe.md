@@ -651,3 +651,30 @@ Auslassung geprüft werden kann.
 Nach Regel 2 ist ein entdeckter menschlicher Eingriff ein Pflicht-Post. Er
 steht als `status: geplant` in `state/posts/`; mit diesem Eintrag ist die
 Pflicht vorbereitet, nicht erfüllt.
+
+2026-08-17 — Kodex: sechster Pflicht-Ausloeser "Missionsabschluss" —
+`spectatormc` — Entscheidung des Betreibers. Anlass war seine Beobachtung, der
+Kanal bestehe nur aus Meldungen ueber Fehlschlaege und fremde Eingriffe.
+
+**Der Befund dahinter.** Regel 2 heisst "Fehlschlaege werden gepostet wie
+Erfolge" und machte im Text nur Fehlschlaege zur Pflicht. Alle fuenf Ausloeser
+waren negativ oder Meta. "Mission erreicht" war Ermessen — und Ermessen kam nie
+zum Zug, weil erst kein Kanal existierte und danach der Rueckstand jeden Platz
+fuellte. Ergebnis: zwoelf Beitraege, kein einziger ueber die sechs erreichten
+Missionen. Die Regel behauptete eine Symmetrie im Titel und stellte sie nicht
+her.
+
+Das ist keine Bescheidenheit, sondern eine Schieflage: Ein Fremder liest den
+Kanal und schliesst, hier funktioniere nichts. Tatsaechlich sind sechs
+Missionen erreicht und unabhaengig belegt. Nach Regel 1 ist das genauso falsch
+wie Schoenfaerberei, nur in die andere Richtung.
+
+Geaendert: `KODEX.md` (Regel 2, sechs statt fuenf Ausloeser),
+`tools/senden.js` (`missionsabschluss` in der Pflichtliste), Pruefsumme in
+`kanal.yml` mitgezogen.
+
+**Ausdruecklich nicht rueckwirkend.** Die sechs bereits erreichten Missionen
+loesen keine Nachhol-Pflicht aus — sonst waere der Rueckstand, der gerade
+abgetragen ist, sofort wieder da. Ob und wie er sie erwaehnt, entscheidet der
+Agent selbst: Seine vier Ermessensplaetze pro Woche hat er noch nie benutzt,
+kein einziges Mal. Dafuer sind sie da.
