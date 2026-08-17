@@ -371,3 +371,64 @@ auflösbar: Erratum 2039 ist wörtlich auf Objekt 4 angewandt, die Erwartung „
 Fehler und kein Hinweis" steht unverändert, und die vorher zugesagte
 Verschärfung — der ICS-Doktor muss auf dem unkorrigierten Objekt melden — ist
 gebaut und an einem Fehlversuch belegt.
+
+---
+
+## Nachtrag vom 2026-08-17 — Lücke 2 ist gebaut, alle vier sind gebaut
+
+**Dieser Nachtrag ändert nichts oberhalb seiner Zeile**, auch nichts am Nachtrag
+darüber. Die Zieldefinition bleibt Wort für Wort stehen.
+
+**Gemessen am 2026-08-17 nach dem Einbau von `P19`** (Lücke 2), Beleg `a997616`,
+mit `sh projekte/icsdoktor/gegenprobe.sh`, Exit 0, demselben festen Stand des
+fremden Werkzeugs (`e5554b9`) und denselben zwölf Eingaben:
+
+```
+§3.6.4 ~ §3.6  icsdoktor: FEHLER  Z4 x2 (P19)   fremd: FEHLER  Z4 x2 (DTSTAMP,UID)
+               ABWEICHUNG rfc4-6:§3.6.4 (abschnittstiefe)
+```
+
+`nur-fremd` geht von **sechs auf fünf**. Die Gesamtzahl bleibt bei
+**dreizehn** — eine Abweichung wechselt die Art, keine kommt hinzu.
+
+**Die Vorhersage aus dem Nachtrag darüber ist damit eine Messung geworden, und
+sie trifft zu.** Dort steht: *„Selbst wenn Lücke 2 zugeht — dort besteht die
+Paarung, weil §3.6 der Oberabschnitt von §3.6.4 ist —, blieben fünf `nur-fremd`
+gegen die geforderten höchstens vier. Diese zweite Rechnung ist eine Vorhersage
+und keine Messung."* Gemessen sind fünf, und die Paarung besteht.
+
+**Punkt 1 bleibt verfehlt, aus dem Grund von heute Vormittag und keinem neuen:**
+`rfc4-4:§3.3` steht weiter mit der Art `nur-fremd` in der Liste. Daran ändert
+Lücke 2 nichts.
+
+**Stand der vier Punkte, ohne Beschönigung:**
+
+| Punkt | Stand am 2026-08-17 |
+|---|---|
+| 1 — vier Lücken zu, am fremden Werkzeug gemessen | **verfehlt**, feststehend seit heute Vormittag |
+| 2 — kein Fehlalarm auf dem Normtext | erfüllt: beide Errata (2039, 4149) angewandt, sechs Objekte, 0 Fehler, 0 Hinweise, Exit 0; unkorrigiert melden Objekt 4 und 6 (1 bzw. 2 Befunde) |
+| 3 — nichts kaputtgemacht | erfüllt: `pruefe.sh` 46/46 Exit 0, `fremdprobe.sh` 6/6 Exit 0, Zustandsprüfer 5/5 Exit 0 |
+| 4 — jede Prüfung einzeln belegt | erfüllt: `P16`–`P19` mit je Beispiel und Erwartung, je Absatz in `GEGENPROBE.md` und `README.md`. **Kein Ziel** (Regel 3) |
+
+**Die vier Widerlegungen, einzeln, und keine ist eingetreten:**
+
+1. *Eine der vier ist keine Lücke.* Nicht eingetreten. Alle vier stehen im
+   Normtext, zwei zusätzlich durch verifizierte Errata (2039, 4149).
+2. *Fehlalarme, die ich nicht wegbekomme.* Nicht eingetreten. `P16`–`P19`
+   erzeugen auf keiner der zwölf fremden Eingaben und keiner der 46
+   Beispieldateien einen Fund, der kein Verstoß ist; keine der 42 älteren
+   Erwartungen hat sich bewegt.
+3. *Der Konflikt mit `rfc-beispiele.sh` ist nicht auflösbar.* Nicht eingetreten,
+   jetzt für beide Objekte: Erratum 2039 auf Objekt 4 (Zyklus 28), Erratum 4149
+   auf Objekt 6 (dieser Zyklus), beide wörtlich, die Erwartung „kein Fehler und
+   kein Hinweis" unverändert, und die zugesagte Verschärfung greift an beiden.
+4. *Die Zahl bewegt sich nicht.* Nicht eingetreten. `nur-fremd` ist von acht auf
+   fünf gegangen — drei der vier Lücken hat die Messvorrichtung verbucht. Dass
+   fünf über der geforderten Vier liegt, ist Punkt 1 und nicht diese
+   Widerlegung.
+
+**Das Ergebnis der Mission steht damit fest und wird am Fristende nur noch
+festgestellt: verfehlt.** Gebaut sind alle vier Prüfungen; die Zahl, die vorher
+als Maß gesetzt wurde, ist nicht erreicht. Diese beiden Sätze werden nicht
+miteinander verrechnet, und der Abschlussblock am 2026-08-21 wird sie nicht
+umdeuten.
