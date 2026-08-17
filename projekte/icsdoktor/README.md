@@ -123,6 +123,33 @@ kein Unterabschnitt von §3.3. Die Abweichung `rfc4-4:§3.3` bleibt deshalb
 `nur-fremd`, und das Ziel der Mission ist an diesem Punkt verfehlt. Der ganze
 Vorgang steht im Nachtrag vom 2026-08-17 in `GEGENPROBE.md`.
 
+`P19` stammt aus derselben Mission und derselben Messung (Kennung
+`rfc4-6:§3.6`) und ist die erste Prüfung, die **außerhalb von `VEVENT` nach
+Pflichteigenschaften sieht**: `UID` und `DTSTAMP` in `VTODO` (§3.6.2),
+`VJOURNAL` (§3.6.3) und `VFREEBUSY` (§3.6.4), `ACTION` und `TRIGGER` in
+`VALARM` (§3.6.6). Alle vier ABNFs sagen es mit demselben Satz — „The following
+are REQUIRED, but MUST NOT occur more than once" —, und deshalb meldet `P19`
+beide Hälften: die fehlende Eigenschaft und die wiederholte.
+
+Sie ist `P07` nachgebaut, das dasselbe für `VEVENT` tut, bis in den Wortlaut der
+Meldung. `VEVENT` selbst bleibt bei `P07` und `P11`: Dieselbe Pflicht zweimal zu
+melden wäre kein zweiter Befund. Für `VALARM` braucht die Prüfung den Wert des
+`ACTION` nicht zu kennen — der Satz über `action` und `trigger` steht in
+`audioprop`, `dispprop` und `emailprop` gleichlautend.
+
+Ihr Beleg ist wieder ein Erratum des **RFC-Editors**: Errata-ID **4149**, Status
+*Verified* (gemeldet 2014-10-29, bestätigt 2014-10-30), ergänzt im sechsten
+Kalenderobjekt aus §4 das fehlende `UID` und `DTSTAMP` des `VFREEBUSY` und
+zitiert als Begründung die ABNF aus §3.6.4. Dass die Familie in echter Software
+vorkommt, zeigt `owncloud/tasks#272` (offen seit 2015): Dort meldet ein Programm
+„Every VTODO component must have an UID", und der Melder hält das für einen
+Fehler, weil `UID` in der ABNF von **RFC 2445** §4.6.2 optional war. In
+RFC 5545 §3.6.2 ist es REQUIRED — der Bericht ist damit kein Beleg gegen die
+Pflicht, sondern dafür, dass sie schwer zu finden ist.
+
+**Was `P19` nicht prüft, steht unten** unter „Was dieses Werkzeug nicht tut":
+die aktionsabhängigen Pflichten des `VALARM` und die Pflichten in `VTIMEZONE`.
+
 ## Warum
 
 Drei öffentliche Fehlerberichte, in der Missionsdatei mit Link und Wortlaut
@@ -213,10 +240,10 @@ Prüfung mindestens einmal ausgelöst, mindestens zwei fehlerfreie Dateien. Die
 abgeschlossene Mission „Die Faltnaht" verlangt mehr — 16 Beispiele und die zehn
 Prüfungen `P01` bis `P10` —, und wo das steht, sagt die letzte Zeile der
 Ausgabe, damit ein grüner Exit-Code nicht als „Mission erreicht" gelesen wird.
-`P11` bis `P18` füllen diese Zehn nicht auf, sondern werden getrennt gezählt:
+`P11` bis `P19` füllen diese Zehn nicht auf, sondern werden getrennt gezählt:
 Eine abgeschlossene Zusage wird nicht dadurch billiger, dass später eine Prüfung
-dazukommt. Die Abdeckungsliste nennt, was gebaut ist; seit dem 2026-08-16 steht
-`P17` mit darin und damit alle siebzehn. Ob die laufende Mission erreicht ist,
+dazukommt. Die Abdeckungsliste nennt, was gebaut ist; seit dem 2026-08-17 stehen
+`P18` und `P19` mit darin und damit alle neunzehn. Ob die laufende Mission erreicht ist,
 sagt ihre Missionsdatei und nicht dieser Exit-Code.
 
 Seit `rfc-beispiele.sh` auch bei einem `HINWEIS` mit `1` endet, ist er die
@@ -268,15 +295,21 @@ Wo der Standard mehrere Lesarten zulässt, steht hier, welche gewählt wurde:
 Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
 
 - **Es repariert nichts.** Nur Diagnose. So steht es in der Mission.
-- **Es prüft genau die achtzehn Prüfungen** und nicht mehr. Bis zum 2026-08-15
+- **Es prüft genau die neunzehn Prüfungen** und nicht mehr. Bis zum 2026-08-15
   stand hier „dreizehn"; die Zahl war seit `P13` um eine zu klein und ist keine
   weggefallene Prüfung, sondern ein nicht nachgezogener Satz. Seit dem
-  2026-08-16 sind `P16` und `P17` dazugekommen, seit dem 2026-08-17 `P18`.
+  2026-08-16 sind `P16` und `P17` dazugekommen, seit dem 2026-08-17 `P18` und
+  `P19`.
   Insbesondere nicht
   die Maskierung von Sonderzeichen in TEXT-Werten (§3.3.11) — `P10` sieht nur, wo
-  eine Faltung sie zerschneidet, nicht ob sie richtig ist —, nicht die
-  Zeichenkodierung, und für `VTODO`, `VJOURNAL` und `VFREEBUSY`
-  keine Pflichtangaben — die erfasst nur `P05` strukturell.
+  eine Faltung sie zerschneidet, nicht ob sie richtig ist — und nicht die
+  Zeichenkodierung.
+
+  Bis zum 2026-08-17 stand in dieser Aufzählung, für `VTODO`, `VJOURNAL` und
+  `VFREEBUSY` würden keine Pflichtangaben geprüft. Der Satz galt und ist durch
+  `P19` überholt: `UID` und `DTSTAMP` sind dort jetzt erfasst, in `VALARM`
+  `ACTION` und `TRIGGER`. Widerlegt hat ihn keine Überlegung von mir, sondern
+  eine Messung gegen ein fremdes Werkzeug und ein verifiziertes Erratum.
 
   Bis zum 2026-08-16 stand in dieser Aufzählung auch `RRULE`. Der Satz ist
   seit `P17` nicht mehr richtig und wird deshalb nicht stehen gelassen: Geprüft
@@ -463,6 +496,30 @@ Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
   als keiner. **`P16` macht das an derselben Stelle anders** und meldet auch auf
   einem kaputten `DTSTAMP` das fehlende `Z`. Der Unterschied ist gesehen, nicht
   übersehen; er steht in `state/offen.md` und wird nicht still angeglichen.
+- **`P19` liest genau den Satz „The following are REQUIRED" und keinen
+  anderen.** Vier Grenzen, alle vor dem ersten Commit festgelegt:
+
+  - **Die aktionsabhängigen Pflichten des `VALARM` bleiben ungeprüft.**
+    `dispprop` verlangt zusätzlich `DESCRIPTION`, `emailprop` zusätzlich
+    `DESCRIPTION`, `SUMMARY` und `ATTENDEE`. Welche der drei Varianten gilt,
+    hängt am Wert des `ACTION` — und §3.8.6.1 lässt dort auch `iana-token` und
+    `x-name` zu. Bei `ACTION:X-MEIN-WECKER` ist keine der drei anwendbar, und
+    eine Prüfung, die dann die nächstliegende nimmt, meldet einen Verstoß gegen
+    eine Regel, die es für diesen Wert nicht gibt.
+  - **`VTIMEZONE` (§3.6.5) und seine Unterkomponenten** haben ebenfalls
+    Pflichten (`TZID`; in `STANDARD` und `DAYLIGHT` `DTSTART`, `TZOFFSETTO`,
+    `TZOFFSETFROM`). Die Messung, die `P19` auslöst, betrifft `VFREEBUSY`, und
+    die Missionsdatei nennt vier Komponenten — `VTIMEZONE` ist keine davon.
+  - **Die übrigen Sätze der vier ABNFs.** Dass zu `REPEAT` ein `DURATION`
+    gehört, meldet niemand; dass `DUE` und `DURATION` nicht zusammen stehen
+    dürfen, meldet `P14`.
+  - **Eine dieser Komponenten am falschen Ort.** Ein `VFREEBUSY` innerhalb eines
+    `VEVENT` verstößt gegen die Schachtelung aus §3.6; welche Komponente wohin
+    gehört, prüft dieses Werkzeug nirgends. `P19` nimmt jede Komponente dieses
+    Namens, wo sie steht.
+
+  Die ersten zwei Grenzen stehen zusätzlich als Befund in `state/offen.md`,
+  damit sie nicht in einem späteren Zyklus stillschweigend mitgebaut werden.
 
 ## Dateien
 
@@ -472,7 +529,7 @@ pruefe.sh           Prüfbefehl 1: Beispiele gegen Erwartungen.
 rfc-beispiele.sh    Prüfbefehl 2: die sechs Kalender aus RFC 5545 §4.
 namensliste.sh      Herkunftsprüfung der Namensliste von P09. Kein Prüfbefehl
                     der Mission — er beweist die Herkunft, nicht die Prüfung.
-beispiele/          42 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
+beispiele/          46 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
 erwartet/           Je eine Datei mit der erwarteten Ausgabe.
 LAGE.md             Geprüfte Werkzeuglandschaft, mit Links.
 .gitattributes      Hält CRLF in beispiele/ auch über einen Klon hinweg.

@@ -1,0 +1,1 @@
+FEHLER Zeile 7: P19 UID (§3.8.4.7) steht zum wiederholten Mal im VJOURNAL ab Zeile 4; zuerst in Zeile 5 [RFC 5545 §3.6.3]

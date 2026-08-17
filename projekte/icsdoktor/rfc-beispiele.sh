@@ -46,12 +46,17 @@
 #     das nach dem Patch schweigt, weil es ueberhaupt schweigt, faellt damit
 #     auf. Auch das steht so in der Missionsdatei.
 #
-# Angewandt wird bisher nur Erratum 2039 auf Objekt 4. Erratum 4149 ergaenzt in
-# Objekt 6 das fehlende UID und DTSTAMP des VFREEBUSY (§3.6.4) und gehoert zu
-# Luecke 2 derselben Mission; solange der ICS-Doktor Pflichteigenschaften nur in
-# VEVENT prueft, wuerde die Verschaerfung oben fuer Objekt 6 fehlschlagen — zu
-# Recht, denn er schweigt dort. Es fehlt hier also nicht aus Versehen, sondern
-# weil die Pruefung dahinter noch nicht gebaut ist.
+# Angewandt werden seit 2026-08-17 zwei Errata. Das zweite ist 4149: Es ergaenzt
+# in Objekt 6 das fehlende UID und DTSTAMP des VFREEBUSY und nennt als
+# Begruendung die ABNF aus §3.6.4. Bis Zyklus 28 fehlte es hier mit Absicht —
+# solange der ICS-Doktor Pflichteigenschaften nur in VEVENT prueft, haette die
+# Verschaerfung "unkorrigiert muss er melden" fuer Objekt 6 zu Recht
+# fehlgeschlagen. Seit P19 meldet er dort, und damit faellt der Grund weg.
+#
+# Weil die Korrektur von 4149 zwei Zeilen einfuegt statt eine zu ersetzen, darf
+# im Ersatztext die Folge \n stehen; sie wird zum Zeilenumbruch CRLF. Die
+# Originalzeile bleibt eine einzelne Zeile, und die Bedingung "genau einmal"
+# gilt unveraendert fuer sie.
 #
 # Exit-Code: 0 kein Fehler und kein Hinweis in den sechs Objekten, 1 mindestens
 #            eines von beidem oder ein stummer ICS-Doktor auf einem
@@ -175,7 +180,9 @@ pfad, e_id, alt, neu = sys.argv[1:5]
 with open(pfad, "rb") as f:
     daten = f.read()
 alt_z = (alt + "\r\n").encode("utf-8")
-neu_z = (neu + "\r\n").encode("utf-8")
+# Ein "\n" im Ersatztext trennt zwei eingefuegte Zeilen (Erratum 4149 fuegt
+# zwei ein). Der Suchtext bleibt eine einzelne Zeile.
+neu_z = (neu.replace("\\n", "\r\n") + "\r\n").encode("utf-8")
 anzahl = daten.count(alt_z)
 if anzahl != 1:
     sys.stderr.write(
@@ -192,6 +199,7 @@ PY
     printf 'Erratum %s auf Objekt %s angewandt: %s\n' "$e_id" "$e_nr" "$e_neu"
 done <<'ERRATA'
 4	2039	TRIGGER:19980403T120000Z	TRIGGER;VALUE=DATE-TIME:19980403T120000Z
+6	4149	BEGIN:VFREEBUSY	BEGIN:VFREEBUSY\nUID:19970901T115957Z-76A912@example.com\nDTSTAMP:19970901T120000Z
 ERRATA
 
 fehler_gesamt=0

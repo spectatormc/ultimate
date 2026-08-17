@@ -1,0 +1,2 @@
+FEHLER Zeile 4: P19 VFREEBUSY ab Zeile 4 hat kein UID (§3.8.4.7); die Eigenschaft ist Pflicht und darf nur einmal vorkommen [RFC 5545 §3.6.4]
+FEHLER Zeile 4: P19 VFREEBUSY ab Zeile 4 hat kein DTSTAMP (§3.8.7.2); die Eigenschaft ist Pflicht und darf nur einmal vorkommen [RFC 5545 §3.6.4]

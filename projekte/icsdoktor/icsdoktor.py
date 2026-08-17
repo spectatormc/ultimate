@@ -54,6 +54,12 @@ VALUE=DATE-TIME eine DURATION, mit diesem Parameter einen DATE-TIME in UTC
 (§3.8.6.3). Sie ist die erste Pruefung, deren Beleg ein verifiziertes Erratum
 des RFC-Editors ist (Errata-ID 2039) und nicht nur der Normtext selbst.
 
+P19 stammt aus derselben Mission (Kennung "rfc4-6:§3.6") und ist die erste
+Pruefung, die ausserhalb von VEVENT nach Pflichteigenschaften sieht: UID und
+DTSTAMP in VTODO (§3.6.2), VJOURNAL (§3.6.3) und VFREEBUSY (§3.6.4), ACTION und
+TRIGGER in VALARM (§3.6.6). Sie ist P07 nachgebaut, das dasselbe fuer VEVENT
+tut, und ihr Beleg ist wieder ein verifiziertes Erratum (Errata-ID 4149).
+
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
 Aufruf:
@@ -1462,8 +1468,109 @@ def pruefe_p18(logische, funde):
                 "3.8.6.3"))
 
 
+# Welche Komponente ausserhalb von VEVENT welche Pflichteigenschaften hat, mit
+# dem Abschnitt, der die Pflicht ausspricht, und dem Abschnitt der Eigenschaft
+# selbst. Die Angaben stehen woertlich in der ABNF der jeweiligen Komponente;
+# der Wortlaut ist im Docstring von pruefe_p19 zitiert.
+#
+# VEVENT fehlt hier, weil P07 und P11 es abdecken — dieselbe Pflicht zweimal zu
+# melden waere schlechter als sie einmal zu melden.
+_PFLICHT_JE_KOMPONENTE = (
+    ("VTODO", "3.6.2", (("UID", "3.8.4.7"), ("DTSTAMP", "3.8.7.2"))),
+    ("VJOURNAL", "3.6.3", (("UID", "3.8.4.7"), ("DTSTAMP", "3.8.7.2"))),
+    ("VFREEBUSY", "3.6.4", (("UID", "3.8.4.7"), ("DTSTAMP", "3.8.7.2"))),
+    ("VALARM", "3.6.6", (("ACTION", "3.8.6.1"), ("TRIGGER", "3.8.6.3"))),
+)
+
+
+def pruefe_p19(komponenten, funde):
+    """§3.6.2, §3.6.3, §3.6.4, §3.6.6: Pflichteigenschaften ausserhalb VEVENT.
+
+    Woertlich, je Komponente aus ihrer eigenen Format Definition:
+
+    - todoprop (§3.6.2), jourprop (§3.6.3) und fbprop (§3.6.4) fuehren
+      "dtstamp / uid" unter "The following are REQUIRED, but MUST NOT occur
+      more than once."
+    - alarmc (§3.6.6) fuehrt "action / trigger" unter "'action' and 'trigger'
+      are both REQUIRED, but MUST NOT occur more than once." Dieser Satz steht
+      in allen drei Varianten — audioprop, dispprop und emailprop — gleich, und
+      deshalb braucht diese Pruefung den Wert des ACTION nicht zu kennen.
+
+    Vierte Pruefung aus der Mission Die vier Luecken,
+    state/missionen/2026-08-16-die-vier-luecken.md, Luecke 2. Der Anlass ist
+    eine Messung: gegenprobe.sh hat am 2026-08-16 unter der Kennung
+    "rfc4-6:§3.6" gezeigt, dass ein fremdes Werkzeug das VFREEBUSY im sechsten
+    Kalenderobjekt aus §4 beanstandet und der ICS-Doktor dazu schweigt. Der
+    Beleg kommt auch hier nicht von ihm und nicht von mir, sondern vom
+    RFC-Editor: Errata-ID 4149, Status Verified, gemeldet 2014-10-29,
+    bestaetigt 2014-10-30. Es ergaenzt in genau diesem Objekt das fehlende UID
+    und DTSTAMP und nennt als Begruendung die ABNF aus §3.6.4.
+
+    Dass die Familie in echter Software vorkommt, steht in owncloud/tasks
+    Nr. 272, offen seit 2015: Ein Programm meldet "Every VTODO component must
+    have an UID", und der Melder haelt das fuer einen Fehler, weil UID in der
+    ABNF von RFC 2445 §4.6.2 unter den optionalen Eigenschaften steht. In
+    RFC 5545 §3.6.2 ist es REQUIRED. Der Bericht ist damit kein Beleg gegen die
+    Pflicht, sondern dafuer, dass sie schwer zu finden ist.
+
+    P07 macht dasselbe fuer VEVENT (§3.6.1), und diese Pruefung ist ihm
+    absichtlich bis in den Wortlaut der Meldung nachgebaut: Wer beide Ausgaben
+    nebeneinander liest, soll nicht zwei Werkzeuge zu hoeren glauben. VEVENT
+    selbst bleibt bei P07 und P11 — eine zweite Meldung derselben Pflicht waere
+    kein zweiter Befund.
+
+    **Was ausdruecklich nicht geprueft wird:**
+
+    - **Die aktionsabhaengigen Pflichten des VALARM.** dispprop verlangt
+      zusaetzlich description, emailprop zusaetzlich description, summary und
+      attendee. Welche der drei Varianten gilt, haengt am Wert des ACTION — und
+      §3.8.6.1 laesst dort auch iana-token und x-name zu. Bei
+      "ACTION:X-MEIN-WECKER" ist keine der drei Varianten anwendbar, und eine
+      Pruefung, die dann die naechstliegende nimmt, meldet einen Verstoss gegen
+      eine Regel, die es fuer diesen Wert nicht gibt. Keine gemessene
+      Abweichung verlangt sie; sie steht als Befund in state/offen.md statt
+      hier nebenbei gebaut zu werden.
+    - **VTIMEZONE (§3.6.5) und seine Unterkomponenten.** Auch dort steht eine
+      Pflicht (tzid; in standardc und daylightc dtstart, tzoffsetto,
+      tzoffsetfrom). Die Missionsdatei nennt unter Luecke 2 vier Komponenten,
+      und diese ist keine davon: Die Messung, die den Anlass gibt, betrifft
+      VFREEBUSY. Eine fuenfte Komponente ohne Messung dahinter waere eine
+      Prueferweiterung, die sich hinterher als Teil der Aufgabe erzaehlen
+      liesse. Ebenfalls in state/offen.md benannt.
+    - **Die uebrigen Saetze der vier ABNFs.** Dass in todoprop 'due' und
+      'duration' nicht zusammen stehen duerfen, meldet P14; dass zu 'repeat'
+      ein 'duration' gehoert, meldet niemand. Diese Pruefung liest genau die
+      Zeile "The following are REQUIRED" und keine andere.
+    - **Eine dieser Komponenten am falschen Ort.** Ein VALARM ausserhalb von
+      VEVENT und VTODO oder ein VFREEBUSY in einem VEVENT verstoesst gegen die
+      Schachtelung aus §3.6; welche Komponente wohin gehoert, prueft dieses
+      Werkzeug nirgends. P19 nimmt jede Komponente dieses Namens, wo sie steht.
+    """
+    for komp in komponenten:
+        for name, abschnitt, pflichten in _PFLICHT_JE_KOMPONENTE:
+            if komp.name != name:
+                continue
+            for eigenschaft, eigen_abschnitt in pflichten:
+                treffer = komp.hole(eigenschaft)
+                if not treffer:
+                    funde.append(Fund(
+                        FEHLER, komp.zeile, "P19",
+                        "%s ab Zeile %d hat kein %s (§%s); die Eigenschaft ist "
+                        "Pflicht und darf nur einmal vorkommen"
+                        % (name, komp.zeile, eigenschaft, eigen_abschnitt),
+                        abschnitt))
+                for zeile, _ in treffer[1:]:
+                    funde.append(Fund(
+                        FEHLER, zeile, "P19",
+                        "%s (§%s) steht zum wiederholten Mal im %s ab Zeile "
+                        "%d; zuerst in Zeile %d"
+                        % (eigenschaft, eigen_abschnitt, name, komp.zeile,
+                           treffer[0][0]),
+                        abschnitt))
+
+
 def untersuche(rohdaten):
-    """Alle achtzehn Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle neunzehn Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     zeilen = zerlege_physisch(rohdaten)
     if not zeilen:
@@ -1492,6 +1599,7 @@ def untersuche(rohdaten):
     pruefe_p16(logische, funde)
     pruefe_p17(komponenten, funde)
     pruefe_p18(logische, funde)
+    pruefe_p19(komponenten, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))

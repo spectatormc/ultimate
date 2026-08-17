@@ -705,3 +705,101 @@ vorher aufgeschrieben wurde, und er ersetzt es nicht.
   `P18` schweigt — ein „hänge ein `Z` an" würde `20260901T1000` nicht retten.
 
 Alle vier Grenzen stehen auch im Docstring von `pruefe_p18` und im `README.md`.
+
+---
+
+# Nachtrag vom 2026-08-17 — Lücke 2 ist zu, in der Messung und im Verhalten
+
+Zweiter Nachtrag dieses Tages. Gleiche Regel wie bei allen davor: Die Messung
+oben bleibt Wort für Wort stehen, einschließlich des Abschnitts `rfc4-6:§3.6`,
+der jetzt keine Abweichung dieser Art mehr beschreibt. Hier steht nur, was sich
+danach geändert hat.
+
+Anlass ist die Mission `state/missionen/2026-08-16-die-vier-luecken.md`, Lücke 2.
+Sie ist die letzte der vier.
+
+## rfc4-6:§3.6.4 — Pflichten außerhalb VEVENT: Lücke geschlossen, Abweichung bleibt als Tiefe
+
+**Gemessen am 2026-08-17 nach dem Einbau von `P19`**, mit demselben Befehl,
+demselben festen Stand des fremden Werkzeugs (`e5554b9`) und denselben zwölf
+Eingaben:
+
+```
+§3.6.4 ~ §3.6  icsdoktor: FEHLER  Z4 x2 (P19)   fremd: FEHLER  Z4 x2 (DTSTAMP,UID)
+               ABWEICHUNG rfc4-6:§3.6.4 (abschnittstiefe)
+```
+
+**Beide melden jetzt dasselbe, und zwar nachprüfbar in vier Merkmalen:**
+dieselbe Zeile (4, die `BEGIN:VFREEBUSY`), dieselbe Anzahl (zwei), dieselbe
+Schwere (Fehler) und dieselben beiden Eigenschaften (`DTSTAMP`, `UID`). Übrig
+bleibt ein Unterschied in der Genauigkeit der Fundstelle: Das fremde Werkzeug
+nennt §3.6, der ICS-Doktor §3.6.4.
+
+**Diese Lücke schließt wie Lücke 3 und anders als Lücke 1.** §3.6 ist der
+Oberabschnitt von §3.6.4, und beide Befunde teilen sich eine Zeile — damit
+paart `gegenprobe.sh` sie, und die Abweichung wechselt von `nur-fremd` auf
+`abschnittstiefe`. Bei Lücke 1 war genau das nicht möglich, weil §3.8.6.3 kein
+Unterabschnitt von §3.3 ist. Die Kennung wandert dabei auf den tieferen der
+beiden Abschnitte: `rfc4-6:§3.6` wird zu `rfc4-6:§3.6.4`. Der Abschnitt oben
+läuft ab diesem Lauf als verwaist mit, so wie die zu §3.8.7 und §3.3.10.
+
+**Die Zahl, an der die Mission gemessen wird:** Abweichungen der Art
+`nur-fremd` gehen von **sechs auf fünf**. Die Gesamtzahl bleibt bei
+**dreizehn** — eine Abweichung wechselt die Art, keine kommt hinzu und keine
+fällt weg. Die fünf verbleibenden `nur-fremd`:
+
+| Kennung | Teil dieser Mission? |
+|---|---|
+| `rfc4-4:§3.3` | ja — Lücke 1, im Verhalten zu, in der Messung verfehlt |
+| `calcurse-323:§3.6` | nein — „kein Befund" |
+| `vagov-23608:§3.8.2.2` | nein — „unentschieden" |
+| `simplecal-1983:§3.8.5.1` | nein — „kein Befund" |
+| `fossify-1102:§3.8.5.1` | nein — „kein Befund" |
+
+**Damit ist die Vorhersage vom Vormittag eine Messung geworden, und sie stimmt.**
+Der Nachtrag vom 2026-08-17 in der Missionsdatei sagt: *„Selbst wenn Lücke 2
+zugeht — dort besteht die Paarung, weil §3.6 der Oberabschnitt von §3.6.4 ist —,
+blieben fünf `nur-fremd` gegen die geforderten höchstens vier. Diese zweite
+Rechnung ist eine Vorhersage und keine Messung."* Gemessen sind es fünf. Der
+Fehlschlag an Punkt 1 der Zieldefinition steht damit auf zwei unabhängigen
+Befunden statt auf einem; er wird dadurch nicht schwerer und nicht leichter,
+sondern nur besser belegt.
+
+**Alle vier Lücken sind gebaut, das Ziel ist verfehlt.** Diese beiden Sätze
+stehen nebeneinander und werden nicht miteinander verrechnet. `P16`, `P17`,
+`P18` und `P19` sind da; die Zahl, die vorher als Maß festgelegt wurde, ist
+nicht erreicht. Was die Mission daraus macht, entscheidet ihr Abschlussblock am
+Fristende und nicht dieser Nachtrag.
+
+**Was `P19` nicht prüft**, damit es niemand hineinliest:
+
+- **Die aktionsabhängigen Pflichten des `VALARM`.** `dispprop` verlangt
+  zusätzlich `DESCRIPTION`, `emailprop` zusätzlich `DESCRIPTION`, `SUMMARY` und
+  `ATTENDEE`. Welche Variante gilt, hängt am Wert des `ACTION`, und §3.8.6.1
+  lässt dort auch `iana-token` und `x-name` zu — bei `ACTION:X-MEIN-WECKER` ist
+  keine der drei anwendbar.
+- **`VTIMEZONE` (§3.6.5) und seine Unterkomponenten.** Auch dort steht eine
+  Pflicht. Die Messung, die diese Prüfung auslöst, betrifft `VFREEBUSY`, und die
+  Missionsdatei nennt unter Lücke 2 vier Komponenten; `VTIMEZONE` ist keine
+  davon.
+- **Die übrigen Sätze der vier ABNFs**, etwa dass zu `REPEAT` ein `DURATION`
+  gehört.
+- **Eine dieser Komponenten am falschen Ort.** `P19` nimmt jede Komponente
+  dieses Namens, wo sie steht.
+
+Die ersten zwei Grenzen stehen zusätzlich als Befund in `state/offen.md`, damit
+sie nicht in einem späteren Zyklus stillschweigend mitgebaut werden. Alle vier
+stehen im Docstring von `pruefe_p19` und im `README.md`.
+
+## Was sich an `rfc-beispiele.sh` geändert hat
+
+Erratum **4149** wird jetzt angewandt, wörtlich, mit der Errata-ID daneben — bis
+zu diesem Zyklus fehlte es mit Begründung, weil die Verschärfung „auf dem
+unkorrigierten Objekt muss der ICS-Doktor melden" für Objekt 6 zu Recht
+fehlgeschlagen wäre. Gemessen in diesem Lauf: **zwei Befunde** auf dem
+unkorrigierten Objekt 6, die Verschärfung greift. Danach sechs Objekte, null
+Fehler, null Hinweise, Exit 0.
+
+Neu ist außerdem, dass ein Ersatztext zwei Zeilen einfügen darf: 4149 ergänzt
+zwei Zeilen, statt eine zu ersetzen. Die Bedingung „die Originalzeile muss genau
+einmal vorkommen" gilt unverändert für die gesuchte Zeile.

@@ -1,0 +1,1 @@
+FEHLER Zeile 9: P19 VALARM ab Zeile 9 hat kein ACTION (§3.8.6.1); die Eigenschaft ist Pflicht und darf nur einmal vorkommen [RFC 5545 §3.6.6]
