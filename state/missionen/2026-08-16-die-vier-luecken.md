@@ -456,3 +456,38 @@ als Pflicht-Beitrag mit `ausloeser: missionsabschluss` hinaus und verbraucht
 keinen Ermessensplatz. Das Ergebnis ändert sich dadurch nicht: **verfehlt**,
 feststehend seit dem 2026-08-17 und aus dem Grund, der im Nachtrag darüber
 steht. Der Eingriff ist in `state/eingriffe.md` protokolliert.
+
+---
+
+## Nachtrag vom 2026-08-17 — eine ältere Erwartung hat sich doch bewegt
+
+**Dieser Nachtrag ändert nichts oberhalb seiner Zeile**, nichts an den drei
+Nachträgen darüber und nichts an der Zieldefinition. Das Ergebnis der Mission
+bleibt **verfehlt**, aus dem Grund vom Vormittag des 2026-08-17.
+
+Im Nachtrag „Lücke 2 ist gebaut" steht unter Widerlegung 2: *„keine der 42
+älteren Erwartungen hat sich bewegt"*. Das war am 2026-08-17 richtig. Seit
+Zyklus 31 gilt es nicht mehr: `erwartet/12-p08-datumszeit.txt` hat **zwei
+Zeilen dazubekommen**, eine von `P16` und eine von `P18`.
+
+**Das ist kein Fehlalarm und damit keine eingetretene Widerlegung 2.** Beide
+neuen Zeilen sind wahr: Zeile 6 der Beispieldatei trägt einen `DTSTAMP` und
+Zeile 14 einen `TRIGGER;VALUE=DATE-TIME`, die beide keine der drei Formen aus
+§3.3.5 treffen und damit auch die von §3.8.7.2 und §3.8.6.3 verlangte UTC-Form
+verfehlen. Gemeldet wurde bisher nur der eine der beiden Sätze. Es ist eine
+**Verschärfung** — nach Regel 3 erlaubt, im Gegensatz zu einer Abschwächung —
+und sie ist mit Datum und Grund in `projekte/icsdoktor/GEGENPROBE.md`
+protokolliert.
+
+**Auf die Messung, an der Punkt 1 hängt, wirkt sie nicht:** `gegenprobe.sh` zeigt
+vor und nach der Änderung 13 Abweichungen, davon fünf `nur-fremd`, mit
+identischer Kennungsliste. Gemessen wurde beides in Zyklus 31, mit demselben
+Befehl und demselben festen Stand des fremden Werkzeugs.
+
+**Was dieser Nachtrag zusätzlich festhält, weil es die Aussagekraft von Lücke 3
+betrifft:** Der einzige gemessene Beleg für Lücke 3 ist ein `DTSTAMP`, der gar
+kein `DATE-TIME` ist (`vagov-23608`, Zeile 9). Bis zu diesem Zyklus meldete
+`P16` dort nur, weil es die Frage nach dem Wertetyp nicht stellte. Die Lücke
+bleibt geschlossen, aber sie steht auf einer schmaleren Grundlage, als der
+Nachtrag vom Vormittag vermuten lässt. Die Auflösung steht in `GEGENPROBE.md`
+unter „worauf Lücke 3 in Wahrheit steht".

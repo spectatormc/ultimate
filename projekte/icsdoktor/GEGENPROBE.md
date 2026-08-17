@@ -803,3 +803,92 @@ Fehler, null Hinweise, Exit 0.
 Neu ist außerdem, dass ein Ersatztext zwei Zeilen einfügen darf: 4149 ergänzt
 zwei Zeilen, statt eine zu ersetzen. Die Bedingung „die Originalzeile muss genau
 einmal vorkommen" gilt unverändert für die gesuchte Zeile.
+
+---
+
+# Nachtrag vom 2026-08-17 — worauf Lücke 3 in Wahrheit steht
+
+**Dieser Nachtrag ändert nichts oberhalb seiner Zeile.** Er hält fest, was eine
+Messung in Zyklus 31 gezeigt hat, und benennt eine Begründung im Repo, die
+falsch war.
+
+## Der `DTSTAMP`, an dem Lücke 3 gemessen wird, ist gar kein `DATE-TIME`
+
+Die Fremddatei `vagov-23608` trägt in Zeile 9:
+
+```
+DTSTAMP:NaNNaNNaNTNaNNaNNaN
+```
+
+Das ist die **einzige** der zwölf Eingaben, an der §3.8.7.2 überhaupt vorkommt —
+Lücke 3 hängt vollständig an dieser Zeile. Und der Wert verfehlt nicht nur die
+UTC-Form, er ist überhaupt keine der drei Formen aus §3.3.5. `P16` hat dort bis
+heute gemeldet, weil es die Frage „ist das ein `DATE-TIME`?" gar nicht stellte
+und schlicht am fehlenden `Z` hängenblieb.
+
+**Damit stand `P16` genau auf der Ungereimtheit, die seit Zyklus 28 als Befund
+in `state/offen.md` steht** — nicht daneben. Hätte ich sie in die naheliegende
+Richtung aufgelöst (`P16` schweigt wie `P18`, wo der Typ schon abweicht), wäre
+`vagov-23608:§3.8.7.2` wieder `nur-fremd` geworden und Lücke 3 in der Messung
+wieder aufgegangen: `nur-fremd` von fünf auf **sechs**.
+
+## Was daraus folgt und was ausdrücklich nicht
+
+**Nicht** ein neuer Fehlschlag: Punkt 1 der Zieldefinition ist seit dem
+2026-08-17 verfehlt und feststehend, aus einem unabhängigen Grund
+(`rfc4-4:§3.3` kann sich nicht mehr bewegen). Diese Messung ändert daran nichts,
+in keine Richtung.
+
+**Wohl aber** eine Einschränkung dessen, was „Lücke 3 ist zu" heißt: Der Beleg
+ist eine einzige Zeile einer einzigen Fremddatei, und ihr Wert ist so kaputt,
+dass zwei Sätze der Norm zugleich auf ihn zutreffen. Wer aus dieser Lücke mehr
+liest als „auf dieser einen Eingabe meldet der ICS-Doktor jetzt auch §3.8.7.2",
+liest zu viel hinein.
+
+## Die Auflösung, und warum sie nicht die bequeme ist
+
+Aufgelöst wurde in die andere Richtung: **`P18` meldet jetzt ebenfalls**, statt
+dass `P16` verstummt. Begründung am Normtext, nicht an der Zahl — §3.8.7.2 und
+§3.8.6.3 verlangen die UTC-Form, und ein Wert, der schon keine Zeitangabe ist,
+verfehlt sie erst recht. Was nicht trug, war nie der Befund, sondern der Rat
+„häng ein `Z` an"; geändert ist deshalb der Wortlaut.
+
+Die Grenze verläuft ab jetzt zwischen **Einzelwert und Beziehung**: `P12` bis
+`P14` und `P17` vergleichen zwei Zeilen und schweigen, wenn eine Seite unlesbar
+ist — da gibt es nichts zu vergleichen. `P16` und `P18` messen einen Wert an
+einem Satz, den er allein verletzt.
+
+**Der unbequeme Teil, der hierher gehört:** Von den beiden Richtungen ist die
+gewählte die, die meine eigene Zahl stehen lässt. Die andere hätte sie
+verschlechtert. Ich habe deshalb vor und nach der Änderung gemessen, mit
+demselben Befehl und demselben festen Stand des fremden Werkzeugs:
+
+| | vorher | nachher |
+|---|---|---|
+| Abweichungen gesamt | 13 | **13** |
+| davon `nur-fremd` | 5 | **5** |
+| Liste der Kennungen | | **identisch** |
+| `--pruefe-abdeckung` | 13/13 | **13/13** |
+
+Die Zahl bewegt sich nicht — sie kann sich durch diese Änderung auch nicht
+verbessern: Keine der fünf `nur-fremd`-Kennungen liegt in §3.8.7.2 oder
+§3.8.6.3. Was die Änderung bewirken konnte, war ausschließlich, dass der
+ICS-Doktor **mehr** meldet als das fremde Werkzeug, also `nur-icsdoktor` steigt.
+Getan hat sie auf diesen zwölf Eingaben keines von beidem.
+
+## Die Begründung, die falsch war
+
+In `state/offen.md` steht seit Zyklus 28 als Grund, die Ungereimtheit nicht
+anzufassen: *„kein Beispiel und keine der zwölf Eingaben löst den Fall heute
+aus"*. Beide Hälften sind falsch, und die Gegenbelege lagen im Repo:
+
+- `beispiele/12-p08-datumszeit.ics` trägt in **Zeile 14**
+  `TRIGGER;VALUE=DATE-TIME:20260901T1000` — genau der Fall, in dem `P18`
+  schwieg.
+- `vagov-23608` löst die `P16`-Seite aus, und zwar an der Stelle, an der Lücke 3
+  gemessen wird. Das stand sogar im `README.md` derselben Mission, im Wortlaut,
+  mit dem Wert daneben.
+
+Nachprüfbar ist beides ohne mich: die eine Zeile in der Beispieldatei, die
+andere im Lauf von `gegenprobe.sh`. Der Satz in `offen.md` wird nicht gelöscht,
+sondern dort als widerlegt gekennzeichnet.

@@ -1,0 +1,4 @@
+FEHLER Zeile 6: P08 DTSTAMP: Wert "20260901T0900" ist kein DATE-TIME; erwartet wird JJJJMMTT, ein 'T' und HHMMSS, wahlweise mit 'Z' am Ende [RFC 5545 §3.3.5]
+FEHLER Zeile 6: P16 DTSTAMP steht mit "20260901T0900" nicht in der UTC-Form; der Wert ist schon kein DATE-TIME, ein angehängtes 'Z' genügt hier also nicht [RFC 5545 §3.8.7.2]
+FEHLER Zeile 12: P08 TRIGGER: Wert "20260901T0830" ist kein DATE-TIME; erwartet wird JJJJMMTT, ein 'T' und HHMMSS, wahlweise mit 'Z' am Ende [RFC 5545 §3.3.5]
+FEHLER Zeile 12: P18 TRIGGER steht mit "20260901T0830" nicht in der UTC-Form; der Wert ist schon kein DATE-TIME, ein angehängtes "Z" genügt hier also nicht [RFC 5545 §3.8.6.3]

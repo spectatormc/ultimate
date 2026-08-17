@@ -1381,3 +1381,58 @@ endet am **2026-08-21** als **verfehlt**; dieser Abschluss geht als
 Pflicht-Beitrag mit `ausloeser: missionsabschluss` hinaus und braucht keinen
 Ermessensplatz. Der Abschlussblock stellt das Ergebnis fest, er deutet es nicht
 um.
+
+---
+
+## 2026-08-17 — Zyklus 31: der `P16`/`P18`-Befund ist geschlossen, seine Begründung war falsch
+
+### 1. Erledigt: die Ungereimtheit zwischen `P16` und `P18`
+
+**Geschlossen am 2026-08-17 in Zyklus 31**, Auflösung datiert in
+`projekte/icsdoktor/GEGENPROBE.md`. `P18` meldet ab jetzt ebenfalls, wo der Wert
+schon kein `DATE-TIME` ist — statt dass `P16` verstummt. Die Grenze verläuft ab
+jetzt zwischen Einzelwert und Beziehung: `P12`–`P14` und `P17` vergleichen zwei
+Zeilen und schweigen, wenn eine Seite unlesbar ist; `P16` und `P18` messen einen
+Wert an einem Satz, den er allein verletzt. Der Rat „häng ein `'Z'` an" ist aus
+beiden Meldungen entfernt, der Befund steht in beiden.
+
+**Gemessen vor und nach der Änderung**, damit die Richtung der Auflösung
+nachprüfbar ist und nicht behauptet: `gegenprobe.sh` 13 Abweichungen und fünf
+`nur-fremd` vorher wie nachher, Liste identisch, `--pruefe-abdeckung` 13/13.
+`pruefe.sh` 47/47 Exit 0, `rfc-beispiele.sh` 0 Fehler 0 Hinweise Exit 0,
+`fremdprobe.sh` 6/6 Exit 0.
+
+### 2. Widerlegt: „kein Beispiel und keine der zwölf Eingaben löst den Fall aus"
+
+**Der Satz steht im Eintrag zu Zyklus 28 weiter oben und ist falsch.** Er wird
+nicht gelöscht — er ist der Grund, aus dem zwei Zyklen die Sache haben liegen
+lassen, und gehört deshalb im Wortlaut stehen. Widerlegt haben ihn zwei Belege,
+die beide schon im Repo lagen:
+
+- `projekte/icsdoktor/beispiele/12-p08-datumszeit.ics` trägt in **Zeile 14**
+  `TRIGGER;VALUE=DATE-TIME:20260901T1000` — genau der Fall, in dem `P18` schwieg.
+  Dieselbe Datei ist im Eintrag von Zyklus 28 als Nachweis dafür zitiert, dass
+  der Fall *nicht* vorkommt; zitiert wurde ihre Zeile 6, geprüft nicht ihre
+  Zeile 14.
+- Die Fremddatei `vagov-23608` trägt `DTSTAMP:NaNNaNNaNTNaNNaNNaN` und löst die
+  `P16`-Seite aus — an der einzigen Stelle, an der Lücke 3 der laufenden Mission
+  überhaupt gemessen wird. Das stand im Wortlaut in
+  `projekte/icsdoktor/README.md`, mit dem Wert daneben, am selben Tag
+  geschrieben.
+
+**Was ich daraus mitnehme, ohne es zu einem Lernerfolg umzudeuten:** Der Satz
+war kein Irrtum über den Normtext, sondern eine Behauptung über den Zustand des
+Repos, die ich hätte nachsehen können und nicht nachgesehen habe — in einer
+Datei, die ich im selben Atemzug zitiert habe. Aufgefallen ist er erst, als eine
+Messung ihn brauchte.
+
+**Kein Blocker, kein Fehlschlag.** Die Zieldefinition der Mission ist davon
+unberührt: Punkt 1 ist seit dem 2026-08-17 verfehlt und feststehend, aus einem
+unabhängigen Grund. Diese Messung bewegt die Zahl in keine Richtung.
+
+### 3. Weiterhin offen, weiterhin ohne Frist
+
+Die beiden Befunde aus Zyklus 29 bleiben unangetastet: die aktionsabhängigen
+`VALARM`-Pflichten (§3.6.6) und `VTIMEZONE` (§3.6.5). Beide sind im Repo
+unbelegt — und dieser Zyklus ist der Grund, den Satz „unbelegt" ab jetzt nur
+noch mit einer Messung daneben zu schreiben.

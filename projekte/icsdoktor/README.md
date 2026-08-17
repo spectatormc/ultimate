@@ -453,6 +453,18 @@ Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
   deshalb zwei Meldungen, und das ist Absicht. Der Fall ist real: Die Fremddatei
   aus `department-of-veterans-affairs/va.gov-team#23608` trägt
   `DTSTAMP:NaNNaNNaNTNaNNaNNaN` und bekommt `P08` **und** `P16`.
+
+  **Seit dem 2026-08-17 lautet die zweite Meldung dort anders.** Bis dahin
+  stand auch auf einem solchen Wert „verlangt ist ein `'Z'` am Ende" — ein Rat,
+  den zu befolgen den Wert nicht gerettet hätte. Der Befund bleibt, weil
+  §3.8.7.2 die UTC-Form verlangt und dieser Wert sie verfehlt; geändert ist der
+  Wortlaut: „der Wert ist schon kein `DATE-TIME`, ein angehängtes `'Z'` genügt
+  hier also nicht". `beispiele/46-p16-p18-kein-datetime.ics` hält den Fall fest.
+
+  Die Meldung nennt `P08` bewusst **nicht** beim Namen. Bei
+  `DTSTAMP;VALUE=DATE:20260901` schweigt `P08` (ein anderer Wertetyp ist nicht
+  seine Frage), `P16` meldet trotzdem — ein Verweis wäre dort ein Zeiger ins
+  Leere.
 - **`P17` prüft `UNTIL` gegen `DTSTART` und sonst nichts an einer `RRULE`.**
   Drei Grenzen, alle vor dem ersten Commit festgelegt:
 
@@ -490,12 +502,21 @@ Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
     lässt `P18` ganz schweigen, statt den Wert an einem Typ zu messen, den die
     Zeile nicht behauptet.
 
-  Bei einem Wert, der schon kein `DATE-TIME` ist, meldet `P08` die Form und
-  `P18` schweigt — bei `TRIGGER;VALUE=DATE-TIME:20260901T1000` würde ein
-  angehängtes `Z` nichts retten, und ein Rat, der nicht trägt, ist schlechter
-  als keiner. **`P16` macht das an derselben Stelle anders** und meldet auch auf
-  einem kaputten `DTSTAMP` das fehlende `Z`. Der Unterschied ist gesehen, nicht
-  übersehen; er steht in `state/offen.md` und wird nicht still angeglichen.
+  **Bei einem Wert, der schon kein `DATE-TIME` ist, meldet `P18` seit dem
+  2026-08-17 mit — vorher schwieg es.** Die alte Begründung lautete: Bei
+  `TRIGGER;VALUE=DATE-TIME:20260901T1000` würde ein angehängtes `Z` nichts
+  retten, und ein Rat, der nicht trägt, ist schlechter als keiner. Der zweite
+  Halbsatz stimmt; der Schluss daraus nicht. Nicht der Befund trägt nicht,
+  sondern der Rat — wer `VALUE=DATE-TIME` schreibt, hat sich nach §3.8.6.3 auf
+  die UTC-Form festgelegt, und die verfehlt dieser Wert. Geändert wurde deshalb
+  der Wortlaut, nicht das Schweigen: `P18` sagt jetzt dasselbe wie `P16`.
+
+  **Die Grenze verläuft zwischen Einzelwert und Beziehung, nicht zwischen
+  `P16` und `P18`.** `P17`, `P12` bis `P14` vergleichen zwei Zeilen; ist eine
+  Seite unlesbar, gibt es nichts zu vergleichen und jede Meldung wäre geraten.
+  `P16` und `P18` messen einen Wert an einem Satz, den er allein verletzt —
+  dafür braucht es keine zweite Zeile. Bis zum 2026-08-17 stand diese Grenze
+  falsch und die Ungereimtheit in `state/offen.md`; sie ist dort geschlossen.
 - **`P19` liest genau den Satz „The following are REQUIRED" und keinen
   anderen.** Vier Grenzen, alle vor dem ersten Commit festgelegt:
 

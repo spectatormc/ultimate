@@ -1188,6 +1188,22 @@ def pruefe_p16(logische, funde):
     Wer nur "kein DATE-TIME" liest, weiss nicht, dass ihm ausserdem die
     Zeitzone fehlt.
 
+    **Auf einem Wert, der schon kein DATE-TIME ist, wird trotzdem gemeldet —
+    nur anders formuliert.** Bis zum 2026-08-17 stand hier der Satz "verlangt
+    ist ein 'Z' am Ende", auch auf einem Wert wie "NaNNaNNaNTNaNNaNNaN", den
+    ein angehaengtes 'Z' nicht rettet. Der Rat trug nicht; die Klage schon.
+    §3.8.7.2 verlangt die UTC-Form, und wer sie verfehlt, verfehlt sie auch
+    dann, wenn er zusaetzlich §3.3.5 verfehlt. Geaendert wurde deshalb der
+    Wortlaut und nicht der Befund. Die Begruendung im Absatz darueber traegt
+    genau bis hierhin: Wer "kein DATE-TIME" liest und repariert, schreibt sonst
+    Ortszeit hin und erfaehrt den zweiten Satz erst beim naechsten Lauf.
+
+    **Warum die zweite Meldung P08 nicht beim Namen nennt.** Naheliegend waere
+    "siehe P08". Bei "DTSTAMP;VALUE=DATE:20260901" schweigt P08 aber (ein
+    anderer Wertetyp ist nicht seine Frage), waehrend diese Pruefung meldet —
+    der Verweis waere dann ein Zeiger ins Leere. Der Satz steht deshalb fuer
+    sich.
+
     **Was ausdruecklich nicht gemeldet wird:**
 
     - **Ortszeit in DTSTART, DTEND, DUE.** Dort ist sie erlaubt (§3.3.5,
@@ -1211,6 +1227,14 @@ def pruefe_p16(logische, funde):
                 FEHLER, lz.nr, "P16",
                 "DTSTAMP trägt den Parameter TZID=%s und steht damit in "
                 "Ortszeit; verlangt ist die UTC-Form mit 'Z' am Ende" % tzid,
+                "3.8.7.2"))
+            continue
+        if _pruefe_datetime(wert, None) is not None:
+            funde.append(Fund(
+                FEHLER, lz.nr, "P16",
+                "DTSTAMP steht mit %s nicht in der UTC-Form; der Wert ist "
+                "schon kein DATE-TIME, ein angehängtes 'Z' genügt hier also "
+                "nicht" % _zeige_wort(wert),
                 "3.8.7.2"))
             continue
         if not wert.endswith("Z"):
@@ -1408,15 +1432,23 @@ def pruefe_p18(logische, funde):
     - **Ein TRIGGER ausserhalb von VALARM.** Die Conformance-Zeile verlangt ihn
       dort; welche Eigenschaft in welche Komponente gehoert, prueft dieses
       Werkzeug nur fuer die Pflichtfaelle P06, P07 und P11.
-    - **Ein Wert, der schon kein DATE-TIME ist.** Bei
-      "TRIGGER;VALUE=DATE-TIME:20260901T1000" meldet P08 die Form, und P18
-      schweigt: Ein 'Z' ans Ende zu haengen wuerde diesen Wert nicht retten,
-      und ein Rat, der nicht traegt, ist schlechter als keiner. Das ist
-      dieselbe Aufteilung wie bei P17 — wo der Typ schon abweicht, ist der
-      Zeitbezug keine zweite Frage. **P16 macht es an dieser Stelle anders**
-      und meldet auch auf einem kaputten DTSTAMP das fehlende 'Z'; der
-      Unterschied ist gesehen und in state/offen.md festgehalten, statt hier
-      still angeglichen zu werden.
+
+    **Ein Wert, der schon kein DATE-TIME ist, wird seit dem 2026-08-17
+    gemeldet.** Vorher schwieg P18 dort mit der Begruendung, ein angehaengtes
+    'Z' rette "TRIGGER;VALUE=DATE-TIME:20260901T1000" nicht und ein Rat, der
+    nicht traegt, sei schlechter als keiner. Der zweite Halbsatz stimmt, der
+    Schluss daraus nicht: Nicht der Befund traegt nicht, sondern der Rat. Wer
+    VALUE=DATE-TIME schreibt, hat sich nach §3.8.6.3 auf die UTC-Form
+    festgelegt, und die verfehlt dieser Wert. Gemeldet wird deshalb mit
+    geaendertem Wortlaut statt geschwiegen — dieselbe Regel wie bei P16.
+
+    **Die Grenze zu P17 verlaeuft nicht zwischen diesen beiden Pruefungen,
+    sondern zwischen Einzelwert und Beziehung.** P17 vergleicht UNTIL mit
+    DTSTART; ist eine der beiden Seiten unlesbar, gibt es nichts zu
+    vergleichen, und jede Meldung waere geraten. P16 und P18 messen einen Wert
+    an einem Satz der Norm, den er allein verletzt — dafuer braucht es keine
+    zweite Zeile. Bis zum 2026-08-17 stand die Grenze falsch, naemlich zwischen
+    P16 und P18, und stand als Ungereimtheit in state/offen.md.
     """
     for lz in logische:
         if lz.name != "TRIGGER":
@@ -1458,7 +1490,13 @@ def pruefe_p18(logische, funde):
                 "3.8.6.3"))
             continue
         if _pruefe_datetime(wert, None) is not None:
-            continue                     # kein DATE-TIME: das meldet P08
+            funde.append(Fund(
+                FEHLER, lz.nr, "P18",
+                "TRIGGER steht mit %s nicht in der UTC-Form; der Wert ist "
+                "schon kein DATE-TIME, ein angehängtes \"Z\" genügt hier also "
+                "nicht" % _zeige_wort(wert),
+                "3.8.6.3"))
+            continue
         if not wert.endswith("Z"):
             funde.append(Fund(
                 FEHLER, lz.nr, "P18",
