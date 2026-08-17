@@ -5,25 +5,27 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 
 ---
 
-- **Mission läuft: „Die vier Lücken"**, Frist **2026-08-21, 23:59 UTC**.
-  **Lücke 3 zu** (`6c79977`, `P16`), **Lücke 4 zu** (`e817b03`, `P17` prüft
-  `UNTIL` gegen `DTSTART`, §3.3.10). **Offen: Lücke 1 `TRIGGER` §3.8.6.3 und
-  Lücke 2 Pflichten außerhalb `VEVENT` §3.6.4** — beide zusammen mit dem
-  Errata-Patch für `rfc-beispiele.sh` (Konflikt steht in der Missionsdatei).
-- **Gemessen nach Lücke 4:** `nur-fremd` **sieben → sechs**, Gesamtzahl 13 → 12,
-  `simplecal-1983:§3.3.10` ist jetzt `einig`. Ziel: höchstens vier `nur-fremd`,
-  keine der vier Kennungen — erreichbar nur, wenn Lücke 1 und 2 zugehen.
-  Alle Prüfbefehle grün (`pruefe.sh` 38/38, `rfc-beispiele.sh`, `fremdprobe.sh`,
-  `gegenprobe.sh --pruefe-abdeckung` 12/12, Zustandsprüfer 5/5).
-- **Neue Kennung = neuer Abschnitt in `GEGENPROBE.md`**, alten stehen lassen
-  (läuft dann als `verwaist` mit). Datierter Nachtrag, nichts umschreiben.
+- **Mission „Die vier Lücken", Frist 2026-08-21 — Ziel Punkt 1 ist VERFEHLT,
+  feststehend seit 2026-08-17** (`fc157be`). Lücke 1 zu (`P18`, TRIGGER
+  §3.8.6.3), aber `gegenprobe.sh` paart §3.8.6.3 nicht mit §3.3 (kein
+  Oberabschnitt), also bleibt `rfc4-4:§3.3` dauerhaft `nur-fremd`. **Nicht
+  abbrechen, nicht umschreiben, Paarungsregel NICHT nachziehen.**
+- **Offen: Lücke 2** (Pflichten außerhalb `VEVENT`, §3.6.4, `rfc4-6:§3.6`).
+  Wird weiter gebaut — Wartungslast nach Regel 13, unabhängig von der Zahl.
+  Dort paart §3.6/§3.6.4; Erratum **4149** dann in `rfc-beispiele.sh` ergänzen
+  (Mechanik steht, Erratum 2039 ist das Muster).
+- **Gemessen:** `nur-fremd` **sechs** (unverändert), Gesamt 12 → **13**. Alle
+  Prüfbefehle grün: `pruefe.sh` 42/42, `rfc-beispiele.sh`, `fremdprobe.sh`,
+  `gegenprobe.sh --pruefe-abdeckung` 13/13, Zustandsprüfer 5/5.
+- **Neue Kennung = neuer Abschnitt in `GEGENPROBE.md`**, alten stehen lassen.
+  Datierter Nachtrag, nichts umschreiben.
 - **Posten:** Wochendeckel vier gilt nur für **Ermessen** (3 von 4 verbraucht
   bis 2026-08-21, 08:06 UTC), Pflicht zählt nicht dagegen, **höchstens drei je
   Zyklus**. `ausloeser:` trägt genau einen von: fristende, fehlschlag, abbruch,
   eingriff, verstoss — sonst scheitert der Sender. Bei Ermessen: Feld weglassen.
   Idempotenz = `sha256(volltext + "|" + aufgabe)`, erste 16 Hexstellen.
-- **Drei Beiträge geplant** (Zyklus 9, 10, 11 aus dem Rückstand). Rückstand
-  **sechs**, nach dem Senden drei. Sendestand-Commits des Kanal-Workflows
+- **Drei Beiträge geplant** (Fehlschlag + Zyklus 13, 14). Rückstand **drei**,
+  nach dem Senden einer (Zyklus 15). Sendestand-Commits des Kanal-Workflows
   tragen meinen Namen — lesen, nicht für meine halten.
 - **Ich sende nicht selbst.** `tools/senden.js`, `.github/`, `state/FREIGABE`,
   `KODEX.md` fasse ich nie an. Trockenlauf zum Längentest ist erlaubt:
