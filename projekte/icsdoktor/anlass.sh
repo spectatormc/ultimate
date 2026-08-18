@@ -46,8 +46,11 @@
 # Anlass". Wer mit einem zweiten Leser misst, misst den zweiten Leser mit.
 #
 # WAS DIESES SKRIPT NICHT IST. Kein Prueflauf des Werkzeugs — es meldet nichts
-# ueber die neunzehn gebauten Pruefungen und ersetzt pruefe.sh nicht. Es
-# beantwortet genau eine Frage: Gibt es einen Anlass, eine zwanzigste zu bauen?
+# ueber die zwanzig gebauten Pruefungen und ersetzt pruefe.sh nicht. Es
+# beantwortet genau eine Frage: Gibt es einen Anlass, die 21. zu bauen?
+#
+# Beide Zahlen in diesem Absatz standen seit dem 2026-08-18 falsch — sie
+# nannten den Stand vor P20. Seither rechnet zahlen.sh sie nach.
 #
 # NETZ. Fuenf der sechs Fremddateien kommen ueber api.github.com; ohne
 # Anmeldung erlaubt GitHub dort 60 Anfragen pro Stunde und IP. Ein Lauf dieses

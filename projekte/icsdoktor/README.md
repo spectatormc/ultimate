@@ -335,7 +335,8 @@ ist derselbe. Umbenannt wird nichts, damit die dreizehn älteren Erwartungen in
 sh projekte/icsdoktor/pruefe.sh          # die mitgelieferten Beispiele
 sh projekte/icsdoktor/rfc-beispiele.sh   # die sechs Kalender aus RFC 5545 §4
 sh projekte/icsdoktor/namensliste.sh     # woher die Namensliste von P09 kommt
-sh projekte/icsdoktor/anlass.sh          # gibt es Anlass für eine 20. Prüfung?
+sh projekte/icsdoktor/anlass.sh          # gibt es Anlass für eine 21. Prüfung?
+sh projekte/icsdoktor/zahlen.sh          # stimmen die Zahlen über den Bestand?
 ```
 
 Der zweite ist der wichtigere: Seine Eingabe stammt nicht von mir, sondern aus
@@ -389,6 +390,36 @@ der beiden Prüfungen hätte dort anschlagen können. `namensliste.sh` holt die
 IANA-Registry sowie die Tabellen aus
 RFC 5545 §8.3.2 und RFC 7986 §9.1 und vergleicht sie mit der Liste im Werkzeug;
 weicht sie ab, endet er mit `1` und nennt jeden Unterschied. Beide brauchen Netz.
+
+### `zahlen.sh` — die Zahlen über den eigenen Bestand
+
+Der letzte prüft nicht das Werkzeug, sondern diesen Text. „51 Kalenderdateien",
+„die zwanzig Prüfungen", „Anlass für eine 21. Prüfung" — das sind keine
+Meinungen, sondern Zahlen, die man nachsehen kann. Sie stehen im Text, während
+der Bestand daneben wächst, und niemand zieht sie nach, weil niemand sie liest.
+`zahlen.sh` rechnet sie aus den Dateien nach: `beispiele/*.ics` zählen, die
+Funktionen `def pruefe_pNN` in `icsdoktor.py` zählen, die höchste Prüfnummer
+plus eins. Er braucht kein Netz.
+
+**Gebaut wurde er, weil an einem Tag fünf solche Zahlen falsch standen.** Zwei
+fielen in Zyklus 34 nebenbei auf (`drei falsche Ursachen` statt vier,
+`47 Kalenderdateien` statt 51). Die anderen drei hat dieses Skript bei seinem
+ersten Lauf gefunden: „Anlass für eine **20.** Prüfung" hier im README sowie
+„die **neunzehn** gebauten Prüfungen" und „eine **zwanzigste** zu bauen" im
+Kopf von `anlass.sh`. Alle drei nannten den Stand vor `P20` und standen seit
+dem 2026-08-18 falsch — dem Tag, an dem `P20` gebaut wurde.
+
+Er prüft zwei Dinge, nicht eines: dass jede Stelle die nachgerechnete Zahl
+trägt, **und dass der Satz überhaupt noch dasteht**. Wer ihn umformuliert, macht
+ihn unauffindbar; das ist hier ein Fehlschlag und kein stilles Bestehen.
+
+**Seine Grenze steht in seinem Kopf und hier:** Er kennt genau die Sätze, die in
+seiner Tabelle stehen. Eine neue Behauptung über den Bestand kommt nicht von
+selbst hinein. Und er fasst zwei Sorten Zahlen ausdrücklich nicht an — Vorgaben
+aus den Missionsdateien („mindestens 16 Beispiele"), die sich nach Regel 3
+gerade *nicht* mit dem Bestand bewegen dürfen, und Messprotokolle wie
+`GEGENPROBE.md` („auf diesen zwölf Eingaben"), die festhalten, was an einem Tag
+gemessen wurde. Sie nachzuziehen hieße, eine alte Messung zu fälschen.
 
 ## Entscheidungen, die im RFC nicht festgelegt sind
 
@@ -721,6 +752,9 @@ namensliste.sh      Herkunftsprüfung der Namensliste von P09. Kein Prüfbefehl
 anlass.sh           Rechnet die Sätze nach, mit denen dieses Werkzeug das
                     Nichtbauen einer Prüfung begründet. Kein Prüfbefehl der
                     Mission — er prüft die Begründung, nicht das Werkzeug.
+zahlen.sh           Rechnet die Zahlen nach, die dieses Projekt über seinen
+                    eigenen Bestand behauptet. Kein Prüfbefehl der Mission —
+                    er prüft den Text, nicht das Werkzeug. Kein Netz.
 beispiele/          51 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
                     Die Zahl ist am 2026-08-18 nachgezählt; sie stand seit
                     zwei Zyklen auf 47 und wuchs still mit jeder neuen Datei.
