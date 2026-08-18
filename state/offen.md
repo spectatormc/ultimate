@@ -1670,3 +1670,77 @@ Die §6-Prüfung bleibt ungebaut. **Das ist ein Satz über meine Suche und keine
 Die beiden Befunde aus Zyklus 29 — aktionsabhängige `VALARM`-Pflichten (§3.6.6)
 und `VTIMEZONE` (§3.6.5). `anlass.sh` zeigt am 2026-08-18 weiter keinen Anlass:
 14 bzw. 3 bzw. 5 betrachtete Komponenten, je 0 Treffer.
+
+---
+
+## 2026-08-18 — Zyklus 35: Zahlen über den eigenen Bestand werden nachgerechnet
+
+### 1. Erledigt: Befund 4 aus Zyklus 34 ist geschlossen
+
+**Kein Blocker, kein Fehlschlag.** `projekte/icsdoktor/zahlen.sh` gebaut
+(`8ed3683`). Er rechnet sechs Sätze aus dem Bestand nach — Dateien in
+`beispiele/`, Funktionen `def pruefe_pNN` in `icsdoktor.py`, höchste Prüfnummer
+plus eins — und prüft zweierlei: dass jede Stelle die nachgerechnete Zahl trägt
+**und dass der Satz überhaupt noch dasteht**. Wer ihn umformuliert, macht ihn
+unauffindbar; das ist dort ein Fehlschlag und kein stilles Bestehen.
+
+**Der erste Lauf war rot, und zwar dreifach.** Alle drei Sätze nannten den Stand
+vor `P20` und standen seit dem 2026-08-18 falsch — dem Tag, an dem `P20` gebaut
+wurde (`9bab78d`):
+
+- `README.md`: „gibt es Anlass für eine **20.** Prüfung?" — eingeführt in
+  Zyklus 32 (`629b703`), wo die höchste Prüfung `P19` war und der Satz stimmte.
+- `anlass.sh`: „die **neunzehn** gebauten Pruefungen".
+- `anlass.sh`: „eine **zwanzigste** zu bauen".
+
+Alle drei korrigiert. Der dritte steht jetzt in Ziffernform („die 21."), damit
+das Skript ohne Ordnungszahlwörter auskommt.
+
+**Gegenprobe zum Wächter selbst**, an einer Kopie unter `/tmp`, das Repo
+unberührt: eine Beispieldatei mehr → Exit 1; eine Prüfung `P21` mehr → Exit 1 an
+fünf von sechs Stellen; ein umformulierter Satz → Exit 1 mit „steht dort nicht
+mehr"; eine Lücke in den Prüfnummern → Exit 1, und das Skript rechnet
+ausdrücklich nicht weiter, weil „höchste + 1" dann nicht mehr die nächste freie
+Nummer ist.
+
+### 2. Befund, nicht geraten: „die dreizehn älteren Erwartungen"
+
+**Kein Blocker, keine Frist.** In `projekte/icsdoktor/README.md` steht:
+*„Umbenannt wird nichts, damit die dreizehn älteren Erwartungen in `erwartet/`
+byte-genau bleiben."* Heute liegen dort **51** Dateien.
+
+**Zwei Lesarten, und ich kann sie nicht auseinanderhalten:** Entweder ist
+„dreizehn" eine veraltete Zahl derselben Sorte wie die drei oben — dann gehört
+sie korrigiert. Oder „die dreizehn älteren" meint eine feste historische Menge,
+die Erwartungen aus der Vormission — dann ist der Satz richtig und darf nicht
+angefasst werden. Gemessen: Der Satz steht schon in `bbb7ba4` (2026-08-12), und
+dort lagen **15** Dateien in `erwartet/`. Er war also zu keinem Zeitpunkt die
+Zahl des Verzeichnisses, was für die zweite Lesart spricht, sie aber nicht
+beweist.
+
+**Deshalb nicht angefasst und nicht in die Tabelle von `zahlen.sh`
+aufgenommen.** Eine Zahl zu „korrigieren", die eine historische Menge nennt,
+wäre dieselbe Fälschung, die das Skript bei `GEGENPROBE.md` ausdrücklich
+unterlässt.
+
+### 3. Die Grenze von `zahlen.sh`, benannt statt vorgeführt
+
+**Kein Blocker, keine Frist.** Er kennt genau die sechs Sätze in seiner Tabelle.
+Eine neue Behauptung über den Bestand kommt nicht von selbst hinein — sie muss
+eingetragen werden. Ein grüner Lauf sagt „diese sechs stimmen" und nicht „im
+Repo steht keine falsche Zahl". Das steht in seinem Kopf und im README.
+
+Nicht erfasst und mit Absicht: Vorgaben aus den Missionsdateien („mindestens 16
+Beispiele"), die sich nach Regel 3 gerade *nicht* mit dem Bestand bewegen
+dürfen, und Messprotokolle wie `GEGENPROBE.md` („auf diesen zwölf Eingaben"),
+die festhalten, was an einem Tag gemessen wurde.
+
+### 4. Weiterhin offen, weiterhin ohne Frist
+
+Unverändert aus Zyklus 33 und 34: `_zeige_wort` gibt das Ersatzzeichen in
+**Wert**-Zitaten weiter aus (Lesbarkeitsgrenze, kein Defekt — dort ist die
+Ursache richtig); die UTF-16-Markierung ist ungeprüft; die §6-Prüfung ist
+ungebaut, und in diesem Zyklus wurde nicht erneut danach gesucht. Dazu die
+beiden Befunde aus Zyklus 29 — `VALARM` (§3.6.6) und `VTIMEZONE` (§3.6.5);
+`anlass.sh` zeigt am 2026-08-18 weiter keinen Anlass: 14 bzw. 3 bzw. 5
+betrachtete Komponenten, je 0 Treffer.
