@@ -207,6 +207,7 @@ ist derselbe. Umbenannt wird nichts, damit die dreizehn älteren Erwartungen in
 sh projekte/icsdoktor/pruefe.sh          # die mitgelieferten Beispiele
 sh projekte/icsdoktor/rfc-beispiele.sh   # die sechs Kalender aus RFC 5545 §4
 sh projekte/icsdoktor/namensliste.sh     # woher die Namensliste von P09 kommt
+sh projekte/icsdoktor/anlass.sh          # gibt es Anlass für eine 20. Prüfung?
 ```
 
 Der zweite ist der wichtigere: Seine Eingabe stammt nicht von mir, sondern aus
@@ -229,9 +230,16 @@ Damit der Patch kein Versteck wird, verlangt dasselbe Skript zweierlei: Die
 Originalzeile muss im Ausschnitt **genau einmal** vorkommen (sonst Exit 2 —
 ein Patch, der nichts trifft, prüft stillschweigend den alten Text), und auf dem
 **unkorrigierten** Objekt muss der ICS-Doktor melden (sonst Exit 1 — sonst wäre
-die Null nur seine eigene Stille). Angewandt ist bisher nur Erratum 2039;
-Erratum 4149 gehört zu einer Prüfung, die noch nicht gebaut ist, und fehlt
-deshalb ausdrücklich statt versehentlich.
+die Null nur seine eigene Stille).
+
+**Angewandt sind beide Errata**, 2039 auf Objekt 4 und 4149 auf Objekt 6; sie
+stehen als zwei Zeilen im Skript. Bis zum 2026-08-18 stand hier, angewandt sei
+„bisher nur Erratum 2039", 4149 gehöre zu einer Prüfung, die noch nicht gebaut
+sei. Das war am 2026-08-16 richtig und am 2026-08-17 nicht mehr: Mit `P19` ist
+diese Prüfung gebaut und das zweite Erratum am selben Tag nachgezogen worden —
+nur dieser Absatz nicht. Er ist ein weiterer Satz über den Zustand des Repos,
+den niemand nachgesehen hat; gefunden wurde er beim Bauen von `anlass.sh`, das
+gegen genau diese Sorte Satz geschrieben ist.
 
 `pruefe.sh` vergleicht Byte für Byte gegen `erwartet/` und leitet den erwarteten
 Exit-Code aus der Erwartung ab, statt ihn danebenzuschreiben. Zusätzlich rechnet
@@ -542,6 +550,14 @@ Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
   Die ersten zwei Grenzen stehen zusätzlich als Befund in `state/offen.md`,
   damit sie nicht in einem späteren Zyklus stillschweigend mitgebaut werden.
 
+  **Beide Begründungen enden mit einem Satz über den Zustand dieses Repos** —
+  keine Beispieldatei und keine der zwölf fremden Eingaben löse den Fall aus.
+  Dieser Satz stand bis zum 2026-08-18 nur da; nachgerechnet hat ihn niemand.
+  Seit dem 2026-08-18 rechnet ihn `anlass.sh` nach, und die erste Messung
+  bestätigt ihn: 14 `VALARM`, 3 `VTIMEZONE`, 5 `STANDARD`/`DAYLIGHT` in den
+  Eingaben, kein einziger Treffer. Die erste Zahl gehört zur zweiten — eine
+  Null ohne sie sagt nichts über den Fall, sondern nur über den Korpus.
+
 ## Dateien
 
 ```
@@ -550,7 +566,10 @@ pruefe.sh           Prüfbefehl 1: Beispiele gegen Erwartungen.
 rfc-beispiele.sh    Prüfbefehl 2: die sechs Kalender aus RFC 5545 §4.
 namensliste.sh      Herkunftsprüfung der Namensliste von P09. Kein Prüfbefehl
                     der Mission — er beweist die Herkunft, nicht die Prüfung.
-beispiele/          46 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
+anlass.sh           Rechnet die Sätze nach, mit denen dieses Werkzeug das
+                    Nichtbauen einer Prüfung begründet. Kein Prüfbefehl der
+                    Mission — er prüft die Begründung, nicht das Werkzeug.
+beispiele/          47 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
 erwartet/           Je eine Datei mit der erwarteten Ausgabe.
 LAGE.md             Geprüfte Werkzeuglandschaft, mit Links.
 .gitattributes      Hält CRLF in beispiele/ auch über einen Klon hinweg.

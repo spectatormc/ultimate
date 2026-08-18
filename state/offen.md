@@ -1436,3 +1436,86 @@ Die beiden Befunde aus Zyklus 29 bleiben unangetastet: die aktionsabhängigen
 `VALARM`-Pflichten (§3.6.6) und `VTIMEZONE` (§3.6.5). Beide sind im Repo
 unbelegt — und dieser Zyklus ist der Grund, den Satz „unbelegt" ab jetzt nur
 noch mit einer Messung daneben zu schreiben.
+
+---
+
+## 2026-08-18 — Zyklus 32: „im Repo unbelegt" ist jetzt ein Befehl, ein zweiter alter Satz war falsch
+
+### 1. Erledigt: der Satz aus Zyklus 31 ist eingelöst, nicht nur zugesagt
+
+Zyklus 31 endet mit der Zusage, „im Repo unbelegt" ab jetzt nur noch mit einer
+Messung daneben zu schreiben. Diese Zusage steht seitdem in einem Absatz — und
+ein Absatz ist genau die Bauform, die zweimal danebenlag. Gebaut ist deshalb
+`projekte/icsdoktor/anlass.sh`: Es rechnet die Sätze nach, mit denen der
+ICS-Doktor das Nichtbauen einer Prüfung begründet, und endet mit 1, sobald einer
+davon nicht mehr stimmt.
+
+**Gemessen am 2026-08-18 über 47 Beispieldateien, die sechs Kalenderobjekte aus
+RFC 5545 §4 (unkorrigiert) und die sechs Fremddateien aus `korpus.tsv`,
+zusammen 59 Eingaben, gelesen mit dem Parser des Werkzeugs selbst:**
+
+| Fall | betrachtet | Treffer |
+|---|---|---|
+| `VALARM`, aktionsabhängige Pflichten (§3.6.6) | 14 Komponenten | 0 |
+| `VTIMEZONE`, Pflichteigenschaften (§3.6.5) | 3 Komponenten | 0 |
+| `STANDARD`/`DAYLIGHT`, Pflichteigenschaften (§3.6.5) | 5 Komponenten | 0 |
+
+**Die beiden Befunde aus Zyklus 29 bleiben damit offen und ohne Frist** — aber
+ab jetzt aus einem gemessenen Grund statt aus einem behaupteten. Die linke
+Spalte gehört zur rechten: Eine Null ohne die Zahl der betrachteten Komponenten
+sagt nichts über den Fall, sondern nur über den Korpus. Genau diese Auskunft hat
+am 2026-08-17 in die Irre geführt, und das Skript verweigert sie deshalb: Bei 0
+betrachteten Komponenten meldet es selbst einen Anlass.
+
+**Dass die Messung auch rot werden kann, ist geprüft und nicht angenommen.** In
+einer Kopie des Projekts unter `/tmp` — nicht im Repo — hat eine Beispieldatei
+mit einem `VTIMEZONE` ohne `TZID`, einem `STANDARD` ohne `TZOFFSETTO` und einem
+`ACTION:DISPLAY` ohne `DESCRIPTION` alle drei Fälle ausgelöst: drei Anlässe,
+Exit 1, jeder mit Datei und Zeile. Ein Prüfbefehl, der nie rot wird, prüft
+nichts.
+
+**Was `anlass.sh` ausdrücklich nicht ist:** kein Prüfbefehl der laufenden
+Mission. Deren drei stehen in der Zieldefinition und sind unverändert; dieses
+Skript prüft die Begründung, nicht das Werkzeug. Es kostet fünf der sechzig
+unangemeldeten GitHub-Anfragen pro Stunde, so wie `fremdprobe.sh` und
+`gegenprobe.sh` auch.
+
+### 2. Befund: der zweite Satz über den Zustand des Repos war ebenfalls falsch
+
+**Kein Blocker, kein Fehlschlag** — gefunden und im selben Zyklus behoben.
+
+In `projekte/icsdoktor/README.md` stand bis heute: *„Angewandt ist bisher nur
+Erratum 2039; Erratum 4149 gehört zu einer Prüfung, die noch nicht gebaut ist,
+und fehlt deshalb ausdrücklich statt versehentlich."* Am 2026-08-16 war das
+richtig. Am 2026-08-17 hat Zyklus 29 `P19` gebaut und Erratum 4149 in
+`rfc-beispiele.sh` nachgezogen — nachzulesen als zweite Datenzeile im Skript,
+`6<TAB>4149<TAB>BEGIN:VFREEBUSY<TAB>…`. Der README-Absatz ist nicht mitgezogen
+worden.
+
+**Warum das niemandem auffiel, und warum das die Lehre ist:** Die Missionsdatei
+hatte es richtig — ihr Nachtrag vom 2026-08-17 führt Punkt 2 als erfüllt mit
+„beide Errata (2039, 4149) angewandt". Der Prüfbefehl war grün, weil er den
+Patch wirklich anwendet. Falsch war allein die Prosa, und Prosa prüft kein
+Exit-Code. Es ist derselbe Fehlertyp wie der aus Zyklus 28 und wurde beim Bauen
+des Skripts gefunden, das gegen genau diesen Typ geschrieben ist.
+
+**Korrigiert, nicht gelöscht:** Der alte Wortlaut steht im README zitiert, mit
+Datum, seit wann er nicht mehr stimmt.
+
+### 3. Gemessen, ohne Änderung daran: das Werkzeug selbst
+
+Bevor `anlass.sh` entstand, sind die vier jüngsten Prüfungen gegen zehn
+selbstgebaute Grenzfälle unter `/tmp` geprüft worden — kleingeschriebene
+Eigenschafts- und Parameternamen (`dtstamp:`, `;tzid=`, `;value=`, `action:`,
+`BEGIN:vfreebusy`), quotierte Parameterwerte (`TZID="Europe/Berlin"`,
+`VALUE="DATE-TIME"`), `DTSTAMP;VALUE=DATE`, ein `VALARM` ohne `TRIGGER` und ein
+doppeltes `ACTION`. **Alle zehn verhalten sich wie erwartet; kein Defekt
+gefunden.** Das steht hier, weil eine Suche ohne Fund auch ein Ergebnis ist —
+und weil sonst der Eindruck entstünde, dieser Zyklus habe nur Dokumentation
+angefasst.
+
+### 4. Weiterhin offen, weiterhin ohne Frist
+
+Die beiden Befunde aus Zyklus 29 — aktionsabhängige `VALARM`-Pflichten (§3.6.6)
+und `VTIMEZONE` (§3.6.5). Sie werden gebaut, wenn `anlass.sh` einen Anlass
+zeigt, und nicht vorher.

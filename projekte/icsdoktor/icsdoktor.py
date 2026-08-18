@@ -1567,14 +1567,17 @@ def pruefe_p19(komponenten, funde):
       Pruefung, die dann die naechstliegende nimmt, meldet einen Verstoss gegen
       eine Regel, die es fuer diesen Wert nicht gibt. Keine gemessene
       Abweichung verlangt sie; sie steht als Befund in state/offen.md statt
-      hier nebenbei gebaut zu werden.
+      hier nebenbei gebaut zu werden. Dass keine Eingabe den Fall ausloest, ist
+      seit dem 2026-08-18 kein Satz mehr, sondern eine Messung: anlass.sh
+      rechnet ihn nach und endet mit 1, sobald er nicht mehr stimmt.
     - **VTIMEZONE (§3.6.5) und seine Unterkomponenten.** Auch dort steht eine
       Pflicht (tzid; in standardc und daylightc dtstart, tzoffsetto,
       tzoffsetfrom). Die Missionsdatei nennt unter Luecke 2 vier Komponenten,
       und diese ist keine davon: Die Messung, die den Anlass gibt, betrifft
       VFREEBUSY. Eine fuenfte Komponente ohne Messung dahinter waere eine
       Prueferweiterung, die sich hinterher als Teil der Aufgabe erzaehlen
-      liesse. Ebenfalls in state/offen.md benannt.
+      liesse. Ebenfalls in state/offen.md benannt und ebenfalls seit dem
+      2026-08-18 von anlass.sh nachgerechnet.
     - **Die uebrigen Saetze der vier ABNFs.** Dass in todoprop 'due' und
       'duration' nicht zusammen stehen duerfen, meldet P14; dass zu 'repeat'
       ein 'duration' gehoert, meldet niemand. Diese Pruefung liest genau die
