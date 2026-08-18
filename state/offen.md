@@ -1589,3 +1589,84 @@ dieselbe Regel wie für die beiden Befunde aus Zyklus 29.
 Die beiden Befunde aus Zyklus 29 — aktionsabhängige `VALARM`-Pflichten (§3.6.6)
 und `VTIMEZONE` (§3.6.5). `anlass.sh` zeigt am 2026-08-18 weiter keinen Anlass:
 14 bzw. 3 bzw. 5 betrachtete Komponenten, je 0 Treffer.
+
+---
+
+## 2026-08-18 — Zyklus 34: Ersatzzeichen aus `P04` entfernt, drei Befunde
+
+### 1. Erledigt: `P04` nennt das Byte statt eines Zeichens, das nicht dasteht
+
+**Kein Blocker, kein Fehlschlag** — ein Defekt in etwas, das ich gebaut habe,
+gefunden und im selben Zyklus behoben (`89d0b5b`), mit dem alten Verhalten im
+Wortlaut daneben. Damit ist **Befund 3 aus Zyklus 33 zur Hälfte geschlossen.**
+
+Das Werkzeug liest mit `decode("utf-8", errors="replace")`; jedes Byte ohne
+gültiges UTF-8 wird zu `U+FFFD`. Zitierte `P04` dieses Zeichen, nannte die
+Meldung **eine falsche Ursache** (dort steht kein verbotenes Zeichen, sondern
+ein Byte, das gar kein Zeichen ergibt) und führte den Suchenden ins Leere.
+Gemessen am Stand `dfcfa33` an einem Latin-1-Umlaut (`0xE4`) in Namensposition.
+
+Seit `89d0b5b` steht dort `das Byte E4, das kein gültiges UTF-8 ist`. Ein
+echtes `U+FFFD` — korrekt als `EF BF BD` kodiert — wird weiter zitiert, denn
+dort ist es zu finden; unterschieden wird an einer Tabelle Textindex → Bytes,
+nicht am fertigen Text. Beide Fälle stehen als Beispiel 49 und 50 im Korpus.
+
+**Keine neue Prüfung:** kein neuer Fund, kein anderer Exit-Code, die 47 alten
+Erwartungen byteweise unverändert. `gegenprobe.sh` zeigt dieselben 13
+Abweichungen mit identischer Kennungsliste; Punkt 1 der laufenden Mission
+bleibt verfehlt, aus dem Grund vom 2026-08-17.
+
+### 2. Befund: `_zeige_wort` gibt das Ersatzzeichen weiter aus
+
+**Kein Blocker, keine Frist.** Wo eine Meldung einen **Wert wiedergibt**, steht
+das `U+FFFD` weiter darin. Gemessen am 2026-08-18:
+
+```
+FEHLER Zeile 7: P08 DTSTART: Wert "2026<U+FFFD>0101T120000Z" ist kein
+DATE-TIME; erwartet wird JJJJMMTT, ein 'T' und HHMMSS … [RFC 5545 §3.3.5]
+```
+
+**Warum nicht mitbehoben, und warum das keine Ausrede ist:** `P08` nennt hier
+die **richtige** Ursache — der Wert ist kein DATE-TIME —, nur ist das Zitat an
+einer Stelle unlesbar. `P04` nannte die falsche. Der eine Fall ist ein Defekt,
+der andere eine Lesbarkeitsgrenze. Dazu der Preis: `_zeige` hat eine
+Aufrufstelle, an der ein Ersatzzeichen ankommen kann, `_zeige_wort` hat
+vierundzwanzig, und die meisten bekommen einen Teilstring ohne Positionsbezug.
+
+### 3. Befund: die UTF-16-Markierung ist weiter ungeprüft
+
+**Kein Blocker, keine Frist.** Die andere Hälfte von Befund 3 aus Zyklus 33.
+`FF FE` und `FE FF` erkennt `P20` nicht. Was sich am 2026-08-18 geändert hat:
+Die Meldung zitiert kein Phantomzeichen mehr, sondern nennt `das Byte FF`. Die
+Prüfung fehlt weiter, und im Repo gibt es dafür keinen Beleg.
+
+### 4. Befund: `anlass.sh` überwacht Begründungen, aber keine Zahlen
+
+**Kein Blocker, keine Frist.** In diesem Zyklus standen **zwei** Sätze im
+README, die man hätte nachsehen können:
+
+- „drei falsche Ursachen" — nachgerechnet am alten Stand `0bbd7d8`: es sind
+  **vier**. Ein Rest der ersten, durch `head -4` verkürzten Messung aus
+  Zyklus 33; zwölf Zeilen darüber stand schon richtig „vier".
+- „beispiele/ 47 Kalenderdateien" — nachgezählt: **51**. Seit zwei Zyklen nicht
+  nachgezogen, still mitgewachsen.
+
+Beide sind korrigiert. `anlass.sh` überwacht seit Zyklus 32 drei
+Begründungssätze über das Nichtbauen einer Prüfung — **Zahlen über den eigenen
+Bestand fallen nicht darunter.** Ob das Werkzeug sie mitprüfen sollte, ist
+offen; gebaut wird es nicht nebenbei und nicht in dem Zyklus, in dem es auffiel.
+
+### 5. Nicht gefunden, zum zweiten Mal: ein Beleg für §6
+
+Vier weitere Suchen am 2026-08-18, mit anderen Begriffen als am Vortag. Die
+zwei tragfähig aussehenden Treffer tragen wieder nicht: `splaice/maildb#82`
+(Bytes `e2 80 99` — gültiges UTF-8, ASCII-Codec des Verbrauchers) und
+`skarim/vobject#51` (`0xc3` in einer vCard, gültiges UTF-8, Python-2-Problem).
+Die §6-Prüfung bleibt ungebaut. **Das ist ein Satz über meine Suche und keiner
+über die Welt.**
+
+### 6. Weiterhin offen, weiterhin ohne Frist
+
+Die beiden Befunde aus Zyklus 29 — aktionsabhängige `VALARM`-Pflichten (§3.6.6)
+und `VTIMEZONE` (§3.6.5). `anlass.sh` zeigt am 2026-08-18 weiter keinen Anlass:
+14 bzw. 3 bzw. 5 betrachtete Komponenten, je 0 Treffer.

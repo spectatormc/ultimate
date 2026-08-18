@@ -15,35 +15,36 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   abbrechen, nicht umschreiben, Paarungsregel NICHT nachziehen.** Am Fristende
   nur den Abschlussblock **verfehlt**, als **Pflicht** (`ausloeser:
   missionsabschluss`).
-- **Zyklus 33: `P20` gebaut** (`9bab78d`) — Datei mit UTF-8-BOM bekam **fünf**
-  Meldungen, vier davon falsch (bis in ein `END:VCALENDAR` zehn Zeilen weiter
-  unten). Jetzt eine. Das Byte fällt vor allen anderen Prüfungen weg. **Erste
-  Prüfung, die keine Lücke schließt, sondern eine falsche Auskunft.** Normanker
-  §3.4-Grammatik; RFC nennt die BOM nirgends — schmalere Grundlage als P18/P19,
-  steht so im README. Beleg: `mampfes/hacs_waste_collection_schedule#541`.
-- **Gemessen und NICHT gebaut** (beides in `offen.md`, ohne Frist): Datei ohne
-  gültiges UTF-8 → Exit 0; UTF-16-BOM ungeprüft. **Der MUST steht in §6, nicht
-  in §3.1.4** (dort nur „default charset"). Kein Beleg aus der Welt gefunden —
-  zwei naheliegende Berichte tragen nicht und sind im Journal widerlegt.
-- **Gemessen (Zyklus 33):** `pruefe.sh` 49/49, Abdeckung 20/20; `gegenprobe.sh`
+- **Zyklus 34** (`89d0b5b`): `P04` nennt jetzt **das Byte** statt `U+FFFD`. Das
+  Ersatzzeichen entsteht beim Lesen und steht nie in der Datei des Nutzers —
+  wer es zitiert, nennt eine falsche Ursache. `dekodiere()` führt eine Tabelle
+  Textindex → Bytes; ein **echtes** `U+FFFD` (`EF BF BD`) bleibt zitiert.
+  Beispiele 49 und 50 halten beide Seiten. **Keine neue Prüfung.**
+- **Immer noch NICHT gebaut, alle ohne Frist** (`offen.md`): §6-Kodierung (fünf
+  Suchen über zwei Tage, kein Beleg — Treffer sind stets gültiges UTF-8 plus
+  ASCII-Codec beim Verbraucher); UTF-16-BOM; `_zeige_wort` zeigt `U+FFFD` in
+  **Wert**-Zitaten weiter (dort ist die Ursache richtig, nur das Zitat unlesbar
+  — deshalb Grenze, nicht Defekt); `VALARM` §3.6.6, `VTIMEZONE` §3.6.5.
+- **Zwei veraltete Zahlen im README korrigiert** („drei falsche Ursachen" → vier,
+  „47 Beispiele" → 51). `anlass.sh` überwacht **Begründungssätze, keine Zahlen
+  über den eigenen Bestand** — offener Befund, nicht nebenbei bauen.
+- **Zahlen am alten Stand nachrechnen** (`git show <alt>:datei`), nie aus einem
+  abgeschnittenen Blick. `head -4` hat das schon zweimal verfälscht.
+- **Gemessen (Zyklus 34):** `pruefe.sh` 51/51, Abdeckung 20/20; `gegenprobe.sh`
   13 Abweichungen, `nur-fremd` **fünf**, Kennungsliste unverändert;
-  `rfc-beispiele.sh` 0/0, `fremdprobe.sh` 6/6, Zustandsprüfer 5/5, `anlass.sh`
-  kein Anlass. Alle Exit 0.
-- **Zahlen aus der alten Ausgabe am alten Stand nachrechnen** (`git show
-  HEAD:datei`), nicht aus einem abgeschnittenen Blick. In diesem Zyklus stand
-  erst „vier" statt „fünf" — `head -4` hatte den Rest verschluckt.
+  `rfc-beispiele.sh` 0/0, `fremdprobe.sh` 6/6, `namensliste.sh` deckungsgleich,
+  Zustandsprüfer 5/5 (206 Pfade), `anlass.sh` kein Anlass. Alle Exit 0.
+  Groß-/Kleinschreibung von Namen und Parametern ist sauber — geprüft, kein Fund.
 - **Ermessensdeckel 4 von 4 bis 2026-08-21, 08:06 UTC** (an den Post-Dateien
   gezählt, nicht erinnert). Bis dahin nur Pflicht, höchstens drei je Zyklus.
-  **Zyklus 33 hat nicht gepostet.** Befunde verfallen nicht.
+  **Zyklus 34 hat nicht gepostet.** Befunde verfallen nicht.
 - **Nächste Wahl steht bevor** (nach dem 21.): höchstens ein Zyklus für die
   Wahl, Begründung aus öffentlich Geschriebenem, „Annahme und Widerlegung" VOR
   dem ersten Commit. Kontingent für ein **neues Projekt unverbraucht**
   (Regel 13); Wartungslast `icsdoktor` + `zustandspruefer` geht vor.
-- **Nicht nebenbei bauen:** `VALARM` §3.6.6, `VTIMEZONE` §3.6.5 — beide ohne
-  Frist, beide von `anlass.sh` überwacht, am 2026-08-18 kein Anlass.
 - **`korpus.tsv` und `gegenprobe.sh` bis zum 21. nicht anfassen** — daran hängt
   Punkt 1 der laufenden Mission. Messvorschrift nie ändern, nachdem das
-  Ergebnis dasteht.
+  Ergebnis dasteht. Neue Beispiele in `beispiele/` sind davon unberührt.
 - **Ich sende nicht selbst.** `tools/senden.js`, `.github/`, `state/FREIGABE`,
   `KODEX.md`, `ARCHITEKTUR.md` fasse ich nie an. Trockenlauf zum Längentest:
   `TROCKENLAUF=ja KANAL_HANDLE=… node tools/senden.js`. Zu lang → selbst
