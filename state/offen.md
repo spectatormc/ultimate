@@ -1519,3 +1519,73 @@ angefasst.
 Die beiden Befunde aus Zyklus 29 — aktionsabhängige `VALARM`-Pflichten (§3.6.6)
 und `VTIMEZONE` (§3.6.5). Sie werden gebaut, wenn `anlass.sh` einen Anlass
 zeigt, und nicht vorher.
+
+---
+
+## 2026-08-18 — Zyklus 33: `P20` gebaut, zwei Kodierungsbefunde gemessen und nicht gebaut
+
+### 1. Erledigt: das Werkzeug erklärt die Bytefolgemarkierung nicht mehr falsch
+
+**Kein Blocker, kein Fehlschlag** — ein Defekt in etwas, das ich gebaut habe,
+gefunden und im selben Zyklus behoben (`9bab78d`), mit dem alten Verhalten im
+Wortlaut daneben.
+
+Eine `.ics`-Datei mit UTF-8-BOM bekam am Stand `0bbd7d8` fünf Meldungen: eine
+richtige, aber unlesbare (`P04` zitiert ein Zeichen ohne Breite) und **vier
+falsche** — `VERSION`/`PRODID` stünden außerhalb jeder Komponente, die äußerste
+Komponente sei `VEVENT`, und das `END:VCALENDAR` zehn Zeilen weiter unten habe
+kein `BEGIN`. Seit `P20` steht dort genau eine Meldung, und die Datei wird
+danach gelesen, als stünde die Markierung nicht da.
+
+**Normanker ist die Grammatik aus §3.4**, und die Grundlage ist schmaler als bei
+`P18`/`P19`: RFC 5545 erwähnt die BOM an keiner Stelle, sie ist also nicht
+verboten, sondern von der Grammatik nicht vorgesehen. Das steht so im README.
+Beleg aus der Welt: `mampfes/hacs_waste_collection_schedule#541` (geschlossen,
+2023-01-01), wörtlich zitiert im Journal.
+
+**Die Messvorschrift der laufenden Mission ist nicht angefasst.** `gegenprobe.sh`
+zeigt vor und nach der Änderung 13 Abweichungen, fünf davon `nur-fremd`, mit
+identischer Kennungsliste. Punkt 1 bleibt verfehlt, aus dem Grund vom
+2026-08-17.
+
+### 2. Befund: eine Datei, die kein gültiges UTF-8 ist, bekommt Exit 0
+
+**Kein Blocker, keine Frist.** Gemessen am 2026-08-18 an einer Datei mit
+Latin-1-Umlauten: kein Fund, Exit 0. Das Werkzeug liest mit
+`decode("utf-8", errors="replace")` und ersetzt die Bytes stillschweigend.
+
+**Der Normtext steht nicht, wo man ihn vermutet.** §3.1.4 sagt nur *„The default
+charset for an iCalendar stream is UTF-8"* — ein Default, kein MUST; der einzige
+MUST dort gilt MIME-Transporten. Der MUST für die Datei steht in **§6**:
+*„Applications MUST generate iCalendar streams in the UTF-8 charset and MUST
+accept an iCalendar stream in the UTF-8 or US-ASCII charset."*
+
+**Warum trotzdem nicht gebaut:** kein Anlass, gemessen statt behauptet. Die 47
+Beispieldateien sind sämtlich gültiges UTF-8, nachgerechnet; die Fremddateien
+stammen aus Git-Ablagen. Und die Suche vom 2026-08-18 hat keinen öffentlichen
+Fehlerbericht gefunden, in dem die gemeldete Datei wirklich kein UTF-8 ist. Die
+zwei naheliegenden Treffer tragen nicht und sind im Journal einzeln widerlegt:
+`ics-py/ics-py#126` (Datei gültig, Verbraucher benutzte den ASCII-Codec) und
+`SuiteCRM/SuiteCRM#4438` (Zeichen schon beim Erzeuger zu `?` geworden, Datei
+danach gültig).
+
+**Was hier ausdrücklich nicht behauptet wird:** dass es solche Dateien nicht
+gibt. Ich habe sie nicht gefunden, und das ist ein Satz über meine Suche.
+
+### 3. Befund: die Bytefolgemarkierung für UTF-16 ist ungeprüft
+
+**Kein Blocker, keine Frist.** `FF FE` und `FE FF` erkennt `P20` nicht. Eine
+Datei in UTF-16 verletzt §6, aber im Repo gibt es dafür keinen Beleg und in der
+Suche vom 2026-08-18 keinen öffentlichen Fehlerbericht. Gemessen am
+2026-08-18: eine solche Datei erzeugt heute mehrere Meldungen, darunter eine,
+die das Ersatzzeichen `U+FFFD` zitiert — also ein Zeichen, das in der Datei des
+Nutzers gar nicht steht. Das ist derselbe Defekttyp wie Punkt 1, nur ohne Beleg.
+
+**Gebaut wird beides, wenn eine Messung einen Anlass zeigt, und nicht vorher** —
+dieselbe Regel wie für die beiden Befunde aus Zyklus 29.
+
+### 4. Weiterhin offen, weiterhin ohne Frist
+
+Die beiden Befunde aus Zyklus 29 — aktionsabhängige `VALARM`-Pflichten (§3.6.6)
+und `VTIMEZONE` (§3.6.5). `anlass.sh` zeigt am 2026-08-18 weiter keinen Anlass:
+14 bzw. 3 bzw. 5 betrachtete Komponenten, je 0 Treffer.
