@@ -172,6 +172,41 @@ class Fund(object):
             self.schwere, self.zeile, self.code, self.text, self.abschnitt)
 
 
+def dekodiere(rohbytes):
+    """Wie decode("utf-8", errors="replace") — sagt aber, welches U+FFFD woher
+    kommt.
+
+    Der Ersatzhandler macht aus jedem Byte, das kein gueltiges UTF-8 ist, ein
+    U+FFFD. Dieses Zeichen steht dann in *meinem* Text und nicht in der Datei
+    des Nutzers. Zitiert eine Meldung es, nennt sie etwas, das er nirgends
+    findet — derselbe Schaden wie vor P20, als eine Meldung das unsichtbare
+    BOM-Zeichen zitierte.
+
+    Deshalb wird hier zweites Wissen mitgefuehrt: eine Tabelle Textindex ->
+    die Bytes, die an dieser Stelle standen. Wer daraus zitiert, kann die Bytes
+    im Klartext nennen.
+
+    Die Unterscheidung ist noetig und nicht Zierde: U+FFFD darf auch echt in
+    der Datei stehen, korrekt als EF BF BD kodiert. Dann steht sein Index
+    *nicht* in der Tabelle, und die Meldung zitiert es wie jedes andere
+    Zeichen — richtig, denn dort ist es zu finden.
+
+    Rueckgabe: (text, ungueltig). Der Text ist zeichengleich mit dem, den
+    errors="replace" liefert; kein Index verschiebt sich.
+    """
+    text = ""
+    ungueltig = {}
+    rest = rohbytes
+    while True:
+        try:
+            return text + rest.decode("utf-8"), ungueltig
+        except UnicodeDecodeError as fehler:
+            text += rest[:fehler.start].decode("utf-8")
+            ungueltig[len(text)] = bytes(rest[fehler.start:fehler.end])
+            text += "�"
+            rest = rest[fehler.end:]
+
+
 class Physisch(object):
     """Eine physische Zeile der Datei."""
 
@@ -179,15 +214,18 @@ class Physisch(object):
         self.nr = nr
         self.rohbytes = rohbytes          # ohne Zeilenende
         self.abschluss = abschluss        # b"\r\n", b"\n" oder b"" am Dateiende
-        self.text = rohbytes.decode("utf-8", errors="replace")
+        self.text, self.ungueltig = dekodiere(rohbytes)
 
 
 class Logisch(object):
     """Eine logische (entfaltete) Zeile, mit der Zeile, in der sie beginnt."""
 
-    def __init__(self, nr, text):
+    def __init__(self, nr, text, ungueltig=None):
         self.nr = nr
         self.text = text
+        # Textindex -> die Bytes, die dort standen, wenn sie kein gueltiges
+        # UTF-8 waren. Beim Entfalten mitgezogen, siehe entfalte().
+        self.ungueltig = dict(ungueltig or {})
         self.name = None                 # gesetzt, wenn P04 durchlaeuft
         self.rohname = None              # Name so, wie er in der Datei steht
         self.params = []                 # Liste (NAME, [werte])
@@ -315,9 +353,16 @@ def entfalte(zeilen):
     for i, z in enumerate(zeilen):
         ist_fortsetzung = i > 0 and z.text[:1] in (" ", "\t")
         if ist_fortsetzung and logische:
+            # Die Tabelle aus dekodiere() wandert mit dem Text. Verschoben wird
+            # um die Laenge des bisherigen Stuecks, vermindert um das eine
+            # WSP-Zeichen, das §3.1 hier entfernt. Bleibt das aus, zeigt eine
+            # Meldung auf einer gefalteten Zeile auf das falsche Byte.
+            versatz = len(logische[-1].text) - 1
+            for stelle, rohbytes in z.ungueltig.items():
+                logische[-1].ungueltig[versatz + stelle] = rohbytes
             logische[-1].text += z.text[1:]
         else:
-            logische.append(Logisch(z.nr, z.text))
+            logische.append(Logisch(z.nr, z.text, z.ungueltig))
     return logische
 
 
@@ -344,7 +389,8 @@ def pruefe_p04(logische, funde):
                 funde.append(Fund(
                     FEHLER, lz.nr, "P04",
                     "Eigenschaftsname enthält %s; erlaubt sind A-Z, 0-9 und "
-                    "'-', danach ';' oder ':'" % _zeige(text[i]),
+                    "'-', danach ';' oder ':'"
+                    % _zeige(text[i], lz.ungueltig.get(i)),
                     "3.1"))
                 namensfehler = True
                 break
@@ -453,8 +499,21 @@ def _lies_parameterwerte(text, i):
         return werte, i, None
 
 
-def _zeige(zeichen):
-    """Ein Zeichen so ausgeben, dass die Meldung einzeilig bleibt."""
+def _zeige(zeichen, rohbytes=None):
+    """Ein Zeichen so ausgeben, dass die Meldung einzeilig bleibt.
+
+    `rohbytes` setzt der Aufrufer, wenn dieses Zeichen ein U+FFFD ist, das
+    dekodiere() aus Bytes ohne gueltiges UTF-8 gemacht hat. Dann wird das
+    Zeichen nicht zitiert, sondern es werden die Bytes genannt: Ein U+FFFD
+    steht in der Datei des Nutzers nicht, und wer danach sucht, sucht nach
+    nichts. Dieselbe Entscheidung wie bei P20, wo die drei BOM-Bytes im
+    Klartext stehen statt des unsichtbaren Zeichens.
+    """
+    if rohbytes:
+        gezeigt = " ".join("%02X" % b for b in rohbytes)
+        if len(rohbytes) == 1:
+            return "das Byte %s, das kein gültiges UTF-8 ist" % gezeigt
+        return "die Bytes %s, die kein gültiges UTF-8 sind" % gezeigt
     if zeichen == " ":
         return "ein Leerzeichen"
     if zeichen == "\t":

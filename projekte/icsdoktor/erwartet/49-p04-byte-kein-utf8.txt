@@ -1,0 +1,1 @@
+FEHLER Zeile 8: P04 Eigenschaftsname enthält das Byte E4, das kein gültiges UTF-8 ist; erlaubt sind A-Z, 0-9 und '-', danach ';' oder ':' [RFC 5545 §3.1]

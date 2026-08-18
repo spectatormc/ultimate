@@ -204,7 +204,13 @@ danebensteht, und es steht hier, statt dass es jemand herausfinden muss.
 Abfallkalender einer Stadt liefert `.ics` mit BOM, und der Verbraucher bricht ab
 mit `ValueError: Content line could not be parsed into parts:
 '<BOM>BEGIN:VCALENDAR'`. Genau dieser Nutzer hätte vom ICS-Doktor bis gestern
-drei falsche Ursachen genannt bekommen.
+vier falsche Ursachen genannt bekommen.
+
+**Hier stand bis zum 2026-08-18 „drei".** Die Zahl war ein Rest der ersten,
+falschen Messung, die durch `head -4` gelaufen war; zwölf Zeilen weiter oben
+stand schon richtig „vier". Nachgerechnet am alten Stand `0bbd7d8` gegen
+`beispiele/47-p20-bom.ics`: fünf Meldungen, vier davon falsch. Der Satz ist
+korrigiert, nicht die Messung.
 
 **Was `P20` mitbringt und was sie kostet.** Sie läuft **vor** allen anderen
 Prüfungen, weil sie das Byte entfernt, das die anderen in die Irre schickt.
@@ -213,6 +219,64 @@ Absicht, keine Ungenauigkeit: §3.1 empfiehlt die 75 Oktette für Inhaltszeilen,
 und die Markierung steht vor dem Objekt, nicht darin. Die Markierung für
 UTF-16 (`FF FE`, `FE FF`) prüft sie **nicht**; dafür gibt es im Repo keinen
 Beleg, und der Befund steht ohne Frist in `state/offen.md`.
+
+## Kein Zeichen in einer Meldung, das in der Datei nicht steht
+
+Seit dem 2026-08-18, zweite Änderung des Tages, aus derselben Wartungslast wie
+`P20` und aus demselben Grund: eine Meldung nannte etwas, das der Nutzer bei
+sich nicht finden kann.
+
+Das Werkzeug liest die Datei mit `decode("utf-8", errors="replace")`. Jedes
+Byte, das kein gültiges UTF-8 ist, wird dabei zu `U+FFFD` — dem
+Ersatzzeichen `<?>`. Das Zeichen steht danach im Text **des Werkzeugs** und
+nicht in der Datei. Zitierte eine Meldung es, sah das so aus:
+
+```
+FEHLER Zeile 8: P04 Eigenschaftsname enthält '<?>'; erlaubt sind A-Z, 0-9
+und '-', danach ';' oder ':' [RFC 5545 §3.1]
+```
+
+Gemessen am Stand `dfcfa33` an einer Datei mit einem Latin-1-Umlaut
+(`0xE4`) in Namensposition. Die Meldung nennt damit eine **falsche Ursache**:
+Nicht ein verbotenes Zeichen steht dort, sondern ein Byte, das gar kein
+Zeichen ergibt. Und wer nach dem `<?>` sucht, sucht nach nichts — derselbe
+Schaden wie beim unsichtbaren BOM-Zeichen vor `P20`.
+
+Seit dem 2026-08-18 nennt sie das Byte im Klartext, so wie `P20` die drei
+BOM-Bytes nennt. Nachprüfbar an `beispiele/49-p04-byte-kein-utf8.ics`:
+
+```
+FEHLER Zeile 8: P04 Eigenschaftsname enthält das Byte E4, das kein gültiges
+UTF-8 ist; erlaubt sind A-Z, 0-9 und '-', danach ';' oder ':' [RFC 5545 §3.1]
+```
+
+**Der Fallstrick, und warum er ein zweites Beispiel hat.** `U+FFFD` darf auch
+echt in der Datei stehen, korrekt als `EF BF BD` kodiert. Dann *ist* es dort zu
+finden, und „das Byte … ist kein gültiges UTF-8" wäre eine neue falsche
+Auskunft an der Stelle der alten. Deshalb wird nicht am fertigen Text geraten:
+`dekodiere()` führt neben dem Text eine Tabelle Textindex → Bytes mit und trägt
+nur ein, was der Ersatzhandler wirklich ersetzt hat. Beim Entfalten wandert sie
+mit. `beispiele/50-p04-echtes-ersatzzeichen.ics` hält fest, dass ein echtes
+`U+FFFD` weiter zitiert wird.
+
+**Die Grenze, und sie ist gemessen.** Behoben ist die Stelle, an der eine
+Meldung das beanstandete **Zeichen selbst** nennt, also `P04`. Wo eine Meldung
+einen **Wert wiedergibt**, steht das Ersatzzeichen weiter darin:
+
+```
+FEHLER Zeile 7: P08 DTSTART: Wert "2026<?>0101T120000Z" ist kein DATE-TIME; …
+```
+
+Das ist mit Absicht nicht mitbehoben, und der Unterschied trägt: `P08` nennt
+hier die **richtige** Ursache — der Wert ist kein DATE-TIME —, nur ist das Zitat
+an einer Stelle unlesbar. `P04` nannte die falsche. Das Zitat mitzuziehen hieße,
+die Bytetabelle durch vierundzwanzig Aufrufstellen zu reichen; das ist kein
+halber Schritt mehr, sondern ein eigener. Der Befund steht ohne Frist in
+`state/offen.md`.
+
+**Was diese Änderung ausdrücklich nicht ist:** die §6-Prüfung. Eine Datei mit
+ungültigen Bytes bekommt weiterhin keinen eigenen Fund und keinen anderen
+Exit-Code als vorher — siehe unten unter „Was dieses Werkzeug nicht tut".
 
 ## Warum
 
@@ -379,8 +443,13 @@ Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
 
   **Zur Zeichenkodierung, seit dem 2026-08-18 genauer:** Der Satz stimmt
   weiter, aber er war zu grob. Eine Datei mit Bytes, die kein gültiges UTF-8
-  sind, bekommt hier nach wie vor **Exit 0** — gemessen an einer Datei mit
-  Latin-1-Umlauten. Der Normtext dazu steht nicht in §3.1.4, wie man vermuten
+  sind, bekommt hier **keinen eigenen Fund**. Wo genau das Byte steht,
+  entscheidet dann darüber, ob überhaupt etwas gemeldet wird — und das ist
+  Zufall, keine Prüfung: Steht es in einem **Wert**, meldet niemand etwas und
+  die Datei bekommt **Exit 0** (gemessen an einer Datei mit Latin-1-Umlaut in
+  `SUMMARY`). Steht es in **Namensposition**, schlägt `P04` an — aber wegen der
+  Namensregel aus §3.1 und nicht wegen der Kodierung. Der Normtext dazu steht
+  nicht in §3.1.4, wie man vermuten
   würde („The default charset for an iCalendar stream is UTF-8"), sondern in
   **§6**: *„Applications MUST generate iCalendar streams in the UTF-8 charset
   and MUST accept an iCalendar stream in the UTF-8 or US-ASCII charset."*
@@ -390,7 +459,11 @@ Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
   benutzten, während die Datei gültiges UTF-8 war. Der Befund steht ohne Frist
   in `state/offen.md`.
   Was hingegen **seit dem 2026-08-18 gebaut ist**, ist die
-  Bytefolgemarkierung davor: siehe `P20`.
+  Bytefolgemarkierung davor: siehe `P20`. Und was am selben Tag dazukam, ist
+  keine Prüfung, sondern eine ehrlichere Meldung: Wo `P04` anschlägt, wird das
+  Byte genannt statt des Ersatzzeichens `U+FFFD`, das nur beim Lesen entsteht —
+  siehe „Kein Zeichen in einer Meldung, das in der Datei nicht steht". Die
+  Kodierung geprüft ist damit nicht.
 
   Bis zum 2026-08-17 stand in dieser Aufzählung, für `VTODO`, `VJOURNAL` und
   `VFREEBUSY` würden keine Pflichtangaben geprüft. Der Satz galt und ist durch
@@ -648,7 +721,9 @@ namensliste.sh      Herkunftsprüfung der Namensliste von P09. Kein Prüfbefehl
 anlass.sh           Rechnet die Sätze nach, mit denen dieses Werkzeug das
                     Nichtbauen einer Prüfung begründet. Kein Prüfbefehl der
                     Mission — er prüft die Begründung, nicht das Werkzeug.
-beispiele/          47 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
+beispiele/          51 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
+                    Die Zahl ist am 2026-08-18 nachgezählt; sie stand seit
+                    zwei Zyklen auf 47 und wuchs still mit jeder neuen Datei.
 erwartet/           Je eine Datei mit der erwarteten Ausgabe.
 LAGE.md             Geprüfte Werkzeuglandschaft, mit Links.
 .gitattributes      Hält CRLF in beispiele/ auch über einen Klon hinweg.
