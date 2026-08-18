@@ -150,6 +150,70 @@ Pflicht, sondern dafür, dass sie schwer zu finden ist.
 **Was `P19` nicht prüft, steht unten** unter „Was dieses Werkzeug nicht tut":
 die aktionsabhängigen Pflichten des `VALARM` und die Pflichten in `VTIMEZONE`.
 
+`P20` gehört **zu keiner Mission**. Sie stammt aus der Wartungslast (Regel 13)
+und unterscheidet sich von allen neunzehn davor: Sie schließt keine Lücke,
+sondern nimmt eine **falsche Auskunft** zurück.
+
+Eine `.ics`-Datei, die mit einer UTF-8-Bytefolgemarkierung beginnt — drei Bytes
+`EF BB BF`, die viele Windows-Werkzeuge unaufgefordert schreiben —, bekam bis
+zum 2026-08-18 **fünf** Meldungen. Nachgerechnet am alten Stand `0bbd7d8` gegen
+`beispiele/47-p20-bom.ics`, nicht erinnert:
+
+```
+FEHLER Zeile  1: P04 Eigenschaftsname enthält '<unsichtbar>'; …
+FEHLER Zeile  2: P05 Eigenschaft "VERSION" steht außerhalb jeder Komponente …
+FEHLER Zeile  3: P05 Eigenschaft "PRODID" steht außerhalb jeder Komponente …
+FEHLER Zeile  4: P05 äußerste Komponente ist "VEVENT"; …
+FEHLER Zeile 11: P05 END:VCALENDAR ohne vorangehendes BEGIN …
+```
+
+Die erste war richtig und trotzdem unbrauchbar: Sie zitiert ein Zeichen ohne
+Breite, und wer danach sucht, sucht nach nichts. **Die anderen vier waren
+falsch** — `VERSION` und `PRODID` stehen sehr wohl in einer Komponente, die
+äußerste ist `VCALENDAR` und nicht `VEVENT`, und das `END:VCALENDAR` in Zeile 11
+hat sehr wohl ein `BEGIN`. Ein Werkzeug, dessen ganzer Zweck darin besteht,
+Zeile, Regel und Abschnitt zu nennen, hat hier viermal die falsche Ursache
+genannt, davon einmal an einer Zeile zehn Zeilen weiter unten. Das ist kein
+kosmetischer Mangel, sondern derselbe Schaden wie ein falsches „in Ordnung",
+nur andersherum.
+
+Seit dem 2026-08-18 steht dort **eine** Meldung, und die Datei wird danach
+gelesen, als stünde die Markierung nicht da:
+
+```
+FEHLER Zeile 1: P20 die Datei beginnt mit einer UTF-8-Bytefolgemarkierung
+(BOM, die drei Bytes EF BB BF) vor BEGIN:VCALENDAR; ein iCalendar-Objekt
+beginnt mit BEGIN [RFC 5545 §3.4]
+```
+
+Statt das unsichtbare Zeichen zu zitieren, nennt die Meldung die drei Bytes im
+Klartext — in einem Editor, der `U+FEFF` nicht anzeigt, ist das der einzige
+Weg, sie zu finden.
+
+**Der Normtext.** §3.4 gibt die Grammatik an — `icalstream = 1*icalobject`,
+`icalobject = "BEGIN" ":" "VCALENDAR" CRLF …` — und sagt davor: *„The first
+line and last line of the iCalendar object MUST contain a pair of iCalendar
+object delimiter strings."* RFC 5545 erwähnt die BOM **an keiner Stelle**; sie
+ist also nicht ausdrücklich verboten, sondern von der Grammatik nicht gedeckt.
+Der Befund steht auf dieser Grammatik und auf nichts sonst — das ist eine
+schmalere Grundlage als bei `P18` und `P19`, wo ein verifiziertes Erratum
+danebensteht, und es steht hier, statt dass es jemand herausfinden muss.
+
+**Dass der Fall in echter Software vorkommt**, belegt
+`mampfes/hacs_waste_collection_schedule#541` (geschlossen, vom 2023-01-01): Ein
+Abfallkalender einer Stadt liefert `.ics` mit BOM, und der Verbraucher bricht ab
+mit `ValueError: Content line could not be parsed into parts:
+'<BOM>BEGIN:VCALENDAR'`. Genau dieser Nutzer hätte vom ICS-Doktor bis gestern
+drei falsche Ursachen genannt bekommen.
+
+**Was `P20` mitbringt und was sie kostet.** Sie läuft **vor** allen anderen
+Prüfungen, weil sie das Byte entfernt, das die anderen in die Irre schickt.
+Damit misst `P03` die Länge von Zeile 1 um drei Oktette kürzer als die Datei —
+Absicht, keine Ungenauigkeit: §3.1 empfiehlt die 75 Oktette für Inhaltszeilen,
+und die Markierung steht vor dem Objekt, nicht darin. Die Markierung für
+UTF-16 (`FF FE`, `FE FF`) prüft sie **nicht**; dafür gibt es im Repo keinen
+Beleg, und der Befund steht ohne Frist in `state/offen.md`.
+
 ## Warum
 
 Drei öffentliche Fehlerberichte, in der Missionsdatei mit Link und Wortlaut
@@ -248,10 +312,10 @@ Prüfung mindestens einmal ausgelöst, mindestens zwei fehlerfreie Dateien. Die
 abgeschlossene Mission „Die Faltnaht" verlangt mehr — 16 Beispiele und die zehn
 Prüfungen `P01` bis `P10` —, und wo das steht, sagt die letzte Zeile der
 Ausgabe, damit ein grüner Exit-Code nicht als „Mission erreicht" gelesen wird.
-`P11` bis `P19` füllen diese Zehn nicht auf, sondern werden getrennt gezählt:
+`P11` bis `P20` füllen diese Zehn nicht auf, sondern werden getrennt gezählt:
 Eine abgeschlossene Zusage wird nicht dadurch billiger, dass später eine Prüfung
-dazukommt. Die Abdeckungsliste nennt, was gebaut ist; seit dem 2026-08-17 stehen
-`P18` und `P19` mit darin und damit alle neunzehn. Ob die laufende Mission erreicht ist,
+dazukommt. Die Abdeckungsliste nennt, was gebaut ist; seit dem 2026-08-18 steht
+`P20` mit darin und damit alle zwanzig. Ob die laufende Mission erreicht ist,
 sagt ihre Missionsdatei und nicht dieser Exit-Code.
 
 Seit `rfc-beispiele.sh` auch bei einem `HINWEIS` mit `1` endet, ist er die
@@ -303,15 +367,30 @@ Wo der Standard mehrere Lesarten zulässt, steht hier, welche gewählt wurde:
 Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
 
 - **Es repariert nichts.** Nur Diagnose. So steht es in der Mission.
-- **Es prüft genau die neunzehn Prüfungen** und nicht mehr. Bis zum 2026-08-15
+- **Es prüft genau die zwanzig Prüfungen** und nicht mehr. Bis zum 2026-08-15
   stand hier „dreizehn"; die Zahl war seit `P13` um eine zu klein und ist keine
   weggefallene Prüfung, sondern ein nicht nachgezogener Satz. Seit dem
   2026-08-16 sind `P16` und `P17` dazugekommen, seit dem 2026-08-17 `P18` und
-  `P19`.
+  `P19`, seit dem 2026-08-18 `P20`.
   Insbesondere nicht
   die Maskierung von Sonderzeichen in TEXT-Werten (§3.3.11) — `P10` sieht nur, wo
   eine Faltung sie zerschneidet, nicht ob sie richtig ist — und nicht die
   Zeichenkodierung.
+
+  **Zur Zeichenkodierung, seit dem 2026-08-18 genauer:** Der Satz stimmt
+  weiter, aber er war zu grob. Eine Datei mit Bytes, die kein gültiges UTF-8
+  sind, bekommt hier nach wie vor **Exit 0** — gemessen an einer Datei mit
+  Latin-1-Umlauten. Der Normtext dazu steht nicht in §3.1.4, wie man vermuten
+  würde („The default charset for an iCalendar stream is UTF-8"), sondern in
+  **§6**: *„Applications MUST generate iCalendar streams in the UTF-8 charset
+  and MUST accept an iCalendar stream in the UTF-8 or US-ASCII charset."*
+  Gebaut ist das nicht, weil die Suche vom 2026-08-18 keinen öffentlichen
+  Fehlerbericht gefunden hat, in dem die gemeldete Datei wirklich kein UTF-8
+  ist — die naheliegenden Treffer waren Verbraucher, die den ASCII-Codec
+  benutzten, während die Datei gültiges UTF-8 war. Der Befund steht ohne Frist
+  in `state/offen.md`.
+  Was hingegen **seit dem 2026-08-18 gebaut ist**, ist die
+  Bytefolgemarkierung davor: siehe `P20`.
 
   Bis zum 2026-08-17 stand in dieser Aufzählung, für `VTODO`, `VJOURNAL` und
   `VFREEBUSY` würden keine Pflichtangaben geprüft. Der Satz galt und ist durch

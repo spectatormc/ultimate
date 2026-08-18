@@ -60,6 +60,13 @@ DTSTAMP in VTODO (§3.6.2), VJOURNAL (§3.6.3) und VFREEBUSY (§3.6.4), ACTION u
 TRIGGER in VALARM (§3.6.6). Sie ist P07 nachgebaut, das dasselbe fuer VEVENT
 tut, und ihr Beleg ist wieder ein verifiziertes Erratum (Errata-ID 4149).
 
+P20 gehoert zu keiner Mission und stammt aus der Wartungslast (Regel 13): Eine
+Datei, die mit einer UTF-8-Bytefolgemarkierung (BOM) beginnt, bekam bis zum
+2026-08-18 fuenf Meldungen, von denen vier die Ursache falsch benannten. Sie ist
+damit die erste Pruefung, die nicht eine Luecke schliesst, sondern eine falsche
+Auskunft — und die einzige, die vor allen anderen laeuft, weil sie das Byte
+entfernt, das die anderen in die Irre schickt.
+
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
 Aufruf:
@@ -1610,16 +1617,99 @@ def pruefe_p19(komponenten, funde):
                         abschnitt))
 
 
+_BOM_UTF8 = b"\xef\xbb\xbf"
+
+
+def pruefe_p20(rohdaten, funde):
+    """§3.4: Vor BEGIN:VCALENDAR steht nichts, auch keine BOM.
+
+    Rueckgabe: (rohdaten ohne BOM, hatte_bom).
+
+    DER NORMTEXT. §3.4 gibt die Grammatik des Stroms an:
+
+        icalstream = 1*icalobject
+        icalobject = "BEGIN" ":" "VCALENDAR" CRLF icalbody
+                     "END" ":" "VCALENDAR" CRLF
+
+    und davor im selben Abschnitt: "The first line and last line of the
+    iCalendar object MUST contain a pair of iCalendar object delimiter
+    strings." Ein U+FEFF vor dem Literal "BEGIN" ist von dieser Grammatik nicht
+    gedeckt. RFC 5545 erwaehnt die BOM an keiner Stelle; sie ist deshalb nicht
+    ausdruecklich verboten, sondern schlicht nicht vorgesehen — der Befund
+    steht auf der Grammatik und auf nichts sonst.
+
+    WARUM DIESE PRUEFUNG DAS BYTE ENTFERNT, STATT NUR ZU MELDEN. Ohne das
+    Entfernen meldete das Werkzeug am Stand 0bbd7d8 auf beispiele/47-p20-bom.ics
+    — einer bis auf die BOM tadellosen Datei — fuenf Zeilen:
+
+        FEHLER Zeile  1: P04 Eigenschaftsname enthält '<unsichtbar>'; ...
+        FEHLER Zeile  2: P05 Eigenschaft "VERSION" steht außerhalb jeder Komponente
+        FEHLER Zeile  3: P05 Eigenschaft "PRODID" steht außerhalb jeder Komponente
+        FEHLER Zeile  4: P05 äußerste Komponente ist "VEVENT"; ...
+        FEHLER Zeile 11: P05 END:VCALENDAR ohne vorangehendes BEGIN
+
+    Die erste Zeile war richtig, aber unlesbar: Sie zitiert ein Zeichen, das
+    keine Breite hat, und der Leser sucht in seiner Datei nach nichts. Die
+    anderen vier waren schlicht falsch — VERSION und PRODID stehen sehr wohl in
+    einer Komponente, die aeusserste ist VCALENDAR, und das END:VCALENDAR hat
+    sehr wohl ein BEGIN. Ein Werkzeug, dessen Zweck es ist, Zeile, Regel und
+    Abschnitt zu nennen, darf nicht viermal die falsche Ursache nennen, davon
+    einmal zehn Zeilen weiter unten. Deshalb faellt das Byte weg, bevor
+    irgendeine andere Pruefung es sieht, und der Befund steht genau einmal da.
+
+    Statt das Zeichen zu zitieren, nennt die Meldung die drei Bytes im
+    Klartext: EF BB BF. Wer sie sucht, findet sie damit auch in einem
+    Editor, der U+FEFF nicht anzeigt.
+
+    ZU P03. Die Laenge in Oktetten wird nach dem Entfernen gemessen, Zeile 1
+    ist also drei Oktette kuerzer als in der Datei. Das ist Absicht und keine
+    Ungenauigkeit: §3.1 empfiehlt die 75 Oktette fuer Inhaltszeilen, und die
+    BOM ist keine — sie steht vor dem Objekt, nicht darin.
+
+    NICHT GEPRUEFT wird die Bytefolgemarkierung fuer UTF-16 (FF FE, FE FF).
+    Eine Datei in UTF-16 verletzt §6 ("Applications MUST generate iCalendar
+    streams in the UTF-8 charset"), aber im Repo gibt es dafuer keinen Beleg
+    und in der Suche vom 2026-08-18 keinen oeffentlichen Fehlerbericht. Der
+    Befund steht ohne Frist in state/offen.md; gebaut wird er, wenn eine
+    Messung einen Anlass zeigt, und nicht vorher.
+
+    DER ANLASS AUS DER WELT. mampfes/hacs_waste_collection_schedule #541,
+    geschlossen, vom 2023-01-01: Ein Abfallkalender einer Stadt liefert .ics
+    mit BOM, und der Verbraucher bricht ab mit
+    "ValueError: Content line could not be parsed into parts:
+    '<BOM>BEGIN:VCALENDAR'". Genau dieser Nutzer bekam vom ICS-Doktor bis
+    heute drei falsche Ursachen genannt.
+    """
+    if not rohdaten.startswith(_BOM_UTF8):
+        return rohdaten, False
+    funde.append(Fund(
+        FEHLER, 1, "P20",
+        "die Datei beginnt mit einer UTF-8-Bytefolgemarkierung "
+        "(BOM, die drei Bytes EF BB BF) vor BEGIN:VCALENDAR; ein "
+        "iCalendar-Objekt beginnt mit BEGIN",
+        "3.4"))
+    return rohdaten[len(_BOM_UTF8):], True
+
+
 def untersuche(rohdaten):
-    """Alle neunzehn Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle zwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
+    rohdaten, hatte_bom = pruefe_p20(rohdaten, funde)
     zeilen = zerlege_physisch(rohdaten)
     if not zeilen:
-        funde.append(Fund(
-            FEHLER, 1, "P05",
-            "die Datei ist leer; ein iCalendar-Objekt beginnt mit "
-            "BEGIN:VCALENDAR",
-            "3.4"))
+        # Ohne BOM heisst "keine Zeile" eine leere Datei. Mit BOM waere dieser
+        # Satz falsch: Die Datei hat drei Bytes, sie sind nur keine Zeile.
+        if hatte_bom:
+            text = ("die Datei enthält außer der Bytefolgemarkierung nichts; "
+                    "ein iCalendar-Objekt beginnt mit BEGIN:VCALENDAR")
+        else:
+            text = ("die Datei ist leer; ein iCalendar-Objekt beginnt mit "
+                    "BEGIN:VCALENDAR")
+        funde.append(Fund(FEHLER, 1, "P05", text, "3.4"))
+        # Auch dieser Zweig sortiert. Bis zum 2026-08-18 stand hier ein
+        # blankes "return funde" — richtig, solange genau ein Fund entstehen
+        # konnte, und ab P20 nicht mehr.
+        funde.sort(key=lambda f: (f.zeile, f.code))
         return funde
     pruefe_p01(zeilen, funde)
     pruefe_p02(zeilen, funde)

@@ -1,0 +1,1 @@
+FEHLER Zeile 1: P20 die Datei beginnt mit einer UTF-8-Bytefolgemarkierung (BOM, die drei Bytes EF BB BF) vor BEGIN:VCALENDAR; ein iCalendar-Objekt beginnt mit BEGIN [RFC 5545 §3.4]
