@@ -1818,3 +1818,68 @@ nicht geraten) steht wie er stand. Dazu unverändert aus Zyklus 33 bis 35:
 gesucht. Dazu die beiden Befunde aus Zyklus 29 — `VALARM` (§3.6.6) und
 `VTIMEZONE` (§3.6.5); `anlass.sh` zeigt am 2026-08-19 weiter keinen Anlass:
 14 bzw. 3 bzw. 5 betrachtete Komponenten, je 0 Treffer.
+
+---
+
+## 2026-08-19 — Zyklus 37: die Fundstellen werden gegen den Normtext gehalten
+
+**Kein Blocker.** Drei Befunde, keiner mit Frist, keiner ein Fehlschlag.
+
+### 1. Gebaut: `fundstellen.sh` — und er hat nichts gefunden
+
+Das Werkzeug hängt an jede Fundzeile `[RFC 5545 §X]`. Dieses `X` hatte niemand
+nachgeschlagen: `pruefe.sh` vergleicht die Ausgabe mit einer Erwartung aus
+meiner Hand — steht die falsche Fundstelle in beiden, ist der Vergleich grün.
+
+Seit `059d871` holt `fundstellen.sh` die zitierten Normtexte zur Laufzeit und
+hält jeden Verweis dagegen: **41 Verweise, 0 ohne Entsprechung.** Der Fehler,
+nach dem gesucht wurde, war nicht da.
+
+Der Befund steckt anderswo: **Zehn Abschnitte kann das Werkzeug ausgeben, ohne
+dass eine einzige Beispieldatei sie auslöst** — `§3.8.2.1`, `§3.8.2.3`,
+`§3.8.2.4`, `§3.8.4.4`, `§3.8.4.7`, `§3.8.5.1`, `§3.8.5.2`, `§3.8.6.1`,
+`§3.8.7.1`, `§3.8.7.3`. Sie standen unbesehen im Code. Das ist keine offene
+Aufgabe, sondern der Grund, warum die statische Erhebung nicht durch eine
+Messung ersetzt werden kann.
+
+**Der Fall, den das Skript selbst gemeldet hat, bevor er zum Loch wurde:**
+`3.7.3` steht als Zeichenkette *innerhalb* von `pruefe_p06`; weder die
+Syntaxbaum-Erhebung noch die Modulkonstanten sehen ihn. Gedeckt ist er allein
+durch den Docstring darüber. Seitdem endet das Skript mit 2, sobald ein
+ausgegebener Abschnitt in keiner statischen Erhebung vorkommt.
+
+### 2. Befund: `pruefe.sh` kann eine falsche Fundstelle nicht finden
+
+**Kein Blocker, keine Frist, nichts zu tun.** Der Punkt ist allgemeiner als
+dieser Zyklus: Jede Erwartung in `erwartet/` stammt von mir. Sie prüft, dass
+sich die Ausgabe nicht **ändert**, nie, dass sie **stimmt**. Alles, was nur
+gegen `erwartet/` läuft, ist gegen einen gemeinsamen Irrtum blind.
+
+Dagegen stehen inzwischen vier Vorrichtungen mit fremder Quelle:
+`rfc-beispiele.sh` (Eingabe aus dem Normtext), `fremdprobe.sh` und
+`gegenprobe.sh` (Eingaben und Erwartungen aus fremden Fehlerberichten),
+`namensliste.sh` (Liste aus IANA und zwei RFCs) — und seit heute
+`fundstellen.sh` (Fundstellen aus den RFCs selbst). Das steht hier, damit es
+beim nächsten „ist doch alles grün" nachlesbar ist, welches Grün woher kommt.
+
+### 3. Messfehler bei mir, nicht im Skript, im selben Zyklus korrigiert
+
+Beim ersten Gegenbeweis habe ich `sh fundstellen.sh | tail -4` geschrieben und
+Exit 0 abgelesen — der Exit-Code kam von `tail`, das Skript endete mit 1. Genau
+davor warnt die Zieldefinition der laufenden Mission mit „Exit-Code nie hinter
+einer Pipe". Ohne Wiederholung ohne Pipe stünde im Journal, der Gegenbeweis sei
+fehlgeschlagen.
+
+Kein Fehlschlag nach Regel 2: innerhalb desselben Zyklus aufgefallen und
+korrigiert, das Skript hat sich richtig verhalten. Steht hier, weil ein
+Messfehler, der nur im Kopf korrigiert wird, beim nächsten Mal wiederkommt.
+
+### 4. Unverändert offen, unverändert ohne Frist
+
+Befund 2 aus Zyklus 35 („die dreizehn älteren Erwartungen", zwei Lesarten,
+nicht geraten) steht wie er stand. Ebenso Befund 1 aus Zyklus 30
+(`ARCHITEKTUR.md` sagt „fünf" Pflicht-Auslöser, der Kodex sechs — Kodex schlägt
+Architektur, nicht selbst angeglichen). Ebenso aus Zyklus 33 bis 36:
+`_zeige_wort` in **Wert**-Zitaten, UTF-16-Markierung, §6-Prüfung, `VALARM`
+(§3.6.6), `VTIMEZONE` (§3.6.5), `UNTIL`+`COUNT` (§3.3.10). `anlass.sh` zeigt
+am 2026-08-19 für alle vier gemessenen Fälle weiter keinen Anlass.
