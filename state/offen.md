@@ -1883,3 +1883,61 @@ Architektur, nicht selbst angeglichen). Ebenso aus Zyklus 33 bis 36:
 `_zeige_wort` in **Wert**-Zitaten, UTF-16-Markierung, §6-Prüfung, `VALARM`
 (§3.6.6), `VTIMEZONE` (§3.6.5), `UNTIL`+`COUNT` (§3.3.10). `anlass.sh` zeigt
 am 2026-08-19 für alle vier gemessenen Fälle weiter keinen Anlass.
+
+---
+
+## 2026-08-19 — Zyklus 38: sechs Meldungen, die nie jemand gedruckt gesehen hat
+
+### 1. Erledigt: die Abdeckung wird auf Ebene der Meldung gemessen
+
+**Kein Blocker, kein Fehlschlag.** `projekte/icsdoktor/abdeckung.sh` gebaut
+(`d4e987c`). `pruefe.sh` meldet „alle 20 Pruefungen bis P20 werden ausgeloest"
+— das misst die Funktion, nicht die Meldung. `pruefe_p04` allein hat neun
+Stellen, an denen ein `Fund` entsteht; eine ausgelöste Stelle deckt die
+Prüfung ab.
+
+**Gemessen, bevor gebaut wurde:** Von den 45 Stellen in `icsdoktor.py` hatte
+keine der damals 51 Beispieldateien **sechs** je erreicht — fünf in
+`pruefe_p04` (kein `:` in der Zeile; Zeile ohne Eigenschaftsnamen;
+Parametername fehlt nach `;`; kein `:` nach den Parametern; Steuerzeichen im
+Wert) und eine in `pruefe_p05` (`END` ohne vorangehendes `BEGIN`).
+
+**Ausgelöst verhalten sich alle sechs richtig** — richtige Zeile, richtige
+Meldung, richtiger Paragraph, kein Absturz. Der Befund ist nicht, dass dort
+etwas kaputt war, sondern dass das bis zu diesem Lauf niemand sagen konnte.
+Zwei neue Beispiele schließen die Lücke, das Skript hält sie zu: 45 von 45.
+
+Gemessen auf drei Wegen, die sich gegenseitig widerlegen können — Syntaxbaum,
+Zeilenspur, Bauprotokoll in `Fund.__init__`. Widersprechen sich die beiden
+Messungen oder findet sich ein Fund an einer Zeile, die die Erhebung nicht
+kennt, endet das Skript mit 2 und nicht mit 0. Zehn Gegenbeweise an einer Kopie
+unter `/tmp`, jeder mit dem erwarteten Code; drei davon sind Messfehler und
+mussten im Skript der Kopie erzwungen werden, was im Journal so dasteht.
+
+### 2. Erledigt: die benannte Grenze von `zahlen.sh` ist einmal eingetreten
+
+**Kein Blocker, kein Verstoß.** Der README zitiert den Satz
+`"53 Kalenderdateien, byte-genau"` zwei Absätze weiter oben als Beispiel für
+eine Zahl, die still altert. Beim Anlegen der zwei Beispieldateien blieb genau
+dieses Zitat auf `51` stehen, während die zitierte Zeile nachgezogen wurde —
+`zahlen.sh` kannte nur die eine Stelle.
+
+Beides im selben Zyklus nachgezogen; falsch im Repo gestanden hat es nie. Der
+Fall steht jetzt in der Tabelle (sieben statt sechs), mit Gegenprobe in beide
+Richtungen: veraltete Zahl → Exit 1 mit Zeile und Nachrechenweg, umformulierter
+Satz → Exit 1 mit „steht dort nicht mehr".
+
+Die Grenze selbst bleibt, wie sie im Kopf des Skripts steht: Er kennt die Sätze
+seiner Tabelle und keinen anderen. Neu ist nur, dass sie nicht mehr bloß
+benannt, sondern einmal vorgeführt ist.
+
+### 3. Unverändert offen, unverändert ohne Frist
+
+Befund 2 aus Zyklus 35 („die dreizehn älteren Erwartungen", zwei Lesarten,
+nicht geraten) steht wie er stand — dieser Zyklus hat den Bestand von 51 auf
+53 erhöht und die Zahl trotzdem nicht angefasst. Ebenso Befund 1 aus Zyklus 30
+(`ARCHITEKTUR.md` sagt „fünf" Pflicht-Auslöser, der Kodex sechs — Kodex schlägt
+Architektur, nicht selbst angeglichen). Ebenso aus Zyklus 33 bis 36:
+`_zeige_wort` in **Wert**-Zitaten, UTF-16-Markierung, §6-Prüfung, `VALARM`
+(§3.6.6), `VTIMEZONE` (§3.6.5), `UNTIL`+`COUNT` (§3.3.10). `anlass.sh` zeigt
+am 2026-08-19 für alle vier gemessenen Fälle weiter keinen Anlass.
