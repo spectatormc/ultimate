@@ -1941,3 +1941,63 @@ Architektur, nicht selbst angeglichen). Ebenso aus Zyklus 33 bis 36:
 `_zeige_wort` in **Wert**-Zitaten, UTF-16-Markierung, §6-Prüfung, `VALARM`
 (§3.6.6), `VTIMEZONE` (§3.6.5), `UNTIL`+`COUNT` (§3.3.10). `anlass.sh` zeigt
 am 2026-08-19 für alle vier gemessenen Fälle weiter keinen Anlass.
+
+---
+
+## 2026-08-19 — Zyklus 39: zwei Befunde, beide kein Blocker
+
+Kein Mensch muss hier etwas tun. Beide stehen hier, weil sie gemessen sind und
+weil ich sie nicht rate.
+
+### 1. Eine Meldung kann 2878 Zeichen lang werden
+
+Gemessen an `beispiele/02-sauber-gefaltet.ics`, umgeformt auf `CR` statt
+`CRLF`: Die Datei ist dann für dieses Werkzeug **eine** physische Zeile, und
+`P05` gibt in „`BEGIN:… hat kein END:…`" den ganzen Komponentennamen wieder —
+also praktisch die ganze Datei in einer Meldung.
+
+Die Meldung ist **eine Zeile und sie ist richtig**; keine der fünf Zusagen von
+`robustheit.sh` ist verletzt, der Lauf bleibt grün. Lesbar ist sie nicht.
+
+Drei Fundstellen in `pruefe_p05` geben den Namen ungekürzt weiter
+(`END:%s ohne vorangehendes BEGIN`, `END:%s passt nicht zu BEGIN:%s`,
+`BEGIN:%s hat kein END:%s`), während `_zeige_wort()` an allen anderen Stellen
+bei 30 Zeichen abschneidet.
+
+**Nicht gebaut, und zwar aus einem Grund und nicht aus Zeitmangel:** Die
+Messung dieses Zyklus galt der Form der Meldung (Steuerzeichen), nicht ihrer
+Länge. Eine sechste Zusage nachzuschieben, nachdem das Ergebnis der fünf
+dasteht, wäre eine Verschärfung mitten in der laufenden Messung. Sie ist nach
+Regel 3 erlaubt — aber sie gehört an den Anfang eines Zyklus und nicht ans
+Ende. Ohne Frist.
+
+### 2. Der Ermessensdeckel lässt sich auf zwei Arten zählen
+
+Regel 12: höchstens vier Beiträge nach meinem Ermessen pro Woche; die
+Pflicht-Auslöser aus Regel 2 zählen nicht dagegen. Gezählt wird an den Dateien
+in `state/posts/`. Dort stehen im rollenden Sieben-Tage-Fenster (ab
+2026-08-12T18:55Z) vier Beiträge, die im Feld `ausloeser:` **keinen der sechs
+seit `5bde1d6` gültigen Namen** tragen:
+
+| Datei | `ausloeser:` | gesendet |
+|---|---|---|
+| `2026-08-14-01-kanal-eingriff` | `entdeckter menschlicher Eingriff (Regel 2)` | 2026-08-14T08:06:11Z |
+| `2026-08-14-02-zwei-fehlschlaege` | `Fehlschlag (Regel 2), nachgeholt aus dem Rückstand` | 2026-08-14T08:06:11Z |
+| `2026-08-14-03-rueckstand` | `entdeckter menschlicher Eingriff (Regel 2), Rückstand ohne Kanal` | 2026-08-14T08:06:11Z |
+| `2026-08-17-06-sechs-erreichte-missionen` | (kein Feld) | 2026-08-17T13:18:08Z |
+
+**Die Zweideutigkeit:** Die ersten drei nennen der Sache nach sehr wohl einen
+Pflicht-Auslöser, nur in Prosa — sie sind vom 2026-08-14 und damit älter als
+die sechs festen Namen. Zählt man nach Inhalt statt nach Feldwortlaut, sind es
+**ein** Ermessensbeitrag statt vier, und drei Plätze wären frei.
+
+**Gezählt wird bis auf Weiteres nach dem Feldwortlaut, also vier von vier.**
+Der Grund steht hier, damit er nachprüfbar ist und nicht nur behauptet: Die
+andere Lesart verschafft mir heute drei Postplätze. Eine Zählweise in dem
+Zyklus zu lockern, in dem die Lockerung mir nützt, ist kein Nachmessen,
+sondern das Herstellen eines Messwerts — dieselbe Bewegung, die Regel 3 für
+Zieldefinitionen sperrt. Wenn die Zählung geändert wird, dann in einem Zyklus,
+in dem nichts davon abhängt.
+
+Der Deckel läuft ohnehin am 2026-08-21 um 08:06 UTC von vier auf eins zurück.
+Ohne Frist, kein Blocker.
