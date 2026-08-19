@@ -1744,3 +1744,77 @@ ungebaut, und in diesem Zyklus wurde nicht erneut danach gesucht. Dazu die
 beiden Befunde aus Zyklus 29 — `VALARM` (§3.6.6) und `VTIMEZONE` (§3.6.5);
 `anlass.sh` zeigt am 2026-08-18 weiter keinen Anlass: 14 bzw. 3 bzw. 5
 betrachtete Komponenten, je 0 Treffer.
+
+---
+
+## 2026-08-19 — Zyklus 36: `UNTIL` und `COUNT` zugleich wird gemessen statt vermutet
+
+### 1. Erledigt: eine Begründung fürs Nichtbauen, die niemand nachgerechnet hat
+
+**Kein Blocker, kein Fehlschlag.** Der Docstring von `pruefe_p17` endete mit
+dem Satz, „UNTIL und COUNT duerfen nicht zugleich vorkommen" sei „eine andere
+Frage und **nicht gemessen worden**". Seit `768cb3a` ist er gemessen:
+`anlass.sh` rechnet den Fall mit nach, über dieselben 63 Eingaben wie die drei
+anderen — 51 Beispieldateien, sechs Kalenderobjekte aus RFC 5545 §4, sechs
+Fremddateien —, gelesen mit dem Parser des Werkzeugs selbst.
+
+**Ergebnis am 2026-08-19: 8 `RRULE`-Zeilen betrachtet, 0 Treffer.** Kein
+Anlass, also keine `P21`. Der Normtext steht wörtlich in der ABNF des
+`RECUR`-Wertes: *„The UNTIL or COUNT rule parts are OPTIONAL, but they MUST NOT
+occur in the same 'recur'."*
+
+**Was dabei die eigentliche Änderung ist:** `betrachtet` zählt jetzt je Fall
+die richtige Einheit. Die drei bisherigen Fälle prüfen Pflichten an einer
+Komponente; dieser hängt an einer einzelnen Eigenschaft. Hätte ich Komponenten
+weitergezählt, stünde bei vierzig `VEVENT` ohne ein einziges `RRULE` da
+„betrachtet: 40, Treffer: 0" — dieselbe beruhigende Auskunft über nichts, vor
+der der Kopf des Skripts seit Zyklus 32 warnt. `Treffer` zählt aus demselben
+Grund Einheiten und nicht Komponenten mit einem Befund.
+
+**Gegenprobe zum Wächter selbst**, an einer Kopie unter `/tmp`, das Repo
+unberührt: eine Beispieldatei mit `UNTIL` und `COUNT` in einer `RRULE` → Exit 1
+mit Datei- und Zeilennummer; ein `VALARM` ohne alle drei `EMAIL`-Pflichten →
+Exit 1 mit **einem** Treffer statt dreien; eine Fallart auf einen
+Komponentennamen gesetzt, den es nicht gibt → Exit 1 im ACHTUNG-Zweig.
+
+### 2. Gemessen, ohne Änderung daran: kein Fehlalarm in zwölf gültigen Konstruktionen
+
+**Kein Blocker, keine Frist.** Vor der Arbeit wie in den Vorzyklen zuerst nach
+einem Fehlalarm gesucht, mit zwölf gültigen Konstruktionen aus RFC 5545, die in
+keinem früheren Zyklus geprüft waren: die Schaltsekunde `235960` (§3.3.12), der
+Schalttag mit `TZID` ohne `Z`, die TEXT-Maskierungen `\n \, \; \\`, ein leerer
+TEXT-Wert, `ATTACH;ENCODING=BASE64;VALUE=BINARY`, `SENT-BY` neben unquotiertem
+`CN`, das Semikolon **im Wert** bei `GEO` und `REQUEST-STATUS`, beide Formen
+des `TRIGGER`, `FREEBUSY` mit zwei Perioden, die Faltung mit **Tabulator**
+(§3.1 nennt „SPACE or HTAB"), `VTODO` mit `DUE;VALUE=DATE`, die drei zulässigen
+`UNTIL`/`DTSTART`-Paarungen, ein vollständiges `VTIMEZONE`, `VJOURNAL` ohne
+`DTSTART` bei gesetztem `METHOD`.
+
+**Kein Fehlalarm.** Die einzige Meldung war ein richtiger `P03`-HINWEIS auf
+eine Zeile, die ich versehentlich 76 Oktette lang geschrieben hatte. Das steht
+hier, weil eine Suche ohne Fund auch ein Ergebnis ist.
+
+### 3. Befund: die GitHub-Grenze wird von drei Skripten geteilt
+
+**Kein Blocker, keine Frist.** Der erste Lauf von `anlass.sh` nach der Änderung
+endete mit **Exit 2**: `api.github.com` stand bei 60 von 60 Anfragen, weil
+`fremdprobe.sh`, `gegenprobe.sh` und `anlass.sh` in der Messung davor je fünf
+verbraucht hatten. Das Skript hat sich richtig verhalten — abgebrochen und
+gesagt warum, statt ein grünes Ergebnis ohne Messung zu liefern.
+
+Kein Blocker nach dem Prüfstein von Zyklus 6: Es hält mich nicht an, und ich
+kann es selbst umgehen, indem ich die drei nicht dicht hintereinander laufen
+lasse. Im Actions-Lauf ist `gh` mit einem Token angemeldet (5000/h); die drei
+Skripte benutzen aber `curl` ohne Anmeldung, und daran ändere ich nichts
+nebenbei.
+
+### 4. Unverändert offen, unverändert ohne Frist
+
+Befund 2 aus Zyklus 35 („die dreizehn älteren Erwartungen", zwei Lesarten,
+nicht geraten) steht wie er stand. Dazu unverändert aus Zyklus 33 bis 35:
+`_zeige_wort` gibt das Ersatzzeichen in **Wert**-Zitaten weiter aus
+(Lesbarkeitsgrenze, kein Defekt); die UTF-16-Markierung ist ungeprüft; die
+§6-Prüfung ist ungebaut, und in diesem Zyklus wurde nicht erneut danach
+gesucht. Dazu die beiden Befunde aus Zyklus 29 — `VALARM` (§3.6.6) und
+`VTIMEZONE` (§3.6.5); `anlass.sh` zeigt am 2026-08-19 weiter keinen Anlass:
+14 bzw. 3 bzw. 5 betrachtete Komponenten, je 0 Treffer.
