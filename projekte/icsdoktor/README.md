@@ -338,6 +338,7 @@ sh projekte/icsdoktor/namensliste.sh     # woher die Namensliste von P09 kommt
 sh projekte/icsdoktor/anlass.sh          # gibt es Anlass für eine 21. Prüfung?
 sh projekte/icsdoktor/zahlen.sh          # stimmen die Zahlen über den Bestand?
 sh projekte/icsdoktor/fundstellen.sh     # steht jeder zitierte § im Normtext?
+sh projekte/icsdoktor/abdeckung.sh       # löst jede Meldung ein Beispiel aus?
 ```
 
 Der zweite ist der wichtigere: Seine Eingabe stammt nicht von mir, sondern aus
@@ -394,7 +395,7 @@ weicht sie ab, endet er mit `1` und nennt jeden Unterschied. Beide brauchen Netz
 
 ### `zahlen.sh` — die Zahlen über den eigenen Bestand
 
-Der letzte prüft nicht das Werkzeug, sondern diesen Text. „51 Kalenderdateien",
+Der letzte prüft nicht das Werkzeug, sondern diesen Text. „53 Kalenderdateien",
 „die zwanzig Prüfungen", „Anlass für eine 21. Prüfung" — das sind keine
 Meinungen, sondern Zahlen, die man nachsehen kann. Sie stehen im Text, während
 der Bestand daneben wächst, und niemand zieht sie nach, weil niemand sie liest.
@@ -458,6 +459,48 @@ gegen das Skript: Zehn der Abschnitte, die das Werkzeug nennen kann, löst keine
 einzige Beispieldatei aus; sie standen unbesehen im Code, und ohne diesen Lauf
 stünde bis heute nur die Vermutung da, dass sie richtig sind. Er braucht Netz
 und ist kein Prüfbefehl einer Mission.
+
+### `abdeckung.sh` — worüber sagt der grüne Lauf überhaupt etwas?
+
+`pruefe.sh` endet mit der Zeile „Abdeckung: alle 20 Prüfungen bis P20 werden
+ausgelöst". Der Satz stimmt, und er klingt nach mehr, als er misst. Eine Prüfung
+ist eine Funktion, und eine Funktion kann ein Dutzend verschiedener Meldungen
+drucken: `pruefe_p04` allein hat neun Stellen, an denen ein Fund entsteht. Löst
+ein einziges Beispiel eine davon aus, gilt `P04` als abgedeckt — und die anderen
+acht sind Code, den nie jemand hat laufen sehen.
+
+Dort sitzt der Fehler, den keiner der anderen Prüfbefehle finden kann.
+`pruefe.sh` vergleicht die Ausgabe byte-genau mit `erwartet/`; was nie gedruckt
+wird, steht in keiner Erwartung und wird von keinem Vergleich berührt. Ein
+Formatfehler, eine falsche Zeilennummer, ein Absturz in einem Zweig, den keine
+Datei betritt: alles grün, bis zum ersten Anwender, der genau die Datei schickt,
+auf die es ankommt.
+
+**Am 2026-08-19 gemessen, bevor gebaut wurde:** Von den 45 Stellen, an denen
+`icsdoktor.py` einen Fund baut, hat keine der damals 51 Beispieldateien **sechs**
+je erreicht — fünf in `pruefe_p04` (kein `:` in der Zeile; Zeile ohne
+Eigenschaftsnamen; Parametername fehlt nach `;`; kein `:` nach den Parametern;
+Steuerzeichen im Wert) und eine in `pruefe_p05` (`END` ohne vorangehendes
+`BEGIN`). Ausgelöst verhalten sich alle sechs richtig: richtige Zeile, richtige
+Meldung, kein Absturz. Der Fund ist nicht, dass dort etwas kaputt war — sondern
+dass das bis dahin niemand sagen konnte. `beispiele/51-p04-form-name-parameter-wert.ics`
+und `beispiele/52-p05-end-ohne-begin.ics` schließen die Lücke, und dieses Skript
+hält sie zu.
+
+Gemessen wird auf drei Wegen, weil ein einzelner sich nicht selbst widerlegen
+kann: statisch über den Syntaxbaum, welche Stellen es gibt; über eine Zeilenspur,
+welche Zeilen laufen; und über ein Bauprotokoll in `Fund.__init__`, von welcher
+Zeile aus wirklich ein Fund entsteht. Die beiden Messungen müssen dasselbe
+Ergebnis liefern und ganz in die Erhebung passen — sonst endet das Skript mit
+`2` und nicht mit `0`. Ohne diesen Abgleich wäre „alles abgedeckt" nur die
+Stille eines Messgeräts, das nichts sieht.
+
+Er braucht kein Netz und ist kein Prüfbefehl einer Mission. Gemessen wird nur
+über `beispiele/`, mit Absicht: Die zwölf fremden Eingaben ändern sich ohne mein
+Zutun, und nur zu den Dateien im Repo gibt es eine byte-genaue Erwartung. Die
+Aussage lautet deshalb genau: Jede Meldung, die dieses Werkzeug drucken kann,
+ist in `erwartet/` festgehalten. Über die Richtigkeit einer Meldung sagt er
+nichts — nur darüber, dass sie überhaupt einmal gedruckt wird.
 
 **Seine Grenze steht in seinem Kopf und hier:** Er kennt genau die Sätze, die in
 seiner Tabelle stehen. Eine neue Behauptung über den Bestand kommt nicht von
@@ -810,7 +853,10 @@ zahlen.sh           Rechnet die Zahlen nach, die dieses Projekt über seinen
 fundstellen.sh      Hält jeden zitierten §-Verweis gegen den Normtext, den er
                     zitiert. Kein Prüfbefehl der Mission — er prüft die
                     Fundstelle, nicht die Regel dahinter.
-beispiele/          51 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
+abdeckung.sh        Hält jede Meldung, die das Werkzeug drucken kann, gegen
+                    beispiele/. Kein Prüfbefehl der Mission — er misst, worüber
+                    pruefe.sh redet, nicht das Werkzeug. Kein Netz.
+beispiele/          53 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
                     Die Zahl ist am 2026-08-18 nachgezählt; sie stand seit
                     zwei Zyklen auf 47 und wuchs still mit jeder neuen Datei.
 erwartet/           Je eine Datei mit der erwarteten Ausgabe.

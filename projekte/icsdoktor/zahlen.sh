@@ -157,6 +157,15 @@ FAELLE = (
      "{} Kalenderdateien, byte-genau",
      len(beispiele), "ziffer",
      "Dateien beispiele/*.ics"),
+    # Derselbe Bestand, zweite Stelle: der Absatz ueber dieses Skript zitiert
+    # den Satz oben als Beispiel fuer eine Zahl, die still altert. Am
+    # 2026-08-19 hat er es getan — beim Anlegen von zwei Beispieldateien blieb
+    # das Zitat auf 51 stehen, waehrend die Zeile darueber nachgezogen wurde.
+    # Ein Beispiel, das seinen eigenen Fall vorfuehrt, ist kein Beispiel mehr.
+    ("README.md",
+     "„{} Kalenderdateien\"",
+     len(beispiele), "ziffer",
+     "Dateien beispiele/*.ics"),
     ("README.md",
      "Es prüft genau die {} Prüfungen",
      anzahl_pruefungen, "wort",

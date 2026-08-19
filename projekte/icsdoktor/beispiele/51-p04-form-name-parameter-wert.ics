@@ -1,0 +1,14 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//ICS-Doktor//Beispiel 51//DE
+BEGIN:VEVENT
+UID:20260819T130000Z-51@icsdoktor.example
+DTSTAMP:20260819T130000Z
+DTSTART:20260819T140000Z
+SUMMARY
+:Wert ohne Eigenschaftsnamen
+DESCRIPTION;=de:Parametername fehlt vor dem Gleichheitszeichen
+LOCATION;LANGUAGE=de
+COMMENT:Steuerzeichen  mitten im Wert
+END:VEVENT
+END:VCALENDAR

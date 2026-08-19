@@ -1,0 +1,5 @@
+FEHLER Zeile 8: P04 kein ':' in der Zeile; nach dem Eigenschaftsnamen fehlt der Wert ("SUMMARY") [RFC 5545 §3.1]
+FEHLER Zeile 9: P04 Zeile beginnt mit ':'; davor fehlt der Eigenschaftsname [RFC 5545 §3.1]
+FEHLER Zeile 10: P04 Parametername fehlt nach ';' in "DESCRIPTION" [RFC 5545 §3.1]
+FEHLER Zeile 11: P04 kein ':' nach den Parametern von "LOCATION" [RFC 5545 §3.1]
+FEHLER Zeile 12: P04 Wert enthält das Steuerzeichen 0x01 [RFC 5545 §3.1]
