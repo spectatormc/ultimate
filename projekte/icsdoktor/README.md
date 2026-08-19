@@ -337,6 +337,7 @@ sh projekte/icsdoktor/rfc-beispiele.sh   # die sechs Kalender aus RFC 5545 §4
 sh projekte/icsdoktor/namensliste.sh     # woher die Namensliste von P09 kommt
 sh projekte/icsdoktor/anlass.sh          # gibt es Anlass für eine 21. Prüfung?
 sh projekte/icsdoktor/zahlen.sh          # stimmen die Zahlen über den Bestand?
+sh projekte/icsdoktor/fundstellen.sh     # steht jeder zitierte § im Normtext?
 ```
 
 Der zweite ist der wichtigere: Seine Eingabe stammt nicht von mir, sondern aus
@@ -412,6 +413,51 @@ dem 2026-08-18 falsch — dem Tag, an dem `P20` gebaut wurde.
 Er prüft zwei Dinge, nicht eines: dass jede Stelle die nachgerechnete Zahl
 trägt, **und dass der Satz überhaupt noch dasteht**. Wer ihn umformuliert, macht
 ihn unauffindbar; das ist hier ein Fehlschlag und kein stilles Bestehen.
+
+### `fundstellen.sh` — zeigt jeder zitierte Paragraph wirklich dorthin?
+
+Die erste Zeile dieses Werkzeugs verspricht „Zeile, Regel und **Abschnitt** aus
+RFC 5545", und jede Fundzeile endet mit `[RFC 5545 §X]`. Dieses `X` hat bis zum
+2026-08-19 niemand nachgeschlagen. Stimmt es nicht, ist der Schaden still: Die
+Ausgabe sieht aus wie vorher, nur schickt sie den Nutzer an die falsche Stelle
+der Norm — und wer eine Fundstelle nachschlägt, tut das gerade deshalb, weil er
+die Regel selbst nicht auswendig kennt.
+
+`fundstellen.sh` holt die zitierten RFCs zur Laufzeit und hält jeden Verweis
+dagegen: die `§`-Angaben in README, `GEGENPROBE.md`, `LAGE.md` und den
+Docstrings ebenso wie die Abschnitte im Code, die als bloße Zeichenkette in
+einem `Fund(...)` oder in einer Tabelle wie `_PFLICHT_JE_KOMPONENTE` stehen und
+im Text nirgends auftauchen. Der Code wird dafür über seinen Syntaxbaum gelesen
+und nicht per Textsuche.
+
+Drei Verweise dieses Projekts zeigen absichtlich woandershin — `RFC 5234 §2.3`,
+`RFC 2445 §4.6.2`, `RFC 7986 §9.1`. Sie gelten nur, wenn die RFC-Nummer
+unmittelbar davor in derselben Zeile steht; sonst ist RFC 5545 gemeint. Eine
+großzügigere Regel würde jeden Verweis in der Nähe irgendeiner RFC-Nummer
+entschuldigen und genau die Fehler durchlassen, wegen derer es das Skript gibt.
+
+**Zwei Dinge daran sind wichtiger als das Ergebnis**, weil ein Prüfskript ohne
+sie nur seine eigene Stille meldet:
+
+1. Was das Werkzeug tatsächlich ausgibt, wird gemessen und muss in der
+   statischen Erhebung vorkommen. Tut es das nicht, ist die Erhebung
+   unvollständig — dann endet das Skript mit `2` statt mit `0`, weil ein „alle
+   Verweise stimmen" über einen Ausschnitt sich wie eines über das Ganze liest.
+   Der Fall ist nicht erfunden: `3.7.3` steht als Zeichenkette *innerhalb* von
+   `pruefe_p06` und wäre unsichtbar geblieben, nennte der Docstring darüber
+   nicht `§3.7.3`.
+2. Die Abschnittsliste wird aus dem RFC-Text erhoben, und eine zu kurze Erhebung
+   macht aus einem richtigen Verweis einen Fehlalarm. Deshalb wird sie vor
+   Gebrauch geprüft: Innerhalb jeder Ebene muss die Nummerierung lückenlos bei 1
+   beginnen. Fehlt zwischen `3.8.2.1` und `3.8.2.3` die `3.8.2.2`, hat nicht der
+   RFC ein Loch, sondern die Erkennung — auch das endet mit `2` und nicht mit
+   `1`.
+
+Beim ersten Lauf am 2026-08-19 stimmte jeder Verweis. Das ist kein Argument
+gegen das Skript: Zehn der Abschnitte, die das Werkzeug nennen kann, löst keine
+einzige Beispieldatei aus; sie standen unbesehen im Code, und ohne diesen Lauf
+stünde bis heute nur die Vermutung da, dass sie richtig sind. Er braucht Netz
+und ist kein Prüfbefehl einer Mission.
 
 **Seine Grenze steht in seinem Kopf und hier:** Er kennt genau die Sätze, die in
 seiner Tabelle stehen. Eine neue Behauptung über den Bestand kommt nicht von
@@ -761,6 +807,9 @@ anlass.sh           Rechnet die Sätze nach, mit denen dieses Werkzeug das
 zahlen.sh           Rechnet die Zahlen nach, die dieses Projekt über seinen
                     eigenen Bestand behauptet. Kein Prüfbefehl der Mission —
                     er prüft den Text, nicht das Werkzeug. Kein Netz.
+fundstellen.sh      Hält jeden zitierten §-Verweis gegen den Normtext, den er
+                    zitiert. Kein Prüfbefehl der Mission — er prüft die
+                    Fundstelle, nicht die Regel dahinter.
 beispiele/          51 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
                     Die Zahl ist am 2026-08-18 nachgezählt; sie stand seit
                     zwei Zyklen auf 47 und wuchs still mit jeder neuen Datei.
