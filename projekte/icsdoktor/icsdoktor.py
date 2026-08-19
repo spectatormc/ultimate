@@ -523,11 +523,42 @@ def _zeige(zeichen, rohbytes=None):
     return "'%s'" % zeichen
 
 
+def _zeigbar(text):
+    """Steuerzeichen sichtbar machen, damit eine Meldung eine Meldung bleibt.
+
+    Ein Wert aus der Datei wandert in Meldungen woertlich weiter. Steht ein
+    Steuerzeichen darin, geht die Meldung im Terminal kaputt: Ein CR setzt den
+    Cursor an den Zeilenanfang zurueck, und der Rest der Meldung ueberschreibt
+    ihren Anfang — der Nutzer liest dann etwas, das so nie geschrieben wurde.
+    Ein ESC laesst das Terminal den Dateiinhalt als Steuerbefehl ausfuehren,
+    ein NUL schneidet die Zeile fuer manche Leser ab, ein BEL piept.
+
+    Der Fall ist nicht ausgedacht: Ein Tabulator ist nach §3.1 (WSP) in einem
+    Wert ausdruecklich erlaubt und kommt in echten Dateien vor; ein CR bleibt
+    stehen, wo eine Datei mit CR statt CRLF trennt oder mitten im Herunterladen
+    abbricht.
+
+    Gezeigt wird <0x0D> statt des Zeichens. Die Kehrseite gehoert dazugesagt:
+    Steht der Text "<0x0D>" so in der Datei, sieht die Meldung gleich aus. Der
+    Tausch geht in die richtige Richtung — ein Zeichen, das sich nicht zeigen
+    laesst, wird benannt statt ausgefuehrt.
+
+    Gegenstueck zu _zeige(), das dasselbe fuer ein einzelnes beanstandetes
+    Zeichen tut. Was hier durchlaeuft, ist nicht beanstandet, sondern zitiert.
+    """
+    if not any(ord(z) < 0x20 or ord(z) == 0x7F for z in text):
+        return text                      # der Normalfall, unveraendert
+    return "".join("<0x%02X>" % ord(z)
+                   if ord(z) < 0x20 or ord(z) == 0x7F else z
+                   for z in text)
+
+
 def _zeige_wort(wort, grenze=30):
-    wort = wort.replace("\t", " ")
+    # Erst kuerzen, dann zeigen: Die Grenze zaehlt Zeichen der Datei, und ein
+    # <0x0D> wird nie mittendrin abgeschnitten.
     if len(wort) > grenze:
         wort = wort[:grenze] + "..."
-    return '"%s"' % wort
+    return '"%s"' % _zeigbar(wort)
 
 
 class Komponente(object):
@@ -601,7 +632,7 @@ def pruefe_p05(logische, funde):
             if not stapel:
                 funde.append(Fund(
                     FEHLER, lz.nr, "P05",
-                    "END:%s ohne vorangehendes BEGIN" % ende,
+                    "END:%s ohne vorangehendes BEGIN" % _zeigbar(ende),
                     "3.4"))
                 continue
             oben = stapel.pop()
@@ -609,7 +640,7 @@ def pruefe_p05(logische, funde):
                 funde.append(Fund(
                     FEHLER, lz.nr, "P05",
                     "END:%s passt nicht zu BEGIN:%s aus Zeile %d"
-                    % (ende, oben.name, oben.zeile),
+                    % (_zeigbar(ende), _zeigbar(oben.name), oben.zeile),
                     "3.4"))
             komponenten.append(oben)
         else:
@@ -625,7 +656,8 @@ def pruefe_p05(logische, funde):
     for offen in stapel:
         funde.append(Fund(
             FEHLER, offen.zeile, "P05",
-            "BEGIN:%s hat kein END:%s" % (offen.name, offen.name),
+            "BEGIN:%s hat kein END:%s" % (_zeigbar(offen.name),
+                                          _zeigbar(offen.name)),
             "3.4"))
         komponenten.append(offen)
 
@@ -748,7 +780,7 @@ def _pruefe_datetime(wert, tzid):
         return "Sekunde %02d liegt außerhalb von 00 bis 60" % sekunde
     if utc and tzid is not None:
         return ("Wert endet auf 'Z' und trägt zugleich den Parameter TZID=%s; "
-                "beides zusammen ist keine der drei Formen" % tzid)
+                "beides zusammen ist keine der drei Formen" % _zeigbar(tzid))
     return None
 
 
@@ -1292,7 +1324,8 @@ def pruefe_p16(logische, funde):
             funde.append(Fund(
                 FEHLER, lz.nr, "P16",
                 "DTSTAMP trägt den Parameter TZID=%s und steht damit in "
-                "Ortszeit; verlangt ist die UTC-Form mit 'Z' am Ende" % tzid,
+                "Ortszeit; verlangt ist die UTC-Form mit 'Z' am Ende"
+                % _zeigbar(tzid),
                 "3.8.7.2"))
             continue
         if _pruefe_datetime(wert, None) is not None:
@@ -1559,7 +1592,7 @@ def pruefe_p18(logische, funde):
                 FEHLER, lz.nr, "P18",
                 "TRIGGER trägt den Parameter TZID=%s und steht damit in "
                 "Ortszeit; mit VALUE=DATE-TIME verlangt §3.8.6.3 die UTC-Form "
-                "mit \"Z\" am Ende" % tzid,
+                "mit \"Z\" am Ende" % _zeigbar(tzid),
                 "3.8.6.3"))
             continue
         if _pruefe_datetime(wert, None) is not None:

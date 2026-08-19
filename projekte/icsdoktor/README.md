@@ -278,6 +278,13 @@ halber Schritt mehr, sondern ein eigener. Der Befund steht ohne Frist in
 ungültigen Bytes bekommt weiterhin keinen eigenen Fund und keinen anderen
 Exit-Code als vorher — siehe unten unter „Was dieses Werkzeug nicht tut".
 
+**Der Spiegelfall, gemessen am 2026-08-19.** Dieser Abschnitt handelt von einem
+Zeichen, das in der Meldung stand und nicht in der Datei. Es gibt ihn auch
+andersherum: ein Zeichen, das in der Datei steht und in der Meldung nichts
+verloren hat. Ein `CR` oder `ESC` aus einem Wert wanderte wörtlich in die
+Ausgabe und machte die Zeile im Terminal unlesbar. Behoben mit `_zeigbar()`,
+gefunden von `robustheit.sh` — siehe dort.
+
 ## Warum
 
 Drei öffentliche Fehlerberichte, in der Missionsdatei mit Link und Wortlaut
@@ -339,6 +346,7 @@ sh projekte/icsdoktor/anlass.sh          # gibt es Anlass für eine 21. Prüfung
 sh projekte/icsdoktor/zahlen.sh          # stimmen die Zahlen über den Bestand?
 sh projekte/icsdoktor/fundstellen.sh     # steht jeder zitierte § im Normtext?
 sh projekte/icsdoktor/abdeckung.sh       # löst jede Meldung ein Beispiel aus?
+sh projekte/icsdoktor/robustheit.sh      # halten die Zusagen auch bei Müll?
 ```
 
 Der zweite ist der wichtigere: Seine Eingabe stammt nicht von mir, sondern aus
@@ -395,7 +403,7 @@ weicht sie ab, endet er mit `1` und nennt jeden Unterschied. Beide brauchen Netz
 
 ### `zahlen.sh` — die Zahlen über den eigenen Bestand
 
-Der letzte prüft nicht das Werkzeug, sondern diesen Text. „53 Kalenderdateien",
+Der letzte prüft nicht das Werkzeug, sondern diesen Text. „55 Kalenderdateien",
 „die zwanzig Prüfungen", „Anlass für eine 21. Prüfung" — das sind keine
 Meinungen, sondern Zahlen, die man nachsehen kann. Sie stehen im Text, während
 der Bestand daneben wächst, und niemand zieht sie nach, weil niemand sie liest.
@@ -509,6 +517,79 @@ aus den Missionsdateien („mindestens 16 Beispiele"), die sich nach Regel 3
 gerade *nicht* mit dem Bestand bewegen dürfen, und Messprotokolle wie
 `GEGENPROBE.md` („auf diesen zwölf Eingaben"), die festhalten, was an einem Tag
 gemessen wurde. Sie nachzuziehen hieße, eine alte Messung zu fälschen.
+
+### `robustheit.sh` — halten die Zusagen auch bei Müll?
+
+Jeder Prüfbefehl oben fragt „sagt das Werkzeug das Richtige?" und braucht dafür
+eine Erwartung. Für `beispiele/` stammt die von mir, für die zwölf fremden
+Eingaben aus fremden Fehlerberichten — in beiden Fällen gibt es genau so viele
+Eingaben, wie jemand hingelegt hat. Was passiert, wenn ein Nutzer eine Datei
+schickt, die niemand vorgesehen hat, sagt keiner von ihnen.
+
+Dieses Skript fragt deshalb etwas anderes und braucht dafür keine Erwartung:
+Egal welche Bytes hereinkommen, fünf Zusagen müssen halten. Sie stammen nicht
+aus meinem Kopf, sondern aus dem Abschnitt „Aufruf" oben — eine Zeile je Fund,
+`<n>` ist die physische Zeile der Datei, drei Exit-Codes.
+
+1. Kein Absturz.
+2. Jede genannte Zeilennummer liegt zwischen 1 und der Zahl der physischen
+   Zeilen.
+3. Eine Meldung ist eine Zeile: kein CR, kein LF, kein Steuerzeichen.
+4. Zweimal dieselbe Eingabe, zweimal dieselbe Ausgabe.
+5. Ein `U+FFFD` steht in einer Meldung nur, wenn es auch im gelesenen Text
+   steht.
+
+Verbogen wird deterministisch und ohne Zufall — abschneiden an jeder
+Bytegrenze, jede Zeile einzeln entfernt, jedes Byte einzeln ersetzt, dazu acht
+Umformungen der ganzen Datei. Ein Zufallsgenerator fände womöglich mehr, aber
+ein roter Lauf wäre dann nicht wiederholbar.
+
+**Am 2026-08-19 zum ersten Mal gemessen, und Zusage 3 hielt nicht:** an
+dreizehn Fundstellen in sieben Prüfungen (`P05`, `P06`, `P08`, `P13`, `P15`,
+`P16`, `P18`), in 1236 von 33498 Fällen. Ein Wert aus der Datei wandert wörtlich
+in die Meldung; stand ein Steuerzeichen darin, stand es danach in der Ausgabe:
+
+```
+FEHLER Zeile 2: P06 VERSION hat den Wert "2.0<CR>"; RFC 5545 verlangt 2.0
+```
+
+Im Terminal setzt das `CR` den Cursor an den Zeilenanfang zurück, und der Rest
+der Meldung überschreibt ihren Anfang — der Nutzer liest einen Satz, den so
+niemand geschrieben hat. Ein `ESC` aus der Datei wird zum Steuerbefehl an sein
+Terminal. Gemessen wurden `0x00`, `0x07`, `0x09`, `0x0D` und `0x1B`.
+
+**Der Fall ist nicht ausgedacht.** Ein Tabulator ist nach §3.1 (`WSP`) in einem
+Wert ausdrücklich erlaubt und kommt in echten Dateien vor; ein `CR` bleibt
+stehen, wo eine Datei mit `CR` statt `CRLF` trennt oder das Herunterladen
+abgebrochen ist. Keine der damals 53 Beispieldateien hat es ausgelöst — deshalb
+war jeder andere Prüfbefehl grün. Behoben ist es mit `_zeigbar()`, das ein
+Steuerzeichen als `<0x0D>` zeigt statt es auszuführen;
+`beispiele/54-p08-tabulator-im-wert.ics` und
+`beispiele/55-p05-steuerzeichen-im-namen.ics` halten je einen der beiden Wege
+fest. Keine der 53 älteren Erwartungen hat sich dabei bewegt — gemessen, nicht
+angenommen.
+
+**Seine Grenzen, und sie sind zwei.** Er sagt kein Wort darüber, ob eine
+Meldung inhaltlich richtig ist. Und er ist kein Beweis, dass keine kaputte
+Datei dieses Werkzeug zu Fall bringt: Gemessen sind die Fälle, die aus
+`beispiele/` entstehen, nicht alle Bytefolgen der Welt. Was er leistet, ist eine
+Untergrenze, die vorher nicht gemessen war.
+
+**Was er am selben Tag mitgemessen und was nicht behoben ist:** Eine Meldung
+kann sehr lang werden. Trennt eine Datei mit `CR` statt `CRLF`, ist sie für
+dieses Werkzeug eine einzige Zeile, und `P05` gibt in „`BEGIN:… hat kein
+END:…`" den ganzen Komponentennamen wieder — gemessen wurden 2878 Zeichen aus
+`beispiele/02-sauber-gefaltet.ics`. Die Meldung ist eine Zeile und sie ist
+richtig; lesbar ist sie nicht. Die Zusagen oben verletzt das nicht, deshalb
+bleibt der Lauf grün, und deshalb steht der Befund ohne Frist in
+`state/offen.md` statt still hier zu verschwinden. Die drei Stellen, um die es
+geht, geben den Namen ungekürzt weiter, während `_zeige_wort()` an allen
+anderen bei 30 Zeichen abschneidet.
+
+Ein Teil der Prüfung läuft als echter Prozess statt im selben Speicher. Der
+Grund steht in seinem Kopf: Nach einer Ausnahme endet Python ebenfalls mit `1`,
+und genau das bedeutet hier „mindestens ein FEHLER". Ein Absturz sähe von außen
+aus wie ein Fund.
 
 ## Entscheidungen, die im RFC nicht festgelegt sind
 
@@ -856,7 +937,10 @@ fundstellen.sh      Hält jeden zitierten §-Verweis gegen den Normtext, den er
 abdeckung.sh        Hält jede Meldung, die das Werkzeug drucken kann, gegen
                     beispiele/. Kein Prüfbefehl der Mission — er misst, worüber
                     pruefe.sh redet, nicht das Werkzeug. Kein Netz.
-beispiele/          53 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
+robustheit.sh       Hält fünf Zusagen des Werkzeugs gegen Eingaben, die
+                    niemand ausgesucht hat. Kein Prüfbefehl der Mission — er
+                    prüft die Form der Meldung, nicht ihren Inhalt. Kein Netz.
+beispiele/          55 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
                     Die Zahl ist am 2026-08-18 nachgezählt; sie stand seit
                     zwei Zyklen auf 47 und wuchs still mit jeder neuen Datei.
 erwartet/           Je eine Datei mit der erwarteten Ausgabe.

@@ -1,0 +1,1 @@
+FEHLER Zeile 10: P05 END:VE<0x09>VENT passt nicht zu BEGIN:VEVENT aus Zeile 4 [RFC 5545 §3.4]
