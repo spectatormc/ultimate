@@ -22,13 +22,21 @@
 #
 # WAS GEMESSEN WIRD. Je Fall zwei Zahlen statt einer:
 #
-#   betrachtet   wie viele Komponenten der fraglichen Art ueberhaupt in den
-#                Eingaben stehen. Ist diese Zahl 0, sagt das Ergebnis nichts
-#                ueber den Fall aus, sondern nur etwas ueber den Korpus.
+#   betrachtet   wie viele Dinge der fraglichen Art ueberhaupt in den Eingaben
+#                stehen. Ist diese Zahl 0, sagt das Ergebnis nichts ueber den
+#                Fall aus, sondern nur etwas ueber den Korpus.
 #   Treffer      wie viele davon die Pflicht wirklich verletzen.
 #
 # Erst beide zusammen tragen den Satz "kein Anlass". Eine 0 ohne die erste Zahl
 # daneben ist genau die Auskunft, die 2026-08-17 in die Irre gefuehrt hat.
+#
+# WAS "betrachtet" ZAEHLT, haengt am Fall und steht deshalb neben ihm. Bei einer
+# Pflicht, die eine Komponente als Ganzes trifft ("ein VALARM braucht ein
+# TRIGGER"), sind es Komponenten. Bei einer Pflicht, die an einer einzelnen
+# Eigenschaft haengt ("ein RRULE darf nicht beides tragen"), waeren Komponenten
+# die falsche Zahl: Vierzig VEVENT ohne ein einziges RRULE ergaeben
+# "betrachtet: 40, Treffer: 0" — dieselbe beruhigende Auskunft ueber nichts, vor
+# der der Absatz darueber warnt. Gezaehlt wird dann die Eigenschaft.
 #
 # DIE EINGABEN sind dieselben wie ueberall in diesem Projekt:
 #   - die Beispieldateien aus beispiele/ (meine eigenen);
@@ -211,16 +219,42 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(werkzeug)))
 import icsdoktor as d
 
 
-# Ein Fall je bewusst nicht gebauter Pruefung. Wer eine dritte Begruendung
+# Ein Fall je bewusst nicht gebauter Pruefung. Wer eine weitere Begruendung
 # "im Repo unbelegt" aufschreibt, haengt sie hier an — sonst altert sie still.
 #
 #   name        wie der Fall in der Ausgabe heisst
 #   abschnitt   die Stelle im Normtext
-#   arten       welche Komponenten ueberhaupt betrachtet werden
-#   pflicht     fehlt(komp, alle) -> Liste der verletzten Pflichten; "alle"
-#               sind die Komponenten derselben Datei, fuer Faelle, die auf die
-#               Schachtelung schauen muessen
+#   arten       welche Komponenten ueberhaupt betrachtet werden, oder None fuer
+#               jede Komponente — dann entscheidet allein zaehlt, was zaehlt
+#   pflicht     pflicht(komp, alle) -> ein fertiger Satzteil je betroffener
+#               Einheit; "alle" sind die Komponenten derselben Datei, fuer
+#               Faelle, die auf die Schachtelung schauen muessen. Ein Eintrag
+#               ist eine Einheit, nicht eine verletzte Pflicht: Ein VALARM, dem
+#               zwei Eigenschaften fehlen, ist ein Treffer und nicht zwei,
+#               sonst zaehlen "betrachtet" und "Treffer" verschiedene Dinge.
 #   wo          wo die Begruendung steht, die dieses Skript nachrechnet
+#   einheit     wie das Ding heisst, das "betrachtet" zaehlt (Mehrzahl)
+#   zaehlt      zaehlt(komp, alle) -> wie viele solche Dinge diese Komponente
+#               beisteuert. Fuer Pflichten an der Komponente ist das 1.
+#
+# Warum die Meldungen in pflicht ausformuliert werden und nicht erst hier: Ein
+# fehlendes DESCRIPTION und ein RRULE, das zwei einander ausschliessende
+# Regelteile traegt, sind nicht dasselbe. Eine gemeinsame Schablone ("fehlt %s")
+# muesste den zweiten Fall verbiegen, und verbogene Meldungen sind der Anfang
+# von Meldungen, die nicht mehr stimmen.
+
+def fehlt_satz(namen):
+    """Ein Satzteil fuer alle fehlenden Eigenschaften einer Komponente.
+
+    Eine Komponente ist eine Einheit, auch wenn ihr drei Eigenschaften fehlen.
+    Deshalb steht hier ein Satzteil und nicht drei — die Liste ausserhalb
+    zaehlt Einheiten.
+    """
+    if not namen:
+        return []
+    wort = "fehlt" if len(namen) == 1 else "fehlen"
+    return ["%s %s" % (", ".join(namen), wort)]
+
 
 def fehlt_valarm(komp, alle):
     """§3.6.6: die aktionsabhaengigen Pflichten von dispprop und emailprop.
@@ -245,7 +279,7 @@ def fehlt_valarm(komp, alle):
         noetig = ("DESCRIPTION", "SUMMARY", "ATTENDEE")
     else:
         return []                        # audio, iana-token, x-name
-    return [e for e in noetig if not komp.hole(e)]
+    return fehlt_satz([e for e in noetig if not komp.hole(e)])
 
 
 def fehlt_vtimezone(komp, alle):
@@ -262,26 +296,71 @@ def fehlt_vtimezone(komp, alle):
               if k.elternteil is komp and k.name in ("STANDARD", "DAYLIGHT")]
     if not kinder:
         fehlt.append("STANDARD oder DAYLIGHT")
-    return fehlt
+    return fehlt_satz(fehlt)
 
 
 def fehlt_zeitzonenteil(komp, alle):
     """§3.6.5, standardc und daylightc: "The following are REQUIRED, but MUST
     NOT occur more than once: dtstart / tzoffsetto / tzoffsetfrom"."""
-    return [e for e in ("DTSTART", "TZOFFSETTO", "TZOFFSETFROM")
-            if not komp.hole(e)]
+    return fehlt_satz([e for e in ("DTSTART", "TZOFFSETTO", "TZOFFSETFROM")
+                       if not komp.hole(e)])
+
+
+def untilcount_im_rrule(komp, alle):
+    """§3.3.10: "The UNTIL or COUNT rule parts are OPTIONAL, but they MUST NOT
+    occur in the same 'recur'." — woertlich aus der ABNF des RECUR-Wertes.
+
+    Der Wert wird gelesen, wie die Description es beschreibt: eine Liste von
+    NAME=VALUE-Paaren, getrennt durch Semikolon, in beliebiger Reihenfolge.
+    Der Name wird grossgeschrieben verglichen. Die Grammatik schreibt
+    Grossbuchstaben vor; wer sich nicht daran haelt, soll hier trotzdem
+    auffallen, denn die Frage lautet, ob der Fall vorkommt, und nicht, ob er
+    sauber geschrieben ist.
+
+    Ein Teil ohne "=" wird uebergangen. Das ist ein Grammatikfehler und eine
+    andere Frage — diese Messung beantwortet, ob zwei Regelteile zugleich
+    dastehen, und nicht, ob der Wert wohlgeformt ist. Dieselbe Grenze zieht
+    P17 im Werkzeug.
+    """
+    verletzt = []
+    for zeile, wert in komp.hole("RRULE"):
+        namen = set()
+        for teil in (wert or "").split(";"):
+            if "=" in teil:
+                namen.add(teil.split("=", 1)[0].strip().upper())
+        if "UNTIL" in namen and "COUNT" in namen:
+            verletzt.append(
+                "das RRULE in Zeile %d traegt UNTIL und COUNT zugleich" % zeile)
+    return verletzt
+
+
+def zaehlt_komponente(komp, alle):
+    """Die Pflicht haengt an der Komponente selbst: sie zaehlt einmal."""
+    return 1
+
+
+def zaehlt_rrule(komp, alle):
+    """Die Pflicht haengt am RRULE: gezaehlt werden die RRULE-Zeilen."""
+    return len(komp.hole("RRULE"))
 
 
 FAELLE = (
     ("VALARM, aktionsabhaengige Pflichten", "3.6.6", ("VALARM",),
      fehlt_valarm,
-     "pruefe_p19, Docstring; state/offen.md, Zyklus 29"),
+     "pruefe_p19, Docstring; state/offen.md, Zyklus 29",
+     "Komponenten", zaehlt_komponente),
     ("VTIMEZONE, Pflichteigenschaften", "3.6.5", ("VTIMEZONE",),
      fehlt_vtimezone,
-     "pruefe_p19, Docstring; state/offen.md, Zyklus 29"),
+     "pruefe_p19, Docstring; state/offen.md, Zyklus 29",
+     "Komponenten", zaehlt_komponente),
     ("STANDARD/DAYLIGHT, Pflichteigenschaften", "3.6.5",
      ("STANDARD", "DAYLIGHT"), fehlt_zeitzonenteil,
-     "pruefe_p19, Docstring; state/offen.md, Zyklus 29"),
+     "pruefe_p19, Docstring; state/offen.md, Zyklus 29",
+     "Komponenten", zaehlt_komponente),
+    ("RRULE, UNTIL und COUNT zugleich", "3.3.10", None,
+     untilcount_im_rrule,
+     "pruefe_p17, Docstring; state/offen.md, Zyklus 36",
+     "RRULE-Zeilen", zaehlt_rrule),
 )
 
 def lies(pfad):
@@ -321,29 +400,32 @@ print("Gelesen mit dem Parser von icsdoktor.py, nicht mit einem zweiten.")
 print("")
 
 anlaesse = 0
-for name, abschnitt, arten, pflicht, wo in FAELLE:
+for name, abschnitt, arten, pflicht, wo, einheit, zaehlt in FAELLE:
     betrachtet = 0
     treffer = []
     for kurz, komponenten in gelesen:
         for komp in komponenten:
-            if komp.name not in arten:
+            if arten is not None and komp.name not in arten:
                 continue
-            betrachtet += 1
-            fehlt = pflicht(komp, komponenten)
-            if fehlt:
-                treffer.append((kurz, komp.zeile, fehlt))
+            betrachtet += zaehlt(komp, komponenten)
+            verletzt = pflicht(komp, komponenten)
+            if verletzt:
+                treffer.append((kurz, komp.zeile, verletzt))
+    # Gezaehlt werden betroffene Einheiten und nicht Komponenten mit einem
+    # Befund. Sonst stuenden links RRULE-Zeilen und rechts Komponenten.
+    getroffen = sum(len(verletzt) for _, _, verletzt in treffer)
     print("%s (§%s)" % (name, abschnitt))
-    print("  betrachtet: %d Komponenten   Treffer: %d"
-          % (betrachtet, len(treffer)))
+    print("  betrachtet: %d %s   Treffer: %d" % (betrachtet, einheit, getroffen))
     if betrachtet == 0:
-        print("  ACHTUNG: keine Komponente dieser Art in den Eingaben. Das")
-        print("  Ergebnis sagt nichts ueber den Fall, nur etwas ueber den")
-        print("  Korpus — und traegt den Satz \"kein Anlass\" nicht.")
+        print("  ACHTUNG: keine %s dieser Art in den Eingaben. Das Ergebnis"
+              % einheit)
+        print("  sagt nichts ueber den Fall, nur etwas ueber den Korpus —")
+        print("  und traegt den Satz \"kein Anlass\" nicht.")
         anlaesse += 1
-    for kurz, zeile, fehlt in treffer:
-        print("  ANLASS %s, ab Zeile %d: fehlt %s"
-              % (kurz, zeile, ", ".join(fehlt)))
-    anlaesse += len(treffer)
+    for kurz, zeile, verletzt in treffer:
+        print("  ANLASS %s, ab Zeile %d: %s"
+              % (kurz, zeile, ", ".join(verletzt)))
+    anlaesse += getroffen
     print("  Begruendung, die das nachrechnet: %s" % wo)
     print("")
 

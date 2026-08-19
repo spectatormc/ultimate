@@ -664,9 +664,15 @@ Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
     `P17` schweigt dazu. Sie fragt, ob `UNTIL` zum `DTSTART` passt, nicht ob der
     Wert wohlgeformt ist — und keine andere Prüfung fängt das auf, weil `P08`
     nur ganze Eigenschaftswerte liest und nicht in einen `RRULE`-Wert hinein.
-  - **`UNTIL` und `COUNT` zugleich** verbietet §3.3.10 im selben Abschnitt. Das
-    ist eine andere Frage, in keiner Abweichung gemessen, und deshalb nicht
-    gebaut.
+  - **`UNTIL` und `COUNT` zugleich** verbietet §3.3.10 im selben Abschnitt:
+    „The UNTIL or COUNT rule parts are OPTIONAL, but they MUST NOT occur in the
+    same `'recur'`." Das ist eine andere Frage und deshalb nicht gebaut.
+
+    Bis zum 2026-08-19 stand hier „in keiner Abweichung gemessen". Der Satz war
+    richtig und ist es nicht mehr: Seit dem 2026-08-19 rechnet
+    `sh projekte/icsdoktor/anlass.sh` den Fall mit nach — am selben Tag
+    **8 `RRULE`-Zeilen, 0 Treffer**. Gemessen wurde in `anlass.sh` und nicht in
+    `gegenprobe.sh`; die Abweichungen der Gegenprobe sind davon unberührt.
   - **Ohne vergleichbares `DTSTART` kein Vergleich.** Fehlt es in der Komponente
     oder trifft sein Wert keine der drei Formen, meldet `P17` nichts; der zweite
     Fall steht bereits als `P08` an seiner eigenen Zeile. Dieselbe Zurückhaltung

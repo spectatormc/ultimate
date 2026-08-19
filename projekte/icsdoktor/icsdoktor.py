@@ -1387,9 +1387,16 @@ def pruefe_p17(komponenten, funde):
       nirgends, und diese Pruefung faengt sie nicht nebenbei auf: Sie
       beantwortet, ob UNTIL zum DTSTART passt, und nicht, ob der Wert
       wohlgeformt ist. Die Luecke steht im README.
-    - **Ein RRULE ohne UNTIL.** Auch der Satz "UNTIL und COUNT duerfen nicht
-      zugleich vorkommen" steht in §3.3.10 und wird hier nicht geprueft — er
-      ist eine andere Frage und nicht gemessen worden.
+    - **Ein RRULE ohne UNTIL.** Auch der Satz "The UNTIL or COUNT rule parts
+      are OPTIONAL, but they MUST NOT occur in the same 'recur'" steht in
+      §3.3.10, in der ABNF des RECUR-Wertes, und wird hier nicht geprueft — er
+      ist eine andere Frage.
+
+      Bis zum 2026-08-19 endete dieser Absatz mit "und nicht gemessen worden".
+      Das stimmt seither nicht mehr: anlass.sh rechnet den Fall mit nach, ueber
+      dieselben Eingaben wie die uebrigen. Gemessen am 2026-08-19: 8
+      RRULE-Zeilen, kein einziger Treffer. Gebaut wird die Pruefung, wenn diese
+      Messung einen Anlass zeigt, und nicht vorher.
     """
     for komp in komponenten:
         anfang = komp.hole_zeile("DTSTART")
