@@ -2001,3 +2001,60 @@ in dem nichts davon abhängt.
 
 Der Deckel läuft ohnehin am 2026-08-21 um 08:06 UTC von vier auf eins zurück.
 Ohne Frist, kein Blocker.
+
+---
+
+## 2026-08-20 — Zyklus 40: Befund 1 aus Zyklus 39 ist geschlossen, ein neuer steht offen
+
+Kein Mensch muss hier etwas tun. Beides ist gemessen, nichts davon geraten.
+
+### Geschlossen: „Eine Meldung kann 2878 Zeichen lang werden" (Zyklus 39, Befund 1)
+
+Behoben mit `_kurz()`, Beleg `301ab2d`. Der Ablauf stand vorher fest und ist
+eingehalten worden: Die sechste Zusage und ihre Grenze wurden **am Anfang**
+dieses Zyklus festgelegt, bevor der erste verbogene Fall dagegen gehalten
+wurde — genau das war der Grund, aus dem Zyklus 39 sie nicht mehr nachgeschoben
+hat.
+
+Zusage 6 lautet: eine Meldung ist höchstens **400 Zeichen** lang. Die 400 sind
+eine Wahl und keine Messung, hergeleitet aus zwei gemessenen Zahlen — 254
+Zeichen längste Meldung über die unverbogenen Beispieldateien, höchstens zwei
+Zitatstellen je Meldung zu je 30 Zeichen plus `...` (254 + 2 × 33 = 320).
+
+Beim ersten Messen dagegen: **48 von 34570 Fällen** verletzt, alle in `P05`,
+alle aus derselben Verbiegung `CR statt CRLF`, die längste mit 2878 Zeichen.
+Danach ist die längste Meldung über alle 35195 Fälle 254 Zeichen lang — genau
+so lang wie die längste über die unverbogenen Dateien.
+
+### Neu: Zusage 6 hält fünf der sechs korrigierten Stellen nicht
+
+Bis zum 2026-08-20 kürzte nur `_zeige_wort()`; **sechs** Stellen gingen daran
+vorbei — dreimal der Komponentenname in `P05`, dazu der `TZID`-Wert in `P08`,
+`P16` und `P18`. Alle sechs gehen jetzt durch `_kurz()`.
+
+Der Gegenbeweis hat jede der sechs einzeln zurückgenommen und `robustheit.sh`
+darauf laufen lassen. Rot wird er bei **einer**:
+
+| zurückgenommene Stelle | längste Meldung | Wächter |
+|---|---|---|
+| `BEGIN:%s hat kein END:%s` | 2878 Zeichen | **rot**, 49 Fälle |
+| `END:%s ohne vorangehendes BEGIN` | 356 Zeichen | grün |
+| `END:%s passt nicht zu BEGIN:%s` | 254 Zeichen | grün |
+| `TZID=%s` in `P08`, `P16`, `P18` | 254 Zeichen | grün |
+
+Der Grund liegt nicht an der Zusage, sondern an den Verbiegungen: Keine von
+ihnen erzeugt einen langen `TZID`-Wert oder einen langen Namen an einem `END`,
+das auf ein anderes `BEGIN` trifft. Die Korrektur an diesen fünf Stellen ist
+richtig und trotzdem von keinem Prüfbefehl gehalten; wer sie zurücknimmt,
+bekommt einen grünen Lauf.
+
+**Nicht in diesem Zyklus behoben, und zwar aus dem Grund, aus dem Befund 1
+einen Zyklus lang liegen geblieben ist.** Beide naheliegenden Wege — die
+Grenze von 400 auf 300 ziehen, damit die 356 auffallen, oder eine Verbiegung
+ergänzen, die lange `TZID`-Werte erzeugt — wären eine Änderung an der Messung,
+nachdem ihr Ergebnis dasteht. Die 400 stehen seit heute früh und sind nicht
+gerissen worden; sie jetzt zu bewegen, weil ich weiß, was dann rot würde, ist
+das Herstellen eines Messwerts und kein Nachmessen. Verschärfen ist nach
+Regel 3 erlaubt — am Anfang eines Zyklus, nicht an seinem Ende.
+
+Ohne Frist, kein Blocker.

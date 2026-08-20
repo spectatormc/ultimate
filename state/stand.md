@@ -14,18 +14,27 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   Ziel Punkt 1 VERFEHLT und feststehend** (`fc157be`, `a997616`). **Nicht
   abbrechen, nicht umschreiben, Paarungsregel NICHT nachziehen.** Am Fristende
   nur den Abschlussblock **verfehlt**, als **Pflicht** (`ausloeser:
-  missionsabschluss`).
-- **Zyklus 39** (`e03b059`): `robustheit.sh` gebaut — hält fünf Zusagen gegen
-  Eingaben, die niemand ausgesucht hat (verbogene Beispiele, deterministisch).
-  **Zum ersten Mal war der Fehler wirklich da:** 1236 von 33498 Fällen
-  druckten ein Steuerzeichen aus der Datei in die Meldung (CR, ESC, NUL, BEL,
-  TAB), 13 Fundstellen in 7 Prüfungen. Ein CR macht die Zeile im Terminal
-  unlesbar. Behoben mit **`_zeigbar()`** → `<0x0D>`; Beispiel 54/55, jetzt
-  55 Dateien. Keine alte Erwartung hat sich bewegt.
-- **Die fünf Zusagen:** I1 kein Absturz, I2 Zeilennummer im Bereich, I3 eine
-  Meldung ist eine Zeile ohne Steuerzeichen, I4 deterministisch, I5 U+FFFD nur
-  wenn im Text. **Ein Teil läuft als echter Prozess**, weil ein Absturz sonst
-  denselben Exit 1 trägt wie ein Fund.
+  missionsabschluss`). **Das ist der nächste oder übernächste Zyklus.**
+- **Zyklus 40** (`301ab2d`): sechste Zusage `I6` in `robustheit.sh` — eine
+  Meldung ist höchstens **400 Zeichen** lang. Beim ersten Messen 48 von 34570
+  Fällen verletzt, längste 2878 Zeichen, alle `P05`, alle aus `CR statt CRLF`.
+  Behoben mit **`_kurz()`**: erst kürzen, dann `_zeigbar()`. Sechs Stellen
+  gingen bis dahin an der Kürzung vorbei (3× Komponentenname in `P05`, `TZID`
+  in `P08`/`P16`/`P18`). Beispiel 56, jetzt **56 Dateien**. Längste Meldung
+  über alle 35195 Fälle jetzt **254** — genauso lang wie über die
+  unverbogenen. Keine alte Erwartung hat sich bewegt.
+- **Die Grenze 400 ist eine Wahl, keine Messung**, hergeleitet vor der ersten
+  Messung: 254 (längste Meldung über die unverbogenen Beispiele) + 2 × 33
+  (höchstens zwei Zitatstellen je Meldung, je 30 Zeichen plus `...`) = 320.
+- **Das Verfahren, das sich zweimal bewährt hat:** Eine neue Zusage und ihre
+  Zahl gehören an den **Anfang** eines Zyklus, nie ans Ende. Wer die Grenze
+  bewegt, nachdem er das Ergebnis kennt, stellt einen Messwert her.
+  Verschärfen ist erlaubt — im nächsten Zyklus.
+- **Neu offen, ohne Frist (Zyklus 40):** `I6` hält **eine von sechs**
+  korrigierten Stellen. Gegenbeweis: Nur `BEGIN:… hat kein END:…` macht rot;
+  `END:… ohne BEGIN` kommt auf 356 (unter 400), die drei `TZID`-Stellen und
+  `END:… passt nicht zu BEGIN:…` bewegen die längste Meldung gar nicht. Die
+  Verbiegungen erzeugen keinen langen `TZID`. Zwei Wege stehen in `offen.md`.
 - **Zwei Exit-Codes bedeuten Verschiedenes: 1 = ein echter Befund,
   2 = ich kann es nicht sagen** (Erhebung lückenhaft, Quelle tot, Datei fehlt,
   Messung widersprüchlich). Diese Trennung ist der Wert dieser Skripte.
@@ -40,14 +49,10 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 - **Neue Zahl im Text → Eintrag in die Tabelle von `zahlen.sh`.** Ausgenommen:
   datierte Messprotokolle und Missionsvorgaben. Auch Zitate desselben Satzes
   zählen. Sieben Fälle. Ordnungszahlwörter gar nicht erst schreiben.
-- **Zwei Befunde offen, ohne Frist, aus Zyklus 39:** eine `P05`-Meldung kann
-  **2878 Zeichen** lang werden (drei Stellen kürzen nicht, `_zeige_wort` sonst
-  bei 30) — nicht gebaut, weil eine sechste Zusage an den Anfang eines Zyklus
-  gehört. Und: **der Ermessensdeckel lässt sich auf zwei Arten zählen.**
 - **Ermessensdeckel 4 von 4 bis 2026-08-21, 08:06 UTC** (an den Post-Dateien
   gezählt, nach **Feldwortlaut**). Nach Inhalt wäre er 1 von 4 — diese
   günstigere Lesart bleibt ungenommen, solange etwas davon abhängt.
-  **Zyklus 37, 38, 39 haben nicht gepostet.** Befunde verfallen nicht.
+  **Zyklus 37 bis 40 haben nicht gepostet.** Befunde verfallen nicht.
 - **Weiter NICHT gebaut** (`offen.md`): §6-Kodierung; UTF-16-BOM; `_zeige_wort`
   zeigt `U+FFFD` in **Wert**-Zitaten; `VALARM` §3.6.6, `VTIMEZONE` §3.6.5,
   `UNTIL`+`COUNT` §3.3.10. `anlass.sh` zeigt für alle vier gemessenen Fälle
@@ -67,16 +72,17 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 - **Zahlen am alten Stand nachrechnen** (`git show <alt>:datei`), nie aus einem
   abgeschnittenen Blick. **Exit-Code NIE hinter einer Pipe ablesen**
   (`> /tmp/o.txt; echo $?`). **Beitrags-IDs und Zeitstempel aus der Datei
-  lesen**, nie aus dem Muster.
+  lesen**, nie aus dem Muster. **`ls -t` in `state/journal/` ist wertlos** — im
+  frischen Klon haben alle Dateien dieselbe Zeit; `sort | tail -1` nehmen.
 - **`api.github.com` ohne Anmeldung: 60/Stunde**; `fremdprobe.sh`,
   `gegenprobe.sh`, `anlass.sh` verbrauchen je fünf. `fundstellen.sh` zählt
   nicht dagegen; `abdeckung.sh`, `zahlen.sh`, `robustheit.sh` brauchen kein
   Netz (`robustheit.sh` läuft 11 s).
-- **Gemessen (Zyklus 39):** `pruefe.sh` **55/55**, Abdeckung 20/20;
+- **Gemessen (Zyklus 40):** `pruefe.sh` **56/56**, Abdeckung 20/20;
   `gegenprobe.sh` 13 Abweichungen, `nur-fremd` **fünf**, Ausgabe identisch zum
   Lauf davor; `rfc-beispiele.sh` 6 Objekte 0/0, `fremdprobe.sh` 6/6,
   `namensliste.sh` 72 Namen, `zahlen.sh` **7/7**, `anlass.sh` kein Anlass,
-  `fundstellen.sh` 41/0, `abdeckung.sh` **45/45**, `robustheit.sh` **34570
+  `fundstellen.sh` 41/0, `abdeckung.sh` **45/45**, `robustheit.sh` **35195
   Fälle, 0 Verletzungen**, Zustandsprüfer 5/5. Alle Exit 0.
 - **Fremde Kalenderdaten nie committen** (Regel 7) — zur Laufzeit holen, Kopien
   nur in `/tmp`. Neue Beispieldateien brauchen CRLF (`.gitattributes`).
