@@ -403,7 +403,7 @@ weicht sie ab, endet er mit `1` und nennt jeden Unterschied. Beide brauchen Netz
 
 ### `zahlen.sh` — die Zahlen über den eigenen Bestand
 
-Der letzte prüft nicht das Werkzeug, sondern diesen Text. „55 Kalenderdateien",
+Der letzte prüft nicht das Werkzeug, sondern diesen Text. „56 Kalenderdateien",
 „die zwanzig Prüfungen", „Anlass für eine 21. Prüfung" — das sind keine
 Meinungen, sondern Zahlen, die man nachsehen kann. Sie stehen im Text, während
 der Bestand daneben wächst, und niemand zieht sie nach, weil niemand sie liest.
@@ -527,7 +527,7 @@ Eingaben, wie jemand hingelegt hat. Was passiert, wenn ein Nutzer eine Datei
 schickt, die niemand vorgesehen hat, sagt keiner von ihnen.
 
 Dieses Skript fragt deshalb etwas anderes und braucht dafür keine Erwartung:
-Egal welche Bytes hereinkommen, fünf Zusagen müssen halten. Sie stammen nicht
+Egal welche Bytes hereinkommen, sechs Zusagen müssen halten. Sie stammen nicht
 aus meinem Kopf, sondern aus dem Abschnitt „Aufruf" oben — eine Zeile je Fund,
 `<n>` ist die physische Zeile der Datei, drei Exit-Codes.
 
@@ -538,6 +538,7 @@ aus meinem Kopf, sondern aus dem Abschnitt „Aufruf" oben — eine Zeile je Fun
 4. Zweimal dieselbe Eingabe, zweimal dieselbe Ausgabe.
 5. Ein `U+FFFD` steht in einer Meldung nur, wenn es auch im gelesenen Text
    steht.
+6. Eine Meldung ist höchstens 400 Zeichen lang.
 
 Verbogen wird deterministisch und ohne Zufall — abschneiden an jeder
 Bytegrenze, jede Zeile einzeln entfernt, jedes Byte einzeln ersetzt, dazu acht
@@ -575,16 +576,53 @@ Datei dieses Werkzeug zu Fall bringt: Gemessen sind die Fälle, die aus
 `beispiele/` entstehen, nicht alle Bytefolgen der Welt. Was er leistet, ist eine
 Untergrenze, die vorher nicht gemessen war.
 
-**Was er am selben Tag mitgemessen und was nicht behoben ist:** Eine Meldung
-kann sehr lang werden. Trennt eine Datei mit `CR` statt `CRLF`, ist sie für
-dieses Werkzeug eine einzige Zeile, und `P05` gibt in „`BEGIN:… hat kein
-END:…`" den ganzen Komponentennamen wieder — gemessen wurden 2878 Zeichen aus
-`beispiele/02-sauber-gefaltet.ics`. Die Meldung ist eine Zeile und sie ist
-richtig; lesbar ist sie nicht. Die Zusagen oben verletzt das nicht, deshalb
-bleibt der Lauf grün, und deshalb steht der Befund ohne Frist in
-`state/offen.md` statt still hier zu verschwinden. Die drei Stellen, um die es
-geht, geben den Namen ungekürzt weiter, während `_zeige_wort()` an allen
-anderen bei 30 Zeichen abschneidet.
+**Zusage 6 kam einen Tag später dazu, und sie hielt beim ersten Messen
+ebenfalls nicht.** Am 2026-08-19 war mitgemessen worden, dass eine Meldung sehr
+lang werden kann: Trennt eine Datei mit `CR` statt `CRLF`, ist sie für dieses
+Werkzeug eine einzige Zeile, und `P05` gibt in „`BEGIN:… hat kein END:…`" den
+ganzen Komponentennamen wieder — praktisch die ganze Datei in einer Meldung.
+Gemessen wurden **2878 Zeichen** aus `beispiele/02-sauber-gefaltet.ics`. Die
+Meldung ist eine Zeile und sie ist richtig; eine Auskunft ist sie nicht. Am
+2026-08-20 als Zusage 6 dagegengehalten: **48 der 34570 Fälle** verletzten sie,
+alle in `P05`, alle aus derselben Verbiegung.
+
+**Die 400 sind eine Wahl und keine Messung**, und sie standen fest, bevor der
+erste verbogene Fall dagegen gehalten wurde — sonst wäre die Grenze an das
+Ergebnis angepasst, das sie beurteilen soll. Abgeleitet ist sie aus zwei
+Zahlen: Die längste Meldung über die unverbogenen Beispieldateien war 254
+Zeichen lang, und eine Meldung hat höchstens **zwei** Stellen, an denen Text
+aus der Datei hineinkommt (über den Syntaxbaum an allen 45 Fund-Stellen
+gezählt). 254 + 2 × 33 = 320; die 400 liegen darüber, mit Luft, und weit unter
+den gemessenen 2878.
+
+Behoben ist es mit `_kurz()`. Bis dahin kürzte nur `_zeige_wort()` bei 30
+Zeichen, und **sechs** Stellen gingen daran vorbei: dreimal der Komponentenname
+in `P05`, dazu der `TZID`-Wert in `P08`, `P16` und `P18`. Jetzt steht die
+Grenze in einer Funktion statt an sieben Stellen — „30 Zeichen plus `...`" ist
+damit eine Regel dieses Werkzeugs und nicht eine Gewohnheit, die sechs Aufrufer
+nicht kannten. `beispiele/56-p05-langer-komponentenname.ics` hält den Fall
+byte-genau fest.
+
+Nach der Änderung ist die längste Meldung über **alle** 35195 verbogenen Fälle
+254 Zeichen lang — genau so lang wie die längste über die unverbogenen
+Dateien. Der Dateiinhalt trägt zur Länge einer Meldung nichts mehr bei.
+
+**Und was Zusage 6 nicht leistet, gemessen und nicht vermutet.** Der
+Gegenbeweis hat jede der sechs Stellen einzeln zurückgenommen und den Wächter
+darauf laufen lassen. Rot wird er bei **einer** von sechs — der, aus der die
+2878 Zeichen kamen. Bei „`END:… ohne vorangehendes BEGIN`" wächst die längste
+Meldung auf 356 Zeichen und bleibt damit unter der Grenze; bei „`END:… passt
+nicht zu BEGIN:…`" und bei den drei `TZID`-Stellen bewegt sich die längste
+Meldung überhaupt nicht. Der Grund liegt nicht an der Zusage, sondern an den
+Verbiegungen: Keine von ihnen erzeugt einen langen `TZID`-Wert oder einen
+langen Namen an einem `END`, das auf ein anderes `BEGIN` trifft.
+
+Die Korrektur an diesen fünf Stellen ist deshalb richtig und trotzdem von
+keinem Prüfbefehl gehalten. Wer sie zurücknimmt, bekommt einen grünen Lauf.
+Das steht ohne Frist in `state/offen.md`; die Grenze nachträglich auf 300 zu
+ziehen, damit die 356 auffallen, wäre eine Zahl, die zu ihrem Ergebnis gesucht
+wurde, und das entscheidet ein Zyklus an seinem Anfang und nicht an seinem
+Ende.
 
 Ein Teil der Prüfung läuft als echter Prozess statt im selben Speicher. Der
 Grund steht in seinem Kopf: Nach einer Ausnahme endet Python ebenfalls mit `1`,
@@ -937,12 +975,14 @@ fundstellen.sh      Hält jeden zitierten §-Verweis gegen den Normtext, den er
 abdeckung.sh        Hält jede Meldung, die das Werkzeug drucken kann, gegen
                     beispiele/. Kein Prüfbefehl der Mission — er misst, worüber
                     pruefe.sh redet, nicht das Werkzeug. Kein Netz.
-robustheit.sh       Hält fünf Zusagen des Werkzeugs gegen Eingaben, die
+robustheit.sh       Hält sechs Zusagen des Werkzeugs gegen Eingaben, die
                     niemand ausgesucht hat. Kein Prüfbefehl der Mission — er
-                    prüft die Form der Meldung, nicht ihren Inhalt. Kein Netz.
-beispiele/          55 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
+                    prüft Form und Länge der Meldung, nicht ihren Inhalt.
+                    Kein Netz.
+beispiele/          56 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
                     Die Zahl ist am 2026-08-18 nachgezählt; sie stand seit
-                    zwei Zyklen auf 47 und wuchs still mit jeder neuen Datei.
+                    zwei Zyklen auf 47 und wuchs still mit jeder neuen Datei; seither hält
+                    zahlen.sh sie nach.
 erwartet/           Je eine Datei mit der erwarteten Ausgabe.
 LAGE.md             Geprüfte Werkzeuglandschaft, mit Links.
 .gitattributes      Hält CRLF in beispiele/ auch über einen Klon hinweg.

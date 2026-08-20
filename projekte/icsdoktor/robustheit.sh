@@ -12,7 +12,7 @@
 # sagt keiner von ihnen.
 #
 # Dieses Skript fragt deshalb etwas anderes und braucht dafuer keine Erwartung:
-# Egal welche Bytes hereinkommen, fuenf Zusagen muessen halten. Sie stehen
+# Egal welche Bytes hereinkommen, sechs Zusagen muessen halten. Sie stehen
 # nicht in meinem Kopf, sondern im README unter "Aufruf" — eine Zeile je Fund,
 # die physische Zeile der Datei, drei Exit-Codes — und im Abschnitt "Kein
 # Zeichen in einer Meldung, das in der Datei nicht steht".
@@ -25,6 +25,30 @@
 #   (I4) Zweimal dieselbe Eingabe, zweimal dieselbe Ausgabe.
 #   (I5) Ein U+FFFD steht in einer Meldung nur, wenn es auch im gelesenen Text
 #        steht.
+#   (I6) Eine Meldung ist hoechstens 400 Zeichen lang.
+#
+# DIE 400 IN (I6) IST EINE WAHL UND KEINE MESSUNG, und sie steht fest, bevor
+# der erste verbogene Fall dagegen gehalten wurde — sonst waere sie an das
+# Ergebnis angepasst, das sie beurteilen soll. Abgeleitet ist sie aus zwei
+# Zahlen, die beide am Stand db3024c gemessen sind und nicht geschaetzt:
+#
+#   * Die laengste Meldung ueber die 55 unverbogenen Beispieldateien ist 254
+#     Zeichen lang (erwartet/38-p18-trigger-ohne-value.txt). So gross ist der
+#     feste Textanteil, den dieses Werkzeug ueberhaupt schreibt.
+#   * Eine Meldung hat hoechstens ZWEI Stellen, an denen Text aus der Datei
+#     hineinkommt (ueber den Syntaxbaum an allen 45 Fund-Stellen gezaehlt), und
+#     das Werkzeug kuerzt jede davon mit _zeige_wort() bei 30 Zeichen plus
+#     "...".
+#
+# 254 + 2 * 33 = 320. Die 400 liegen darueber, mit Luft, und weit unter dem,
+# was gemessen wurde: Die laengste Meldung dieses Werkzeugs war 2878 Zeichen
+# lang, also mehr als das Siebenfache. Wer die Grenze spaeter enger zieht,
+# verschaerft; wer sie weiter zieht, muss den Grund danebenschreiben.
+#
+# (I6) ist nicht (I3) in gross. (I3) fragt, ob die Meldung EINE Zeile ist;
+# (I6) fragt, ob diese eine Zeile noch lesbar ist. Eine Meldung von 2878
+# Zeichen haelt (I3) und ist trotzdem keine Auskunft mehr, sondern die halbe
+# Datei mit einem Satz davor.
 #
 # WARUM ES DIESES SKRIPT GIBT, mit Beleg statt als gute Absicht. Am 2026-08-19
 # in Zyklus 39 zum ersten Mal gemessen, am Stand 200bb52: (I3) war an dreizehn
@@ -82,7 +106,7 @@
 #
 # KEIN NETZ. Alles steht im Repo.
 #
-# Exit-Code: 0 alle fuenf Zusagen halten in allen gebildeten Faellen
+# Exit-Code: 0 alle sechs Zusagen halten in allen gebildeten Faellen
 #            1 mindestens eine Zusage ist verletzt
 #            2 Aufruf-, Umgebungs- oder Messfehler — kein Ergebnis ist kein
 #              gruenes Ergebnis
@@ -100,7 +124,7 @@ command -v python3 >/dev/null 2>&1 || {
 	echo "ABBRUCH: $verzeichnis/beispiele fehlt" >&2; exit 2; }
 
 python3 - "$verzeichnis" <<'PYTHON'
-"""Fuenf Zusagen gegen mechanisch verbogene Eingaben halten."""
+"""Sechs Zusagen gegen mechanisch verbogene Eingaben halten."""
 import glob
 import os
 import subprocess
@@ -128,6 +152,10 @@ if not dateien:
 
 ERSATZ = [b"\x00", b"\r", b"\n", b";", b":", b"\xe4", b"\xff", b"\\",
           b'"', b",", b" ", b"\t", b"\x07", b"\x1b"]
+
+# (I6). Die Herleitung steht im Kopf dieser Datei; sie stand fest, bevor der
+# erste verbogene Fall dagegen gehalten wurde.
+GRENZE_MELDUNG = 400
 
 
 def faelle(roh):
@@ -161,6 +189,7 @@ verletzungen = []                        # (Zusage, Herkunft, Belegtext)
 n_faelle = 0
 n_funde = 0
 n_leer = 0
+laengste = 0                             # laengste gesehene Meldung, in Zeichen
 
 for pfad in dateien:
     name = os.path.basename(pfad)
@@ -196,6 +225,13 @@ for pfad in dateien:
                     ("I2 Zeilennummer", herkunft,
                      "Zeile %r bei %d physischen Zeilen: %s"
                      % (fund.zeile, zeilen, gedruckt)))
+            if len(gedruckt) > laengste:
+                laengste = len(gedruckt)
+            if len(gedruckt) > GRENZE_MELDUNG:
+                verletzungen.append(
+                    ("I6 Meldung zu lang", herkunft,
+                     "%d Zeichen, Anfang: %r" % (len(gedruckt),
+                                                 gedruckt[:100])))
             gefunden = steuerzeichen(gedruckt)
             if gefunden:
                 verletzungen.append(
@@ -252,6 +288,8 @@ print("  Beispieldateien:            %d" % len(dateien))
 print("  daraus gebildete Faelle:    %d" % n_faelle)
 print("  davon ohne jede Meldung:    %d" % n_leer)
 print("  gepruefte Meldungen:        %d" % n_funde)
+print("  laengste davon:             %d Zeichen (erlaubt: %d)"
+      % (laengste, GRENZE_MELDUNG))
 print("  Prozesslaeufe (rueckwaerts): %d" % len(dateien))
 print("")
 
@@ -283,7 +321,7 @@ if verletzungen or prozessfehler:
           % (len(verletzungen) + len(prozessfehler), n_faelle))
     sys.exit(1)
 
-print("Alle fuenf Zusagen halten in allen %d Faellen — gemessen an Eingaben,"
+print("Alle sechs Zusagen halten in allen %d Faellen — gemessen an Eingaben,"
       % n_faelle)
 print("zu denen es keine Erwartung gibt und die niemand ausgesucht hat.")
 sys.exit(0)

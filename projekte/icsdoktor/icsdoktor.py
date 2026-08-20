@@ -553,12 +553,31 @@ def _zeigbar(text):
                    for z in text)
 
 
+def _kurz(text, grenze=30):
+    """Ein Stueck Datei so weit kuerzen, dass die Meldung lesbar bleibt.
+
+    Erst kuerzen, dann zeigen: Die Grenze zaehlt Zeichen der Datei, und ein
+    <0x0D> aus _zeigbar() wird nie mittendrin abgeschnitten.
+
+    WARUM ES DIESE FUNKTION GIBT, gemessen statt vermutet. Bis zum 2026-08-20
+    kuerzte nur _zeige_wort(); sechs Stellen gaben Namen und TZID-Werte
+    ungekuerzt weiter. Trennt eine Datei mit CR statt CRLF, ist sie fuer dieses
+    Werkzeug eine einzige physische Zeile, und der "Komponentenname" hinter
+    BEGIN: ist dann praktisch die ganze Datei. Gemessen an
+    beispiele/02-sauber-gefaltet.ics: eine P05-Meldung von 2878 Zeichen. Sie
+    war eine Zeile und sie war richtig — eine Auskunft war sie nicht.
+
+    Die Grenze steht in EINER Funktion und nicht an sieben Stellen, damit
+    "30 Zeichen plus ..." eine Regel dieses Werkzeugs ist und nicht eine
+    Gewohnheit, die sechs Aufrufer nicht kannten.
+    """
+    if len(text) > grenze:
+        text = text[:grenze] + "..."
+    return _zeigbar(text)
+
+
 def _zeige_wort(wort, grenze=30):
-    # Erst kuerzen, dann zeigen: Die Grenze zaehlt Zeichen der Datei, und ein
-    # <0x0D> wird nie mittendrin abgeschnitten.
-    if len(wort) > grenze:
-        wort = wort[:grenze] + "..."
-    return '"%s"' % _zeigbar(wort)
+    return '"%s"' % _kurz(wort, grenze)
 
 
 class Komponente(object):
@@ -632,7 +651,7 @@ def pruefe_p05(logische, funde):
             if not stapel:
                 funde.append(Fund(
                     FEHLER, lz.nr, "P05",
-                    "END:%s ohne vorangehendes BEGIN" % _zeigbar(ende),
+                    "END:%s ohne vorangehendes BEGIN" % _kurz(ende),
                     "3.4"))
                 continue
             oben = stapel.pop()
@@ -640,7 +659,7 @@ def pruefe_p05(logische, funde):
                 funde.append(Fund(
                     FEHLER, lz.nr, "P05",
                     "END:%s passt nicht zu BEGIN:%s aus Zeile %d"
-                    % (_zeigbar(ende), _zeigbar(oben.name), oben.zeile),
+                    % (_kurz(ende), _kurz(oben.name), oben.zeile),
                     "3.4"))
             komponenten.append(oben)
         else:
@@ -656,8 +675,8 @@ def pruefe_p05(logische, funde):
     for offen in stapel:
         funde.append(Fund(
             FEHLER, offen.zeile, "P05",
-            "BEGIN:%s hat kein END:%s" % (_zeigbar(offen.name),
-                                          _zeigbar(offen.name)),
+            "BEGIN:%s hat kein END:%s" % (_kurz(offen.name),
+                                          _kurz(offen.name)),
             "3.4"))
         komponenten.append(offen)
 
@@ -780,7 +799,7 @@ def _pruefe_datetime(wert, tzid):
         return "Sekunde %02d liegt außerhalb von 00 bis 60" % sekunde
     if utc and tzid is not None:
         return ("Wert endet auf 'Z' und trägt zugleich den Parameter TZID=%s; "
-                "beides zusammen ist keine der drei Formen" % _zeigbar(tzid))
+                "beides zusammen ist keine der drei Formen" % _kurz(tzid))
     return None
 
 
@@ -1325,7 +1344,7 @@ def pruefe_p16(logische, funde):
                 FEHLER, lz.nr, "P16",
                 "DTSTAMP trägt den Parameter TZID=%s und steht damit in "
                 "Ortszeit; verlangt ist die UTC-Form mit 'Z' am Ende"
-                % _zeigbar(tzid),
+                % _kurz(tzid),
                 "3.8.7.2"))
             continue
         if _pruefe_datetime(wert, None) is not None:
@@ -1592,7 +1611,7 @@ def pruefe_p18(logische, funde):
                 FEHLER, lz.nr, "P18",
                 "TRIGGER trägt den Parameter TZID=%s und steht damit in "
                 "Ortszeit; mit VALUE=DATE-TIME verlangt §3.8.6.3 die UTC-Form "
-                "mit \"Z\" am Ende" % _zeigbar(tzid),
+                "mit \"Z\" am Ende" % _kurz(tzid),
                 "3.8.6.3"))
             continue
         if _pruefe_datetime(wert, None) is not None:
