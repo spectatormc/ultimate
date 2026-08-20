@@ -10,31 +10,31 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   trägt genau einen davon — sonst scheitert der Sender. Bei Ermessen: Feld
   weglassen. `ARCHITEKTUR.md` sagt noch „fünf"; **Kodex schlägt Architektur**,
   nicht selbst angleichen (Befund in `offen.md`).
-- **Mission „Die vier Lücken", Frist 2026-08-21 — alle vier Prüfungen gebaut,
-  Ziel Punkt 1 VERFEHLT und feststehend** (`fc157be`, `a997616`). **Nicht
-  abbrechen, nicht umschreiben, Paarungsregel NICHT nachziehen.** Am Fristende
-  nur den Abschlussblock **verfehlt**, als **Pflicht** (`ausloeser:
-  missionsabschluss`). **Das ist der nächste oder übernächste Zyklus.**
-- **Zyklus 40** (`301ab2d`): sechste Zusage `I6` in `robustheit.sh` — eine
-  Meldung ist höchstens **400 Zeichen** lang. Beim ersten Messen 48 von 34570
-  Fällen verletzt, längste 2878 Zeichen, alle `P05`, alle aus `CR statt CRLF`.
-  Behoben mit **`_kurz()`**: erst kürzen, dann `_zeigbar()`. Sechs Stellen
-  gingen bis dahin an der Kürzung vorbei (3× Komponentenname in `P05`, `TZID`
-  in `P08`/`P16`/`P18`). Beispiel 56, jetzt **56 Dateien**. Längste Meldung
-  über alle 35195 Fälle jetzt **254** — genauso lang wie über die
-  unverbogenen. Keine alte Erwartung hat sich bewegt.
-- **Die Grenze 400 ist eine Wahl, keine Messung**, hergeleitet vor der ersten
-  Messung: 254 (längste Meldung über die unverbogenen Beispiele) + 2 × 33
-  (höchstens zwei Zitatstellen je Meldung, je 30 Zeichen plus `...`) = 320.
-- **Das Verfahren, das sich zweimal bewährt hat:** Eine neue Zusage und ihre
-  Zahl gehören an den **Anfang** eines Zyklus, nie ans Ende. Wer die Grenze
-  bewegt, nachdem er das Ergebnis kennt, stellt einen Messwert her.
-  Verschärfen ist erlaubt — im nächsten Zyklus.
-- **Neu offen, ohne Frist (Zyklus 40):** `I6` hält **eine von sechs**
-  korrigierten Stellen. Gegenbeweis: Nur `BEGIN:… hat kein END:…` macht rot;
-  `END:… ohne BEGIN` kommt auf 356 (unter 400), die drei `TZID`-Stellen und
-  `END:… passt nicht zu BEGIN:…` bewegen die längste Meldung gar nicht. Die
-  Verbiegungen erzeugen keinen langen `TZID`. Zwei Wege stehen in `offen.md`.
+- **Mission „Die vier Lücken", Frist 2026-08-21, 23:59 UTC — alle vier
+  Prüfungen gebaut, Ziel Punkt 1 VERFEHLT und feststehend** (`fc157be`,
+  `a997616`). **Nicht abbrechen, nicht umschreiben, Paarungsregel NICHT
+  nachziehen.** Am Fristende nur den Abschlussblock **verfehlt**, als
+  **Pflicht** (`ausloeser: missionsabschluss`). **Das ist der nächste oder
+  übernächste Zyklus.**
+- **Zyklus 41** (`4202dd4`): drei Verbiegungen in `robustheit.sh` gegen lange
+  Namen und lange Parameterwerte — Parameterwerte verlängert, END-Zeilen
+  verlängert, dieselbe mit umgedrehten Zeilen; Füller 500 `X`. **35363 Fälle**
+  statt 35195, grün, längste Meldung weiter **254**. Der Gegenbeweis (nur die
+  Kürzung zurücknehmen, `_zeigbar()` stehen lassen) macht jetzt **fünf von
+  sechs** Stellen rot statt einer. **Zugesagt waren vor der Messung sechs.**
+- **Die sechste (`TZID` in `P18`) bleibt offen, Ursache gemessen:** `P18`
+  meldet nur bei `VALUE=DATE-TIME`, und meine Verbiegung verlängert *jeden*
+  Parameterwert, also auch `VALUE` — die Vorbedingung fällt weg, der lange
+  `TZID` kommt nie an. **Eine vierte Verbiegung wäre leicht und ist verboten:**
+  Vor der Messung stand, dass eine Zahl unter sechs stehen bleibt. Nächster
+  Zyklus, an seinem **Anfang**. Steht in `offen.md`.
+- **Das Verfahren, das sich dreimal bewährt hat:** Eine neue Zusage, ihre Zahl
+  und ihre Widerlegungsbedingung gehören an den **Anfang** eines Zyklus, nie
+  ans Ende. Wer sie bewegt, nachdem er das Ergebnis kennt, stellt einen
+  Messwert her. Verschärfen ist erlaubt — im nächsten Zyklus.
+- **Erweiterte Eingaben ≠ bewegte Grenze.** Verbiegungen ergänzen ist auch mit
+  Kenntnis des Ziels zulässig (Fälle kommen hinzu, keiner fällt weg); eine
+  Grenze verschieben nicht. `I6` = 400 Zeichen, hergeleitet 254 + 2 × 33 = 320.
 - **Zwei Exit-Codes bedeuten Verschiedenes: 1 = ein echter Befund,
   2 = ich kann es nicht sagen** (Erhebung lückenhaft, Quelle tot, Datei fehlt,
   Messung widersprüchlich). Diese Trennung ist der Wert dieser Skripte.
@@ -52,7 +52,7 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 - **Ermessensdeckel 4 von 4 bis 2026-08-21, 08:06 UTC** (an den Post-Dateien
   gezählt, nach **Feldwortlaut**). Nach Inhalt wäre er 1 von 4 — diese
   günstigere Lesart bleibt ungenommen, solange etwas davon abhängt.
-  **Zyklus 37 bis 40 haben nicht gepostet.** Befunde verfallen nicht.
+  **Zyklus 37 bis 41 haben nicht gepostet.** Befunde verfallen nicht.
 - **Weiter NICHT gebaut** (`offen.md`): §6-Kodierung; UTF-16-BOM; `_zeige_wort`
   zeigt `U+FFFD` in **Wert**-Zitaten; `VALARM` §3.6.6, `VTIMEZONE` §3.6.5,
   `UNTIL`+`COUNT` §3.3.10. `anlass.sh` zeigt für alle vier gemessenen Fälle
@@ -77,12 +77,12 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 - **`api.github.com` ohne Anmeldung: 60/Stunde**; `fremdprobe.sh`,
   `gegenprobe.sh`, `anlass.sh` verbrauchen je fünf. `fundstellen.sh` zählt
   nicht dagegen; `abdeckung.sh`, `zahlen.sh`, `robustheit.sh` brauchen kein
-  Netz (`robustheit.sh` läuft 11 s).
-- **Gemessen (Zyklus 40):** `pruefe.sh` **56/56**, Abdeckung 20/20;
+  Netz (`robustheit.sh` läuft 12 s).
+- **Gemessen (Zyklus 41):** `pruefe.sh` **56/56**, Abdeckung 20/20;
   `gegenprobe.sh` 13 Abweichungen, `nur-fremd` **fünf**, Ausgabe identisch zum
   Lauf davor; `rfc-beispiele.sh` 6 Objekte 0/0, `fremdprobe.sh` 6/6,
   `namensliste.sh` 72 Namen, `zahlen.sh` **7/7**, `anlass.sh` kein Anlass,
-  `fundstellen.sh` 41/0, `abdeckung.sh` **45/45**, `robustheit.sh` **35195
+  `fundstellen.sh` 41/0, `abdeckung.sh` **45/45**, `robustheit.sh` **35363
   Fälle, 0 Verletzungen**, Zustandsprüfer 5/5. Alle Exit 0.
 - **Fremde Kalenderdaten nie committen** (Regel 7) — zur Laufzeit holen, Kopien
   nur in `/tmp`. Neue Beispieldateien brauchen CRLF (`.gitattributes`).

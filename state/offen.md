@@ -2058,3 +2058,75 @@ das Herstellen eines Messwerts und kein Nachmessen. Verschärfen ist nach
 Regel 3 erlaubt — am Anfang eines Zyklus, nicht an seinem Ende.
 
 Ohne Frist, kein Blocker.
+
+---
+
+## 2026-08-20 — Zyklus 41: fünf von sechs statt einer von sechs, und die sechste bleibt stehen
+
+Kein Mensch muss hier etwas tun. Alles gemessen, nichts geraten.
+
+### Weitgehend geschlossen: „Zusage 6 hält fünf der sechs Stellen nicht" (Zyklus 40)
+
+Behoben mit drei neuen Verbiegungen in `robustheit.sh`, Beleg `4202dd4`. Von
+den zwei Wegen, die der Eintrag darüber nennt, ist der zweite genommen: die
+Eingaben erweitern, die Grenze 400 unangetastet lassen.
+
+**Weg A (400 auf 300) ist nicht bloß der falsche Zeitpunkt, sondern
+unzureichend**, und das ist nachrechenbar: Vier der fünf ungehaltenen Stellen
+bewegen die längste Meldung überhaupt nicht — sie bleibt bei 254 Zeichen, ob
+gekürzt wird oder nicht. Keine Grenze oberhalb von 254 fängt sie, eine
+unterhalb macht bestehende, richtige Meldungen rot, und 300 läge zudem unter
+der eigenen Herleitung 254 + 2 × 33 = 320.
+
+**Weg B ist auch dann zulässig, wenn ich weiß, worauf er zielt:** Fälle kommen
+hinzu, keiner fällt weg — eine Erweiterung der Eingaben kann einen roten Lauf
+nie grün machen. Das ist der Unterschied zu einer Grenze, die sich in beide
+Richtungen schieben lässt.
+
+Die drei Umformungen, 500 `X` als Füller: Parameterwerte verlängert (hinter
+jedem `=` vor dem ersten `:`), `END`-Zeilen verlängert (hinter dem `:`), und
+dieselbe mit umgedrehter Zeilenreihenfolge. 35363 Fälle statt 35195, Lauf grün,
+längste Meldung weiter 254 Zeichen.
+
+Gegenbeweis, jeweils nur die **Kürzung** zurückgenommen und `_zeigbar()` stehen
+gelassen, damit allein die Länge gemessen wird:
+
+| zurückgenommene Kürzung | längste Meldung | Wächter |
+|---|---|---|
+| `BEGIN:%s hat kein END:%s` | 2878 | **rot**, 49 Fälle |
+| `END:%s ohne vorangehendes BEGIN` | 602 | **rot**, 112 Fälle |
+| `END:%s passt nicht zu BEGIN:%s` | 594 | **rot**, 130 Fälle |
+| `TZID=%s` in `P08` | 660 | **rot**, 1 Fall |
+| `TZID=%s` in `P16` | 657 | **rot**, 1 Fall |
+| `TZID=%s` in `P18` | 254 | grün |
+
+**Fünf von sechs. Zugesagt waren vor der Messung sechs von sechs.**
+
+### Neu: die `P18`-Stelle ist weiter von keinem Prüfbefehl gehalten
+
+**Die Ursache ist gemessen.** `P18` meldet nur, wenn `TRIGGER` den Parameter
+`VALUE=DATE-TIME` trägt; im Quelltext steht sonst ein `continue`. Die
+Beispieldatei lautet
+`TRIGGER;VALUE=DATE-TIME;TZID=Europe/Berlin:20260901T100000`. Die Umformung
+verlängert **jeden** Parameterwert vor dem ersten `:`, also auch diesen — aus
+`VALUE=DATE-TIME` wird `VALUE=XXX…DATE-TIME`, die Prüfung greift nicht mehr,
+und ein langer `TZID` kommt bei `P18` nie an. Die Verbiegung schlägt die
+Vorbedingung der Prüfung tot, die sie treffen soll.
+
+**Nicht in diesem Zyklus nachgebessert, und diesmal nicht wegen des
+Zeitpunkts, sondern wegen eines Satzes, den ich vorher geschrieben habe.** Vor
+der ersten Messung stand als Widerlegungsbedingung im Journal: Fällt die Zahl
+unter sechs, bleibt sie so stehen und wird nicht durch eine weitere Verbiegung
+geheilt, die ich mir nach dem Ergebnis ausdenke. Eine vierte Verbiegung, die
+nur `TZID` verlängert und `VALUE` in Ruhe lässt, wäre in zehn Minuten
+geschrieben. Eine Widerlegungsbedingung, die man aufhebt, sobald sie eintritt,
+ist keine gewesen.
+
+**Wo die günstigere Lesart läge, und sie bleibt ungenommen.** Wörtlich gesagt
+war „nimmt man eine Stelle zurück, wird der Wächter rot" — und rot wird er bei
+allen sechs. Bei `P18` aber über **Zusage 3**: Mit `_kurz()` fällt auch
+`_zeigbar()` weg, und ein Steuerzeichen wandert in die Meldung (vier Fälle,
+`0x00`, `0x07`, `0x0D`, `0x1B`). Das ist die Arbeit vom 2026-08-19. Gemeint war
+die Länge, gemessen ist die Länge, und das Ergebnis ist fünf von sechs.
+
+Ohne Frist, kein Blocker. Gehört an den **Anfang** eines Zyklus.
