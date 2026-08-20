@@ -79,14 +79,41 @@
 #   2. Jede physische Zeile einzeln entfernt.
 #   3. Jedes Byte einzeln ersetzt, aus einer festen Liste, rotierend nach
 #      Position: NUL CR LF ; : 0xE4 0xFF \ " , SP TAB BEL ESC.
-#   4. Acht Umformungen der ganzen Datei: LF statt CRLF, CR statt CRLF, ohne
+#   4. Elf Umformungen der ganzen Datei: LF statt CRLF, CR statt CRLF, ohne
 #      letztes Zeilenende, verdoppelt, mit BOM davor, rueckwaerts, nur
-#      NUL-Bytes, Zeilen in umgekehrter Reihenfolge.
+#      NUL-Bytes, Zeilen in umgekehrter Reihenfolge, Parameterwerte
+#      verlaengert, END-Zeilen verlaengert, END-Zeilen verlaengert und Zeilen
+#      umgedreht.
 #
 # Ausgangspunkt sind die Dateien in beispiele/, weil die im Repo liegen und
 # sich nicht ohne mein Zutun aendern. Aus jeder entstehen so einige hundert
 # Eingaben, die keiner Erwartung entsprechen und auch keiner entsprechen
 # sollen.
+#
+# WOHER DIE DREI LETZTEN UMFORMUNGEN KOMMEN, und das gehoert dazugesagt, weil
+# sie anders entstanden sind als die acht davor. Am 2026-08-20 hat der
+# Gegenbeweis zu _kurz() gemessen, wie weit dieses Skript ueberhaupt reicht:
+# Von den SECHS Stellen, an denen icsdoktor.py einen Namen oder einen
+# TZID-Wert kuerzt, macht das Zuruecknehmen genau EINER den Lauf rot. Die
+# anderen fuenf sind richtig und trotzdem von keinem Pruefbefehl gehalten —
+# nicht weil die Grenze zu weit stuende, sondern weil keine der acht
+# Umformungen einen langen TZID-Wert oder einen langen Namen an einem END
+# erzeugt. Gemessen, nicht vermutet; die Tabelle steht in state/offen.md.
+#
+# Die drei neuen Umformungen zielen genau auf diese Luecke, und sie sind
+# deshalb ausgesucht worden. Das ist zulaessig und die Grenze zu verschieben
+# waere es nicht: Faelle kommen hinzu, keiner faellt weg — eine Erweiterung
+# der Eingaben kann einen roten Lauf nie gruen machen. Eine Grenze zu bewegen,
+# nachdem man weiss, was dann rot wuerde, ist das Herstellen eines Messwerts.
+#
+# WARUM NICHT DIE GRENZE VON 400 AUF 300, der andere naheliegende Weg. Nicht
+# nur, weil er die Reihenfolge verletzt — er reicht auch nicht, und das ist
+# nachrechenbar: VIER der fuenf ungehaltenen Stellen bewegen die laengste
+# Meldung ueberhaupt nicht. Sie bleibt bei 254 Zeichen, ob gekuerzt wird oder
+# nicht. Keine Grenze oberhalb von 254 faengt sie, und eine unterhalb macht
+# bestehende, richtige Meldungen rot. Dazu laege 300 unter der eigenen
+# Herleitung 254 + 2 * 33 = 320 — das waere keine Verschaerfung, sondern eine
+# falsche Zusage.
 #
 # DIE MESSUNG PRUEFT SICH SELBST, sonst waere Stille ein Ergebnis: Ein Lauf,
 # der keine Faelle bildet oder in dem keine einzige Meldung entsteht, misst
@@ -157,6 +184,40 @@ ERSATZ = [b"\x00", b"\r", b"\n", b";", b":", b"\xe4", b"\xff", b"\\",
 # erste verbogene Fall dagegen gehalten wurde.
 GRENZE_MELDUNG = 400
 
+# Fuer die drei Umformungen, die auf lange Namen und lange Parameterwerte
+# zielen. 500 liegt ueber GRENZE_MELDUNG: Wer den Wert ungekuerzt in eine
+# Meldung schreibt, reisst (I6) allein damit, ohne dass es auf den festen
+# Textanteil ankommt.
+FUELLER = b"X" * 500
+
+
+def _laengere_parameterwerte(roh):
+    """Hinter jedem '=' vor dem ersten ':' einer Zeile stehen 500 X.
+
+    Trifft TZID=..., und damit die drei Stellen in P08, P16 und P18.
+    """
+    aus = []
+    for zeile in roh.split(b"\r\n"):
+        kopf, doppelpunkt, rest = zeile.partition(b":")
+        aus.append(kopf.replace(b"=", b"=" + FUELLER) + doppelpunkt + rest)
+    return b"\r\n".join(aus)
+
+
+def _laengere_end_zeilen(roh):
+    """Nur Zeilen, die mit END: beginnen, bekommen einen langen Namen.
+
+    Weil BEGIN unveraendert bleibt, passt das END danach zu keinem BEGIN mehr
+    — das ist die Stelle "END:%s passt nicht zu BEGIN:%s". Dreht man die
+    Zeilen zusaetzlich um, steht das END vor jedem BEGIN, und es ist die
+    Stelle "END:%s ohne vorangehendes BEGIN".
+    """
+    aus = []
+    for zeile in roh.split(b"\r\n"):
+        if zeile.upper().startswith(b"END:"):
+            zeile = zeile[:4] + FUELLER + zeile[4:]
+        aus.append(zeile)
+    return aus
+
 
 def faelle(roh):
     """Alle Verbiegungen einer Datei. Deterministisch, ohne Zufall."""
@@ -178,6 +239,10 @@ def faelle(roh):
     yield "rueckwaerts", roh[::-1]
     yield "nur NUL-Bytes", b"\x00" * len(roh)
     yield "Zeilen umgedreht", b"\r\n".join(roh.split(b"\r\n")[::-1])
+    yield "Parameterwerte verlaengert", _laengere_parameterwerte(roh)
+    yield "END-Zeilen verlaengert", b"\r\n".join(_laengere_end_zeilen(roh))
+    yield ("END-Zeilen verlaengert, Zeilen umgedreht",
+           b"\r\n".join(_laengere_end_zeilen(roh)[::-1]))
 
 
 def steuerzeichen(text):

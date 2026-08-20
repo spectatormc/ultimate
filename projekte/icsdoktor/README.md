@@ -541,7 +541,7 @@ aus meinem Kopf, sondern aus dem Abschnitt „Aufruf" oben — eine Zeile je Fun
 6. Eine Meldung ist höchstens 400 Zeichen lang.
 
 Verbogen wird deterministisch und ohne Zufall — abschneiden an jeder
-Bytegrenze, jede Zeile einzeln entfernt, jedes Byte einzeln ersetzt, dazu acht
+Bytegrenze, jede Zeile einzeln entfernt, jedes Byte einzeln ersetzt, dazu elf
 Umformungen der ganzen Datei. Ein Zufallsgenerator fände womöglich mehr, aber
 ein roter Lauf wäre dann nicht wiederholbar.
 
@@ -603,26 +603,73 @@ damit eine Regel dieses Werkzeugs und nicht eine Gewohnheit, die sechs Aufrufer
 nicht kannten. `beispiele/56-p05-langer-komponentenname.ics` hält den Fall
 byte-genau fest.
 
-Nach der Änderung ist die längste Meldung über **alle** 35195 verbogenen Fälle
-254 Zeichen lang — genau so lang wie die längste über die unverbogenen
-Dateien. Der Dateiinhalt trägt zur Länge einer Meldung nichts mehr bei.
+Nach der Änderung ist die längste Meldung über **alle** verbogenen Fälle 254
+Zeichen lang — genau so lang wie die längste über die unverbogenen Dateien. Der
+Dateiinhalt trägt zur Länge einer Meldung nichts mehr bei. Gemessen am
+2026-08-20 an 35195 Fällen, nach der Erweiterung unten an 35363.
 
-**Und was Zusage 6 nicht leistet, gemessen und nicht vermutet.** Der
+**Und was Zusage 6 zunächst nicht leistete, gemessen und nicht vermutet.** Der
 Gegenbeweis hat jede der sechs Stellen einzeln zurückgenommen und den Wächter
-darauf laufen lassen. Rot wird er bei **einer** von sechs — der, aus der die
-2878 Zeichen kamen. Bei „`END:… ohne vorangehendes BEGIN`" wächst die längste
-Meldung auf 356 Zeichen und bleibt damit unter der Grenze; bei „`END:… passt
-nicht zu BEGIN:…`" und bei den drei `TZID`-Stellen bewegt sich die längste
-Meldung überhaupt nicht. Der Grund liegt nicht an der Zusage, sondern an den
-Verbiegungen: Keine von ihnen erzeugt einen langen `TZID`-Wert oder einen
-langen Namen an einem `END`, das auf ein anderes `BEGIN` trifft.
+darauf laufen lassen. Rot wurde er bei **einer** von sechs — der, aus der die
+2878 Zeichen kamen. Bei „`END:… ohne vorangehendes BEGIN`" wuchs die längste
+Meldung auf 356 Zeichen und blieb damit unter der Grenze; bei „`END:… passt
+nicht zu BEGIN:…`" und bei den drei `TZID`-Stellen bewegte sich die längste
+Meldung überhaupt nicht. Der Grund lag nicht an der Zusage, sondern an den
+Verbiegungen: Keine der acht Umformungen erzeugte einen langen `TZID`-Wert oder
+einen langen Namen an einem `END`, das auf ein anderes `BEGIN` trifft.
 
-Die Korrektur an diesen fünf Stellen ist deshalb richtig und trotzdem von
-keinem Prüfbefehl gehalten. Wer sie zurücknimmt, bekommt einen grünen Lauf.
-Das steht ohne Frist in `state/offen.md`; die Grenze nachträglich auf 300 zu
-ziehen, damit die 356 auffallen, wäre eine Zahl, die zu ihrem Ergebnis gesucht
-wurde, und das entscheidet ein Zyklus an seinem Anfang und nicht an seinem
-Ende.
+**Am 2026-08-20 sind deshalb drei Umformungen dazugekommen**, und zwar am
+Anfang des Zyklus und vor der ersten Messung. Sie zielen auf genau diese Lücke
+und sind deshalb ausgesucht worden — das gehört dazugesagt:
+
+| Umformung | trifft |
+|---|---|
+| Parameterwerte verlängert (500 `X` hinter jedem `=` vor dem ersten `:`) | `TZID=…` in `P08`, `P16`, `P18` |
+| END-Zeilen verlängert (500 `X` hinter dem `:` jeder `END:`-Zeile) | `END:… passt nicht zu BEGIN:…` |
+| dieselbe, dazu Zeilen umgedreht | `END:… ohne vorangehendes BEGIN` |
+
+**Warum das erlaubt ist und die Grenze zu bewegen es nicht wäre.** Eine
+Erweiterung der Eingaben kann einen roten Lauf nie grün machen: Fälle kommen
+hinzu, keiner fällt weg. Eine Grenze zu verschieben, nachdem man weiß, was dann
+rot würde, stellt einen Messwert her. Der andere naheliegende Weg — 400 auf 300
+— wäre außerdem **unzureichend**, und das ist nachrechenbar: Vier der fünf
+ungehaltenen Stellen bewegen die längste Meldung gar nicht, sie bleibt bei 254.
+Keine Grenze oberhalb von 254 fängt sie, eine unterhalb macht bestehende,
+richtige Meldungen rot, und 300 läge zudem unter der eigenen Herleitung 320.
+
+**Das Ergebnis danach: fünf von sechs statt eine von sechs.** Nimmt man jetzt
+eine der Stellen zurück und lässt `_zeigbar()` stehen, damit allein die Länge
+gemessen wird:
+
+| zurückgenommene Kürzung | längste Meldung | Wächter |
+|---|---|---|
+| keine | 254 | Exit 0 |
+| `BEGIN:%s hat kein END:%s` | 2878 | **rot**, 49 Fälle |
+| `END:%s ohne vorangehendes BEGIN` | 602 | **rot**, 112 Fälle |
+| `END:%s passt nicht zu BEGIN:%s` | 594 | **rot**, 130 Fälle |
+| `TZID=%s` in `P08` | 660 | **rot**, 1 Fall |
+| `TZID=%s` in `P16` | 657 | **rot**, 1 Fall |
+| `TZID=%s` in `P18` | 254 | grün |
+
+**Die sechste bleibt offen, und der Grund ist gemessen.** `P18` meldet nur,
+wenn `TRIGGER` den Parameter `VALUE=DATE-TIME` trägt. Die Umformung verlängert
+aber *jeden* Parameterwert, also auch diesen — aus `VALUE=DATE-TIME` wird
+`VALUE=XXX…DATE-TIME`, die Prüfung greift nicht mehr, und ein langer `TZID`
+kommt bei `P18` nie an. Die Verbiegung schlägt die Vorbedingung der Prüfung tot,
+die sie treffen soll.
+
+Nachgebessert wird das **in diesem Zyklus nicht**. Vor der Messung stand der
+Satz, dass eine Zahl unter sechs so stehen bleibt und nicht durch eine weitere
+Verbiegung geheilt wird, die ich mir nach dem Ergebnis ausdenke. Das ist
+dieselbe Regel, die die Grenze bei 400 gehalten hat; sie gilt auch dann, wenn
+sie mich eine schönere Zahl kostet. Der Befund steht ohne Frist in
+`state/offen.md`.
+
+Nimmt man `_kurz()` an der `P18`-Stelle ganz zurück, wird der Wächter trotzdem
+rot — dann aber über **Zusage 3**, weil mit der Kürzung auch `_zeigbar()`
+wegfällt und ein Steuerzeichen aus der Datei in die Meldung wandert. Das ist
+die Arbeit vom 2026-08-19 und nicht die von heute; wer beide Zusagen in einem
+Gegenbeweis vermischt, liest sechs von sechs, wo fünf von sechs stehen.
 
 Ein Teil der Prüfung läuft als echter Prozess statt im selben Speicher. Der
 Grund steht in seinem Kopf: Nach einer Ausnahme endet Python ebenfalls mit `1`,
