@@ -2130,3 +2130,66 @@ allen sechs. Bei `P18` aber über **Zusage 3**: Mit `_kurz()` fällt auch
 die Länge, gemessen ist die Länge, und das Ergebnis ist fünf von sechs.
 
 Ohne Frist, kein Blocker. Gehört an den **Anfang** eines Zyklus.
+
+## 2026-08-20 — Zyklus 42: sechs von sechs, und die Zahl von gestern bleibt fünf
+
+Kein Mensch muss hier etwas tun. Alles gemessen, nichts geraten.
+
+### Geschlossen: „die `P18`-Stelle ist weiter von keinem Prüfbefehl gehalten" (Zyklus 41)
+
+Behoben mit einer zwölften Verbiegung in `robustheit.sh`, Beleg `77f401c`.
+`_langer_tzid()` verlängert genau den Wert des Parameters `TZID` und rührt
+keinen anderen an — damit bleibt `VALUE=DATE-TIME` stehen, die Vorbedingung
+von `P18` hält, und der lange `TZID` kommt an der Stelle an, die ihn kürzen
+soll.
+
+**Die Zusage stand vor der Arbeit und ist vor der Arbeit committet** (`65258e6`,
+(V8) im Journal von Zyklus 42). Das ist der Unterschied zu einer Verbiegung,
+die man sich ausdenkt, nachdem man das Ergebnis kennt — und es ist der Grund,
+warum diese Nachbesserung einen Zyklus gewartet hat.
+
+**Die vollständige Tabelle, alle sechs Stellen an demselben Stand `77f401c`
+einzeln gemessen** — je ein Lauf, bei dem genau ein `_kurz()` durch das alte
+`_zeigbar()` ersetzt wurde und die fünf anderen unberührt blieben:
+
+| zurückgenommene Kürzung | längste Meldung | Wächter |
+|---|---|---|
+| `BEGIN:%s hat kein END:%s` | 2878 | **rot**, 49 Fälle |
+| `END:%s ohne vorangehendes BEGIN` | 602 | **rot**, 112 Fälle |
+| `END:%s passt nicht zu BEGIN:%s` | 594 | **rot**, 130 Fälle |
+| `TZID=%s` in `P08` | 660 | **rot**, 2 Fälle |
+| `TZID=%s` in `P16` | 657 | **rot**, 2 Fälle |
+| `TZID=%s` in `P18` | 683 | **rot**, 1 Fall |
+
+**Sechs von sechs.** Beide Zahlen, die (V8) vor der Messung nannte, sind
+eingetreten: 35363 + 56 = **35419** Fälle, und der unveränderte Bestand bleibt
+grün. Die `P18`-Verletzung ist eine von `(I6)` — die Länge, 683 Zeichen —, nicht
+eine von `(I3)` über ein Steuerzeichen; auch das war vorher als Bedingung
+benannt.
+
+**Was sich dabei nebenbei verschoben hat:** `P08` und `P16` standen gestern mit
+je einem Fall in der Tabelle, heute mit je zweien. Die zwölfte Verbiegung trifft
+sie zusätzlich. Das ist kein Widerspruch zu gestern, sondern die Folge einer
+erweiterten Eingabemenge.
+
+### Nicht nachgezogen: die Zahl aus Zyklus 41 bleibt fünf von sechs
+
+Es wäre eine kleine Bewegung und sie unterbleibt. Zyklus 41 hat **drei**
+Verbiegungen zugesagt und damit fünf der sechs Stellen erreicht; das ist der
+Messwert dieser Zusage und er wird nicht zu „sechs von sechs" umgeschrieben,
+weil ein späterer Zyklus mit einer **vierten** Verbiegung weiterkam. Gemessen
+wurden zwei verschiedene Dinge. Wer die Zahl von gestern durch die von heute
+ersetzt, hat die Zusage von gestern nachträglich gelockert, und dann bedeutet
+keine Zusage mehr etwas.
+
+Dasselbe gilt in die andere Richtung für das Verfahren selbst: (V8) ist die
+vierte Zusage in dieser Reihenfolge und die erste, die **gehalten** hat, seit
+(V7) gegen mich ausfiel. Dass sie hält, macht die Reihenfolge nicht besser als
+gestern — sie war gestern schon richtig, als sie gegen mich ausfiel.
+
+### Unverändert offen, unverändert ohne Frist
+
+§6-Kodierung; UTF-16-BOM; `_zeige_wort` zeigt `U+FFFD` in **Wert**-Zitaten;
+`VALARM` §3.6.6, `VTIMEZONE` §3.6.5, `UNTIL`+`COUNT` §3.3.10. `anlass.sh` zeigt
+für alle vier gemessenen Fälle weiter keinen Anlass. Ebenso „die dreizehn
+älteren Erwartungen" (Zyklus 35). Kein Blocker, keiner davon.
