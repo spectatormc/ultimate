@@ -347,6 +347,7 @@ sh projekte/icsdoktor/zahlen.sh          # stimmen die Zahlen über den Bestand?
 sh projekte/icsdoktor/fundstellen.sh     # steht jeder zitierte § im Normtext?
 sh projekte/icsdoktor/abdeckung.sh       # löst jede Meldung ein Beispiel aus?
 sh projekte/icsdoktor/robustheit.sh      # halten die Zusagen auch bei Müll?
+sh projekte/icsdoktor/quellen.sh         # stehen die fremden Zitate noch dort?
 ```
 
 Der zweite ist der wichtigere: Seine Eingabe stammt nicht von mir, sondern aus
@@ -675,6 +676,35 @@ Ein Teil der Prüfung läuft als echter Prozess statt im selben Speicher. Der
 Grund steht in seinem Kopf: Nach einer Ausnahme endet Python ebenfalls mit `1`,
 und genau das bedeutet hier „mindestens ein FEHLER". Ein Absturz sähe von außen
 aus wie ein Fund.
+
+### `quellen.sh` — stehen die fremden Zitate noch dort?
+
+`korpus.tsv` trägt je Zeile ein wörtliches Zitat aus einem öffentlichen
+Fehlerbericht. Diese Zitate sind der Maßstab dieses Projekts, der nicht aus
+meiner Hand stammt: `fremdprobe.sh` misst daran, ob das Werkzeug die Klage
+meldet. Geprüft hat die Zitate selbst bisher niemand — `fremdprobe.sh` druckt
+die Spalte nur, `gegenprobe.sh` und `anlass.sh` lesen sie und vergleichen sie
+mit nichts.
+
+Der Anlass ist gemessen und nicht vorsorglich: Am 2026-08-20 war das
+Repository, in dem eine der Fundstellen liegt, nicht mehr abrufbar — HTTP 404
+auf Fundstelle, Repository und HTML-Seite, während die Organisation darüber
+mit 200 antwortete und die Ratenbegrenzung nicht griff. Sechs Stunden vorher
+war derselbe Abruf grün. Belege verschwinden, und zwar stillschweigend; ein
+verschwundener Beleg macht eine Behauptung nicht falsch, aber unbelegt.
+
+Die Vergleichsregel steht im Kopf des Skripts und stand dort, bevor der erste
+Vergleich lief: wörtlich, an `[…]` zerlegt, jeder Teil in der Reihenfolge des
+Zitats, normalisiert werden nur typografische Anführungszeichen und Leerraum.
+
+**Was dieses Skript heute noch nicht liest, ist der Titel einer Fundstelle** —
+und zwei der Zitate stehen genau dort. Das ist am 2026-08-20 gemessen, es
+steht im Kopf des Skripts und in `state/offen.md`, und es ist der Grund, warum
+`quellen.sh` in diesem Fall `2` meldet und nicht `1`: „nicht im Text und in
+keinem Kommentar" ist kein „steht dort nicht mehr". Nachgetragen wird der
+Titel nicht in dem Zyklus, in dem die Lücke aufgefallen ist — eine
+Vergleichsregel, die man aufmacht, sobald ihr Ergebnis unbequem wird, ist
+keine gewesen.
 
 ## Entscheidungen, die im RFC nicht festgelegt sind
 
@@ -1026,6 +1056,10 @@ robustheit.sh       Hält sechs Zusagen des Werkzeugs gegen Eingaben, die
                     niemand ausgesucht hat. Kein Prüfbefehl der Mission — er
                     prüft Form und Länge der Meldung, nicht ihren Inhalt.
                     Kein Netz.
+quellen.sh          Hält die wörtlichen Zitate aus korpus.tsv gegen die
+                    Fundstellen, aus denen sie stammen. Kein Prüfbefehl der
+                    Mission — er prüft meine Buchführung, nicht das Werkzeug.
+                    Braucht Netz.
 beispiele/          56 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
                     Die Zahl ist am 2026-08-18 nachgezählt; sie stand seit
                     zwei Zyklen auf 47 und wuchs still mit jeder neuen Datei; seither hält

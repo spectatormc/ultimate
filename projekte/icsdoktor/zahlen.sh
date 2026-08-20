@@ -65,7 +65,7 @@ verzeichnis=$(dirname "$0")
 command -v python3 >/dev/null 2>&1 || {
 	echo "ABBRUCH: python3 ist nicht im PATH" >&2; exit 2; }
 
-for datei in icsdoktor.py README.md anlass.sh; do
+for datei in icsdoktor.py README.md anlass.sh quellen.sh korpus.tsv; do
 	[ -f "$verzeichnis/$datei" ] || {
 		echo "ABBRUCH: $verzeichnis/$datei fehlt" >&2; exit 2; }
 done
@@ -110,6 +110,17 @@ if nummern != list(range(1, len(nummern) + 1)):
 
 anzahl_pruefungen = len(nummern)
 naechste_pruefung = nummern[-1] + 1
+
+# Der Fremdkorpus. quellen.sh sagt in seinem Kopf zwei Dinge ueber ihn: wie
+# viele Zitate er traegt und wie viele Abrufe ein Lauf deshalb kostet. Beide
+# altern still mit, sobald korpus.tsv eine Zeile dazubekommt oder verliert —
+# genau der Fall, gegen den dieses Skript geschrieben ist.
+with open(os.path.join(verzeichnis, "korpus.tsv"), encoding="utf-8") as fh:
+    korpuszeilen = [z for z in fh.read().split("\n")
+                    if z.strip() and not z.startswith("#")]
+if not korpuszeilen:
+    sys.stderr.write("ABBRUCH: korpus.tsv enthaelt keine Datenzeile\n")
+    sys.exit(2)
 
 # --- Zahlwoerter ------------------------------------------------------------
 #
@@ -186,6 +197,14 @@ FAELLE = (
      "Gibt es einen Anlass, die {}. zu bauen?",
      naechste_pruefung, "ziffer",
      "hoechste Pruefnummer in icsdoktor.py, plus 1"),
+    ("quellen.sh",
+     "Diese {} Zitate sind der Maßstab",
+     len(korpuszeilen), "wort",
+     "Datenzeilen in korpus.tsv"),
+    ("quellen.sh",
+     "macht {} Abrufe je Lauf",
+     2 * len(korpuszeilen), "ziffer",
+     "zwei Abrufe je Datenzeile in korpus.tsv"),
 )
 
 # In der Luecke steht entweder eine Ziffernfolge oder ein Wort aus Buchstaben.
@@ -203,6 +222,7 @@ print("  Beispieldateien (beispiele/*.ics): %d" % len(beispiele))
 print("  gebaute Pruefungen (P01..P%02d):    %d"
       % (nummern[-1], anzahl_pruefungen))
 print("  naechste freie Pruefnummer:        %d" % naechste_pruefung)
+print("  Datenzeilen in korpus.tsv:         %d" % len(korpuszeilen))
 print("")
 
 fehler = 0
