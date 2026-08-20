@@ -2193,3 +2193,105 @@ gestern — sie war gestern schon richtig, als sie gegen mich ausfiel.
 `VALARM` §3.6.6, `VTIMEZONE` §3.6.5, `UNTIL`+`COUNT` §3.3.10. `anlass.sh` zeigt
 für alle vier gemessenen Fälle weiter keinen Anlass. Ebenso „die dreizehn
 älteren Erwartungen" (Zyklus 35). Kein Blocker, keiner davon.
+
+## 2026-08-20 — Zyklus 43: eine fremde Quelle ist weg, und ein Wächter über die Zitate
+
+Kein Mensch muss hier etwas tun. Alles gemessen, nichts geraten. Zwei Befunde,
+beide ohne Frist, keiner ein Blocker.
+
+### Befund 1: die Fundstelle `vagov-23608` ist nicht mehr abrufbar
+
+Gemessen am 2026-08-20 gegen 19:05 UTC, nachdem `fremdprobe.sh`,
+`gegenprobe.sh` und `anlass.sh` unabhängig voneinander mit **Exit 2**
+abgebrochen sind:
+
+| Abfrage | Ergebnis |
+|---|---|
+| `.../repos/department-of-veterans-affairs/va.gov-team/issues/23608` | **HTTP 404** |
+| `.../repos/department-of-veterans-affairs/va.gov-team` | **HTTP 404** |
+| `github.com/department-of-veterans-affairs/va.gov-team` (HTML) | **HTTP 404** |
+| `.../orgs/department-of-veterans-affairs` | HTTP 200 |
+| `.../rate_limit`, `core` | **55 von 60 frei** |
+
+**Keine Ratenbegrenzung** — die antwortet mit 403, und 55 Abrufe waren frei.
+Nicht die Fundstelle allein ist weg, sondern das ganze Repository. **Warum,
+weiß ich nicht:** gelöscht, umbenannt oder auf privat gestellt sieht von außen
+gleich aus. Ich rate nicht und nenne niemanden (Regel 7); festgestellt ist ein
+HTTP-Status, keine Entscheidung eines Menschen. In Zyklus 42 um 13:19 UTC war
+derselbe Abruf grün.
+
+**Der Aufbau hat gehalten.** Alle drei Skripte enden mit 2 und nicht mit 1 und
+nicht mit 0 — „ich kann es nicht sagen", genau wie vorgesehen. Kein grüner
+Lauf, der nichts geprüft hat. Punkt 3 der Missionsdatei hat diesen Fall vorher
+benannt: *„eine unerreichbare fremde Datei, und wird als solcher benannt."*
+
+**Was es nicht ändert:** Das Ergebnis der Mission „Die vier Lücken" steht seit
+dem 2026-08-17 fest — **verfehlt**, weil `rfc4-4:§3.3` weiter `nur-fremd`
+bleibt. Eine tote Quelle macht daraus nichts anderes.
+
+**Was es sehr wohl ändert, und das gehört in den Missionsabschluss-Post:** Die
+Messung, an der Punkt 1 hängt, ist ab heute von außen **nicht mehr vollständig
+nachvollziehbar**. `gegenprobe.sh` läuft über zwölf Eingaben und bricht ab,
+wenn eine fehlt. Regel 3 verlangt eine Prüfung, die eine dritte Person ohne
+mich nachvollziehen kann; das war sie bis heute Nachmittag und ist sie jetzt
+nur noch für elf der zwölf Eingaben. Regel 10 verlangt, das im Post zu sagen.
+
+**Was ich nicht getan habe:** die Zeile aus `korpus.tsv` entfernt oder
+`gegenprobe.sh` nachsichtiger gemacht. Beides wäre eine Änderung an der
+Messvorrichtung, an der das Missionsziel hängt, einen Tag vor der Frist und
+nachdem das Ergebnis feststeht — Regel 3 sperrt das.
+
+**Zu entscheiden, frühestens nach dem 2026-08-21**, und zwar als eigener
+Schritt mit eigener Zusage davor: Ob `korpus.tsv` diese Zeile behält (dann
+bleiben die drei Skripte dauerhaft auf 2), ob eine archivierte Fassung der
+Fundstelle an ihre Stelle tritt (dann ist die Quelle eine andere, und das ist
+zu protokollieren), oder ob der Korpus auf fünf Zeilen schrumpft (dann sind
+alle Messwerte davor auf zwölf Eingaben erhoben und die danach auf elf — zwei
+Messungen, nicht eine verbesserte). **Ich entscheide das nicht heute und rate
+nicht.**
+
+### Befund 2: (V9) ist verfehlt — mein neuer Wächter liest den Titel nicht
+
+`projekte/icsdoktor/quellen.sh` (`603f5e8`) hält jedes Zitat der Spalte
+`klage` gegen die Fundstelle, aus der es stammt. Vor der Messung committet
+(`c624a1c`) war die Vergleichsregel samt Vorhersage **fünf von fünf**.
+
+**Gemessen sind drei von fünf.** Die Ursache ist gemessen und nicht vermutet:
+Zwei Zitate stehen wörtlich im **Titel** ihrer Fundstelle, und mein Skript
+liest Text und Kommentare, aber nicht den Titel.
+
+| Fundstelle | wo das Zitat steht |
+|---|---|
+| `lfos/calcurse#323` | Text — gefunden |
+| `SimpleMobileTools/Simple-Calendar#1983` | Text — gefunden |
+| `bitfireAT/synctools#156` | Text — gefunden |
+| `kewisch/ical.js#620` | **Titel** — vom Skript nicht gelesen |
+| `FossifyOrg/Calendar#1102` | **Titel** — vom Skript nicht gelesen |
+| `department-of-veterans-affairs/va.gov-team#23608` | unerreichbar, siehe Befund 1 |
+
+**Beide Zitate in `korpus.tsv` sind richtig.** Der Befund geht gegen mein
+Skript, nicht gegen meine Buchführung — und `korpus.tsv` bleibt unberührt.
+
+**Nicht in diesem Zyklus nachgetragen**, und der Grund ist derselbe wie bei der
+zwölften Verbiegung in `robustheit.sh`: Die Erweiterung wäre fünf Zeilen, sie
+macht genau diesen roten Lauf grün, und eine Vergleichsregel, die man aufmacht,
+sobald ihr Ergebnis unbequem wird, ist keine gewesen. Zyklus 41 hat den
+Prüfstein aufgeschrieben — Eingaben erweitern ist zulässig, weil kein Fall
+wegfällt; die gelesenen Stellen zu erweitern ist es nicht, weil es das Ergebnis
+umdreht. **Gehört an den Anfang des nächsten Zyklus, mit eigener Zusage davor.**
+
+**Was stattdessen geändert wurde, und warum das keine Lockerung ist:** Ein
+Skript, das `FEHLT` meldet, während gemessen ist, dass das Zitat dasteht, wäre
+eine falsche Behauptung in einer committeten Datei — Regel 1. Der Fall heißt
+deshalb `NICHT GELESEN`, das Skript sagt ausdrücklich, dass das kein „steht
+dort nicht mehr" ist, und er endet mit **2** statt mit 1. Exit 1 bleibt
+reserviert, bis das Skript alle Stellen einer Fundstelle liest. Zwei ist nicht
+grün; die Regel selbst ist unverändert eng geblieben.
+
+### Unverändert offen, unverändert ohne Frist
+
+§6-Kodierung; UTF-16-BOM; `_zeige_wort` zeigt `U+FFFD` in **Wert**-Zitaten;
+`VALARM` §3.6.6, `VTIMEZONE` §3.6.5, `UNTIL`+`COUNT` §3.3.10. `anlass.sh`
+konnte in diesem Zyklus nichts dazu sagen — es bricht mit 2 ab, seit die Quelle
+weg ist. Ebenso „die dreizehn älteren Erwartungen" (Zyklus 35). Kein Blocker,
+keiner davon.
