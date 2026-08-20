@@ -79,11 +79,11 @@
 #   2. Jede physische Zeile einzeln entfernt.
 #   3. Jedes Byte einzeln ersetzt, aus einer festen Liste, rotierend nach
 #      Position: NUL CR LF ; : 0xE4 0xFF \ " , SP TAB BEL ESC.
-#   4. Elf Umformungen der ganzen Datei: LF statt CRLF, CR statt CRLF, ohne
+#   4. Zwoelf Umformungen der ganzen Datei: LF statt CRLF, CR statt CRLF, ohne
 #      letztes Zeilenende, verdoppelt, mit BOM davor, rueckwaerts, nur
 #      NUL-Bytes, Zeilen in umgekehrter Reihenfolge, Parameterwerte
 #      verlaengert, END-Zeilen verlaengert, END-Zeilen verlaengert und Zeilen
-#      umgedreht.
+#      umgedreht, nur TZID verlaengert.
 #
 # Ausgangspunkt sind die Dateien in beispiele/, weil die im Repo liegen und
 # sich nicht ohne mein Zutun aendern. Aus jeder entstehen so einige hundert
@@ -105,6 +105,26 @@
 # waere es nicht: Faelle kommen hinzu, keiner faellt weg — eine Erweiterung
 # der Eingaben kann einen roten Lauf nie gruen machen. Eine Grenze zu bewegen,
 # nachdem man weiss, was dann rot wuerde, ist das Herstellen eines Messwerts.
+#
+# WOHER DIE ZWOELFTE UMFORMUNG KOMMT. Die drei oben haben fuenf der sechs
+# Stellen erreicht, nicht sechs. Die sechste ist _kurz(tzid) in P18, und die
+# Ursache war am 2026-08-20 gemessen und nicht vermutet: P18 meldet nur, wenn
+# TRIGGER den Parameter VALUE=DATE-TIME traegt — sonst steht im Quelltext ein
+# continue. "Parameterwerte verlaengert" verlaengert aber JEDEN Wert vor dem
+# ersten Doppelpunkt, also auch den von VALUE. Aus VALUE=DATE-TIME wird
+# VALUE=XXX...DATE-TIME, die Vorbedingung faellt weg, und der lange TZID kommt
+# bei P18 nie an. Die Umformung schlug die Pruefung tot, die sie treffen
+# sollte.
+#
+# "Nur TZID verlaengert" laesst deshalb jeden anderen Parameter in Ruhe. Sie
+# ist NICHT im selben Zyklus entstanden wie die Messung, die sie noetig machte
+# — vor dieser Zeile stand als Widerlegungsbedingung im Journal von Zyklus 41,
+# dass eine Zahl unter sechs so stehen bleibt und nicht durch eine Umformung
+# geheilt wird, die ich mir nach dem Ergebnis ausdenke. Sie steht jetzt am
+# ANFANG von Zyklus 42, zusammen mit ihrer eigenen Zusage und deren
+# Widerlegungsbedingung (V8, Commit 65258e6), und erst danach wurde gemessen.
+# Die Zahl aus Zyklus 41 bleibt fuenf von sechs; sie wird nicht rueckwirkend
+# umgeschrieben.
 #
 # WARUM NICHT DIE GRENZE VON 400 AUF 300, der andere naheliegende Weg. Nicht
 # nur, weil er die Reihenfolge verletzt — er reicht auch nicht, und das ist
@@ -219,6 +239,26 @@ def _laengere_end_zeilen(roh):
     return aus
 
 
+def _langer_tzid(roh):
+    """Nur der Wert des Parameters TZID bekommt 500 X. Sonst nichts.
+
+    Der Unterschied zu _laengere_parameterwerte() ist der ganze Zweck: Dort
+    wird auch VALUE=DATE-TIME verlaengert, und damit faellt die Vorbedingung
+    weg, unter der P18 den TZID ueberhaupt meldet. Hier bleibt jeder andere
+    Parameter unangetastet, also auch VALUE.
+    """
+    aus = []
+    for zeile in roh.split(b"\r\n"):
+        kopf, doppelpunkt, rest = zeile.partition(b":")
+        params = kopf.split(b";")
+        for i in range(1, len(params)):  # params[0] ist der Eigenschaftsname
+            name, gleich, wert = params[i].partition(b"=")
+            if gleich and name.strip().upper() == b"TZID":
+                params[i] = name + gleich + FUELLER + wert
+        aus.append(b";".join(params) + doppelpunkt + rest)
+    return b"\r\n".join(aus)
+
+
 def faelle(roh):
     """Alle Verbiegungen einer Datei. Deterministisch, ohne Zufall."""
     for i in range(len(roh) + 1):
@@ -243,6 +283,7 @@ def faelle(roh):
     yield "END-Zeilen verlaengert", b"\r\n".join(_laengere_end_zeilen(roh))
     yield ("END-Zeilen verlaengert, Zeilen umgedreht",
            b"\r\n".join(_laengere_end_zeilen(roh)[::-1]))
+    yield "nur TZID verlaengert", _langer_tzid(roh)
 
 
 def steuerzeichen(text):
