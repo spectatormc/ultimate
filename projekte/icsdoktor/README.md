@@ -348,6 +348,7 @@ sh projekte/icsdoktor/fundstellen.sh     # steht jeder zitierte § im Normtext?
 sh projekte/icsdoktor/abdeckung.sh       # löst jede Meldung ein Beispiel aus?
 sh projekte/icsdoktor/robustheit.sh      # halten die Zusagen auch bei Müll?
 sh projekte/icsdoktor/quellen.sh         # stehen die fremden Zitate noch dort?
+sh projekte/icsdoktor/exitprobe.sh       # sagt quellen.sh die Wahrheit über sich?
 ```
 
 Der zweite ist der wichtigere: Seine Eingabe stammt nicht von mir, sondern aus
@@ -697,14 +698,40 @@ Die Vergleichsregel steht im Kopf des Skripts und stand dort, bevor der erste
 Vergleich lief: wörtlich, an `[…]` zerlegt, jeder Teil in der Reihenfolge des
 Zitats, normalisiert werden nur typografische Anführungszeichen und Leerraum.
 
-**Was dieses Skript heute noch nicht liest, ist der Titel einer Fundstelle** —
-und zwei der Zitate stehen genau dort. Das ist am 2026-08-20 gemessen, es
-steht im Kopf des Skripts und in `state/offen.md`, und es ist der Grund, warum
-`quellen.sh` in diesem Fall `2` meldet und nicht `1`: „nicht im Text und in
-keinem Kommentar" ist kein „steht dort nicht mehr". Nachgetragen wird der
-Titel nicht in dem Zyklus, in dem die Lücke aufgefallen ist — eine
+**Am Tag seiner Entstehung las dieses Skript den Titel einer Fundstelle
+nicht** — und zwei der Zitate stehen genau dort. Der Lauf zeigte deshalb „drei
+von fünf", und der Titel wurde in jenem Zyklus **nicht** nachgetragen: Eine
 Vergleichsregel, die man aufmacht, sobald ihr Ergebnis unbequem wird, ist
-keine gewesen.
+keine gewesen. Solange das Skript nicht jede Stelle las, durfte es außerdem
+keine `1` vergeben — „nicht im Text und in keinem Kommentar" ist kein „steht
+dort nicht mehr".
+
+**Seit dem 2026-08-21 liest es den Titel**, als dritte Stelle neben Text und
+Kommentaren, ohne einen zusätzlichen Abruf und ohne dass an der
+Vergleichsregel ein Zeichen gelockert wurde. Der Nachtrag stand als Zusage im
+Repo, bevor die erste Zeile Code geschrieben war. **Der Preis dafür ist die
+scharfe `1`:** Ein Zitat, das an keiner der drei Stellen steht, heißt jetzt
+`FEHLT` und beendet den Lauf mit `1` — ein Befund gegen meine Buchführung,
+nicht gegen die Quelle. Und **`1` schlägt `2`**, damit ein Befund nicht von
+einer unerreichbaren Quelle geschluckt wird.
+
+### `exitprobe.sh` — sagt `quellen.sh` die Wahrheit über sich selbst?
+
+Der Exit-1-Pfad war an echten Daten nie ausgelöst: Am Tag der Umstellung
+standen fünf von fünf abrufbaren Zitaten, eine Quelle war tot, der Lauf endete
+mit `2`. Ein Code-Pfad, den keine Messung je berührt hat, ist eine Behauptung.
+
+`exitprobe.sh` schneidet den Python-Teil **aus `quellen.sh` selbst** heraus —
+nicht eine Kopie — und lässt ihn gegen erfundene Eingaben laufen: Zitat im
+Titel, Zitat im Text, Zitat nirgends, Quelle unerreichbar, und der Fall, in
+dem beides zugleich zutrifft. Erwarteter und gemessener Code stehen
+nebeneinander in der Ausgabe.
+
+Es braucht **kein Netz und macht keinen einzigen Abruf** — als einziges der
+Skripte mit fremder Berührung. Keine der Fundstellen darin ist echt, es wird
+also auch keine fremde Zeile in dieses Repo kopiert (Regel 7). Wer die
+Exit-Logik von `quellen.sh` ändert, ohne die Zusage nachzuziehen, macht dieses
+Skript rot. Das ist sein ganzer Zweck.
 
 ## Entscheidungen, die im RFC nicht festgelegt sind
 
@@ -1057,9 +1084,13 @@ robustheit.sh       Hält sechs Zusagen des Werkzeugs gegen Eingaben, die
                     prüft Form und Länge der Meldung, nicht ihren Inhalt.
                     Kein Netz.
 quellen.sh          Hält die wörtlichen Zitate aus korpus.tsv gegen die
-                    Fundstellen, aus denen sie stammen. Kein Prüfbefehl der
-                    Mission — er prüft meine Buchführung, nicht das Werkzeug.
-                    Braucht Netz.
+                    Fundstellen, aus denen sie stammen — Titel, Text und
+                    Kommentare. Kein Prüfbefehl der Mission — er prüft meine
+                    Buchführung, nicht das Werkzeug. Braucht Netz.
+exitprobe.sh        Hält die Exit-Codes von quellen.sh gegen erfundene
+                    Eingaben, mit dessen echtem Code. Kein Prüfbefehl der
+                    Mission — er prüft die Mechanik, nicht den Bestand.
+                    Kein Netz, kein Abruf.
 beispiele/          56 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
                     Die Zahl ist am 2026-08-18 nachgezählt; sie stand seit
                     zwei Zyklen auf 47 und wuchs still mit jeder neuen Datei; seither hält
