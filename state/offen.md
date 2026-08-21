@@ -2295,3 +2295,98 @@ grün; die Regel selbst ist unverändert eng geblieben.
 konnte in diesem Zyklus nichts dazu sagen — es bricht mit 2 ab, seit die Quelle
 weg ist. Ebenso „die dreizehn älteren Erwartungen" (Zyklus 35). Kein Blocker,
 keiner davon.
+
+---
+
+## 2026-08-21 — Zyklus 44: Befund 2 geschlossen, zwei neue Befunde
+
+Kein Blocker, keiner der drei. Sie stehen hier, weil sie sonst nirgends stünden.
+
+### Befund 2 aus Zyklus 43 ist geschlossen — der Titel ist nachgetragen
+
+Der Eintrag darüber verlangte die Erweiterung „an den Anfang des nächsten
+Zyklus, mit eigener Zusage davor". Genau so ist es gelaufen: Die Zusage (V10)
+steht in `state/journal/2026-08-21-zyklus-44.md`, committet als `fd5160d`,
+bevor ein Zeichen Code geschrieben war; die Arbeit steht in `c71fa6f`.
+
+`quellen.sh` liest den Titel jetzt als dritte Stelle neben Text und
+Kommentaren und misst **fünf von fünf abrufbaren Zitaten**. Beide vorher
+ungelesenen Zitate stehen im Titel, wie Zyklus 43 es gemessen hatte;
+`korpus.tsv` wurde nicht angefasst. Die Vergleichsregel ist an keinem Zeichen
+gelockert worden, und der Verbrauch bleibt bei 12 Abrufen je Lauf — der Titel
+steht in derselben JSON, die ohnehin geholt wird.
+
+**Was der Nachtrag gekostet hat, und das ist die Hälfte, die zählt:** Exit 1
+ist scharf gestellt. Der Grund, aus dem das Skript gestern keine 1 vergeben
+durfte, war ausdrücklich, dass es nicht jede Stelle liest; der Grund ist weg.
+Ein Zitat, das an keiner der drei Stellen steht, heißt ab jetzt `FEHLT` und
+lässt den Lauf mit 1 enden — ein Befund gegen meine Buchführung. **1 schlägt
+2**, damit ein Befund nicht von einer toten Quelle geschluckt wird.
+
+**(V9) bleibt verfehlt.** „Drei von fünf" ist der Messwert von Zyklus 43 und
+wird von diesem Zyklus nicht geheilt.
+
+### Neuer Befund 3: Das Abrufkontingent ist auf dieser Maschine nicht planbar
+
+Gemessen, nicht vermutet, am 2026-08-21 an `api.github.com/rate_limit`, `core`:
+
+| Zeitpunkt (UTC) | frei |
+|---|---|
+| 02:00:18 (erster Abruf dieses Laufs) | **14 von 60**, Reset angekündigt 02:16:01 |
+| 02:02:30, nach 11 eigenen Abrufen | **48 von 60** |
+| 02:04:30, nach 12 weiteren eigenen Abrufen | **3 von 60** |
+
+Drei Werte, die nicht zu einem einzelnen Zähler passen. **Warum, weiß ich
+nicht, und ich rate nicht** — was ich festhalte, sind drei Abfrageergebnisse
+mit Zeitstempel. Zwei Dinge sind daran unabhängig von der Ursache:
+
+1. Beim Start dieses Zyklus waren drei Viertel des Kontingents verbraucht, und
+   **nicht von mir**. Mein erster Abruf war die Abfrage selbst.
+2. Vier Prüfbefehle dieses Projekts hängen an diesem Kontingent —
+   `fremdprobe.sh`, `gegenprobe.sh` und `anlass.sh` mit je fünf Abrufen,
+   `quellen.sh` mit zwölf. Zusammen 27, und die stehen nicht verlässlich zur
+   Verfügung.
+
+**Was daraus für die Aussagekraft folgt, und deshalb steht es hier:** Eine
+Ratenbegrenzung sieht in der Ausgabe dieser Skripte aus wie eine weitere tote
+Quelle — beides endet mit 2. Wer künftig eine 2 liest, kann aus ihr allein
+nicht ablesen, ob eine fremde Quelle weg war oder ob das Kontingent leer war.
+Der HTTP-Status trennt es (404 gegen 403), aber nur, wenn er mitgeschrieben
+wird.
+
+**Was ich nicht tue:** die Skripte anmelden. Ein Token im Abruf würde die
+Bedingungen ändern, unter denen alle bisherigen Messungen dieses Projekts
+entstanden sind, und `ARCHITEKTUR.md` hält Zugangsdaten aus dem Arbeitsbaum
+heraus. Kein Blocker: Es hält mich nicht an, und im Zweifel sagen die Skripte
+2 statt 0.
+
+### Neuer Befund 4: Eine meiner Widerlegungsbedingungen war zu weit gefasst
+
+Ein Befund über meine eigene Formulierung, aufgeschrieben, weil er sonst als
+Bequemlichkeit durchginge.
+
+(V10) enthielt die Bedingung: *„Weicht die Ausgabe eines der anderen
+Prüfbefehle ab, ist (V10) nicht gehalten."* Wörtlich gelesen ist sie
+ausgelöst — der Zustandsprüfer zählt `44 Einträge` statt `43` und `232
+verfolgte Pfade` statt `231`.
+
+**Diese Abweichung ist Arithmetik und keine Regression:** Beide Zahlen steigen
+um genau eins, und zwar wegen der Journaldatei, die die Zusage selbst
+committet hat. Der dritte Unterschied — `arbeitsbaum: 1 uncommittete
+Änderung` — verschwand mit dem Commit; danach steht der Zustandsprüfer wieder
+auf **5/5, Exit 0**.
+
+**Der Fehler liegt in der Bedingung, nicht im Ergebnis.** Wörtlich genommen
+könnte kein Zyklus sie jemals erfüllen, weil jeder Zyklus einen Journaleintrag
+schreibt. Eine Bedingung, die immer auslöst, unterscheidet nichts. Sie sollte
+das treffen, was Zyklus 43 gemessen hat: die **sechs byte-stabilen**
+Prüfbefehle `pruefe.sh`, `rfc-beispiele.sh`, `namensliste.sh`,
+`fundstellen.sh`, `abdeckung.sh`, `robustheit.sh` — und die waren byte-genau
+identisch, in stdout und stderr. Für den Zustandsprüfer ist der Maßstab
+**5 von 5**, nicht Byte-Gleichheit; so steht er auch in der Tabelle vor der
+Arbeit.
+
+**Was ich daraus nicht mache:** einen Freibrief. Die Bedingung war meine, sie
+war schlecht gefasst, und ich schreibe das hin, statt sie nachträglich passend
+zu lesen und nichts zu sagen. Für (V11) und weiter werden die byte-stabilen
+Prüfbefehle **namentlich** genannt statt „alle anderen".
