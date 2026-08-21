@@ -35,9 +35,11 @@
 #   1. Das Zitat wird an "[...]" (U+2026 in eckigen Klammern) in Teile
 #      zerlegt. JEDER Teil muss woertlich vorkommen, in der Reihenfolge des
 #      Zitats. Eine Auslassung im Zitat ist eine Auslassung, kein Freibrief.
-#   2. Gesucht wird im Text der Fundstelle UND in ihren Kommentaren. Wer
-#      seinen Fall im ersten Kommentar praezisiert, hat ihn dort geschrieben;
-#      ein Zitat von dort ist zitiert und nicht erfunden.
+#   2. Gesucht wird im TITEL der Fundstelle, in ihrem TEXT und in ihren
+#      KOMMENTAREN. Wer seinen Fall im ersten Kommentar praezisiert, hat ihn
+#      dort geschrieben; ein Zitat von dort ist zitiert und nicht erfunden.
+#      Und wer seine Klage in die Ueberschrift setzt, hat sie erst recht
+#      geschrieben.
 #   3. Normalisiert wird genau zweierlei: typografische Anfuehrungszeichen und
 #      Apostrophe auf ihre geraden Formen, und jede Folge aus Leerraum
 #      einschliesslich Zeilenumbruch auf ein Leerzeichen. Ein Bericht ist
@@ -60,36 +62,45 @@
 # Befund darueber, dass ich es nicht mehr pruefen kann, und die beiden
 # auseinanderzuhalten ist der ganze Wert der drei Exit-Codes.
 #
-# WAS DIESEM SKRIPT AM TAG SEINER ENTSTEHUNG FEHLT, und das steht hier oben
-# statt in einer Fussnote: Es liest den Text einer Fundstelle und ihre
-# Kommentare — NICHT ihren Titel. Am 2026-08-20 gemessen und nicht vermutet:
-# Zwei Zitate (icaljs-620, fossify-1102) stehen woertlich im Titel
-# ihrer Fundstelle und in keinem Text. Beide Zitate sind richtig; die Luecke
-# liegt in diesem Skript.
+# WAS AN TAG ZWEI DAZUKAM, und warum es hier oben steht statt in einer
+# Fussnote: Am Tag seiner Entstehung las dieses Skript Text und Kommentare,
+# NICHT den Titel. Am 2026-08-20 gemessen und nicht vermutet: Zwei Zitate
+# (icaljs-620, fossify-1102) stehen woertlich im Titel ihrer Fundstelle und in
+# keinem Text. Beide Zitate waren richtig; die Luecke lag in diesem Skript, und
+# der Lauf zeigte "drei von fuenf".
 #
-# Der Titel wird trotzdem NICHT in diesem Zyklus nachgetragen, und der Grund
-# ist derselbe wie bei der zwoelften Verbiegung in robustheit.sh: Die
-# Vergleichsregel stand vor der Messung fest, zusammen mit der Vorhersage
-# "fuenf von fuenf". Gemessen sind drei von fuenf. Eine Regel, die man
-# aufmacht, sobald ihr Ergebnis unbequem wird, hat nie eine Regel sein
-# koennen — und die Erweiterung geht hier in die verbotene Richtung: Sie
-# macht einen roten Lauf gruen. Sie gehoert an den ANFANG des naechsten
-# Zyklus, mit ihrer eigenen Zusage davor. Der Befund steht in state/offen.md.
+# Nachgetragen wurde der Titel trotzdem erst am 2026-08-21, im naechsten
+# Zyklus, mit einer eigenen Zusage davor (V10, state/journal/
+# 2026-08-21-zyklus-44.md, committet als fd5160d, bevor diese Zeile geschrieben
+# war). Der Umweg ist der Punkt: Die Vergleichsregel stand vor der Messung
+# fest, zusammen mit der Vorhersage "fuenf von fuenf" — und eine Regel, die man
+# aufmacht, sobald ihr Ergebnis unbequem wird, war nie eine. Die Erweiterung
+# geht ausserdem in die gefaehrliche Richtung: Sie macht genau den roten Lauf
+# gruen, der sie ausgeloest hat. Zulaessig ist daran nur die Reihenfolge. Der
+# Messwert von (V9) bleibt verfehlt; er wird durch diese Aenderung nicht
+# geheilt.
 #
-# DESHALB VERGIBT DIESES SKRIPT HEUTE KEINE 1. Solange es nicht jede Stelle
-# einer Fundstelle liest, kann es Abwesenheit nicht beweisen: "nicht im Text
-# und in keinem Kommentar" ist kein "steht dort nicht mehr". Was es in diesem
-# Fall sagt, ist 2 — nicht pruefbar ist nicht dasselbe wie in Ordnung, und es
-# ist auch nicht dasselbe wie widerlegt.
+# DESHALB VERGIBT DIESES SKRIPT AB JETZT AUCH EINE 1 — und das ist der Preis
+# fuer den Titel, nicht ein Zusatz. Der Grund, aus dem es gestern keine 1
+# vergeben durfte, war ausdruecklich, dass es nicht jede Stelle liest: "nicht
+# im Text und in keinem Kommentar" war kein "steht dort nicht mehr". Titel,
+# Text und Kommentare sind die Stellen, an denen ein Bericht Text traegt; faellt
+# der Grund, faellt die Zurueckhaltung mit ihm. Eine Erweiterung, die nur mehr
+# gruen macht und nichts riskanter, waere die halbe Bewegung.
+#
+# VORRANG DER CODES, festgelegt bevor er gebraucht wurde: 1 SCHLAEGT 2. Steht
+# ein Zitat nachweislich nicht mehr da und ist zugleich eine andere Quelle
+# unerreichbar, endet der Lauf mit 1 und nennt beides. Ein Befund ist eine
+# Tatsache; "ich kann es nicht sagen" darf ihn nicht schlucken.
 #
 # Exit-Code: 0 jedes Zitat steht an seiner Fundstelle
-#            1 reserviert: ein Zitat steht nachweislich nicht mehr dort. Das
-#              kann dieses Skript erst behaupten, wenn es alle Stellen einer
-#              Fundstelle liest, den Titel eingeschlossen. Bis dahin sagt es
-#              in diesem Fall 2 und nie 1.
-#            2 mindestens ein Zitat ist nicht abrufbar oder an den gelesenen
-#              Stellen nicht zu finden, oder Aufruf- und Umgebungsfehler.
-#              Kein Ergebnis ist kein gruenes Ergebnis.
+#            1 mindestens ein Zitat steht an keiner Stelle seiner abrufbaren
+#              Fundstelle — weder im Titel noch im Text noch in einem
+#              Kommentar. Das ist ein Befund gegen meine Buchfuehrung, nicht
+#              gegen die Quelle.
+#            2 mindestens ein Zitat ist nicht abrufbar und keines widerlegt,
+#              oder Aufruf- und Umgebungsfehler. Kein Ergebnis ist kein
+#              gruenes Ergebnis.
 
 set -u
 
@@ -192,7 +203,7 @@ if os.path.exists(pfad_tot):
             tot[id_] = (s1, s2)
 
 gut = []
-ungefunden = []
+fehlt = []
 unerreichbar = []
 
 with open(korpus, encoding="utf-8") as fh:
@@ -230,7 +241,10 @@ with open(korpus, encoding="utf-8") as fh:
             sys.stderr.write("ABBRUCH: leeres Zitat in Zeile zu %s\n" % id_)
             sys.exit(2)
 
-        stellen = [("Text", normal(bericht.get("body") or ""))]
+        # Die drei Stellen, an denen ein Bericht Text traegt. Die Reihenfolge
+        # entscheidet nur, was gemeldet wird, nicht ob.
+        stellen = [("Titel", normal(bericht.get("title") or "")),
+                   ("Text", normal(bericht.get("body") or ""))]
         for n, k in enumerate(kommentare, 1):
             stellen.append(("Kommentar %d" % n, normal(k.get("body") or "")))
 
@@ -239,7 +253,7 @@ with open(korpus, encoding="utf-8") as fh:
                 gut.append((id_, fundstelle, wo))
                 break
         else:
-            ungefunden.append((id_, fundstelle, len(stellen) - 1, zitat))
+            fehlt.append((id_, fundstelle, len(stellen) - 2, zitat))
 
 for id_, fundstelle, wo in gut:
     print("GEFUNDEN      %-15s Zitat steht in %s (%s)"
@@ -247,32 +261,36 @@ for id_, fundstelle, wo in gut:
 for id_, fundstelle, wo, status in unerreichbar:
     print("UNERREICHBAR  %-15s %s — %s: HTTP %s"
           % (id_, fundstelle, wo, status))
-for id_, fundstelle, n, zitat in ungefunden:
-    print("NICHT GELESEN %-15s %s — nicht im Text und in keinem der %d "
-          "Kommentare" % (id_, fundstelle, n))
+for id_, fundstelle, n, zitat in fehlt:
+    print("FEHLT         %-15s %s — nicht im Titel, nicht im Text und in "
+          "keinem der %d Kommentare" % (id_, fundstelle, n))
     print("              gesucht: %s" % zitat)
 
-abrufbar = len(gut) + len(ungefunden)
+abrufbar = len(gut) + len(fehlt)
 gesamt = abrufbar + len(unerreichbar)
 print("")
 print("%d Korpuszeilen, davon %d abrufbar" % (gesamt, abrufbar))
-print("%d von %d abrufbaren Zitaten stehen im Text oder in einem Kommentar"
-      % (len(gut), abrufbar))
+print("%d von %d abrufbaren Zitaten stehen im Titel, im Text oder in einem "
+      "Kommentar" % (len(gut), abrufbar))
 
-if ungefunden:
+if unerreichbar:
     print("")
-    print("%d Zitat(e) stehen an keiner Stelle, die dieses Skript liest."
-          % len(ungefunden))
-    print("Das heisst NICHT, dass sie nicht mehr an ihrer Fundstelle stehen:")
-    print("den Titel liest dieses Skript nicht (siehe Kopf der Datei und")
-    print("state/offen.md). Was hier fehlt, ist die Auskunft, nicht der Beleg.")
+    print("%d Quelle(n) nicht abrufbar. Ueber deren Zitate sage ich nichts:"
+          % len(unerreichbar))
+    print("nicht pruefbar ist nicht dasselbe wie in Ordnung.")
 
-if ungefunden or unerreichbar:
-    if unerreichbar:
-        print("")
-        print("%d Quelle(n) nicht abrufbar. Ueber deren Zitate sage ich"
-              % len(unerreichbar))
-        print("nichts: nicht pruefbar ist nicht dasselbe wie in Ordnung.")
+# 1 schlaegt 2: ein Befund ist eine Tatsache, "ich kann es nicht sagen" darf
+# ihn nicht schlucken. Der Kopf dieser Datei legt das fest.
+if fehlt:
+    print("")
+    print("%d Zitat(e) stehen an keiner Stelle ihrer Fundstelle. Das ist ein"
+          % len(fehlt))
+    print("Befund gegen meine Buchfuehrung und nicht gegen die Quelle:")
+    print("entweder falsch abgeschrieben oder der Bericht wurde geaendert.")
+    print("Was jetzt NICHT passiert, ist eine stille Korrektur in korpus.tsv.")
+    sys.exit(1)
+
+if unerreichbar:
     sys.exit(2)
 
 print("")
