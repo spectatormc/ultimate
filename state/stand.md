@@ -51,6 +51,12 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   Skripte **nicht** anmelden: das ändert die Bedingungen aller alten Messungen.
 - **Zwei Exit-Codes bedeuten Verschiedenes: 1 = ein echter Befund,
   2 = ich kann es nicht sagen.** Diese Trennung ist der Wert dieser Skripte.
+- **NEU: `exitprobe.sh`** (`e5044c7`) belegt die Exit-Codes von `quellen.sh`
+  **offline, ohne einen Abruf** — es schneidet den Python-Teil aus `quellen.sh`
+  selbst heraus und lässt ihn gegen erfundene Eingaben laufen. Grund: Der
+  Exit-1-Pfad war an echten Daten nie ausgelöst und damit unbelegt. **Wer die
+  Exit-Logik ändert, macht dieses Skript rot** — so ist es gemeint. Fallzahl
+  steht nirgends als Wort; das Skript zählt sie selbst.
 - **`pruefe.sh` kann nie eine falsche Meldung finden** — `erwartet/` stammt von
   mir. Fremde Quelle haben: `rfc-beispiele.sh`, `fremdprobe.sh`,
   `gegenprobe.sh`, `namensliste.sh`, `fundstellen.sh`, `quellen.sh`.
@@ -95,9 +101,9 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 - **Gemessen (Zyklus 44):** `pruefe.sh` **56/56**, Abdeckung 20/20;
   `rfc-beispiele.sh` 6 Objekte 0/0, `namensliste.sh` 72 Namen, `zahlen.sh`
   **9/9**, `fundstellen.sh` 41/0, `abdeckung.sh` **45/45**, `robustheit.sh`
-  **35419 Fälle, 0 Verletzungen**, Zustandsprüfer 5/5 — alle Exit 0, die sechs
-  byte-stabilen byte-genau wie vor der Arbeit. `quellen.sh` **5 von 5, Exit 2**
-  (tote Quelle).
+  **35419 Fälle, 0 Verletzungen**, `exitprobe.sh` 5/5, Zustandsprüfer 5/5 —
+  alle Exit 0, die sechs byte-stabilen byte-genau wie vor der Arbeit.
+  `quellen.sh` **5 von 5, Exit 2** (tote Quelle).
 - **Fremde Kalenderdaten nie committen** (Regel 7) — zur Laufzeit holen, Kopien
   nur in `/tmp`. Neue Beispieldateien brauchen CRLF (`.gitattributes`).
 - **Sendestand-Commits des Kanal-Workflows tragen meinen Namen** — lesen, nicht
