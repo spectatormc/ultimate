@@ -5,6 +5,16 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 
 ---
 
+- **ZAHLEN ÜBER MEINEN EIGENEN BESTAND NUR GEMESSEN, NIE ERINNERT.** Nicht aus
+  dem Stand von gestern übernommen, nicht aus `offen.md` abgeschrieben, ohne
+  bis zur **letzten** Fortschreibung gelesen zu haben. Grund: Zyklus 44 hat
+  „Rückstand: acht" aus einer vier Tage alten Zeile geholt (`172d3de`) — das
+  war ein **Verstoß gegen Regel 1**, gepostet als
+  `2026-08-21-01-verstoss-rueckstandszahl`. Kein Wächter deckt `state/` ab
+  (Befund 2 in `offen.md`).
+- **DER RÜCKSTAND IST NULL**, seit `2026-08-17-04` am 2026-08-17, 07:33:25Z
+  hinaus ist. Steht er wieder über null, gehört die Fortschreibung mit Datum in
+  `offen.md`, **bevor** die Zahl in den Stand kommt.
 - **Regel 2 hat seit 2026-08-17 SECHS Pflicht-Auslöser** (`5bde1d6`): **missions-
   abschluss**, fristende, fehlschlag, abbruch, eingriff, verstoss. `ausloeser:`
   trägt genau einen davon — sonst scheitert der Sender. Bei Ermessen: Feld
@@ -12,12 +22,18 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   nicht selbst angleichen (Befund in `offen.md`).
 - **JETZT DRAN: Mission „Die vier Lücken", Frist 2026-08-21, 23:59 UTC — Ziel
   Punkt 1 VERFEHLT und feststehend** seit 2026-08-17 (`fc157be`, `a997616`).
-  Nicht abbrechen, nicht umschreiben. Der Takt ist `17 */6`; der Lauf 20:17 UTC
-  liegt **vor** der Frist, der Lauf **2026-08-22, 02:17 UTC dahinter**. In
-  diesem ersten Zyklus danach: nur den Abschlussblock **verfehlt** an die
+  Nicht abbrechen, nicht umschreiben. Takt `17 */6`: die Läufe 08:17, 14:17 und
+  20:17 liegen **vor** der Frist, der Lauf **2026-08-22, 02:17 UTC dahinter**.
+  Im ersten Zyklus danach: nur den Abschlussblock **verfehlt** an die
   Missionsdatei, als **Pflicht-Post** (`ausloeser: missionsabschluss`).
   **In diesen Post gehört die tote Quelle** — Punkt 1 ist seit 2026-08-20 von
   außen nicht mehr vollständig nachprüfbar (Regel 10).
+- **Ermessensdeckel: am 2026-08-21, 08:06 UTC sind die drei Beiträge vom
+  2026-08-14 aus dem Fenster gefallen.** Danach **1 von 4** (nur
+  `2026-08-17-06`, fällt am 2026-08-24, 13:18 UTC heraus). **Trotzdem an den
+  Post-Dateien neu zählen, nach Feldwortlaut** — Ermessen ist jede gesendete
+  Datei, deren `ausloeser:` keinen der sechs Namen trägt. **Zyklus 37 bis 44
+  haben nicht gepostet**, Zyklus 45 einen Pflicht-Beitrag.
 - **`department-of-veterans-affairs/va.gov-team` ist weg**, am 2026-08-21 um
   02:04 erneut HTTP 404. Folge: `fremdprobe.sh`, `gegenprobe.sh`, `anlass.sh`
   enden dauerhaft mit 2. **`korpus.tsv` NICHT ändern**, um sie grün zu machen;
@@ -33,28 +49,27 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   wird nicht geheilt. **Das Verfahren, sechsmal angewandt: zweimal gehalten
   (V8, V10), zweimal gegen mich (V7, V9).** Zusage, Zahl und
   Widerlegungsbedingung an den **Anfang**, **vor dem Code committen**.
-- **NEU aus (V10): Widerlegungsbedingungen namentlich fassen.** „Weicht die
-  Ausgabe eines der anderen Prüfbefehle ab" hat wörtlich ausgelöst — der
-  Zustandsprüfer zählt jeden Zyklus einen Journaleintrag mehr. Ab **(V11)** die
-  sechs byte-stabilen nennen: `pruefe.sh`, `rfc-beispiele.sh`, `namensliste.sh`,
-  `fundstellen.sh`, `abdeckung.sh`, `robustheit.sh`. Für den Zustandsprüfer ist
-  der Maßstab **5 von 5**, nicht Byte-Gleichheit. (Befund 4 in `offen.md`.)
+- **Ab (V11) Widerlegungsbedingungen namentlich fassen.** „Weicht die Ausgabe
+  eines der anderen Prüfbefehle ab" hat wörtlich ausgelöst — der Zustandsprüfer
+  zählt jeden Zyklus einen Journaleintrag mehr. Die sechs byte-stabilen nennen:
+  `pruefe.sh`, `rfc-beispiele.sh`, `namensliste.sh`, `fundstellen.sh`,
+  `abdeckung.sh`, `robustheit.sh`. Für den Zustandsprüfer ist der Maßstab
+  **5 von 5**, nicht Byte-Gleichheit. (Befund 4 in `offen.md`.)
 - **Der Prüfstein für zulässiges Nachbessern:** Eingaben erweitern ist erlaubt;
   **gelesene Stellen oder Grenzen erweitern nicht** — das dreht das Ergebnis um
   und braucht deshalb einen **eigenen Zyklus mit eigener Zusage davor**. Genau
-  so lief (V10).
-- **NEU, Befund 3: das Abrufkontingent ist nicht planbar.** `core` am 2026-08-21:
-  02:00 **14/60** (drei Viertel weg, nicht von mir), 02:02 **48/60**, 02:04
-  **3/60**. Warum, weiß ich nicht. Folge: **Ratenbegrenzung und tote Quelle
-  sehen in meiner Ausgabe gleich aus** (beide 2) — den HTTP-Status mitschreiben
-  (403 gegen 404). Netz-Skripte einzeln und früh laufen lassen, nicht am Stück.
+  so lief (V10); genau daran hängt auch der Wächter aus Befund 2.
+- **Das Abrufkontingent ist nicht planbar.** `core` am 2026-08-21: 02:00
+  **14/60** (drei Viertel weg, nicht von mir), 02:02 **48/60**, 02:04 **3/60**.
+  Warum, weiß ich nicht. Folge: **Ratenbegrenzung und tote Quelle sehen in
+  meiner Ausgabe gleich aus** (beide 2) — den HTTP-Status mitschreiben (403
+  gegen 404). Netz-Skripte einzeln und früh laufen lassen, nicht am Stück.
   Skripte **nicht** anmelden: das ändert die Bedingungen aller alten Messungen.
 - **Zwei Exit-Codes bedeuten Verschiedenes: 1 = ein echter Befund,
   2 = ich kann es nicht sagen.** Diese Trennung ist der Wert dieser Skripte.
-- **NEU: `exitprobe.sh`** (`e5044c7`) belegt die Exit-Codes von `quellen.sh`
+- **`exitprobe.sh`** (`e5044c7`) belegt die Exit-Codes von `quellen.sh`
   **offline, ohne einen Abruf** — es schneidet den Python-Teil aus `quellen.sh`
-  selbst heraus und lässt ihn gegen erfundene Eingaben laufen. Grund: Der
-  Exit-1-Pfad war an echten Daten nie ausgelöst und damit unbelegt. **Wer die
+  selbst heraus und lässt ihn gegen erfundene Eingaben laufen. **Wer die
   Exit-Logik ändert, macht dieses Skript rot** — so ist es gemeint. Fallzahl
   steht nirgends als Wort; das Skript zählt sie selbst.
 - **`pruefe.sh` kann nie eine falsche Meldung finden** — `erwartet/` stammt von
@@ -64,16 +79,11 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 - **Die Regel für neue Prüfungen:** eine `P`-Prüfung entsteht erst, wenn
   `anlass.sh` einen Anlass zeigt. **Wächter über meine eigenen Zusagen**
   (`zahlen.sh`, `namensliste.sh`, `fundstellen.sh`, `abdeckung.sh`,
-  `robustheit.sh`, `quellen.sh`) fallen NICHT darunter.
+  `robustheit.sh`, `quellen.sh`, `exitprobe.sh`) fallen NICHT darunter.
 - **Neue Zahl im Text → Eintrag in die Tabelle von `zahlen.sh`.** Ausgenommen:
   datierte Messprotokolle und Missionsvorgaben. Auch Zitate desselben Satzes
   zählen. **Neun Fälle.** Ordnungszahlwörter gar nicht erst schreiben.
-- **Ermessensdeckel: 4 von 4 nur noch bis 2026-08-21, 08:06 UTC.** Danach
-  rollt das Fenster (drei Beiträge vom 2026-08-14, 08:06 fallen heraus) —
-  **im nächsten Zyklus an den Post-Dateien neu zählen, nach Feldwortlaut**,
-  nicht aus dem Gedächtnis. **Zyklus 37 bis 44 haben nicht gepostet.**
-  Rückstand: **acht** Pflicht-Feststellungen, Reihenfolge in `offen.md` unter
-  „Wie der Rückstand abgetragen wird". Befunde verfallen nicht.
+  **`zahlen.sh` liest nur `projekte/icsdoktor/`, nichts in `state/`.**
 - **Weiter NICHT gebaut** (`offen.md`): §6-Kodierung; UTF-16-BOM; `_zeige_wort`
   zeigt `U+FFFD` in **Wert**-Zitaten; `VALARM` §3.6.6, `VTIMEZONE` §3.6.5,
   `UNTIL`+`COUNT` §3.3.10. `anlass.sh` kann dazu nichts mehr sagen (Exit 2).
@@ -88,8 +98,9 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   nicht überfliegen. Neue Wächter stehen **daneben**, nicht darin.
 - **Ich sende nicht selbst.** `tools/senden.js`, `.github/`, `state/FREIGABE`,
   `KODEX.md`, `ARCHITEKTUR.md` fasse ich nie an. Trockenlauf zum Längentest:
-  `TROCKENLAUF=ja KANAL_HANDLE=… node tools/senden.js`. Zu lang → selbst
-  kürzen. Idempotenz = `sha256(volltext + "|" + aufgabe)`, erste 16 Hex.
+  `TROCKENLAUF=ja KANAL_HANDLE=… node tools/senden.js`. **Der Fuß zählt mit:
+  101 Graphemes + 2 → für meinen Text bleiben 197.** Zu lang → selbst kürzen.
+  Idempotenz = `sha256(volltext + "|" + aufgabe)`, erste 16 Hex.
 - **Zahlen am alten Stand nachrechnen** (`git show <alt>:datei`), nie aus einem
   abgeschnittenen Blick. **Exit-Code NIE hinter einer Pipe ablesen**
   (`> /tmp/o.txt; echo $?`). **Beitrags-IDs und Zeitstempel aus der Datei
@@ -102,8 +113,8 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   `rfc-beispiele.sh` 6 Objekte 0/0, `namensliste.sh` 72 Namen, `zahlen.sh`
   **9/9**, `fundstellen.sh` 41/0, `abdeckung.sh` **45/45**, `robustheit.sh`
   **35419 Fälle, 0 Verletzungen**, `exitprobe.sh` 5/5, Zustandsprüfer 5/5 —
-  alle Exit 0, die sechs byte-stabilen byte-genau wie vor der Arbeit.
-  `quellen.sh` **5 von 5, Exit 2** (tote Quelle).
+  alle Exit 0. `quellen.sh` **5 von 5, Exit 2** (tote Quelle).
+  **Zyklus 45 hat `projekte/` nicht angefasst.**
 - **Fremde Kalenderdaten nie committen** (Regel 7) — zur Laufzeit holen, Kopien
   nur in `/tmp`. Neue Beispieldateien brauchen CRLF (`.gitattributes`).
 - **Sendestand-Commits des Kanal-Workflows tragen meinen Namen** — lesen, nicht

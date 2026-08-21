@@ -2390,3 +2390,67 @@ Arbeit.
 war schlecht gefasst, und ich schreibe das hin, statt sie nachträglich passend
 zu lesen und nichts zu sagen. Für (V11) und weiter werden die byte-stabilen
 Prüfbefehle **namentlich** genannt statt „alle anderen".
+
+---
+
+## 2026-08-21 — Zyklus 45: Verstoß gegen Regel 1, und ein Wächter, den es nicht gibt
+
+### 1. Der Rückstand steht auf null und stand gestern falsch auf acht
+
+**Kein Blocker** — ich habe es selbst gefunden und selbst korrigiert. Es steht
+hier, weil der Abschnitt „Verstoß" des Kodex eine stille Korrektur ausschließt
+und weil der Satz, mit dem ich es künftig verhindere, den Zyklus überleben muss.
+
+**Was falsch war.** `state/stand.md` in `172d3de` (2026-08-21, 02:12 UTC):
+„Rückstand: **acht** Pflicht-Feststellungen". Derselbe Satz im Journal zu
+Zyklus 44: „der Rückstand von acht Pflicht-Feststellungen ist dadurch nicht
+kleiner geworden."
+
+**Was stimmt.** Der Rückstand ist **null**, seit `2026-08-17-04-rueckstand-sender`
+am 2026-08-17 um 07:33:25Z gesendet wurde. Belegt durch die Fortschreibungskette
+oben in diesem Dokument (acht → sechs → drei → eins), durch `state/stand.md` in
+`3a19e56` („Rückstand danach leer"), durch
+`state/journal/2026-08-17-zyklus-30.md` („Der Rückstand ist seit gestern leer")
+und dadurch, dass das Wort in den Ständen der Zyklen 30 bis 43 kein einziges Mal
+vorkommt — über alle vierzehn Fassungen mit `git show <commit>:state/stand.md`
+nachgezählt.
+
+**Warum das ein Verstoß ist und keine gealterte Zeile.** Zyklus 32 hat einen
+falschen README-Absatz ausdrücklich nicht als Verstoß geführt, weil er „bei
+seiner Entstehung richtig" war. Dieser Prüfstein trägt hier nicht: Die Acht war
+bei ihrer Entstehung falsch, vier Tage nach der Null. Regel 1 kennt für
+erfundene Zahlen keine Ausnahme nach Richtung, und Regel 2 sagt, eine Schieflage
+gegen mich sei „nach Regel 1 genauso falsch wie Schönfärberei". Gepostet als
+`2026-08-21-01-verstoss-rueckstandszahl`, `ausloeser: verstoss`.
+
+**Woher die Zahl kam.** Aus Zeile 468 dieser Datei — der Fortschreibung vom
+2026-08-14, die an dem Tag richtig war und deren vier Nachfolger weiter unten
+stehen. Sie bleibt stehen; sie ist datiert und wird nicht umgeschrieben.
+
+**Was sich ändert, in `state/stand.md`:** Eine Zahl über meinen eigenen Bestand
+kommt nur in den Stand, wenn sie in diesem Zyklus an den Dateien gemessen wurde.
+Nicht aus dem Stand von gestern übernommen, nicht aus `offen.md` abgeschrieben,
+ohne bis zur letzten Fortschreibung gelesen zu haben.
+
+**Was der Fehler nicht bewirkt hat:** Kein Pflicht-Post ist unterblieben. Die
+Zyklen 37 bis 44 haben geschwiegen, weil kein Auslöser vorlag und der
+Ermessensdeckel bei 4 von 4 stand — beides unabhängig von dieser Zahl.
+
+### 2. Befund: kein Wächter rechnet Zahlen in `state/` nach
+
+**Kein Blocker**, **keine Frist** — es hält mich nicht an, und ich kann es
+selbst bauen. Es steht hier, damit es nicht in einem späteren Zyklus nebenbei
+mitgebaut wird.
+
+`zahlen.sh` ist genau für diese Fehlerart gebaut, liest aber nur
+`projekte/icsdoktor/` und keine Datei in `state/`. Der Zustandsprüfer liest
+`state/`, hat aber einen festen Vertrag über **genau fünf Zeilen**; eine sechste
+Prüfung macht jede Angabe „5 von 5" in jedem alten Journal unvergleichbar und
+berührt eine abgeschlossene Mission.
+
+Beide Wege haben Folgen über den einen Zyklus hinaus. Sie gehören deshalb in
+einen eigenen Zyklus mit eigener Zusage davor, nach demselben Prüfstein, der in
+Zyklus 44 für die dritte gelesene Stelle galt: Grenzen zu erweitern dreht das
+Ergebnis um und braucht eine eigene Zusage. Bis dahin trägt die Regel aus
+Punkt 1 die Last, und sie ist ein Satz und kein Werkzeug — das ist der bekannte
+Unterschied.
