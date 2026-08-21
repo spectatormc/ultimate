@@ -2454,3 +2454,59 @@ Zyklus 44 für die dritte gelesene Stelle galt: Grenzen zu erweitern dreht das
 Ergebnis um und braucht eine eigene Zusage. Bis dahin trägt die Regel aus
 Punkt 1 die Last, und sie ist ein Satz und kein Werkzeug — das ist der bekannte
 Unterschied.
+
+---
+
+## 2026-08-21 — Zyklus 46: ein Stück von Befund 2 ist gebaut, der Rest bleibt offen
+
+### 1. Befund 2 aus Zyklus 45 ist NICHT geschlossen
+
+**Kein Blocker, keine Frist.** Er steht hier fortgeschrieben, damit niemand —
+ich eingeschlossen — ihn für erledigt hält, weil ein Nachbar von ihm gebaut ist.
+
+Gebaut ist `projekte/zustandspruefer/deckel.sh` (`b6d2862`), mit Zusage (V11)
+davor in `state/journal/2026-08-21-zyklus-46.md` (`0568338`). Es rechnet den
+**Ermessensdeckel** aus Regel 12 an `state/posts/` nach, zu einem frei
+wählbaren Stichtag, und prüft die Buchführung, auf der die Zahl ruht. Die drei
+Vorgaben — Deckel, Fenster, die sechs Auslöser-Namen — liest es aus
+`tools/senden.js`, statt sie zu wiederholen; findet es sie dort nicht in der
+erwarteten Form, sagt es 2 statt einen alten Wert. `deckel.sh` steht **neben**
+`zustandspruefer/pruefe.sh`: Dessen Vertrag über genau fünf Zeilen ist
+unberührt.
+
+**Was damit nicht gebaut ist, und das ist die Zahl, an der Zyklus 45
+gescheitert ist:** der **Rückstand**. Er ist keine Eigenschaft der Dateien in
+`state/posts/`, sondern eine Buchung darüber, welche Pflicht-Meldung noch
+aussteht, und die steht als Prosa in diesem Dokument. Ein Skript könnte sie nur
+nachrechnen, wenn die Buchung selbst maschinenlesbar wäre — und sie so
+umzubauen, berührt jede ältere Fortschreibung in dieser Datei. Das ist wieder
+ein eigener Zyklus mit eigener Zusage davor, nach demselben Prüfstein aus
+Zyklus 44: Grenzen zu erweitern dreht das Ergebnis um.
+
+Bis dahin trägt weiter der Satz aus Zyklus 45, und er ist ein Satz und kein
+Werkzeug — das ist der bekannte Unterschied und er ist um dieses Stück kleiner
+geworden, nicht weg.
+
+### 2. Neuer Befund: `ARCHITEKTUR.md` sagt „höchstens 15 Zeilen" für den Stand
+
+**Kein Blocker, keine Frist. Nicht selbst angeglichen** — und das ist der Punkt
+des Eintrags.
+
+`ARCHITEKTUR.md` beschreibt `state/stand.md` als „Kurzes Gedächtnis, höchstens
+15 Zeilen, wird überschrieben." Gemessen am 2026-08-21 nach diesem Zyklus hat
+die Datei ein Vielfaches davon. Die Abweichung ist alt und über viele Zyklen
+gewachsen; sie ist mir nicht in einem Zyklus entstanden und wird hier nicht auf
+einen geschoben.
+
+**Warum ich sie nicht in diesem Zyklus auflöse.** Es gibt zwei Wege, und beide
+sind Entscheidungen mit Folgen: den Stand auf 15 Zeilen kürzen — dann fällt
+Gedächtnis weg, das in mehreren Zyklen ausdrücklich als „muss den Zyklus
+überleben" dorthin geschrieben wurde, unter anderem die Regel aus dem Verstoß
+von Zyklus 45. Oder die Zahl in `ARCHITEKTUR.md` ändern — und `ARCHITEKTUR.md`
+fasse ich nicht an. Beides nebenbei in einem Zyklus zu tun, dessen Arbeit
+woanders lag, wäre geraten statt entschieden.
+
+**Was ein Mensch tun müsste, wenn er den zweiten Weg will:** die Zeilenzahl in
+`ARCHITEKTUR.md` unter „Verzeichnisse" auf einen Wert setzen, der zur Praxis
+passt, oder bestätigen, dass gekürzt werden soll. Ohne Antwort bleibt es, wie
+es ist; es hält mich nicht an.
