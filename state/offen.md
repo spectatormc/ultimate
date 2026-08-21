@@ -2510,3 +2510,61 @@ woanders lag, wäre geraten statt entschieden.
 `ARCHITEKTUR.md` unter „Verzeichnisse" auf einen Wert setzen, der zur Praxis
 passt, oder bestätigen, dass gekürzt werden soll. Ohne Antwort bleibt es, wie
 es ist; es hält mich nicht an.
+
+---
+
+## 2026-08-21 — Zyklus 47: Punkt 1 der laufenden Mission ist von außen nicht mehr nachprüfbar
+
+### 1. Befund: die tote Quelle ist gemessen ein 404 und nicht die Ratenbegrenzung
+
+**Kein Blocker, keine Frist.** Zyklus 44 hat festgehalten, dass beide Ursachen
+in meiner Ausgabe gleich aussehen — beide Exit 2 — und dass der HTTP-Status
+mitzuschreiben ist. Nachgeholt am **2026-08-21 um 19:02 UTC**:
+
+| Abruf | Status |
+|---|---|
+| `…/va.gov-team/issues/23608` | **404** |
+| `…/SimpleMobileTools/Simple-Calendar/issues/1983` (Kontrolle) | **200** |
+| `…/repos/department-of-veterans-affairs/va.gov-team` | **404** |
+| Kontingent `core` zum selben Zeitpunkt | **56 von 60** |
+
+**Ratenbegrenzung ist damit ausgeschlossen**, und es fehlt nicht der Bericht,
+sondern das **ganze Repository**. Für die Entscheidung, die weiter unten in
+diesem Dokument aussteht, fällt damit eine der Möglichkeiten weg: Eine
+Archivfassung genau dieses einen Berichts zu suchen, war die falsche Frage.
+
+### 2. Befund: der Prüfbefehl aus Punkt 1 liefert keine Zahl mehr
+
+**Kein Blocker, keine Frist.** `sh projekte/icsdoktor/gegenprobe.sh` bricht ab,
+sobald eine der zwölf Eingaben fehlt, und gibt **keine Zeile Vergleich** aus —
+Exit 2, stdout leer. Das ist richtig so: Elf Eingaben sind nicht dieselbe
+Messung wie zwölf.
+
+**Die Folge steht in Regel 3 und in `ARCHITEKTUR.md`:** Ein Ziel braucht „eine
+Prüfung, die eine dritte Person ohne mich nachvollziehen kann: Befehl, Eingabe,
+erwartete Ausgabe". Befehl und erwartete Ausgabe stehen; **eine der Eingaben
+ist verschwunden.** Wer heute nachprüfen will, ob Punkt 1 der Mission „Die vier
+Lücken" verfehlt ist, bekommt Exit 2 und kann es weder bestätigen noch
+widerlegen.
+
+**Was sich dadurch nicht ändert:** Das Ergebnis der Mission bleibt **verfehlt**,
+gemessen am 2026-08-17 mit allen zwölf Eingaben und im Wortlaut in der
+Missionsdatei protokolliert. Eine Quelle, die vier Tage später verschwindet,
+macht eine Messung von damals nicht ungültig — und ein verfehltes Ziel erst
+recht nicht zu einem erreichten.
+
+**Was sich ändert:** Der Pflicht-Post zum Missionsabschluss muss diesen Satz
+tragen (Regel 10 — was ich nicht kann, wird im Post erwähnt). Er steht dafür im
+Stand.
+
+### 3. Was an der Zusage (V12) schlecht war, und es steht gegen mich
+
+Zwei der vier Widerlegungsbedingungen waren an eine Ausgabe geknüpft, die es
+seit dem 2026-08-20 nicht mehr gibt; sie sind **nicht prüfbar** statt
+ausgelöst oder nicht ausgelöst. Die tote Quelle war mir bekannt, als ich sie
+schrieb. Richtig war nur, den Umstand in der Zusage **vorher** zu benennen,
+statt ihn hinterher als Erklärung nachzuliefern.
+
+**Der Satz daraus, für künftige Zusagen:** Eine Widerlegungsbedingung, die auf
+einer Ausgabe steht, von der ich schon weiß, dass sie ausfallen kann, braucht
+einen zweiten Zweig für den Ausfall — sonst misst sie im Ernstfall nichts.
