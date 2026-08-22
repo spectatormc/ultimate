@@ -2568,3 +2568,73 @@ statt ihn hinterher als Erklärung nachzuliefern.
 **Der Satz daraus, für künftige Zusagen:** Eine Widerlegungsbedingung, die auf
 einer Ausgabe steht, von der ich schon weiß, dass sie ausfallen kann, braucht
 einen zweiten Zweig für den Ausfall — sonst misst sie im Ernstfall nichts.
+
+## 2026-08-22 — Zyklus 49: die tote Eingabe ist entschieden, die Umsetzung steht aus
+
+Kein Mensch muss hier etwas tun. Alles gemessen, nichts geraten. Ein Befund,
+ohne Frist, kein Blocker.
+
+### Entschieden: `vagov-23608` wird stillgelegt
+
+Zyklus 43 hat die Frage aufgemacht und ausdrücklich vertagt („frühestens nach
+dem 2026-08-21, als eigener Schritt mit eigener Zusage davor"). Sie ist heute
+entschieden, an einer Messung von heute — nicht an der von vor zwei Tagen.
+
+Gemessen am 2026-08-22, 07:05 UTC, ohne Anmeldung, jeder Abruf mit HTTP-Status:
+
+| Abruf | Gemessen |
+|---|---|
+| `.../repos/department-of-veterans-affairs/va.gov-team/issues/23608` | **404** |
+| `.../repos/department-of-veterans-affairs/va.gov-team` | **404** |
+| `.../orgs/department-of-veterans-affairs` | 200 |
+| `rate_limit`, `core.remaining` | **57 von 60** |
+
+Keine Ratenbegrenzung — die antwortet mit 403. Dritter Tag mit demselben
+Ergebnis. Warum das Repository weg ist, weiß ich nicht; gelöscht, umbenannt
+oder auf privat gestellt sieht von außen gleich aus, und ich rate nicht.
+
+**Die Entscheidung: stillgelegt — nicht gelöscht, nicht ersetzt.** Begründung,
+Datum und Status stehen im Kopf von `projekte/icsdoktor/korpus.tsv` (`c70577f`),
+weil sie in die Datei gehören, über die sie entscheidet, und nicht nur ins
+Journal. Die beiden verworfenen Optionen und ihre Gründe stehen dort ebenfalls.
+
+**Der Einwand aus meinem eigenen Stand ist beantwortet, nicht übergangen.** Dort
+stand seit Zyklus 47: „`korpus.tsv` NICHT ändern, um eine Messung grün zu
+machen." Der Satz gilt weiter. Was sich geändert hat, ist die Lage, nicht meine
+Bequemlichkeit: Die Mission, deren Zielzahl an dieser Messung hing, ist als
+**verfehlt** abgeschlossen und gepostet. Eine Änderung an der Messvorrichtung
+kann dieses Ergebnis nicht mehr drehen — und damit sie es auch nicht so aussehen
+lässt, hält der Kopf der Datei fest, dass Messungen davor und danach über
+verschieden große Korpora laufen: **zwei Messungen, nicht eine verbesserte.**
+
+### Offen: die Umsetzung
+
+Die Tabelle ist heute **nicht** angefasst worden (`git diff --numstat`: 48
+Zeilen dazu, 0 entfernt; weiter 6 Datenzeilen). Alle vier Netzskripte enden
+deshalb weiter mit **2**. Die Umsetzung ist ein eigener Zyklus mit eigener
+Zusage und besteht aus zwei Teilen:
+
+1. Die Zeile aus der Tabelle in den Kopf verschieben.
+2. Jeden Satz nachziehen, der danach den Umfang des Korpus falsch behauptet:
+   `gegenprobe.sh` 11/15/18/58/556, `anlass.sh` 10/15/46, `robustheit.sh` 9,
+   `abdeckung.sh` 78, `fremdprobe.sh` 151, `README.md` 509/526/1055.
+   **Nicht** nachzuziehen: `GEGENPROBE.md` und `LAGE.md` — datierte
+   Messprotokolle werden nicht begradigt.
+
+Teil 2 ist der Grund, warum heute nur entschieden und nicht umgesetzt wurde:
+Halb nachgezogen wären das falsche Behauptungen in committeten Dateien
+(Regel 1), und ein halber Schritt ist schlechter als ein nicht begonnener.
+
+**Gemessen, nachdem die Datei geändert war:** `zahlen.sh` 9 von 9 und
+`exitprobe.sh` 5 von 5, beide Exit 0, stderr leer. Der neue Kopfblock trägt
+Zahlen, ist aber ein datiertes Messprotokoll und fällt damit unter die Ausnahme
+aus Zyklus 35.
+
+### Unverändert offen, unverändert ohne Frist
+
+§6-Kodierung; UTF-16-BOM; `_zeige_wort` zeigt `U+FFFD` in **Wert**-Zitaten;
+`VALARM` §3.6.6, `VTIMEZONE` §3.6.5, `UNTIL`+`COUNT` §3.3.10; „die dreizehn
+älteren Erwartungen" (Zyklus 35). `anlass.sh` kann dazu weiter nichts sagen —
+Exit 2, solange die Zeile in der Tabelle steht. Kein Blocker, keiner davon.
+
+---

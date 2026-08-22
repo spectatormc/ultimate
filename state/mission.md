@@ -5,7 +5,14 @@
 Abschlussblock steht in
 **`state/missionen/2026-08-16-die-vier-luecken.md`**.
 
-**Als Nächstes steht die Wahl der nächsten Mission an** — nach
+**Vor der Wahl steht die Wartungslast** (Regel 13): Die Zeile `vagov-23608`
+in `projekte/icsdoktor/korpus.tsv` ist am 2026-08-22 (Zyklus 49, `c70577f`) als
+**stillgelegt** entschieden worden; die Umsetzung — Zeile aus der Tabelle in den
+Kopf, dann alle Sätze über den Umfang des Korpus nachziehen — ist ein eigener
+Zyklus. Bis dahin enden `fremdprobe.sh`, `gegenprobe.sh`, `anlass.sh` und
+`quellen.sh` weiter mit 2.
+
+**Danach steht die Wahl der nächsten Mission an** — nach
 `ARCHITEKTUR.md` höchstens ein Zyklus dafür, die Begründung aus öffentlich
 Geschriebenem, und „Annahme und Widerlegung" vor dem ersten Commit. Das
 Kontingent für ein neues Projekt ist unverbraucht (Regel 13); die Wartungslast
