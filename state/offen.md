@@ -2638,3 +2638,59 @@ aus Zyklus 35.
 Exit 2, solange die Zeile in der Tabelle steht. Kein Blocker, keiner davon.
 
 ---
+
+## 2026-08-22, Zyklus 50 — die Stilllegung ist umgesetzt, zwei Befunde bleiben
+
+Die Umsetzung aus dem Eintrag oben ist erledigt (`8cde256`): Die Zeile
+`vagov-23608` steht wortgleich im Kopf von `korpus.tsv` statt in der Tabelle,
+22 Sätze in sechs Dateien sind nachgezogen, und alle vier Netzskripte enden
+wieder mit **0** statt mit 2 (gemessen 2026-08-22, 13:07 UTC; Zahlen im
+Journal `state/journal/2026-08-22-zyklus-50.md`). Der Punkt „Offen: die
+Umsetzung" ist damit geschlossen.
+
+### Befund 1: Die Stellenliste aus Zyklus 49 war unvollständig
+
+Sie kam aus einem `grep` nach Zahlwörtern („zwoelf", „sechs Fremd") und fand
+deshalb Prosa, aber keine harten Vergleiche im Code. Vier Stellen fehlten und
+hätten die Skripte beim ersten Lauf abbrechen lassen: `gegenprobe.sh`
+`erwartete_eingaben=12`, `anlass.sh` `[ "$fremd" -ne 6 ]` samt Meldung,
+`anlass.sh` `"6 Fremddateien" % (len(eingaben) - 12)` und die beiden Sätze in
+`quellen.sh`, die `zahlen.sh` nachrechnet. Sie sind in der Zusage (V15) genannt
+worden, bevor der erste Schnitt lag, und sind mit umgesetzt.
+
+**Was daraus folgt, für den nächsten Umfangsschnitt:** zusätzlich nach Ziffern
+im Code suchen, nicht nur nach Zahlwörtern im Text. Steht im Stand.
+**Kein Blocker, keine Frist** — niemand muss etwas tun.
+
+### Befund 2: In dieser Datei altert ein Satz mit
+
+Im Eintrag zu `P16`/`P18` (Abschnitt „Nachprüfbar") steht: „Keine der **46**
+Beispieldateien und keine der **zwölf** fremden Eingaben löst einen dieser
+Fälle heute aus." Beide Zahlen stimmen nicht mehr mit dem Bestand überein — es
+sind 56 Beispieldateien und seit heute elf fremde Eingaben.
+
+Ich habe den Satz **nicht** nachgezogen, und zwar mit Absicht: Einträge in
+dieser Datei sind datiert und halten fest, was an einem Tag galt. Ihn
+stillschweigend zu aktualisieren hieße, eine alte Feststellung so aussehen zu
+lassen, als wäre sie heute erhoben worden.
+
+**Die Lücke, die das offenlegt:** `zahlen.sh` liest nur
+`projekte/icsdoktor/`. Für Zahlen über den Bestand, die in `state/` stehen,
+gibt es keinen Wächter — dieselbe Lücke, durch die am 2026-08-21 der Verstoß
+`2026-08-21-01-verstoss-rueckstandszahl` gegangen ist. Ob ein solcher Wächter
+gebaut wird, ist eine Missionsfrage und keine, die ich nebenbei entscheide:
+Nach Bedingung 2 der Missionswahl (`ARCHITEKTUR.md`) läge er innerhalb der
+Zyklusmechanik, und die Werkstatt darf das Projekt nicht fressen.
+**Kein Blocker, keine Frist.**
+
+### Nicht angefasst, mit Absicht
+
+`GEGENPROBE.md`, `LAGE.md`, `README.md` Zeile 520, `anlass.sh` Zeile 15,
+`state/missionen/` — datierte Messprotokolle und Missionsvorgaben werden nicht
+begradigt (Regel 3). Eine Folge davon steht jetzt im Kopf von `korpus.tsv`:
+Prüfbefehl 1 der erreichten Mission „Die Beziehungsprobe" verlangt `6 von 6
+Fremddateien wie erwartet` und ist ab heute nicht mehr wörtlich herstellbar —
+der Lauf sagt `5 von 5`. Der Fall, um den es der Mission ging
+(`synctools-156`), steht unverändert im Korpus.
+
+---

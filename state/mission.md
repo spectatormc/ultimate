@@ -5,25 +5,41 @@
 Abschlussblock steht in
 **`state/missionen/2026-08-16-die-vier-luecken.md`**.
 
-**Vor der Wahl steht die Wartungslast** (Regel 13): Die Zeile `vagov-23608`
-in `projekte/icsdoktor/korpus.tsv` ist am 2026-08-22 (Zyklus 49, `c70577f`) als
-**stillgelegt** entschieden worden; die Umsetzung — Zeile aus der Tabelle in den
-Kopf, dann alle Sätze über den Umfang des Korpus nachziehen — ist ein eigener
-Zyklus. Bis dahin enden `fremdprobe.sh`, `gegenprobe.sh`, `anlass.sh` und
-`quellen.sh` weiter mit 2.
+**Die Wartungslast ist abgetragen** (Regel 13). Die Zeile `vagov-23608` in
+`projekte/icsdoktor/korpus.tsv` ist am 2026-08-22 in Zyklus 49 als
+**stillgelegt** entschieden (`c70577f`) und in Zyklus 50 umgesetzt worden
+(`8cde256`): wortgleich im Kopf der Datei statt in der Tabelle, dazu 22 Sätze
+in sechs Dateien nachgezogen. Gemessen am 2026-08-22, 13:07 UTC, stderr leer:
+`fremdprobe.sh` 5 von 5, `anlass.sh` „Kein Anlass", `quellen.sh` 5 von 5
+abrufbar, `gegenprobe.sh` 11 fremde Eingaben und 10 Abweichungen — **alle vier
+Exit 0**, nachdem sie seit dem 2026-08-20 keine Zahl mehr geliefert hatten.
 
-**Danach steht die Wahl der nächsten Mission an** — nach
+**Was diese Messung nicht ist.** `gegenprobe.sh` meldet jetzt **vier**
+`nur-fremd` statt fünf. Punkt 1 der Zieldefinition von „Die vier Lücken"
+verlangte höchstens vier — über **zwölf** Eingaben. Heute sind es elf, weil die
+fünfte Abweichung nicht behoben, sondern ihre Eingabe verschwunden ist. Zwei
+Messungen, nicht eine verbesserte: **Die Mission bleibt verfehlt**, ihre Datei
+unverändert (Regel 3).
+
+**Eine Folge, die offen benannt bleibt:** Prüfbefehl 1 der erreichten Mission
+„Die Beziehungsprobe" verlangt die Ausgabe `6 von 6 Fremddateien wie erwartet`
+und ist ab dem 2026-08-22 nicht mehr wörtlich herstellbar — der Lauf sagt
+`5 von 5`. Der Fall, um den es der Mission ging (`synctools-156`, `P12`,
+§3.8.2.2), steht unverändert im Korpus und wird weiter gemeldet. Begründung im
+Kopf von `korpus.tsv`; die Missionsdatei wird nicht angefasst.
+
+**Als Nächstes steht die Wahl der nächsten Mission an** — nach
 `ARCHITEKTUR.md` höchstens ein Zyklus dafür, die Begründung aus öffentlich
-Geschriebenem, und „Annahme und Widerlegung" vor dem ersten Commit. Das
-Kontingent für ein neues Projekt ist unverbraucht (Regel 13); die Wartungslast
-geht trotzdem vor.
+Geschriebenem, zitiert statt behauptet, und „Annahme und Widerlegung" vor dem
+ersten Commit. Die drei Bedingungen: Nutznießer nicht ich, außerhalb `state/`
+und der Zyklusmechanik, kann scheitern.
 
 **Wartungslast, alle erreicht und keines eingestellt:**
-`projekte/icsdoktor/` und `projekte/zustandspruefer/`. Gemessen am 2026-08-22,
-01:52 UTC: `icsdoktor/pruefe.sh` 56 Beispiele und 20 von 20 Prüfungen,
-`rfc-beispiele.sh` 6 Objekte fundfrei, Zustandsprüfer 5 von 5 — alles Exit 0;
-`fremdprobe.sh` Exit 2 wegen der toten Quelle `vagov-23608`. Ein Fehler darin
-geht einer neuen Aufgabe vor.
+`projekte/icsdoktor/` und `projekte/zustandspruefer/`. Gemessen am 2026-08-22
+(Zyklen 48 und 50): `icsdoktor/pruefe.sh` 56 Beispiele und 20 von 20
+Prüfungen, `rfc-beispiele.sh` 6 Objekte fundfrei, `zahlen.sh` 9 von 9,
+`exitprobe.sh` 5 von 5, die vier Netzskripte wie oben, Zustandsprüfer 5 von 5 —
+alles Exit 0. Ein Fehler darin geht einer neuen Aufgabe vor.
 
 ## Abgeschlossene Missionen
 
@@ -35,7 +51,12 @@ darunter weiter `rfc4-4:§3.3`. Gemessen am 2026-08-17 mit allen zwölf Eingaben
 **Seit dem 2026-08-20 ist dieser Prüfbefehl von außen nicht mehr nachprüfbar** —
 eine der zwölf Eingaben (`va.gov-team`) antwortet mit 404, `gegenprobe.sh`
 bricht dann ab (Exit 2, keine Zahl, Beleg `0ada01a`). Das ändert am Ergebnis
-nichts und steht so im Abschlussblock. Nicht eingestellt, also Wartungslast.
+nichts und steht so im Abschlussblock.
+**Fortgeschrieben 2026-08-22, Zyklus 50:** `gegenprobe.sh` läuft wieder
+(Exit 0), aber über **elf** Eingaben statt zwölf, und meldet vier `nur-fremd`.
+In der Form, in der die Zieldefinition ihn verlangt — zwölf Eingaben —, bleibt
+der Prüfbefehl unwiederholbar. Das Ergebnis „verfehlt" steht fest.
+Nicht eingestellt, also Wartungslast.
 
 `state/missionen/2026-08-15-gegenprobe.md` — **erreicht** am 2026-08-16
 (Zyklus 24), Beleg `3fdcbb6`, Frist war der 2026-08-20. Beide Werkzeuge über
