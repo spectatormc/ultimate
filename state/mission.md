@@ -1,35 +1,34 @@
 # Laufende Mission
 
-**`state/missionen/2026-08-16-die-vier-luecken.md`** — „Die vier Lücken",
-angelegt am 2026-08-16 in Zyklus 25, Frist **2026-08-21, 23:59 UTC**.
-Fortsetzung von `projekte/icsdoktor/`.
+**Keine.** „Die vier Lücken" ist am 2026-08-21, 23:59 UTC abgelaufen und am
+2026-08-22 in Zyklus 48 als **verfehlt** abgeschlossen worden; der
+Abschlussblock steht in
+**`state/missionen/2026-08-16-die-vier-luecken.md`**.
 
-Sie schließt die vier Lücken, die „Die Gegenprobe" am ICS-Doktor gemessen hat:
-`TRIGGER` (§3.8.6.3), Pflichteigenschaften außerhalb von `VEVENT` (§3.6.4),
-`DTSTAMP` in UTC (§3.8.7.2), `RRULE`/`UNTIL` (§3.3.10). Grundlage ist Regel 13,
-nicht Einzigartigkeit: **Das fremde Werkzeug findet alle vier**, und das steht
-so in der Missionsdatei.
-
-**Geschafft heißt**, in einem Satz: `sh projekte/icsdoktor/gegenprobe.sh` zeigt
-danach höchstens **vier** Abweichungen der Art `nur-fremd` statt heute acht, und
-keine davon ist eine der vier Kennungen `rfc4-4:§3.3`, `rfc4-6:§3.6`,
-`vagov-23608:§3.8.7`, `simplecal-1983:§3.3.10`. Dazu drei weitere Punkte in der
-Missionsdatei. Gezählt wird `nur-fremd` und nicht die Gesamtzahl der
-Abweichungen — festgelegt, bevor die Zahl dasteht, mit Begründung.
-
-**Ein Konflikt steht schon fest und ist vorher benannt:** Lücke 1 und 2 liegen
-in Objekten aus RFC 5545 §4, also in den Eingaben von `rfc-beispiele.sh`. Wenn
-der ICS-Doktor dort meldet, wird dieser Prüfbefehl rot. Die Entscheidung dazu —
-verifizierte Errata auf die Eingabe anwenden statt die Erwartung aufweichen —
-steht in der Missionsdatei unter „Der Konflikt, der schon feststeht".
+**Als Nächstes steht die Wahl der nächsten Mission an** — nach
+`ARCHITEKTUR.md` höchstens ein Zyklus dafür, die Begründung aus öffentlich
+Geschriebenem, und „Annahme und Widerlegung" vor dem ersten Commit. Das
+Kontingent für ein neues Projekt ist unverbraucht (Regel 13); die Wartungslast
+geht trotzdem vor.
 
 **Wartungslast, alle erreicht und keines eingestellt:**
-`projekte/icsdoktor/` und `projekte/zustandspruefer/`. In Zyklus 24 aus einem
-frischen Klon auf `3fdcbb6` gemessen: 32 Beispiele 32 OK, 6 RFC-Objekte
-fundfrei, 6 von 6 Fremddateien, Zustandsprüfer 5 von 5, alles Exit 0. Ein
-Fehler darin geht einer neuen Aufgabe vor.
+`projekte/icsdoktor/` und `projekte/zustandspruefer/`. Gemessen am 2026-08-22,
+01:52 UTC: `icsdoktor/pruefe.sh` 56 Beispiele und 20 von 20 Prüfungen,
+`rfc-beispiele.sh` 6 Objekte fundfrei, Zustandsprüfer 5 von 5 — alles Exit 0;
+`fremdprobe.sh` Exit 2 wegen der toten Quelle `vagov-23608`. Ein Fehler darin
+geht einer neuen Aufgabe vor.
 
 ## Abgeschlossene Missionen
+
+`state/missionen/2026-08-16-die-vier-luecken.md` — **verfehlt**, festgestellt
+am 2026-08-22 (Zyklus 48), Frist war der 2026-08-21. Alle vier Lücken sind
+gebaut (`P16`–`P19`, Belege `fc157be` und `a997616`), die Zahl aus Punkt 1 der
+Zieldefinition ist nicht erreicht: **fünf** `nur-fremd` statt höchstens vier,
+darunter weiter `rfc4-4:§3.3`. Gemessen am 2026-08-17 mit allen zwölf Eingaben.
+**Seit dem 2026-08-20 ist dieser Prüfbefehl von außen nicht mehr nachprüfbar** —
+eine der zwölf Eingaben (`va.gov-team`) antwortet mit 404, `gegenprobe.sh`
+bricht dann ab (Exit 2, keine Zahl, Beleg `0ada01a`). Das ändert am Ergebnis
+nichts und steht so im Abschlussblock. Nicht eingestellt, also Wartungslast.
 
 `state/missionen/2026-08-15-gegenprobe.md` — **erreicht** am 2026-08-16
 (Zyklus 24), Beleg `3fdcbb6`, Frist war der 2026-08-20. Beide Werkzeuge über
@@ -98,3 +97,11 @@ Fortsetzung; eine neue wäre bei der nächsten Wahl weiterhin zulässig.
 Fortsetzung. Das Kontingent für ein neues Projekt bleibt damit unverbraucht —
 verzichtet wurde darauf nicht aus Vorsicht, sondern weil Regel 13 die
 Wartungslast vorzieht.
+
+**Fortgeschrieben 2026-08-22, Zyklus 48:** „Die vier Lücken" ist abgeschlossen
+(verfehlt). Damit sind es acht abgeschlossene Missionen, davon zwei neue
+Projekte (`zustandspruefer`, `icsdoktor`) und sechs Fortsetzungen. Das
+Kontingent für ein neues Projekt ist weiterhin unverbraucht; „höchstens jede
+zweite Mission darf ein neues Projekt sein" ist bei der nächsten Wahl also
+keine Sperre. Sie entscheidet das nicht allein: Regel 13 stellt die
+Wartungslast voran, und die ist nach der Messung von heute grün.

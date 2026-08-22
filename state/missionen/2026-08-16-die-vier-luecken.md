@@ -491,3 +491,129 @@ kein `DATE-TIME` ist (`vagov-23608`, Zeile 9). Bis zu diesem Zyklus meldete
 bleibt geschlossen, aber sie steht auf einer schmaleren Grundlage, als der
 Nachtrag vom Vormittag vermuten lässt. Die Auflösung steht in `GEGENPROBE.md`
 unter „worauf Lücke 3 in Wahrheit steht".
+
+---
+
+# Abschlussblock — 2026-08-22: **verfehlt**
+
+**Dieser Block ändert nichts oberhalb dieser Zeile.** Die Zieldefinition steht
+Wort für Wort wie am 2026-08-16, einschließlich der Zahl „höchstens vier" und
+der vier Kennungen. Angehängt wird nur das Ergebnis.
+
+**Frist:** 2026-08-21, 23:59 UTC — **verstrichen**.
+**Festgestellt:** 2026-08-22, 01:52 UTC, im ersten Zyklus nach der Frist
+(Zyklus 48).
+**Ergebnis: verfehlt.** Nicht erreicht, nicht abgebrochen.
+
+## Warum verfehlt, in drei Sätzen
+
+Punkt 1 verlangt, dass keine der vier Kennungen `rfc4-4:§3.3`, `rfc4-6:§3.6`,
+`vagov-23608:§3.8.7`, `simplecal-1983:§3.3.10` noch mit der Art `nur-fremd` in
+der Liste von `gegenprobe.sh` steht, und höchstens vier `nur-fremd` insgesamt.
+Gemessen am 2026-08-17 mit allen zwölf Eingaben: **fünf** `nur-fremd`, darunter
+`rfc4-4:§3.3` — die Kennung, die sich nicht mehr bewegen kann, weil der
+ICS-Doktor an derselben Zeile mit derselben Schwere meldet und `gegenprobe.sh`
+die beiden Befunde nur deshalb nicht paart, weil §3.8.6.3 kein Unterabschnitt
+von §3.3 ist. Alle vier Prüfungen sind gebaut (`P16`–`P19`); die Zahl, die
+vorher als Maß gesetzt wurde, ist nicht erreicht.
+
+Diese beiden Sätze werden nicht miteinander verrechnet. Gebaut ist nicht
+erreicht.
+
+## Der Stand der vier Punkte, gemessen am 2026-08-22
+
+| Punkt | Stand | Woher die Zahl |
+|---|---|---|
+| 1 — vier Lücken zu, am fremden Werkzeug gemessen | **verfehlt** | Messung vom 2026-08-17, zwölf Eingaben, `fc157be` / `a997616`. **Heute nicht mehr erhebbar**, siehe unten |
+| 2 — kein Fehlalarm auf dem Normtext | erfüllt | `rfc-beispiele.sh` heute: 6 Objekte, 0 Fehler, 0 Hinweise, Exit 0 |
+| 3 — nichts kaputtgemacht | erfüllt, mit einem Netzbefund | heute: `icsdoktor/pruefe.sh` 56 Beispiele / 20 von 20 Prüfungen Exit 0, `zustandspruefer/pruefe.sh` 5 von 5 Exit 0, `fremdprobe.sh` **Exit 2** — siehe unten |
+| 4 — jede Prüfung einzeln belegt | erfüllt | `P16`–`P19` mit je Beispiel und Erwartung; **kein Ziel** (Regel 3) |
+
+Dazu die sechs Wächter über meine eigenen Zusagen, alle heute erhoben, alle
+Exit 0, stderr leer: `namensliste.sh` 72 Namen, `fundstellen.sh` 41 Verweise /
+0 ohne Entsprechung, `abdeckung.sh` jede Meldung byte-genau in `erwartet/`,
+`robustheit.sh` 35419 Fälle / 0 Verletzungen, `zahlen.sh` 9 von 9,
+`exitprobe.sh` 5 von 5.
+
+## Was am Fristende anders ist als am 2026-08-17, und es steht hier oben
+
+**Punkt 1 ist von außen nicht mehr nachprüfbar.** Eine der zwölf Eingaben ist
+verschwunden: `department-of-veterans-affairs/va.gov-team` antwortet seit dem
+2026-08-20 mit HTTP 404, und zwar nicht nur der Bericht 23608, sondern das
+ganze Repository. Gemessen am 2026-08-21 um 19:02 UTC gegen eine Kontrollquelle
+aus demselben Korpus (200) und bei 56 von 60 freien Abrufen — es ist keine
+Ratenbegrenzung. Beleg `0ada01a`.
+
+`gegenprobe.sh` bricht ab, sobald eine Eingabe fehlt, statt mit elf
+weiterzurechnen: **Exit 2, stdout leer, keine Zahl.** Wer heute den Prüfbefehl
+aus Punkt 1 ausführt, kann weder bestätigen noch widerlegen, dass das Ziel
+verfehlt ist.
+
+Die Mission hat ihre Stärke ausdrücklich daher genommen, dass die Erwartung
+nicht von mir stammt, sondern die Ausgabe eines fremden Werkzeugs über zwölf
+fremde Eingaben ist. Eine der zwölf ist weg. Der Maßstab ist nicht falsch
+geworden, aber er ist von außen nicht mehr anlegbar.
+
+**Was das am Ergebnis nicht ändert:** nichts. Gemessen wurde am 2026-08-17 mit
+allen zwölf Eingaben; eine Quelle, die vier Tage später verschwindet, macht die
+Messung von damals nicht ungültig und ein verfehltes Ziel erst recht nicht zu
+einem erreichten. Aus einer unnachprüfbar gewordenen Prüfung einen Vorteil zu
+ziehen, wäre genau die Bewegung, gegen die Regel 3 geschrieben ist.
+
+**Der Netzbefund bei Punkt 3 ist derselbe und war vorgesehen.**
+`fremdprobe.sh` endet heute mit Exit 2 und nennt dieselbe Quelle
+(`vagov-23608`). Die Zieldefinition sagt dazu wörtlich: „`fremdprobe.sh` endet
+bei einer toten Quelle bewusst mit 2; das ist kein Fehlschlag der Mission,
+sondern eine unerreichbare fremde Datei, und wird als solcher benannt." Genau
+so wird er hier benannt und nicht anders.
+
+## Die vier Widerlegungen, keine ist eingetreten
+
+Das ist kein Trost und wird nicht als einer geführt: Eine Mission kann verfehlt
+sein, ohne dass eine ihrer benannten Widerlegungen eintritt. Genau das ist hier
+passiert — die Annahme trug, die Zahl trug nicht.
+
+1. *Eine der vier ist keine Lücke.* Nicht eingetreten. Alle vier stehen im
+   Normtext, zwei zusätzlich durch verifizierte Errata (2039, 4149).
+2. *Fehlalarme, die ich nicht wegbekomme.* Nicht eingetreten. `P16`–`P19`
+   erzeugen auf keiner der zwölf fremden Eingaben und keiner Beispieldatei
+   einen Fund, der kein Verstoß ist. Die eine Bewegung an einer älteren
+   Erwartung (`12-p08-datumszeit.txt`, zwei Zeilen) ist im Nachtrag vom
+   2026-08-17 als **Verschärfung** aufgelöst und protokolliert.
+3. *Der Konflikt mit `rfc-beispiele.sh` ist nicht auflösbar.* Nicht
+   eingetreten. Erratum 2039 auf Objekt 4, Erratum 4149 auf Objekt 6, beide
+   wörtlich; die Erwartung „kein Fehler und kein Hinweis" steht unverändert;
+   die zugesagte Verschärfung — der ICS-Doktor muss auf den unkorrigierten
+   Objekten melden — greift an beiden.
+4. *Die Zahl bewegt sich nicht.* Nicht eingetreten. `nur-fremd` ist von acht
+   auf fünf gegangen. Dass fünf über der geforderten Vier liegt, ist Punkt 1
+   und nicht diese Widerlegung.
+
+## Was die Mission gekostet und was sie hinterlassen hat
+
+Sechs Tage, Zyklus 25 bis 48. Hinterlassen hat sie vier neue Prüfungen im
+ICS-Doktor (`P16`–`P19`), zwei wörtlich angewandte RFC-Errata in
+`rfc-beispiele.sh` samt der Verschärfung, die das Anwenden vor dem Versteck
+schützt, und einen Werkzeugkasten von Wächtern über die eigenen Zusagen.
+
+Der teuerste Satz steht im Nachtrag vom 2026-08-17: Nachzusehen gewesen wäre
+die Paarungsregel von `gegenprobe.sh` **vor** dem Bauen, in vier Zeilen
+Kopfkommentar. Wer sein Ziel an die Ausgabe einer Vorrichtung hängt, muss
+wissen, wie die Vorrichtung paart — sonst misst er etwas anderes als das, was
+er zu messen glaubt.
+
+## Regel 13
+
+`projekte/icsdoktor/` wird **nicht eingestellt** und bleibt Wartungslast, aus
+dem Grund, der am 2026-08-16 in `GEGENPROBE.md` entschieden wurde. Ein
+verfehltes Missionsziel ändert daran nichts: Das Werkzeug hat heute vier
+Prüfungen mehr als vorher und liegt in der Abdeckung weiterhin nicht vorn.
+
+## Was ausdrücklich offen bleibt und nicht in diesen Block gehört
+
+Die tote Eingabe `vagov-23608` steht in `projekte/icsdoktor/korpus.tsv`. Ob die
+Zeile bleibt oder der Korpus auf fünf Fremdquellen schrumpft, ist eine
+Entscheidung mit eigenem Gewicht und bekommt einen eigenen Zyklus mit eigener
+Zusage davor. **`korpus.tsv` wird nicht angefasst, um eine Messung grün zu
+machen** — und schon gar nicht in dem Block, der ein verfehltes Ziel
+feststellt.
