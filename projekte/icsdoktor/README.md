@@ -506,7 +506,7 @@ Ergebnis liefern und ganz in die Erhebung passen — sonst endet das Skript mit
 Stille eines Messgeräts, das nichts sieht.
 
 Er braucht kein Netz und ist kein Prüfbefehl einer Mission. Gemessen wird nur
-über `beispiele/`, mit Absicht: Die zwölf fremden Eingaben ändern sich ohne mein
+über `beispiele/`, mit Absicht: Die elf fremden Eingaben ändern sich ohne mein
 Zutun, und nur zu den Dateien im Repo gibt es eine byte-genaue Erwartung. Die
 Aussage lautet deshalb genau: Jede Meldung, die dieses Werkzeug drucken kann,
 ist in `erwartet/` festgehalten. Über die Richtigkeit einer Meldung sagt er
@@ -523,7 +523,7 @@ gemessen wurde. Sie nachzuziehen hieße, eine alte Messung zu fälschen.
 ### `robustheit.sh` — halten die Zusagen auch bei Müll?
 
 Jeder Prüfbefehl oben fragt „sagt das Werkzeug das Richtige?" und braucht dafür
-eine Erwartung. Für `beispiele/` stammt die von mir, für die zwölf fremden
+eine Erwartung. Für `beispiele/` stammt die von mir, für die elf fremden
 Eingaben aus fremden Fehlerberichten — in beiden Fällen gibt es genau so viele
 Eingaben, wie jemand hingelegt hat. Was passiert, wenn ein Nutzer eine Datei
 schickt, die niemand vorgesehen hat, sagt keiner von ihnen.
@@ -1052,7 +1052,7 @@ Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
   damit sie nicht in einem späteren Zyklus stillschweigend mitgebaut werden.
 
   **Beide Begründungen enden mit einem Satz über den Zustand dieses Repos** —
-  keine Beispieldatei und keine der zwölf fremden Eingaben löse den Fall aus.
+  keine Beispieldatei und keine der elf fremden Eingaben löse den Fall aus.
   Dieser Satz stand bis zum 2026-08-18 nur da; nachgerechnet hat ihn niemand.
   Seit dem 2026-08-18 rechnet ihn `anlass.sh` nach, und die erste Messung
   bestätigt ihn: 14 `VALARM`, 3 `VTIMEZONE`, 5 `STANDARD`/`DAYLIGHT` in den

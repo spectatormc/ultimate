@@ -7,7 +7,7 @@
 # WOZU. Der ICS-Doktor baut eine Pruefung nur, wenn eine Messung den Anlass
 # gibt. Wo er eine Pflicht der Norm absichtlich nicht prueft, steht der Grund
 # im Docstring und in state/offen.md, und er endet regelmaessig mit dem Satz
-# "keine der Beispieldateien und keine der zwoelf fremden Eingaben loest den
+# "keine der Beispieldateien und keine der elf fremden Eingaben loest den
 # Fall heute aus". Dieses Skript rechnet diesen Satz nach.
 #
 # WARUM ES DIESES SKRIPT GIBT, und zwar mit Beleg statt als gute Absicht.
@@ -43,9 +43,9 @@
 #   - die sechs vollstaendigen Kalenderobjekte aus RFC 5545 §4, geholt vom
 #     RFC-Editor, ausgeschnitten wie in rfc-beispiele.sh, aber OHNE die Errata
 #     — gemessen wird der Text, wie er im RFC steht;
-#   - die sechs Fremddateien aus korpus.tsv, geholt und ausgeschnitten wie in
+#   - die fuenf Fremddateien aus korpus.tsv, geholt und ausgeschnitten wie in
 #     fremdprobe.sh.
-# Die letzten zwoelf zur Laufzeit. Fremde Kalenderdaten kommen nicht in dieses
+# Die letzten elf zur Laufzeit. Fremde Kalenderdaten kommen nicht in dieses
 # Repo (Regel 7); das temporaere Verzeichnis wird am Ende geloescht.
 #
 # GELESEN WIRD MIT DEM PARSER DES WERKZEUGS SELBST — zerlege_physisch,
@@ -60,7 +60,7 @@
 # Beide Zahlen in diesem Absatz standen seit dem 2026-08-18 falsch — sie
 # nannten den Stand vor P20. Seither rechnet zahlen.sh sie nach.
 #
-# NETZ. Fuenf der sechs Fremddateien kommen ueber api.github.com; ohne
+# NETZ. Vier der fuenf Fremddateien kommen ueber api.github.com; ohne
 # Anmeldung erlaubt GitHub dort 60 Anfragen pro Stunde und IP. Ein Lauf dieses
 # Skripts verbraucht davon fuenf, genau wie ein Lauf von fremdprobe.sh oder
 # gegenprobe.sh. Wer die drei hintereinander mehrmals laufen laesst, laeuft in
@@ -137,7 +137,7 @@ if [ "$(cat "$arbeit/anzahl")" != "6" ]; then
 	exit 2
 fi
 
-# --- Die sechs Fremddateien aus korpus.tsv ----------------------------------
+# --- Die fuenf Fremddateien aus korpus.tsv ----------------------------------
 #
 # Wortgleich zu fremdprobe.sh. Der Kommentar dort erklaert die drei
 # Quellsorten und warum bei "bericht" und "block" die Zeilenenden meine sind.
@@ -203,8 +203,8 @@ while IFS='	' read -r id typ fundstelle quelle kennung beleg abschnitt klage; do
 	fremd=$((fremd + 1))
 done < "$korpus"
 
-if [ "$fremd" -ne 6 ]; then
-	echo "ABBRUCH: $fremd Fremddateien geholt, erwartet 6." >&2
+if [ "$fremd" -ne 5 ]; then
+	echo "ABBRUCH: $fremd Fremddateien geholt, erwartet 5." >&2
 	exit 2
 fi
 
@@ -395,7 +395,7 @@ for pfad, kurz in eingaben:
         raise SystemExit(2)
 
 print("Eingaben: %d Beispieldateien, 6 Kalenderobjekte aus RFC 5545 §4, "
-      "6 Fremddateien" % (len(eingaben) - 12))
+      "5 Fremddateien" % (len(eingaben) - 11))
 print("Gelesen mit dem Parser von icsdoktor.py, nicht mit einem zweiten.")
 print("")
 

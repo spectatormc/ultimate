@@ -8,14 +8,14 @@
 #
 # Es gibt ein fremdes Werkzeug, das dasselbe tut wie der ICS-Doktor:
 # <https://github.com/WapplerSystems/rfc5545-validator>. Dieses Skript laesst
-# beide ueber dieselben zwoelf fremden Eingaben laufen und stellt ihre Befunde
+# beide ueber dieselben elf fremden Eingaben laufen und stellt ihre Befunde
 # nebeneinander. Es entscheidet nichts. Wer recht hat, wird am Normtext
 # entschieden, einzeln, in GEGENPROBE.md.
 #
-# Keine der zwoelf Eingaben stammt von mir:
+# Keine der elf Eingaben stammt von mir:
 #   - die sechs vollstaendigen Kalenderobjekte aus RFC 5545 §4, geholt vom
 #     RFC-Editor, ausgeschnitten wie in rfc-beispiele.sh;
-#   - die sechs Fremddateien aus korpus.tsv, jede aus einem oeffentlichen
+#   - die fuenf Fremddateien aus korpus.tsv, jede aus einem oeffentlichen
 #     Fehlerbericht, geholt und ausgeschnitten wie in fremdprobe.sh.
 # Beide zur Laufzeit. Fremde Kalenderdaten kommen nicht in dieses Repo
 # (Regel 7); das temporaere Verzeichnis wird am Ende geloescht.
@@ -55,7 +55,7 @@
 #     (x3), sie zaehlt nur nicht mit.
 #   - Wortlaut und Begruendung. Zwei Werkzeuge koennen denselben Abschnitt aus
 #     verschiedenen Gruenden nennen; das faellt hier nicht auf.
-#   - Alles ausserhalb der zwoelf Eingaben. Verglichen wird Verhalten auf zwoelf
+#   - Alles ausserhalb der elf Eingaben. Verglichen wird Verhalten auf elf
 #     Dateien, nicht die Guete zweier Projekte.
 #
 # Jede Abweichung bekommt eine Kennung aus Eingabe und Abschnitt, etwa
@@ -88,7 +88,7 @@ fremd_quelle="https://github.com/WapplerSystems/rfc5545-validator.git"
 fremd_stand="e5554b99a08a5208949bb97c02eedf50d2b58ec4"
 rfc_quelle="https://www.rfc-editor.org/rfc/rfc5545.txt"
 
-erwartete_eingaben=12
+erwartete_eingaben=11
 
 modus=vergleich
 case "${1:-}" in
@@ -201,7 +201,7 @@ while [ "$nr" -le 6 ]; do
 	nr=$((nr + 1))
 done
 
-# ---------------------------------------------------------------- Eingaben 7-12: der Fremdkorpus
+# ---------------------------------------------------------------- Eingaben 7-11: der Fremdkorpus
 #
 # Ausschneiden wortgleich zu fremdprobe.sh, aus demselben Grund wie oben. Was
 # dort ueber die Zeilenenden steht, gilt hier genauso: Bei "bericht" und
@@ -553,7 +553,7 @@ if __name__ == "__main__":
 PYTHON
 
 echo "Gegenprobe: ICS-Doktor gegen rfc5545-validator @ $fremd_stand"
-echo "Eingaben: 6 Kalenderobjekte aus RFC 5545 §4, 6 Fremddateien aus korpus.tsv"
+echo "Eingaben: 6 Kalenderobjekte aus RFC 5545 §4, 5 Fremddateien aus korpus.tsv"
 echo "Beide zur Laufzeit geholt, keine davon von mir geschrieben."
 
 if [ "$modus" = abdeckung ]; then

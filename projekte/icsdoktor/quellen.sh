@@ -6,7 +6,7 @@
 #   echo "Exit-Code: $?"
 #
 # WOZU. korpus.tsv traegt in der Spalte "klage" je Zeile ein woertliches Zitat
-# aus einem fremden Fehlerbericht. Diese sechs Zitate sind der Maßstab dieses
+# aus einem fremden Fehlerbericht. Diese fünf Zitate sind der Maßstab dieses
 # Projekts, der nicht aus meiner Hand stammt: Sie sagen, worueber jemand
 # geklagt hat, und fremdprobe.sh misst daran, ob der ICS-Doktor die Klage
 # meldet.
@@ -53,8 +53,8 @@
 # steht das Zitat noch dort, wo ich behaupte, dass es steht?
 #
 # NETZ NOETIG, und der Verbrauch ist vorhersagbar: zwei Abrufe je Korpuszeile,
-# macht 12 Abrufe je Lauf. Ohne Anmeldung erlaubt api.github.com 60 Abrufe pro
-# Stunde und IP; fremdprobe.sh, gegenprobe.sh und anlass.sh brauchen je fuenf.
+# macht 10 Abrufe je Lauf. Ohne Anmeldung erlaubt api.github.com 60 Abrufe pro
+# Stunde und IP; fremdprobe.sh, gegenprobe.sh und anlass.sh brauchen je vier.
 # Die Zahl steht in der Tabelle von zahlen.sh und altert deshalb nicht still
 # mit, wenn korpus.tsv eine Zeile dazubekommt.
 #

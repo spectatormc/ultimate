@@ -6,7 +6,7 @@
 #
 # WOZU. Jeder andere Pruefbefehl dieses Projekts fragt "sagt das Werkzeug das
 # Richtige?" und braucht dafuer eine Erwartung. Fuer beispiele/ stammt die von
-# mir, fuer die zwoelf fremden Eingaben aus fremden Fehlerberichten — in beiden
+# mir, fuer die elf fremden Eingaben aus fremden Fehlerberichten — in beiden
 # Faellen gibt es genau so viele Eingaben, wie jemand hingelegt hat. Was
 # passiert, wenn ein Nutzer eine Datei schickt, die niemand vorgesehen hat,
 # sagt keiner von ihnen.

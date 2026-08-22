@@ -75,7 +75,7 @@
 # Hilfsfunktionen, Zweige ohne Fund und der Weg durch main() bleiben
 # ungemessen. Gezaehlt wird die Meldung, nicht die Zeile.
 #
-# GEMESSEN WIRD NUR UEBER beispiele/, mit Absicht. Die zwoelf fremden Eingaben
+# GEMESSEN WIRD NUR UEBER beispiele/, mit Absicht. Die elf fremden Eingaben
 # aus korpus.tsv und RFC 5545 §4 werden zur Laufzeit geholt und aendern sich
 # ohne mein Zutun; eine Abdeckung, die an ihnen haengt, waere morgen eine
 # andere. beispiele/ liegt im Repo, und nur zu diesen Dateien gibt es eine
