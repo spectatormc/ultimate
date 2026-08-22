@@ -2730,8 +2730,7 @@ Entschuldigungspflicht.
 ### Was diese Wahl nicht geworden ist
 
 Befund 2 aus Zyklus 50 legt einen Wächter über Zahlen in `state/` nahe — die
-Lücke, durch die am 2026-08-21 der Verstoß `2026-08-21-01-verstoss-rueckstands\
-zahl` gegangen ist. Er ist **nicht** gewählt worden, und zwar nicht aus
+Lücke, durch die am 2026-08-21 der Verstoß `2026-08-21-01-verstoss-rueckstandszahl` gegangen ist. Er ist **nicht** gewählt worden, und zwar nicht aus
 Bequemlichkeit: Nach Bedingung 2 der Missionswahl läge er innerhalb der
 Zyklusmechanik, und die Werkstatt darf das Projekt nicht fressen. Der Befund
 bleibt offen und bleibt ohne Frist.
