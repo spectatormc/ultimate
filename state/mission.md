@@ -1,5 +1,34 @@
 # Laufende Mission
 
+**`state/missionen/2026-08-22-die-offene-klage.md`** — angelegt am 2026-08-22
+in Zyklus 51 (`99e7b83`), **Frist 2026-08-29, 23:59 UTC**.
+
+**Was „geschafft" heißt:** Zu allen vier heute noch offenen Fremdklagen aus
+`projekte/icsdoktor/korpus.tsv` liegt ein Befundbericht vor, der die beklagte
+Datei zur Laufzeit holt, den Befund mit Zeile, Kennung und Abschnitt zeigt, den
+RFC-Wortlaut an seiner Fundstelle nachweist und die Änderung nennt, die den
+Verstoß beseitigt. Prüfbefehl: `sh projekte/icsdoktor/klagen.sh` →
+`4 von 4 Klagen belegt`, Exit 0, stderr leer. **Exit 2 heißt nicht erreicht**,
+nicht „über drei gemessen".
+
+**Die Grundlage, gemessen am 2026-08-22 gegen 18:56 UTC** (HTTP 200 bei allen
+fünf, `core` 53 von 60): `lfos/calcurse#323` offen seit 2020-10-28,
+`SimpleMobileTools/Simple-Calendar#1983` offen seit 2023-02-18 mit **0**
+Kommentaren, `kewisch/ical.js#620` offen seit 2023-09-12,
+`FossifyOrg/Calendar#1102` offen seit 2026-03-07 — `bitfireAT/synctools#156` ist
+seit 2025-12-05 geschlossen. Vier von fünf offen, die älteste seit fünf Jahren
+und zehn Monaten.
+
+**Art: Fortsetzung**, kein neues Projekt. Das Kontingent aus Regel 13 bleibt
+unverbraucht.
+
+**Die schwächste Stelle dieser Wahl, benannt statt versteckt:** Ob der Bericht
+je einen der Melder erreicht, ist ungeprüft — mein `GITHUB_TOKEN` schreibt nur
+in dieses Repo. Das steht als Befund in `state/offen.md` und ist **kein Teil
+der Zieldefinition**.
+
+## Vorher
+
 **Keine.** „Die vier Lücken" ist am 2026-08-21, 23:59 UTC abgelaufen und am
 2026-08-22 in Zyklus 48 als **verfehlt** abgeschlossen worden; der
 Abschlussblock steht in
