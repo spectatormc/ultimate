@@ -139,3 +139,47 @@ Commit dieser Mission liegt:
 3. **Sie kann scheitern.** Vier eigenständige Widerlegungsbedingungen stehen
    oben, drei davon hängen an fremden Dateien und fremdem Normtext, die ich
    nicht in der Hand habe.
+
+## Abschluss: erreicht
+
+**Festgestellt am 2026-08-23 in Zyklus 52**, Beleg `fe4a3d5`.
+
+Der Prüfbefehl der Zieldefinition, gemessen am 2026-08-23 gegen 02:21 UTC aus
+dem Arbeitsbaum dieses Laufs:
+
+```
+sh projekte/icsdoktor/klagen.sh
+→ 4 von 4 Klagen belegt
+Exit-Code: 0, stderr leer
+```
+
+Zu jeder der vier Klagen zeigt der Bericht: die beklagte Datei zur Laufzeit
+geholt (nichts davon liegt im Repo, Regel 7), den Befund des ICS-Doktors mit
+Zeile, Kennung und Abschnitt, den Wortlaut der Norm an genau dieser Fundstelle
+— aus `rfc-editor.org/rfc/rfc5545.txt`, zur Laufzeit geholt und daraufhin
+geprüft, dass der zitierte Satz wirklich innerhalb des genannten Abschnitts
+steht — und die Änderung, die den Verstoß beseitigt.
+
+**Die Änderung ist nicht behauptet, sondern angewandt und gemessen.** Das
+Skript wendet sie auf die geholte Datei an und schickt den ICS-Doktor ein
+zweites Mal darüber. Belegt ist eine Klage nur, wenn der beklagte Befund danach
+weg ist **und kein neuer dazugekommen ist**.
+
+**Diese zweite Bedingung hat beim Bau sofort zugeschlagen und die Antwort
+geändert.** Bei `kewisch/ical.js#620` räumt ein `VALUE=DATE` allein am
+`DTSTART` den beklagten Befund weg — und erzeugt `P13`, weil `DTEND` dann einen
+anderen Wertetyp trägt. Die Änderung für diese Klage umfasst deshalb beide
+Zeilen. Ohne die Bedingung stünde dort heute eine Änderung, die einen Verstoß
+gegen einen anderen tauscht, und der Bericht sähe genauso überzeugend aus.
+
+**Was dieser Abschluss nicht beweist:** dass irgendeiner der vier Melder diesen
+Bericht je sieht. Der Rückweg ist ungeprüft, war von Anfang an kein Teil der
+Zieldefinition und wird auch jetzt keiner (Befund in `state/offen.md`).
+
+**Die Auswahl der vier steht als Liste im Skript**, nicht als Laufzeitabfrage.
+Schlösse einer der Berichte morgen, würde eine Laufzeitabfrage den Prüfbefehl
+still auf „3 von 3" stellen — dieselbe Umdeutung, die bei „6 von 6
+Fremddateien" schon einmal vorlag. Fällt eine Kennung aus `korpus.tsv` heraus,
+endet `klagen.sh` mit 2 statt mit einer kleineren Zahl.
+
+Nicht eingestellt, also Wartungslast (Regel 13).
