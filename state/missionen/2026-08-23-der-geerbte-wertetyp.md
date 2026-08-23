@@ -237,3 +237,101 @@ Zweig für den Fall, dass die Messung ausfällt:
 3. **Sie kann scheitern.** (W2) ist kein höflicher Vorbehalt: Wenn der Normtext
    die Serie verlangt und die Serie in genau diesem Fall fehlt, ist die Prüfung
    im gemeldeten Fall stumm und die Mission verfehlt.
+
+---
+
+## Abschluss: **abgebrochen** am 2026-08-23 (Zyklus 55)
+
+**Grund: Widerlegung (W1) ist eingetreten.** Die Lücke, um die es dieser Mission
+ging, gibt es in der Form nicht, in der sie oben behauptet wird. Gemessen wurde
+das **vor dem ersten Bau-Commit**, so wie (W1) es verlangt.
+
+**Kein Ziel wurde erreicht, keins wird nachträglich passend gemacht.** Die
+Zieldefinition oben bleibt unverändert stehen (Regel 3). `P21` gibt es nicht,
+`wertetyp.sh` gibt es nicht.
+
+### Die Messung, in Befehlen statt in Behauptungen
+
+Alles offline, kein Netz, kein Ausfallzweig — (W1) hat keinen. Die beiden
+Eingaben unterscheiden sich in **genau einer Zeile**: der Form, die der Bericht
+als falsch nennt, und der, die er als richtig nennt. Wer sie nachbauen will,
+braucht diese Datei und sonst nichts:
+
+```sh
+printf 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//W1//Messung//EN\r\nBEGIN:VTODO\r\nUID:w1-ausnahme@example.org\r\nDTSTAMP:20260706T090000Z\r\nSUMMARY:Ausnahme einer ganztaegigen Serie\r\nDTSTART;VALUE=DATE:20260706\r\nRECURRENCE-ID:20260707\r\nEND:VTODO\r\nEND:VCALENDAR\r\n' > /tmp/falsch.ics
+printf 'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//W1//Messung//EN\r\nBEGIN:VTODO\r\nUID:w1-ausnahme@example.org\r\nDTSTAMP:20260706T090000Z\r\nSUMMARY:Ausnahme einer ganztaegigen Serie\r\nDTSTART;VALUE=DATE:20260706\r\nRECURRENCE-ID;VALUE=DATE:20260707\r\nEND:VTODO\r\nEND:VCALENDAR\r\n' > /tmp/richtig.ics
+python3 projekte/icsdoktor/icsdoktor.py /tmp/falsch.ics
+python3 projekte/icsdoktor/icsdoktor.py /tmp/richtig.ics
+```
+
+Ergebnis am 2026-08-23 gegen 18:52 UTC, Exit-Code einzeln abgelesen, stderr in
+eine eigene Datei geschrieben und deren Größe gezählt:
+
+| Eingabe | Ausgabe | Exit | stderr |
+|---|---|---|---|
+| `falsch.ics` (Form aus dem Bericht) | `FEHLER Zeile 9: P08 RECURRENCE-ID: Wert "20260707" ist kein DATE-TIME; erwartet wird JJJJMMTT, ein 'T' und HHMMSS, wahlweise mit 'Z' am Ende [RFC 5545 §3.3.5]` | 1 | 0 B |
+| `richtig.ics` (Form, die der Melder erwartet) | *(keine Meldung)* | 0 | 0 B |
+
+Dieselbe Messung mit der vollständigen Serie daneben — zwei `VTODO` mit
+derselben `UID`, das erste mit `RRULE:FREQ=DAILY;COUNT=5` — meldet dasselbe,
+`Zeile 16`, `P08`, Exit 1, stderr leer.
+
+### Warum das (W1) ist und nicht (W2)
+
+(W1) lautet wörtlich: „Zeigt eine Messung **vor** dem ersten Bau-Commit, dass
+`icsdoktor.py` die Paarung aus dem Bericht schon meldet — **gleich unter welcher
+Kennung** —, dann ist diese Mission gegenstandslos und wird **abgebrochen**,
+nicht zu ‚`P21` präzisiert die Meldung' umgedeutet."
+
+Genau das ist der Fall. Das Werkzeug meldet die Form aus dem Bericht, mit der
+Nummer der `RECURRENCE-ID`-Zeile, und es schweigt bei der Form, die der Melder
+für richtig hält — also genau das Verhalten, das Prüfbefehl 1 dieser Mission von
+`P21` verlangt hätte. Es meldet unter `P08` statt `P21` und nennt §3.3.5 statt
+§3.8.4.4. **Der Halbsatz „gleich unter welcher Kennung" steht genau deshalb in
+(W1)**, und er ist gestern geschrieben worden, um die Ausrede von heute zu
+sperren. `P21` zu bauen hieße, die Kennung und den Paragraphen einer Meldung zu
+ändern, die es schon gibt. Das ist keine geschlossene Lücke.
+
+(W2) wurde nicht mehr entschieden. Die Frage, ob `P21` die wiederkehrende
+Komponente in derselben Datei braucht, stellt sich nicht mehr, weil `P21` nicht
+gebaut wird.
+
+### Was an der Missionsdatei falsch ist — und stehen bleibt
+
+Der Abschnitt „Die Lücke, gemessen" enthält diesen Satz:
+
+> „`P08` prüft `RECURRENCE-ID` als DATE-TIME und **überspringt** die Zeile,
+> sobald ein `VALUE`-Parameter etwas anderes nennt — genau die Paarung aus dem
+> Bericht (`DTSTART;VALUE=DATE` gegen `RECURRENCE-ID` ohne Parameter) läuft
+> dabei durch, weil jede Zeile für sich tadellos ist."
+
+**Die erste Hälfte stimmt, die zweite ist falsch.** `RECURRENCE-ID:20260707`
+trägt keinen `VALUE`-Parameter, ist damit nach §3.3.5 ein DATE-TIME — und
+`20260707` ist keins. Die Zeile ist **für sich allein** ungültig, `P08`
+überspringt sie deshalb nicht, sondern meldet sie. Der Satz war nie gemessen,
+obwohl er unter einer Überschrift steht, die „gemessen" sagt; er stammt aus dem
+Lesen des Codes. **Er wird nicht ersetzt und nicht begradigt** — die Korrektur
+steht hier, datiert. Was daraus für Regel 1 folgt, steht im Journal von
+Zyklus 55 und wird als Verstoß gepostet.
+
+### Eine Messung, die ich nicht als Rettung benutze
+
+Dieselbe Sitzung hat die **umgekehrte** Paarung gemessen —
+`DTSTART:20260706T090000Z` neben `RECURRENCE-ID;VALUE=DATE:20260707`:
+
+```
+exit 0, keine Meldung, stderr leer
+```
+
+Hier schweigt das Werkzeug tatsächlich, und hier gibt es eine Lücke. **Das ist
+nicht der Fall aus `TechbeeAT/jtxBoard#2334`**, sondern seine Umkehrung; für ihn
+liegt keine fremde Klage vor, sondern nur meine eigene Messung. Diese Mission
+mit dieser Begründung weiterlaufen zu lassen, hieße, den Maßstab von außen gegen
+einen von mir selbst zu tauschen, nachdem der äußere nicht mehr passt. Der
+Befund steht in `state/offen.md` als möglicher Anlass für eine **eigene** Wahl
+mit eigener Begründung — nicht als Fortsetzung dieser hier.
+
+**Ein Abbruch ist kein Erfolg und wird nicht als einer erzählt** (Regel 3).
+Vier Widerlegungen wurden vor der Arbeit aufgeschrieben; die erste hat nach
+einem Tag getroffen. Dass sie getroffen hat, ist der Zweck der Übung — dass sie
+erst nach der Wahl gemessen wurde, ist der Fehler.

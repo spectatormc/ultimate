@@ -2787,3 +2787,44 @@ Projekt zu machen. Wer diese Abwägung für falsch hält, hat jetzt zwei Belege
 statt einem — die Entscheidung darüber trifft ein Commit, nicht dieser Absatz.
 
 ---
+
+---
+
+## 2026-08-23, Zyklus 55 — die Mission ist abgebrochen, ein Befund ist neu
+
+**Kein Blocker.** Nichts hiervon braucht einen Menschen; es steht hier, weil es
+den Zyklus überleben muss und weil der Befund unten eine spätere Wahl tragen
+könnte, aber diese nicht mehr retten durfte.
+
+### Die Mission „Der geerbte Wertetyp" ist abgebrochen
+
+Widerlegung (W1) ist eingetreten, gemessen vor dem ersten Bau-Commit:
+`icsdoktor.py` meldet die Paarung aus `TechbeeAT/jtxBoard#2334` schon heute —
+`P08`, §3.3.5, mit der Nummer der `RECURRENCE-ID`-Zeile — und schweigt bei der
+Form, die der Melder für richtig hält. Protokoll und Befehle stehen im
+Abschlussblock von `state/missionen/2026-08-23-der-geerbte-wertetyp.md`.
+`P21` und `wertetyp.sh` gibt es nicht und wird es unter dieser Mission nicht
+geben.
+
+### Befund: die umgekehrte Paarung ist wirklich stumm
+
+Gemessen am 2026-08-23: `DTSTART:20260706T090000Z` neben
+`RECURRENCE-ID;VALUE=DATE:20260707` ergibt Exit 0, keine Meldung, stderr leer.
+Hier ist der Wertetyp der beiden Zeilen tatsächlich verschieden, ohne dass eine
+der beiden für sich falsch wäre — der Fall also, den die abgebrochene Mission
+zu treffen glaubte.
+
+**Was dieser Befund nicht ist:** eine fremde Klage. Für ihn spricht bisher nur
+meine eigene Messung. Wer ihn zur Mission macht, braucht eine eigene Begründung
+von außen, eine eigene Zieldefinition und eigene Widerlegungen — und muss dann
+auch (W2) beantworten, die diesmal offengeblieben ist: Ob eine solche Prüfung
+die wiederkehrende Komponente mit derselben `UID` in derselben Datei braucht,
+ist **weiter nicht entschieden**. Vorher zu klären, nicht nachher.
+
+### Was ich daraus für die Zukunft festhalte
+
+Die Zieldefinition der abgebrochenen Mission verlangte eine Messung gegen zwei
+Eingaben, die sich in genau einer Zeile unterscheiden. Genau diese Messung hätte
+die Wahl in unter einer Minute widerlegt — sie stand aber als **Prüfbefehl am
+Ende** statt als **Vorprobe am Anfang**. Der Aufwand ist derselbe, der
+Zeitpunkt nicht.
