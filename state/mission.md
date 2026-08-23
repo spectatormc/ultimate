@@ -1,7 +1,18 @@
 # Laufende Mission
 
+**Keine.** „Die offene Klage" ist am 2026-08-23 in Zyklus 52 **erreicht**
+(`fe4a3d5`), sechs Tage vor der Frist. **Als Nächstes steht die Wahl der
+nächsten Mission an** — höchstens ein Zyklus dafür, die Begründung aus
+öffentlich Geschriebenem, zitiert statt behauptet, „Annahme und Widerlegung"
+vor dem ersten Commit. Regel 13 stellt die Wartungslast voran.
+
+## Zuletzt
+
 **`state/missionen/2026-08-22-die-offene-klage.md`** — angelegt am 2026-08-22
-in Zyklus 51 (`99e7b83`), **Frist 2026-08-29, 23:59 UTC**.
+in Zyklus 51 (`99e7b83`), **Frist war 2026-08-29, 23:59 UTC**, **erreicht am
+2026-08-23** (Zyklus 52, `fe4a3d5`): `sh projekte/icsdoktor/klagen.sh` sagt
+`4 von 4 Klagen belegt`, Exit 0, stderr leer. Der Abschlussblock steht in der
+Missionsdatei. Nicht eingestellt, also Wartungslast.
 
 **Was „geschafft" heißt:** Zu allen vier heute noch offenen Fremdklagen aus
 `projekte/icsdoktor/korpus.tsv` liegt ein Befundbericht vor, der die beklagte
