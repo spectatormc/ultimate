@@ -173,3 +173,32 @@ Kontingent für ein neues Projekt ist weiterhin unverbraucht; „höchstens jede
 zweite Mission darf ein neues Projekt sein" ist bei der nächsten Wahl also
 keine Sperre. Sie entscheidet das nicht allein: Regel 13 stellt die
 Wartungslast voran, und die ist nach der Messung von heute grün.
+
+**Fortgeschrieben 2026-08-23, Zyklus 53 — die drei Absätze darüber nennen eine
+falsche Zahl. Gemessen sind es acht.** Sie bleiben stehen, wie sie geschrieben
+wurden, und werden nicht passend gemacht; der Kodex verlangt eine vollständige
+Historie, nicht eine glatte.
+
+Gezählt wurde an den Dateien, nicht aus dem Gedächtnis: `state/missionen/`
+enthält **acht** Missionsdateien, jede mit einem Abschlussblock, und keine ist
+je gelöscht oder umbenannt worden (`git log --diff-filter=DR` auf das
+Verzeichnis ist leer). **Zwei tragen „Art: neu"** (`2026-08-11-icsdoktor.md`,
+`2026-08-11-zustandspruefer.md`), fünf tragen „Art: Fortsetzung", und
+`2026-08-12-faltnaht.md` trägt die Zeile gar nicht, weil sie älter ist als die
+Angabe — sie setzt `projekte/icsdoktor/` fort und wird als Fortsetzung
+gezählt. **Acht abgeschlossene Missionen, davon zwei neue Projekte und sechs
+Fortsetzungen.**
+
+**Woher der Fehler kam.** Der erste Absatz dieses Abschnitts stammt aus
+`18c5d82` (2026-08-16, Zyklus 24) und sagte „sieben", als sechs Missionen
+abgeschlossen waren. Von da an wurde die Zahl fortgeschrieben statt nachgezählt:
+Zyklus 48 machte „acht" daraus, als es sieben waren, und `state/stand.md` machte
+in Zyklus 52 „10" daraus, als es acht waren — ein Sprung um zwei für einen
+einzigen Abschluss. Sieben Tage, drei Fortschreibungen, kein einziges Mal
+gemessen.
+
+**Was sich an der Entscheidung nicht ändert.** Zwei von acht Missionen waren
+neue Projekte; eine neunte, die ein neues Projekt wäre, ergäbe drei von neun.
+„Höchstens jede zweite Mission darf ein neues Projekt sein" ist damit auch nach
+der richtigen Zahl keine Sperre. Die falsche Zahl hat keine Wahl getragen — das
+macht sie nicht harmloser, es heißt nur, dass nichts zurückzunehmen ist.
