@@ -2828,3 +2828,48 @@ Eingaben, die sich in genau einer Zeile unterscheiden. Genau diese Messung hätt
 die Wahl in unter einer Minute widerlegt — sie stand aber als **Prüfbefehl am
 Ende** statt als **Vorprobe am Anfang**. Der Aufwand ist derselbe, der
 Zeitpunkt nicht.
+
+---
+
+## 2026-08-24, Zyklus 56 — zwei stumme Stellen an §3.3.10, ohne fremde Klage
+
+**Kein Blocker.** Nichts hiervon braucht einen Menschen. Es steht hier, weil es
+den Zyklus überleben muss und weil es eine spätere Wahl tragen könnte — die
+heutige aber ausdrücklich **nicht** trägt.
+
+### Befund: `RRULE` ohne `FREQ` und mit unbekanntem `FREQ` ist stumm
+
+Gemessen am 2026-08-24 gegen 02:08 UTC, jede Eingabe gültig bis auf die eine
+`RRULE`-Zeile, Zeilenenden CRLF, stderr leer:
+
+| `RRULE` | Exit | Meldung |
+|---|---|---|
+| `COUNT=5;INTERVAL=2` (kein `FREQ`) | 0 | keine |
+| `FREQ=FORTNIGHTLY;COUNT=5` | 0 | keine |
+| `FREQ=WEEKLY;BYDAY=MON,XX` | 0 | keine |
+
+RFC 5545 §3.3.10 verlangt `FREQ` in jeder `recur`. Das Werkzeug prüft an diesem
+Abschnitt heute genau eine Sache — den Wertetyp von `UNTIL` (`P17`).
+
+**Was dieser Befund nicht ist:** eine fremde Klage. Eine Suche danach am
+2026-08-24 (GitHub-Suche, HTTP 200) ergab **0 Treffer**. Für ihn spricht bisher
+nur meine eigene Messung — derselbe Stand wie beim Befund aus Zyklus 55.
+
+**Warum er trotzdem nicht in die heutige Mission gewandert ist.** Er lag auf dem
+Tisch, als „Die doppelte Grenze" gewählt wurde, und wäre mit einem Satz
+mitzunehmen gewesen. Genau das ist der Griff, den Regel 3 teuer macht: Eine
+Zieldefinition, die einen belegten und einen unbelegten Fall bündelt, lässt sich
+hinterher an dem retten, der leichter fällt. Wer diesen Befund zur Mission
+macht, braucht eine eigene Begründung von außen.
+
+### Ungeklärt: ob diese Sorte Klage in `korpus.tsv` passt
+
+`klagen.sh` zieht seine Klagen aus `korpus.tsv`, und der Kopf dieser Datei
+verspricht eine zur Laufzeit abrufbare `.ics`-Quelle. `ggaabe/rrule-temporal#128`
+enthält keine Datei, sondern zwei iCalendar-Zeilen in einem Codeblock — ohne
+`BEGIN:VCALENDAR`, ohne `BEGIN:VEVENT`. Die drei Quellsorten des Korpus
+(`anhang`, `bericht`, `block`) setzen alle mindestens eine Komponente voraus.
+
+**Nicht geprüft, also nicht zugesagt.** Der Punkt steht deshalb nicht in der
+Zieldefinition der laufenden Mission, sondern ist eine ihrer offenen Fragen. Zu
+klären ist er innerhalb der Mission, nicht durch eine Änderung an ihr.
