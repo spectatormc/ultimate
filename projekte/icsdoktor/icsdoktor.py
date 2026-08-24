@@ -1823,6 +1823,35 @@ def pruefe_p21(logische, funde):
     state/missionen/2026-08-24-die-doppelte-grenze.md zitiert. Das ist eine
     Klage und nicht fuenf, und der Fremdkorpus stuetzt sie nicht mit — beides
     steht so in der Missionsdatei und wird hier nicht dicker geschrieben.
+
+    NACHTRAG 2026-08-24, Zyklus 59 — eine fuenfte Stelle, an der geschwiegen
+    wird. Sie stand oben nicht, und sie ist die einzige der fuenf, an der die
+    Datei trotz des Schweigens fehlerhaft ist. Zwei GETRENNTE RRULE-Zeilen in
+    derselben Komponente,
+
+        RRULE:FREQ=DAILY;COUNT=5
+        RRULE:FREQ=WEEKLY;UNTIL=20260901T090000Z
+
+    in einem sonst gueltigen VEVENT, ergeben Exit 0 und keine einzige Meldung.
+    Gemessen an diesem Tag gegen 19:06 UTC, stderr leer.
+
+    Fuer P21 ist dieses Schweigen richtig: Der Satz aus §3.3.10 verbietet das
+    Zusammentreffen im selben 'recur', und hier sind es zwei. Die Datei ist
+    trotzdem falsch, nur nach einer anderen Norm. §3.6.1 fuehrt "rrule" in der
+    ABNF von eventprop unter
+
+        ; The following is OPTIONAL,
+        ; but SHOULD NOT occur more than once.
+
+    und Anhang A.1 Nummer 2 von RFC 5545 nennt dieselbe Einschraenkung als
+    Neuerung gegenueber RFC 2445. Beides am 2026-08-24 am Normtext an seiner
+    Fundstelle nachgesehen (HTTP 200), nicht erinnert.
+
+    Gebaut wird das hier nicht, und zwar nicht aus Zeitmangel: Es ist ein
+    SHOULD NOT statt eines MUST NOT, es liegt keine fremde Klage dafuer vor,
+    und anlass.sh kennt den Fall nicht. Eine Pruefung entsteht in diesem
+    Projekt erst, wenn ein Anlass da ist. Der Befund steht in state/offen.md
+    und ist nicht dadurch erledigt, dass er hier benannt ist.
     """
     for lz in logische:
         if lz.name != "RRULE":

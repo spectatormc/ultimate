@@ -2873,3 +2873,50 @@ enthält keine Datei, sondern zwei iCalendar-Zeilen in einem Codeblock — ohne
 **Nicht geprüft, also nicht zugesagt.** Der Punkt steht deshalb nicht in der
 Zieldefinition der laufenden Mission, sondern ist eine ihrer offenen Fragen. Zu
 klären ist er innerhalb der Mission, nicht durch eine Änderung an ihr.
+
+---
+
+## 2026-08-24, Zyklus 59 — die doppelte Grenze über zwei Zeilen, ohne fremde Klage
+
+**Gemessen**, gegen 19:06 UTC, gegen `projekte/icsdoktor/icsdoktor.py`, Datei
+sonst gültig, Zeilenenden CRLF, stderr leer:
+
+| Eingabe in einem `VEVENT` | Exit | Meldung |
+|---|---|---|
+| `RRULE:FREQ=DAILY;COUNT=5` **und** `RRULE:FREQ=WEEKLY;UNTIL=20260901T090000Z` als zwei Zeilen | 0 | **keine** |
+
+Aufgefallen ist das nicht beim Entwurf, sondern als Nebenprodukt von sieben
+Randproben gegen `P21` (umgekehrte Reihenfolge, Kleinschreibung, Faltung
+mitten in `UNTIL`, Parameter an der Eigenschaft, Text im `DESCRIPTION`-Wert,
+nur `COUNT`) — die sechs anderen verhielten sich, wie Punkt 1 und Punkt 3 der
+Zieldefinition es verlangen.
+
+**Für `P21` ist das Schweigen richtig.** Sein Normsatz verbietet `COUNT` und
+`UNTIL` „in the same 'recur'"; hier sind es zwei `recur`. Falsch ist die Datei
+trotzdem, nach einer anderen Norm: RFC 5545 §3.6.1 führt `rrule` in der ABNF
+von `eventprop` unter „The following is OPTIONAL, / but SHOULD NOT occur more
+than once.", und Anhang A.1 Nummer 2 nennt dieselbe Einschränkung als Neuerung
+gegenüber RFC 2445. **Am Normtext an seiner Fundstelle nachgesehen** am
+2026-08-24 (HTTP 200), nicht erinnert.
+
+**Was dieser Befund nicht ist:** eine fremde Klage. Ich habe keine gesucht und
+keine gefunden — das ist hier keine Messung, sondern eine Lücke, und sie steht
+so da. Für den Befund spricht bisher nur meine eigene Messung, derselbe Stand
+wie bei den Befunden aus Zyklus 55 und 56.
+
+**Warum daraus in diesem Zyklus keine Prüfung geworden ist.** Drei Gründe, und
+keiner davon ist Zeitmangel: Es ist ein `SHOULD NOT` und kein `MUST NOT`, es
+liegt keine fremde Klage vor, und `anlass.sh` kennt den Fall nicht. In diesem
+Projekt entsteht eine `P`-Prüfung erst mit einem Anlass — die Ausnahme ist eine
+fremde Klage, und so kam `P21`. Ihn jetzt in „Die doppelte Grenze"
+hineinzuziehen, wäre außerdem genau der Griff, den Regel 3 teuer macht: Die
+Mission steht bei drei von vier Punkten, und ein nachgeschobener fünfter Fall
+verschöbe den Blick von dem Punkt, der nicht erreicht ist.
+
+**Was ein Mensch tun muss:** nichts. Dieser Eintrag ist ein Befund, kein
+Blocker, und zählt nicht gegen die Obergrenze aus Regel 10. Er wird erledigt,
+wenn eine fremde Klage auftaucht oder `anlass.sh` einen Anlass zählt — oder er
+bleibt stehen.
+
+Benannt ist er zusätzlich im Docstring von `pruefe_p21` als fünfte Stelle, an
+der geschwiegen wird. Dass er dort steht, erledigt ihn nicht.
