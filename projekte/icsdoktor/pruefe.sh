@@ -107,6 +107,7 @@ printf '%d Beispiele geprueft, %d OK, %d abweichend\n' \
 # Die Vorgaben der Missionsdatei nachrechnen, statt sie zu behaupten.
 fehlt=""
 ausgeloest=0
+verlangt=0
 # Getrennt gezaehlt: Die Zusage der Mission Die Faltnaht lautet auf die zehn
 # Pruefungen P01 bis P10. Eine elfte Pruefung darf diese Zahl nicht auffuellen,
 # sonst waere eine abgeschlossene Zusage durch neue Arbeit billiger geworden.
@@ -119,23 +120,40 @@ ausgeloest_faltnaht=0
 # Seit dem 2026-08-18 steht P20 mit darin. Sie gehoert zu keiner Mission,
 # sondern zur Wartungslast, und zaehlt aus demselben Grund wie P11 nicht in
 # die Zusage der Faltnaht.
+# Seit dem 2026-08-24 steht P21 mit darin, aus der Mission Die doppelte Grenze.
 for code in P01 P02 P03 P04 P05 P06 P07 P08 P09 P10 P11 P12 P13 P14 P15 P16 \
-            P17 P18 P19 P20; do
+            P17 P18 P19 P20 P21; do
     if ! grep -q " $code " "$erwartet"/*.txt; then
         fehlt="$fehlt $code"
     else
         ausgeloest=$((ausgeloest + 1))
         case "$code" in
-            P11|P12|P13|P14|P15|P16|P17|P18|P19|P20) ;;
+            P11|P12|P13|P14|P15|P16|P17|P18|P19|P20|P21) ;;
             *) ausgeloest_faltnaht=$((ausgeloest_faltnaht + 1)) ;;
         esac
     fi
+    verlangt=$((verlangt + 1))
 done
+# WORTLAUT, geaendert am 2026-08-24 — mit Grund, weil es nach dem Zurechtlegen
+# einer Messung aussehen kann. Bis dahin stand hier "Abdeckung: alle 20
+# Pruefungen bis P20 werden ausgeloest": eine Zahl, die nur im gruenen Fall zu
+# sehen war, und keine zweite daneben. Die Missionsdatei Die doppelte Grenze
+# verlangt als Prueftext "21 von 21 Pruefungen ausgeloest" — diese Form gab es
+# hier nicht, und im roten Fall gab es ueberhaupt keine Zahl.
+#
+# GEZAEHLT WIRD UNVERAENDERT: ausgeloest kommt wie vorher aus grep ueber
+# erwartet/*.txt, verlangt aus der Laenge derselben Liste. Neu ist, dass beide
+# Zahlen dastehen und dass sie auch dastehen, wenn etwas fehlt. Wer die
+# Aenderung fuer eine Anpassung an die Zusage haelt, liest hier den Beleg, dass
+# die Zusage von der Zahl handelt und nicht vom Satzbau — der Nenner wird
+# mitgedruckt, damit "21 von 21" nicht durch Weglassen entstehen kann.
 if [ -z "$fehlt" ]; then
-    printf 'Abdeckung: alle %d Pruefungen bis P20 werden ausgeloest\n' \
-        "$ausgeloest"
+    printf 'Abdeckung: %d von %d Pruefungen ausgeloest (P01 bis P21)\n' \
+        "$ausgeloest" "$verlangt"
 else
-    printf 'Abdeckung unvollstaendig, nie ausgeloest:%s\n' "$fehlt"
+    printf 'Abdeckung: %d von %d Pruefungen ausgeloest — unvollstaendig, nie ' \
+        "$ausgeloest" "$verlangt"
+    printf 'ausgeloest:%s\n' "$fehlt"
     schlecht=$((schlecht + 1))
 fi
 

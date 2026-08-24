@@ -1449,6 +1449,18 @@ def pruefe_p17(komponenten, funde):
       dieselben Eingaben wie die uebrigen. Gemessen am 2026-08-19: 8
       RRULE-Zeilen, kein einziger Treffer. Gebaut wird die Pruefung, wenn diese
       Messung einen Anlass zeigt, und nicht vorher.
+
+      **Nachtrag vom 2026-08-24.** Die Pruefung ist gebaut, und der Absatz
+      darueber bleibt stehen, wie er geschrieben wurde. Was er sagte, ist
+      eingetreten und was er verlangte, ist es nicht: anlass.sh zaehlt ueber
+      den Fremdkorpus weiter null Treffer. Der Anlass kam aus einer offenen
+      Fremdklage gegen eine fremde Bibliothek statt aus der eigenen Zaehlung —
+      ggaabe/rrule-temporal Nr. 128, zitiert in
+      state/missionen/2026-08-24-die-doppelte-grenze.md. Wer "und nicht vorher"
+      streng liest, findet hier eine Abweichung von der eigenen Ansage; sie
+      wird benannt und nicht wegformuliert. Die neue Pruefung heisst P21, ihr
+      Satz aus §3.3.10 ist ein anderer als der hier gepruefte, und sie liegt
+      unter pruefe_p21.
     """
     for komp in komponenten:
         anfang = komp.hole_zeile("DTSTART")
@@ -1735,6 +1747,100 @@ def pruefe_p19(komponenten, funde):
                         abschnitt))
 
 
+def _recur_teil(wert, gesucht):
+    """(erster Wert, Anzahl) eines Regelteils in einem RECUR-Wert.
+
+    Liest denselben Wert wie _until_wert, nur fuer einen beliebigen Regelteil
+    und mit der Anzahl daneben: "teil=wert", getrennt durch Semikolon, Namen
+    tolerant gelesen. Ohne Treffer (None, 0).
+    """
+    erster = None
+    anzahl = 0
+    for teil in (wert or "").split(";"):
+        name, gleich, rest = teil.partition("=")
+        if gleich and name.strip().upper() == gesucht:
+            anzahl += 1
+            if erster is None:
+                erster = rest.strip()
+    return erster, anzahl
+
+
+def pruefe_p21(logische, funde):
+    """§3.3.10: COUNT und UNTIL stehen nicht in derselben RRULE.
+
+    DER NORMTEXT, woertlich aus der ABNF des RECUR-Wertes in §3.3.10:
+
+        ; The UNTIL or COUNT rule parts are OPTIONAL,
+        ; but they MUST NOT occur in the same 'recur'.
+
+    Am 2026-08-24 am Normtext an seiner Fundstelle nachgewiesen (HTTP 200):
+    Der Satz steht genau einmal im ganzen RFC 5545, und zwar im Abschnitt
+    3.3.10 "Recurrence Rule". Er steht dort als Kommentarzeile IN der ABNF und
+    nicht in der Prosa unter "Description" — das ist kein schwaecherer Ort,
+    sondern der normative Teil der Wertdefinition, aber es gehoert
+    hingeschrieben, weil P17 seinen Satz aus der Prosa desselben Abschnitts
+    nimmt.
+
+    **Was diese Pruefung von P17 trennt.** Beide zitieren §3.3.10 und beide
+    lesen den RECUR-Wert einer RRULE. P17 vergleicht den UNTIL-Wert mit dem
+    DTSTART und braucht dafuer zwei Zeilen; P21 braucht nur die eine, denn der
+    Verstoss steckt ganz in ihr. Eine RRULE kann beide Meldungen zugleich
+    bekommen: COUNT und UNTIL zusammen (P21) und ein UNTIL, das nicht zum
+    DTSTART passt (P17). Das ist kein doppelter Befund, sondern sind zwei
+    Saetze derselben Norm.
+
+    **Warum ueber die logischen Zeilen und nicht ueber die Komponenten.**
+    P17 laeuft ueber komponenten, weil es das DTSTART daneben braucht. Hier
+    gibt es nichts daneben: Eine RRULE mit COUNT und UNTIL ist falsch, wo immer
+    sie steht — auch in STANDARD und DAYLIGHT innerhalb einer VTIMEZONE, wo
+    §3.6.5 sie ausdruecklich erlaubt, und auch in einer Zeile, die ausserhalb
+    jeder Komponente steht. Ueber die Komponentenliste waeren die letzten
+    beiden Faelle stumm, ohne dass irgendwo stuende, warum.
+
+    **Wo geschwiegen wird, und warum das kein Versaeumnis ist:**
+
+    - **Nur COUNT oder nur UNTIL.** Beide Regelteile sind OPTIONAL; einzeln
+      sind sie richtig. Genau das ist der haeufige Fall, und ein Fehlalarm
+      dort waere teurer als die ganze Pruefung wert ist.
+    - **Eine Zeile, die P04 nicht lesen konnte.** Sie traegt keinen Namen und
+      wird hier nicht angefasst — dieselbe Grenze wie ueberall im Werkzeug.
+    - **Ein doppeltes COUNT oder ein doppeltes UNTIL fuer sich.** "The rule
+      parts are not ordered and MUST NOT occur more than once" steht im selben
+      Abschnitt und ist eine andere Frage; dieses Werkzeug prueft die Grammatik
+      des RECUR-Wertes nirgends. Die Anzahl wird hier trotzdem gelesen, aber
+      nur, um im Meldungstext nicht die zweite Nennung zu unterschlagen.
+    - **Ob COUNT oder UNTIL wohlgeformt sind.** Ein "COUNT=viele" ist nach
+      dieser Pruefung derselbe Verstoss wie ein "COUNT=2": Verboten ist das
+      Zusammentreffen der Regelteile, nicht ein bestimmter Wert.
+
+    ANLASS. Bis zum 2026-08-24 stand im Docstring von pruefe_p17, gebaut werde
+    diese Pruefung, "wenn diese Messung einen Anlass zeigt, und nicht vorher" —
+    gemeint war die Zaehlung von anlass.sh ueber den Fremdkorpus, die am
+    2026-08-19 und am 2026-08-24 null Treffer hatte und weiter null Treffer
+    hat. Der Anlass kommt von woanders her: aus einer offenen Fremdklage gegen
+    eine fremde Bibliothek, ggaabe/rrule-temporal Nr. 128, eroeffnet am
+    2026-08-02, am 2026-08-24 als offen abgerufen. Sie ist im Wortlaut in
+    state/missionen/2026-08-24-die-doppelte-grenze.md zitiert. Das ist eine
+    Klage und nicht fuenf, und der Fremdkorpus stuetzt sie nicht mit — beides
+    steht so in der Missionsdatei und wird hier nicht dicker geschrieben.
+    """
+    for lz in logische:
+        if lz.name != "RRULE":
+            continue
+        count, count_n = _recur_teil(lz.wert, "COUNT")
+        until, until_n = _recur_teil(lz.wert, "UNTIL")
+        if count is None or until is None:
+            continue
+        funde.append(Fund(
+            FEHLER, lz.nr, "P21",
+            "die Wiederholungsregel nennt COUNT (%s) und UNTIL (%s) "
+            "zugleich%s; beide Regelteile sind einzeln erlaubt, aber nicht in "
+            "derselben RRULE"
+            % (_zeige_wort(count), _zeige_wort(until),
+               "" if count_n == 1 and until_n == 1 else ", mehrfach"),
+            "3.3.10"))
+
+
 _BOM_UTF8 = b"\xef\xbb\xbf"
 
 
@@ -1810,7 +1916,7 @@ def pruefe_p20(rohdaten, funde):
 
 
 def untersuche(rohdaten):
-    """Alle zwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle einundzwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     rohdaten, hatte_bom = pruefe_p20(rohdaten, funde)
     zeilen = zerlege_physisch(rohdaten)
@@ -1849,6 +1955,7 @@ def untersuche(rohdaten):
     pruefe_p17(komponenten, funde)
     pruefe_p18(logische, funde)
     pruefe_p19(komponenten, funde)
+    pruefe_p21(logische, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))

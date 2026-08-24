@@ -285,6 +285,58 @@ verloren hat. Ein `CR` oder `ESC` aus einem Wert wanderte wörtlich in die
 Ausgabe und machte die Zeile im Terminal unlesbar. Behoben mit `_zeigbar()`,
 gefunden von `robustheit.sh` — siehe dort.
 
+`P21` stammt aus der Mission „Die doppelte Grenze"
+(`state/missionen/2026-08-24-die-doppelte-grenze.md`) und meldet eine `RRULE`,
+die `COUNT` **und** `UNTIL` zugleich enthält. Der Normtext steht in der ABNF des
+`RECUR`-Wertes in §3.3.10, wörtlich:
+
+```
+; The UNTIL or COUNT rule parts are OPTIONAL,
+; but they MUST NOT occur in the same 'recur'.
+```
+
+Am 2026-08-24 gegen den Normtext geprüft (HTTP 200): Der Satz steht **genau
+einmal** im ganzen RFC 5545 und dort im Abschnitt 3.3.10. Er steht als
+Kommentarzeile *in* der ABNF und nicht in der Prosa unter „Description" — das
+ist der normative Teil der Wertdefinition, aber es gehört hingeschrieben, weil
+`P17` seinen Satz aus der Prosa desselben Abschnitts nimmt.
+
+Beide Zeilen sind für sich tadellos; falsch ist erst ihr Zusammentreffen. Vor
+dem 2026-08-24 war dieser Fall **stumm** — gemessen an
+`beispiele/57-p21-count-und-until.ics`, dessen beide entscheidenden Zeilen
+wörtlich aus dem Fehlerbericht `ggaabe/rrule-temporal#128` stammen (eröffnet
+2026-08-02, am 2026-08-24 als offen abgerufen):
+
+```
+FEHLER Zeile 8: P21 die Wiederholungsregel nennt COUNT ("2") und UNTIL
+("20260805T090000Z") zugleich; beide Regelteile sind einzeln erlaubt, aber
+nicht in derselben RRULE [RFC 5545 §3.3.10]
+```
+
+**Die Grenze zu `P17` verläuft zwischen Wert und Beziehung.** Beide zitieren
+§3.3.10 und beide lesen den `RECUR`-Wert einer `RRULE`. `P17` vergleicht `UNTIL`
+mit dem `DTSTART` und braucht dafür zwei Zeilen; `P21` braucht nur die eine.
+Eine `RRULE` kann beide Meldungen zugleich bekommen — das ist kein doppelter
+Befund, sondern sind zwei Sätze derselben Norm.
+`beispiele/59-p21-in-vtimezone.ics` zeigt genau das an einer `RRULE` in einer
+`DAYLIGHT`-Komponente, und es zeigt zugleich, warum `P21` über die logischen
+Zeilen läuft statt über die Komponentenliste: Der Verstoß steckt ganz in der
+einen Zeile und ist falsch, wo immer sie steht.
+
+**Was `P21` nicht prüft.** Ob `COUNT` oder `UNTIL` wohlgeformt sind, und ob ein
+Regelteil mehrfach vorkommt — „The rule parts are not ordered and MUST NOT occur
+more than once" steht im selben Abschnitt und ist eine andere Frage. Die Anzahl
+wird gelesen, aber nur, damit die Meldung eine zweite Nennung nicht
+unterschlägt (`beispiele/60-p21-regelteil-mehrfach.ics`).
+
+**Was an dieser Prüfung dünn ist, benannt statt versteckt.** Ihr Anlass ist
+**eine** offene Fremdklage, nicht fünf. `anlass.sh` zählt den Fall über den
+Fremdkorpus weiter mit **null** Treffern — genau wie am 2026-08-19, als im
+Docstring von `pruefe_p17` stand, gebaut werde die Prüfung, „wenn diese Messung
+einen Anlass zeigt, und nicht vorher". Der Anlass kam von woanders her. Wer
+diesen Satz streng liest, findet eine Abweichung von der eigenen Ansage; sie
+steht als datierter Nachtrag im Docstring und wird nicht wegformuliert.
+
 ## Warum
 
 Drei öffentliche Fehlerberichte, in der Missionsdatei mit Link und Wortlaut
@@ -342,7 +394,7 @@ ist derselbe. Umbenannt wird nichts, damit die dreizehn älteren Erwartungen in
 sh projekte/icsdoktor/pruefe.sh          # die mitgelieferten Beispiele
 sh projekte/icsdoktor/rfc-beispiele.sh   # die sechs Kalender aus RFC 5545 §4
 sh projekte/icsdoktor/namensliste.sh     # woher die Namensliste von P09 kommt
-sh projekte/icsdoktor/anlass.sh          # gibt es Anlass für eine 21. Prüfung?
+sh projekte/icsdoktor/anlass.sh          # gibt es Anlass für eine 22. Prüfung?
 sh projekte/icsdoktor/zahlen.sh          # stimmen die Zahlen über den Bestand?
 sh projekte/icsdoktor/fundstellen.sh     # steht jeder zitierte § im Normtext?
 sh projekte/icsdoktor/abdeckung.sh       # löst jede Meldung ein Beispiel aus?
@@ -389,10 +441,10 @@ Prüfung mindestens einmal ausgelöst, mindestens zwei fehlerfreie Dateien. Die
 abgeschlossene Mission „Die Faltnaht" verlangt mehr — 16 Beispiele und die zehn
 Prüfungen `P01` bis `P10` —, und wo das steht, sagt die letzte Zeile der
 Ausgabe, damit ein grüner Exit-Code nicht als „Mission erreicht" gelesen wird.
-`P11` bis `P20` füllen diese Zehn nicht auf, sondern werden getrennt gezählt:
+`P11` bis `P21` füllen diese Zehn nicht auf, sondern werden getrennt gezählt:
 Eine abgeschlossene Zusage wird nicht dadurch billiger, dass später eine Prüfung
-dazukommt. Die Abdeckungsliste nennt, was gebaut ist; seit dem 2026-08-18 steht
-`P20` mit darin und damit alle zwanzig. Ob die laufende Mission erreicht ist,
+dazukommt. Die Abdeckungsliste nennt, was gebaut ist; seit dem 2026-08-24 steht
+`P21` mit darin und damit alle einundzwanzig. Ob die laufende Mission erreicht ist,
 sagt ihre Missionsdatei und nicht dieser Exit-Code.
 
 Seit `rfc-beispiele.sh` auch bei einem `HINWEIS` mit `1` endet, ist er die
@@ -405,7 +457,7 @@ weicht sie ab, endet er mit `1` und nennt jeden Unterschied. Beide brauchen Netz
 
 ### `zahlen.sh` — die Zahlen über den eigenen Bestand
 
-Der letzte prüft nicht das Werkzeug, sondern diesen Text. „56 Kalenderdateien",
+Der letzte prüft nicht das Werkzeug, sondern diesen Text. „60 Kalenderdateien",
 „die zwanzig Prüfungen", „Anlass für eine 21. Prüfung" — das sind keine
 Meinungen, sondern Zahlen, die man nachsehen kann. Sie stehen im Text, während
 der Bestand daneben wächst, und niemand zieht sie nach, weil niemand sie liest.
@@ -472,7 +524,8 @@ und ist kein Prüfbefehl einer Mission.
 
 ### `abdeckung.sh` — worüber sagt der grüne Lauf überhaupt etwas?
 
-`pruefe.sh` endet mit der Zeile „Abdeckung: alle 20 Prüfungen bis P20 werden
+`pruefe.sh` druckt die Zeile „Abdeckung: 21 von 21 Prüfungen ausgelöst (P01
+bis P21)" — bis zum 2026-08-24 hieß sie „alle 20 Prüfungen bis P20 werden
 ausgelöst". Der Satz stimmt, und er klingt nach mehr, als er misst. Eine Prüfung
 ist eine Funktion, und eine Funktion kann ein Dutzend verschiedener Meldungen
 drucken: `pruefe_p04` allein hat neun Stellen, an denen ein Fund entsteht. Löst
@@ -774,11 +827,11 @@ Wo der Standard mehrere Lesarten zulässt, steht hier, welche gewählt wurde:
 Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
 
 - **Es repariert nichts.** Nur Diagnose. So steht es in der Mission.
-- **Es prüft genau die zwanzig Prüfungen** und nicht mehr. Bis zum 2026-08-15
+- **Es prüft genau die einundzwanzig Prüfungen** und nicht mehr. Bis zum 2026-08-15
   stand hier „dreizehn"; die Zahl war seit `P13` um eine zu klein und ist keine
   weggefallene Prüfung, sondern ein nicht nachgezogener Satz. Seit dem
   2026-08-16 sind `P16` und `P17` dazugekommen, seit dem 2026-08-17 `P18` und
-  `P19`, seit dem 2026-08-18 `P20`.
+  `P19`, seit dem 2026-08-18 `P20`, seit dem 2026-08-24 `P21`.
   Insbesondere nicht
   die Maskierung von Sonderzeichen in TEXT-Werten (§3.3.11) — `P10` sieht nur, wo
   eine Faltung sie zerschneidet, nicht ob sie richtig ist — und nicht die
@@ -1091,7 +1144,7 @@ exitprobe.sh        Hält die Exit-Codes von quellen.sh gegen erfundene
                     Eingaben, mit dessen echtem Code. Kein Prüfbefehl der
                     Mission — er prüft die Mechanik, nicht den Bestand.
                     Kein Netz, kein Abruf.
-beispiele/          56 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
+beispiele/          60 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
                     Die Zahl ist am 2026-08-18 nachgezählt; sie stand seit
                     zwei Zyklen auf 47 und wuchs still mit jeder neuen Datei; seither hält
                     zahlen.sh sie nach.

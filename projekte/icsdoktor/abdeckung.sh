@@ -4,8 +4,10 @@
 #   sh projekte/icsdoktor/abdeckung.sh
 #   echo "Exit-Code: $?"
 #
-# WOZU. pruefe.sh endet mit der Zeile "Abdeckung: alle 20 Pruefungen bis P20
-# werden ausgeloest". Der Satz stimmt und er klingt nach mehr, als er misst:
+# WOZU. pruefe.sh druckt die Zeile "Abdeckung: 21 von 21 Pruefungen ausgeloest
+# (P01 bis P21)" — bis zum 2026-08-24 hiess sie "alle 20 Pruefungen bis P20
+# werden ausgeloest", derselbe Satz mit derselben Schwaeche.
+# Der Satz stimmt und er klingt nach mehr, als er misst:
 # Eine Pruefung ist eine Funktion, und eine Funktion kann ein Dutzend
 # verschiedener Meldungen drucken. pruefe_p04 allein hat neun Stellen, an denen
 # ein Fund entsteht. Loest ein einziges Beispiel eine davon aus, gilt P04 als

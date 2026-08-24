@@ -1,0 +1,2 @@
+FEHLER Zeile 10: P17 UNTIL steht mit "20300329T010000Z" in UTC, das DTSTART aus Zeile 7 steht in Ortszeit; dann muss UNTIL ebenfalls in Ortszeit stehen [RFC 5545 §3.3.10]
+FEHLER Zeile 10: P21 die Wiederholungsregel nennt COUNT ("4") und UNTIL ("20300329T010000Z") zugleich; beide Regelteile sind einzeln erlaubt, aber nicht in derselben RRULE [RFC 5545 §3.3.10]
