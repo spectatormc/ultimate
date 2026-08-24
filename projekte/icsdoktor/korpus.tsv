@@ -96,6 +96,61 @@
 # Paragraph 3.8.2.2), steht unveraltet in der Tabelle. Die Missionsdatei wird
 # nicht angefasst (Regel 3).
 #
+# ENTSCHEIDUNG VOM 2026-08-24 (Zyklus 58): DIE KLAGE ggaabe/rrule-temporal#128
+# BEKOMMT KEINE ZEILE IN DIESER TABELLE.
+#
+# Die Frage stand offen, seit die Mission "Die doppelte Grenze" angelegt wurde
+# (state/missionen/2026-08-24-die-doppelte-grenze.md, "Was ich nicht weiss",
+# Punkt 1). Sie stand ausdruecklich NICHT in deren Zieldefinition — die
+# Entscheidung hier aendert am Ergebnis dieser Mission also nichts, in keine
+# Richtung.
+#
+# Gemessen am 2026-08-24, 13:17:50 UTC, am Berichtstext selbst statt an meiner
+# Erinnerung an ihn:
+#
+#   200  api.github.com/repos/ggaabe/rrule-temporal/issues/128
+#        state open, 0 Kommentare, eroeffnet 2026-08-02T15:10:30Z
+#   Im Berichtstext (1286 Bytes) gezaehlt:
+#        BEGIN:VCALENDAR  0
+#        BEGIN:           0
+#        END:             0
+#        ".ics"           0
+#        DTSTART          1     RRULE  2
+#   Zwei Codebloecke: einer mit Sprachangabe "ts", einer ohne. Der einzige
+#   Link im Text zeigt auf den RFC, nicht auf eine Datei.
+#
+# WARUM DAS DIE ENTSCHEIDUNG SCHON TRAEGT. Diese Datei kennt drei Quellsorten,
+# und der Bericht bedient keine davon:
+#
+#   anhang   — verlangt eine angehaengte Datei. Es gibt keine.
+#   bericht  — fremdprobe.sh schneidet den ersten BEGIN:VCALENDAR-Block
+#              heraus. Es gibt keinen.
+#   block    — fremdprobe.sh schneidet die erste Komponente heraus. Es gibt
+#              keine; im ganzen Text steht kein einziges BEGIN:.
+#
+# Die beiden iCalendar-Zeilen, um die es geht, stehen in einem TypeScript-
+# Codeblock als Elemente eines String-Arrays, mit Anfuehrungszeichen, Komma und
+# einem .join("\n") darum. Aus ihnen eine pruefbare Eingabe zu machen hiesse:
+# die Zeichenkettenliteralen aufloesen, den VCALENDAR- und den VEVENT-Rahmen
+# dazuschreiben und die Zeilenenden setzen. Das ist genau das, was der Kopf
+# dieser Datei zwei Absaetze weiter oben verbietet — die Zeile pruefte dann
+# meinen Zuschnitt und nicht das Werkzeug.
+#
+# WAS DAS NICHT HEISST. Nicht, dass die Klage schwach waere: Sie ist offen, sie
+# ist woertlich zitiert, und sie hat P21 begruendet (Zyklus 57, Commit bfec9cf).
+# Der Fall wird gemeldet — er wird nur an meinen eigenen Beispieldateien
+# gemessen (beispiele/57-p21-count-und-until.ics traegt die zwei Zeilen des
+# Melders woertlich) und nicht an einer fremden Datei. Diese Datei misst
+# ausdruecklich das, was sie nicht selbst zuschneidet; wo es nichts
+# zuzuschneiden gibt, misst sie nichts.
+#
+# WORAN SICH DAS AENDERN WUERDE, damit die Entscheidung nicht endgueltiger
+# aussieht als sie ist: Haengt der Melder oder ein Kommentator eine .ics an,
+# oder setzt jemand ein vollstaendiges iCalendar-Objekt in den Bericht, ist der
+# Fall vom Typ "anhang" oder "bericht" und gehoert dann in die Tabelle. Der
+# Bericht hatte am 2026-08-24 null Kommentare; die Messung oben ist der Stand,
+# gegen den ein spaeterer Zyklus vergleichen kann.
+#
 # id	typ	fundstelle	quelle	kennung	beleg	abschnitt	klage
 calcurse-323	anhang	lfos/calcurse#323	https://github.com/lfos/calcurse/files/5453140/test.ics.txt	P11	DTSTART	3.6.1	It says that DTSTART could not be found for VEVENT.
 simplecal-1983	bericht	SimpleMobileTools/Simple-Calendar#1983	https://api.github.com/repos/SimpleMobileTools/Simple-Calendar/issues/1983	P08	EXDATE	3.3.5	`EXDATE` property requires `VALUE=DATE` attribute when its value is only a date (without time)

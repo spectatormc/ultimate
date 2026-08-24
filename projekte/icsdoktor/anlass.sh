@@ -306,42 +306,17 @@ def fehlt_zeitzonenteil(komp, alle):
                        if not komp.hole(e)])
 
 
-def untilcount_im_rrule(komp, alle):
-    """§3.3.10: "The UNTIL or COUNT rule parts are OPTIONAL, but they MUST NOT
-    occur in the same 'recur'." — woertlich aus der ABNF des RECUR-Wertes.
-
-    Der Wert wird gelesen, wie die Description es beschreibt: eine Liste von
-    NAME=VALUE-Paaren, getrennt durch Semikolon, in beliebiger Reihenfolge.
-    Der Name wird grossgeschrieben verglichen. Die Grammatik schreibt
-    Grossbuchstaben vor; wer sich nicht daran haelt, soll hier trotzdem
-    auffallen, denn die Frage lautet, ob der Fall vorkommt, und nicht, ob er
-    sauber geschrieben ist.
-
-    Ein Teil ohne "=" wird uebergangen. Das ist ein Grammatikfehler und eine
-    andere Frage — diese Messung beantwortet, ob zwei Regelteile zugleich
-    dastehen, und nicht, ob der Wert wohlgeformt ist. Dieselbe Grenze zieht
-    P17 im Werkzeug.
-    """
-    verletzt = []
-    for zeile, wert in komp.hole("RRULE"):
-        namen = set()
-        for teil in (wert or "").split(";"):
-            if "=" in teil:
-                namen.add(teil.split("=", 1)[0].strip().upper())
-        if "UNTIL" in namen and "COUNT" in namen:
-            verletzt.append(
-                "das RRULE in Zeile %d traegt UNTIL und COUNT zugleich" % zeile)
-    return verletzt
+# HIER STAND untilcount_im_rrule, dazu zaehlt_rrule — entfernt am 2026-08-24
+# (Zyklus 58). Der Grund steht ausfuehrlich bei FAELLE weiter unten. In Kuerze:
+# Dieses Skript misst Anlaesse fuer Pruefungen, die es NICHT gibt. Seit
+# Zyklus 57 gibt es P21 (Commit bfec9cf), also gibt es diesen Fall hier nicht
+# mehr. Der Code ist nicht verloren — er steht in der Git-Historie und, in der
+# Sache identisch, als pruefe_p21 in icsdoktor.py.
 
 
 def zaehlt_komponente(komp, alle):
     """Die Pflicht haengt an der Komponente selbst: sie zaehlt einmal."""
     return 1
-
-
-def zaehlt_rrule(komp, alle):
-    """Die Pflicht haengt am RRULE: gezaehlt werden die RRULE-Zeilen."""
-    return len(komp.hole("RRULE"))
 
 
 FAELLE = (
@@ -357,11 +332,39 @@ FAELLE = (
      ("STANDARD", "DAYLIGHT"), fehlt_zeitzonenteil,
      "pruefe_p19, Docstring; state/offen.md, Zyklus 29",
      "Komponenten", zaehlt_komponente),
-    ("RRULE, UNTIL und COUNT zugleich", "3.3.10", None,
-     untilcount_im_rrule,
-     "pruefe_p17, Docstring; state/offen.md, Zyklus 36",
-     "RRULE-Zeilen", zaehlt_rrule),
 )
+
+# HIER STAND EIN VIERTER FALL: ("RRULE, UNTIL und COUNT zugleich", "3.3.10",
+# None, untilcount_im_rrule, "pruefe_p17, Docstring; state/offen.md,
+# Zyklus 36", "RRULE-Zeilen", zaehlt_rrule). Er ist am 2026-08-24 (Zyklus 58)
+# entfernt worden. Warum, und warum das keine weichgeklopfte Messung ist:
+#
+# Dieser Fall hat gemessen, ob es einen Anlass gibt, eine Pruefung zu bauen,
+# die es nicht gab. Seit Zyklus 57 gibt es sie: pruefe_p21 in icsdoktor.py
+# meldet genau diesen Verstoss mit Zeile, Kennung und [RFC 5545 §3.3.10]
+# (Commit bfec9cf). Damit ist der Fall nicht "erledigt", sondern
+# gegenstandslos — der Kopf dieser Datei sagt "Ein Fall je bewusst nicht
+# gebauter Pruefung", und bewusst nicht gebaut ist hier nichts mehr.
+#
+# WAS DAS BEHOBEN HAT, offen hingeschrieben statt uebergangen. Zyklus 57 hat
+# P21 gebaut, aber diesen Fall stehen lassen und anlass.sh nicht gemessen
+# (das Journal zu Zyklus 57 fuehrt anlass.sh ausdruecklich unter "nicht
+# gemessen"). Das Skript war damit rot, ohne dass es jemand wusste: Gemessen am
+# 2026-08-24 gegen 13:24 UTC meldete es "betrachtet: 14 RRULE-Zeilen,
+# Treffer: 3" und Exit 1 — die drei Treffer waren die neuen Beispieldateien
+# 57, 59 und 60, also die Belege von P21 selbst. Ein Skript, das die eigenen
+# Belege als Anlass meldet, misst nichts mehr.
+#
+# WAS HIER NICHT PASSIERT IST: Kein Treffer wurde weggeschnitten, damit eine
+# Zahl gruen wird. Die drei Treffer sind echt und stehen weiter da — sie werden
+# jetzt von pruefe.sh und den erwartet/-Dateien gemessen, byte-genau, statt
+# von einer Anlassfrage, die beantwortet ist.
+#
+# Der Absatz "WAS 'betrachtet' ZAEHLT" im Kopf benutzt weiter das RRULE als
+# Beispiel fuer eine Pflicht, die an einer Eigenschaft haengt. Er bleibt
+# stehen: Er erklaert die Bauart dieses Skripts und behauptet nicht, dass es
+# diesen Fall noch fuehrt. Kommt je ein Fall dieser Bauart dazu, ist die
+# Vorrichtung dafuer in der Historie und die Erklaerung im Kopf.
 
 def lies(pfad):
     """Die Komponenten einer Datei, gelesen wie der ICS-Doktor sie liest."""
