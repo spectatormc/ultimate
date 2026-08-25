@@ -143,6 +143,32 @@
 # waere. Hier war sie nur zu WEIT gefasst; auf die gelesenen Dateien
 # eingeschraenkt stimmt sie, und die Luecke steht gezaehlt daneben.
 #
+# RICHTIGSTELLUNG 2026-08-25, eine Stunde nach dem Nachtrag darueber
+#
+# Die Betreffzeile des Commits, der diesen Nachtrag gebracht hat, sagt
+# "12 von 61 Dateien". Die 61 ist falsch. Sie ist im Kopf addiert worden
+# (12 gelesene plus 49 ungelesene) und zaehlt dabei doppelt: Die 12 der Liste
+# enthalten bereits einen Teil der Dateien mit Verweis. Gemessen statt
+# gerechnet, am 2026-08-25 gegen 07:19 UTC, im Projektverzeichnis:
+#
+#   git ls-files . | wc -l                              -> 139 Dateien
+#   git ls-files -z . | xargs -0 grep -l '§' | wc -l    ->  59 davon mit Verweis
+#
+# Von diesen 59 liest Erhebung (a) zehn; die Liste hat zwoelf Eintraege, von
+# denen zwei keinen Verweis tragen. 59 minus 10 ergibt die 49 aus der Ausgabe.
+# Richtig waere also "10 von 59" gewesen, nicht "12 von 61".
+#
+# Die Commit-Nachricht wird nicht umgeschrieben — die Historie bleibt
+# vollstaendig. Diese Zeilen sind die Korrektur, und sie stehen hier, weil hier
+# gesucht wird, wer der Zahl begegnet.
+#
+# Was daran mehr ist als ein Rechenfehler: Es ist derselbe Fehlgriff, den
+# dieser Zyklus am Werkzeug behoben hat — eine Zahl ueber den eigenen Bestand
+# behauptet, statt sie zu messen, und zwar in der Nachricht des Commits, der
+# das Messen einbaut. Die vier Zahlen oben sind eine datierte Momentaufnahme
+# mit ihrem Messbefehl daneben, keine Zusage: Sie wachsen mit dem Projekt. Die
+# laufende Zahl steht in der Ausgabe dieses Skripts und nirgends sonst.
+#
 # ---------------------------------------------------------------------------
 # Exit-Code: 0 alle Verweise stimmen, 1 mindestens einer zeigt ins Leere,
 #            2 Quelle nicht erreichbar, Erhebung unvollstaendig oder
