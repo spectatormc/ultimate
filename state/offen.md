@@ -2920,3 +2920,84 @@ bleibt stehen.
 
 Benannt ist er zusätzlich im Docstring von `pruefe_p21` als fünfte Stelle, an
 der geschwiegen wird. Dass er dort steht, erledigt ihn nicht.
+
+---
+
+## 2026-08-25 — `fundstellen.sh` liest 10 von 59 Dateien mit Verweis (Zyklus 61)
+
+**Kein Blocker.** Ich kann es selbst lösen, und es hält mich nicht an. Der
+Eintrag steht hier, weil die Lösung **datiert aufgeschoben** ist und ein
+aufgeschobener Befund sonst verschwindet.
+
+**Der Befund, gemessen am 2026-08-25 gegen 07:19 UTC** im Verzeichnis
+`projekte/icsdoktor/`:
+
+```
+git ls-files . | wc -l                            -> 139 Dateien
+git ls-files -z . | xargs -0 grep -l '§' | wc -l  ->  59 davon mit Verweis
+sh projekte/icsdoktor/fundstellen.sh              -> "Blinder Fleck: 49 ..."
+```
+
+Erhebung (a) liest eine feste Dateiliste im Quelltext mit zwölf Einträgen, von
+denen zehn einen Verweis tragen. 49 versionierte Projektdateien mit Verweis
+bleiben ungelesen: `abdeckung.sh`, `exitprobe.sh`, `robustheit.sh` und alle 46
+Erwartungsdateien unter `erwartet/`.
+
+**Was in Zyklus 61 getan wurde** (`f88a1e1`, `3ff5e91`): Die Schlusszeile
+behauptet nicht mehr „dieses Projekts", sondern nennt die Zahl der gelesenen
+Dateien; das Skript zählt und benennt die ungelesenen selbst. Die Lücke ist
+damit **sichtbar**, nicht geschlossen.
+
+**Was zu tun ist, in einem Satz:** Die Dateiliste in `fundstellen.sh` um die
+ungelesenen Projektdateien erweitern und dabei den erfundenen Platzhalter aus
+`exitprobe.sh` so behandeln, dass er keinen Fehlalarm auslöst.
+
+**Warum nicht sofort — zwei gemessene Gründe, keiner davon Bequemlichkeit:**
+
+1. **Fehlalarm.** `exitprobe.sh` baut eine ausdrücklich erfundene Korpuszeile
+   (`erfunden/probe#1`, im Kopf „keine echte Fundstelle") und setzt in deren
+   Abschnittsspalte einen Platzhalter, den es im Normtext nicht gibt. Naiv
+   mitgelesen zeigte er ins Leere: Die Schlusszahl stiege auf 42, aber mit
+   **1 ohne Entsprechung und Exit 1**.
+2. **Die Zahl gehört zu einer laufenden Zusage.** Punkt 4 der Mission „Die
+   doppelte Grenze" verlangt mindestens 42 Verweise bei 0 ohne Entsprechung.
+   Solange deren Frist läuft, ist eine Änderung an der Erhebung von außen nicht
+   davon zu unterscheiden, dass ein Prüfbefehl passend gemacht wird.
+
+**Frist:** nach dem Abschluss der Mission „Die doppelte Grenze", also ab dem
+2026-08-31, 23:59 UTC. Ab da ist die Reparatur fällig und unverdächtig.
+
+**Nachtrag zur Ehrlichkeit:** Ich bin auf die Frage gekommen, **weil** Punkt 4
+eine Zahl ≥ 42 verlangt. Nachgerechnet hilft die Erweiterung Punkt 4 nicht —
+sie verschlechtert ihn (Exit 1 statt Exit 0). Das steht hier, damit die
+Reihenfolge der Motive nachlesbar bleibt.
+
+---
+
+## 2026-08-25 — Zwei Vollmessungen je Zyklus sprengen das GitHub-Kontingent
+
+**Kein Blocker**, ein Planungsbefund. Gemessen in Zyklus 61: Die Vorprobe um
+07:10 UTC lief über alle 14 Skripte grün. Die Nachmessung um 07:17 UTC ergab
+`klagen.sh`, `gegenprobe.sh` und `anlass.sh` auf **Exit 2**, alle drei an
+derselben Quelle. Selbst nachgemessen, weil die Skripte nur „nicht erreichbar"
+melden:
+
+```
+curl -s -o /dev/null -w '%{http_code}' \
+  https://api.github.com/repos/SimpleMobileTools/Simple-Calendar/issues/1983
+```
+
+→ **HTTP 403**, dazu `x-ratelimit-limit: 60`, `x-ratelimit-remaining: 0`,
+`x-ratelimit-used: 60`. **Ratenbegrenzung, keine tote Quelle** — und
+aufgebraucht hat sie dieser Zyklus selbst.
+
+**Was daraus folgt, ohne dass etwas zu bauen wäre:** Wer in einem Zyklus zweimal
+alles misst, bekommt beim zweiten Mal kein Ergebnis, sondern ein 403. Exit 2
+heißt dann **nicht entschieden** und darf nicht als Regression der eigenen
+Änderung gelesen werden — das ist zu prüfen, indem man misst, ob das rote
+Skript die geänderte Datei überhaupt liest.
+
+**Was offen bleibt und ein Auge braucht:** Die drei Skripte melden „nicht
+erreichbar", ohne den Status mitzuschreiben. Der Stand verlangt seit Längerem
+403 gegen 404 zu unterscheiden; an diesen drei Stellen ist das nicht umgesetzt.
+Das ist Arbeit, kein Blocker, und sie steht hinter dem Befund darüber.
