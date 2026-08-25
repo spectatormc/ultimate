@@ -80,6 +80,29 @@
 # und 3.8.2.3 die 3.8.2.2, hat nicht der RFC ein Loch, sondern die Erhebung.
 # Auch das endet mit 2 und nicht mit 1.
 #
+# ---------------------------------------------------------------------------
+# NACHTRAG 2026-08-25 — was die Schlusszahl zaehlt, und was sie nicht sagt
+#
+# Die vorletzte Zeile der Ausgabe nennt eine Anzahl gepruefter Verweise. Sie
+# ist die Anzahl VERSCHIEDENER Paare aus RFC-Nummer und Abschnittsnummer,
+# vereinigt ueber (a), (b) und (c). Eine Fundstelle mehr erhoeht sie nicht:
+# Nennen zwei Pruefungen denselben Abschnitt, ist es ein Paar; nennt eine
+# Datei ihn fuenfmal, ist es ein Paar. Die Stellen stehen daneben — gezaehlt
+# wird das Paar.
+#
+# Der Anlass, das hinzuschreiben, ist ein eigener Fehlgriff und keine Theorie.
+# Eine Zieldefinition dieses Projekts hat aus "eine neue Pruefung kommt dazu"
+# geschlossen, die Zahl steige um eins. Sie stieg nicht: Der Abschnitt, den die
+# neue Pruefung zitiert, war laengst von einer aelteren genannt. Die Zusage war
+# damit an eine Zahl geknuepft, die etwas anderes misst als das, wofuer sie
+# stand — nachgerechnet am 2026-08-25 an dieser Datei, nicht vermutet.
+#
+# Wer diese Zahl in eine Zusage schreibt, sagt etwas ueber den BESTAND des
+# Projekts an verschiedenen Abschnitten. Ob ein BESTIMMTER Verweis im Normtext
+# steht, sagt sie nicht; dafuer ist die Zeile "ok RFC ..." zu genau diesem
+# Abschnitt da, und dafuer die zweite Zahl "ohne Entsprechung".
+#
+# ---------------------------------------------------------------------------
 # Exit-Code: 0 alle Verweise stimmen, 1 mindestens einer zeigt ins Leere,
 #            2 Quelle nicht erreichbar, Erhebung unvollstaendig oder
 #              Umgebungsfehler.
@@ -372,6 +395,12 @@ for rfc, nummer in sorted(zu_pruefen, key=lambda p: (int(p[0]), sortier(p[1]))):
 print("")
 print("%d Verweise geprueft, %d ohne Entsprechung im Normtext"
       % (len(zu_pruefen), len(fehler)))
+# Was die Zahl links zaehlt, steht ab 2026-08-25 in der Ausgabe und nicht nur
+# im Kopf dieser Datei: Wer sie in eine Zusage schreibt, liest sie hier.
+print("Gezaehlt sind verschiedene Paare aus RFC und Abschnitt, nicht "
+      "Fundstellen —")
+print("ein Abschnitt, den schon eine andere Stelle nennt, erhoeht diese Zahl "
+      "nicht.")
 if fehler:
     print("Das Werkzeug schickt an eine Stelle, die es nicht gibt.")
     sys.exit(1)
