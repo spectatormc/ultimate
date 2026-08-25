@@ -103,6 +103,47 @@
 # Abschnitt da, und dafuer die zweite Zahl "ohne Entsprechung".
 #
 # ---------------------------------------------------------------------------
+# NACHTRAG 2026-08-25, zweiter des Tages — was (a) NICHT liest
+#
+# Die Schlusszeile lautete "Jeder §-Verweis dieses Projekts steht im zitierten
+# RFC". Erhebung (a) liest aber eine feste Liste von Dateien, die weiter oben
+# im Quelltext steht — nicht das Projekt. Die Liste ist seit ihrer Anlage nicht
+# mitgewachsen: Gemessen am 2026-08-25 tragen mehrere versionierte
+# Projektdateien einen §-Verweis, ohne darin vorzukommen, darunter die
+# Erwartungsdateien unter erwartet/. Der Satz sagte damit ueber das Ganze, was
+# ueber einen Ausschnitt gemessen war — dieselbe Sorte Fehlgriff wie im
+# Nachtrag darueber, diesmal in der eigenen Schlusszeile.
+#
+# Geaendert wurde heute zweierlei, und bewusst nicht mehr:
+#
+#   - Die Schlusszeile nennt die Zahl der gelesenen Dateien und sagt, dass
+#     sie ueber ungelesene nichts aussagt.
+#   - Das Skript ZAEHLT den blinden Fleck selbst: versionierte Projektdateien
+#     mit einem §-Verweis, die (a) nicht liest, stehen mit Namen in der
+#     Ausgabe. Ein Kommentar veraltet, eine gemessene Zeile nicht.
+#
+# WARUM DIE LISTE HEUTE NICHT ERWEITERT WIRD, obwohl das die Reparatur waere:
+# Zwei Gruende, beide gemessen, keiner davon Bequemlichkeit.
+#
+#   1. Eine naive Erweiterung erzeugt einen FEHLALARM. exitprobe.sh baut eine
+#      erfundene Korpuszeile ("erfunden/probe#1") und setzt in deren
+#      Abschnittsspalte einen Platzhalter, den es im Normtext nicht gibt. Er
+#      ist als erfunden gekennzeichnet und ist kein Verweis auf die Norm; als
+#      Verweis gelesen zeigte er ins Leere. Genau davor warnt der Absatz
+#      "Warum 'Abschnitt nicht gefunden' hier ueberhaupt etwas bedeutet".
+#   2. Die Erweiterung bewegt die Schlusszahl. An dieser Zahl haengt Punkt 4
+#      einer laufenden Zieldefinition. Solange deren Frist laeuft, ist eine
+#      Aenderung an der Erhebung von aussen nicht davon zu unterscheiden, dass
+#      hier ein Pruefbefehl passend gemacht wird — und die Zieldefinition wird
+#      nicht angefasst. Nach dem Abschluss der Mission ist die Reparatur faellig
+#      und unverdaechtig; sie steht als Befund in state/offen.md.
+#
+# Der Exit-Code bleibt deshalb 0 und wird nicht zu 2. Die beiden bestehenden
+# Selbstpruefungen enden mit 2, weil dort eine Aussage nachweislich FALSCH
+# waere. Hier war sie nur zu WEIT gefasst; auf die gelesenen Dateien
+# eingeschraenkt stimmt sie, und die Luecke steht gezaehlt daneben.
+#
+# ---------------------------------------------------------------------------
 # Exit-Code: 0 alle Verweise stimmen, 1 mindestens einer zeigt ins Leere,
 #            2 Quelle nicht erreichbar, Erhebung unvollstaendig oder
 #              Umgebungsfehler.
@@ -344,6 +385,45 @@ for pfad in beispiele:
 aus_code = set(literale) | set(tabellen)
 aus_prosa_5545 = {nr for rfc, nr in prosa if rfc == AUSGABE_RFC}
 
+# --- Der blinde Fleck von (a), gezaehlt statt behauptet --------------------
+
+def ungelesene():
+    """Versionierte Projektdateien mit §-Verweis, die nicht in DATEIEN stehen.
+
+    (a) liest eine feste Liste. Waechst das Projekt, waechst die Liste nicht
+    mit — und die Schlusszeile spraeche weiter ueber "das Projekt", waehrend
+    sie einen Ausschnitt meint. Was die Liste auslaesst, wird deshalb gemessen
+    und beim Namen genannt, statt in einem Kommentar zu stehen, der veraltet.
+
+    Rueckgabe None heisst NICHT "keine" — es heisst "nicht ermittelt", und die
+    Ausgabe sagt das dann auch. Kein Ergebnis ist kein gruenes Ergebnis.
+    """
+    # Fehlt git ganz, wirft run() eine OSError, statt einen Code zu liefern —
+    # am 2026-08-25 mit leerem PATH gemessen, nicht angenommen. Ohne diesen
+    # Zweig endet das Skript an dieser Stelle mit einem Traceback auf stderr.
+    try:
+        lauf = subprocess.run(["git", "-C", verzeichnis, "ls-files", "-z"],
+                              capture_output=True, text=True)
+    except OSError:
+        return None
+    if lauf.returncode != 0:
+        return None
+    fehlend = []
+    for name in lauf.stdout.split("\0"):
+        if not name or name in DATEIEN:
+            continue
+        try:
+            with open(os.path.join(verzeichnis, name),
+                      encoding="utf-8", errors="replace") as fh:
+                if VERWEIS.search(fh.read()):
+                    fehlend.append(name)
+        except OSError:
+            continue
+    return sorted(fehlend)
+
+
+ungelesen = ungelesene()
+
 print("")
 print("Erhoben:")
 print("  (a) Prosa     %3d Verweise in %d Datei(en), %d RFC(s)"
@@ -352,6 +432,20 @@ print("  (b) Literale  %3d am 5. Argument von Fund(...)" % len(literale))
 print("  (c) Tabellen  %3d in Modulkonstanten" % len(tabellen))
 print("  (d) Gemessen  %3d ueber %d Beispieldatei(en)"
       % (len(gemessen), len(beispiele)))
+
+if ungelesen is None:
+    print("  Blinder Fleck: NICHT ERMITTELT — git lieferte keine Dateiliste.")
+    print("    Ob (a) jede versionierte Projektdatei liest, ist damit offen.")
+elif ungelesen:
+    print("  Blinder Fleck: %d versionierte Projektdatei(en) mit §-Verweis "
+          "liest (a) nicht" % len(ungelesen))
+    for name in ungelesen[:6]:
+        print("    ungelesen: %s" % name)
+    if len(ungelesen) > 6:
+        print("    ungelesen: ... und %d weitere" % (len(ungelesen) - 6))
+else:
+    print("  Blinder Fleck: keiner — (a) liest jede versionierte "
+          "Projektdatei mit §-Verweis")
 
 # Selbstpruefung: (d) muss in (a)+(b)+(c) aufgehen.
 unzugeordnet = sorted(set(gemessen) - aus_code - aus_prosa_5545, key=sortier)
@@ -404,6 +498,15 @@ print("ein Abschnitt, den schon eine andere Stelle nennt, erhoeht diese Zahl "
 if fehler:
     print("Das Werkzeug schickt an eine Stelle, die es nicht gibt.")
     sys.exit(1)
-print("Jeder §-Verweis dieses Projekts steht im zitierten RFC — nachgerechnet, "
-      "nicht behauptet.")
+print("Jeder §-Verweis der %d gelesenen Projektdateien steht im zitierten RFC —"
+      % len(DATEIEN))
+if ungelesen is None:
+    print("nachgerechnet, nicht behauptet. Ob das alle sind, wurde nicht "
+          "ermittelt.")
+elif ungelesen:
+    print("nachgerechnet, nicht behauptet. Ueber die %d ungelesenen oben sagt "
+          "dieser Satz nichts." % len(ungelesen))
+else:
+    print("nachgerechnet, nicht behauptet — und das sind alle versionierten "
+          "Projektdateien.")
 PYTHON
