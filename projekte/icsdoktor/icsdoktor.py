@@ -1852,6 +1852,29 @@ def pruefe_p21(logische, funde):
     und anlass.sh kennt den Fall nicht. Eine Pruefung entsteht in diesem
     Projekt erst, wenn ein Anlass da ist. Der Befund steht in state/offen.md
     und ist nicht dadurch erledigt, dass er hier benannt ist.
+
+    NACHTRAG 2026-08-25, Zyklus 63 — eine SECHSTE Stelle, an der geschwiegen
+    wird, und wie die fuenfte eine, an der die Datei trotzdem fehlerhaft ist.
+    Ein Regelteil, dessen Name auf COUNT oder UNTIL endet, ohne einer zu sein:
+
+        RRULE:FREQ=DAILY;X-COUNT=2;UNTIL=20260901T090000Z
+        RRULE:FREQ=DAILY;COUNT=2;X-UNTIL=20260901T090000Z
+
+    Beide ergeben Exit 0 und keine Meldung, gemessen am 2026-08-25 gegen
+    19:02 UTC, stderr leer. Das ist richtig: _recur_teil vergleicht den
+    ganzen Namen links vom ersten "=" und nicht ein Stueck davon. Eine
+    Umsetzung, die stattdessen "COUNT=" im Wert SUCHT, alarmiert hier falsch —
+    dieselbe Falle wie beim Muster im Parameterwert (Beispiel 61), nur eine
+    Ebene tiefer. Beide Zeilen liegen als beispiele/63-p21-regelteil-mit-x-
+    praefix.ics im Repo, mit leerer Erwartung.
+
+    Fehlerhaft sind sie dennoch: Die ABNF von §3.3.10 fuehrt unter
+    recur-rule-part genau VIERZEHN Alternativen, von FREQ bis WKST, und
+    KEINEN x-name-Zweig — nachgesehen am Normtext an seiner Fundstelle am
+    2026-08-25 (HTTP 200), nicht erinnert. Ein X-COUNT ist dort also kein
+    erlaubter Regelteil, sondern gar keiner. Gemeldet wird das hier nicht,
+    weil dieses Werkzeug die Grammatik des RECUR-Wertes nirgends prueft (siehe
+    oben, dritter Spiegelstrich) — der Befund steht in state/offen.md.
     """
     for lz in logische:
         if lz.name != "RRULE":

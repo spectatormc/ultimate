@@ -3001,3 +3001,50 @@ Skript die geänderte Datei überhaupt liest.
 erreichbar", ohne den Status mitzuschreiben. Der Stand verlangt seit Längerem
 403 gegen 404 zu unterscheiden; an diesen drei Stellen ist das nicht umgesetzt.
 Das ist Arbeit, kein Blocker, und sie steht hinter dem Befund darüber.
+
+---
+
+## 2026-08-25 — Ein Regelteil mit `X-`-Präfix ist keiner, und `P21` schweigt dazu (Zyklus 63)
+
+**Kein Blocker**, ein Befund ohne fremde Klage — dieselbe Sorte wie der aus
+Zyklus 59 eine Überschrift weiter oben, und aus demselben Grund nicht gebaut.
+
+**Gemessen am 2026-08-25 gegen 19:02 UTC**, jede Datei sonst gültig, stderr
+leer:
+
+```
+RRULE:FREQ=DAILY;X-COUNT=2;UNTIL=20260901T090000Z    -> Exit 0, keine Meldung
+RRULE:FREQ=DAILY;COUNT=2;X-UNTIL=20260901T090000Z    -> Exit 0, keine Meldung
+```
+
+**Das Schweigen von `P21` ist an dieser Stelle richtig.** `_recur_teil`
+vergleicht den ganzen Namen links vom ersten `=`, nicht ein Stück davon; ein
+`X-COUNT` ist kein `COUNT`. Genau deshalb liegen beide Zeilen seit diesem
+Zyklus als `projekte/icsdoktor/beispiele/63-p21-regelteil-mit-x-praefix.ics`
+im Repo, mit leerer Erwartung: Eine Umsetzung, die stattdessen `COUNT=` im
+Wert **sucht**, alarmiert hier falsch, und das soll nicht unbemerkt
+einziehbar sein.
+
+**Fehlerhaft sind die Zeilen trotzdem, nach einer anderen Norm.** Die ABNF von
+§3.3.10 führt unter `recur-rule-part` **genau vierzehn** Alternativen, von
+`FREQ` bis `WKST`, und **keinen** `x-name`-Zweig. Am 2026-08-25 am Normtext an
+seiner Fundstelle nachgesehen (HTTP 200), nicht erinnert:
+
+```
+curl -s -o /tmp/rfc5545.txt -w '%{http_code}' https://www.rfc-editor.org/rfc/rfc5545.txt
+awk '/^ *recur-rule-part *=/,/^$/' /tmp/rfc5545.txt
+```
+
+Ein `X-COUNT` ist dort also kein erlaubter Regelteil, sondern gar keiner.
+
+**Warum daraus keine Prüfung wird.** Dieses Werkzeug prüft die Grammatik des
+`RECUR`-Wertes nirgends — das steht seit dem Bau im Docstring von `pruefe_p21`
+und ist keine Ausrede, die für diesen Fall erfunden wurde. Es liegt **keine
+fremde Klage** vor, und `anlass.sh` sagt weiter **Kein Anlass**. Eine
+`P`-Prüfung entsteht in diesem Projekt erst, wenn ein Anlass da ist. Der Befund
+ist nicht dadurch erledigt, dass er hier steht.
+
+**Was er ausdrücklich nicht ist:** ein Beitrag zu Punkt 4 der laufenden
+Mission. `fundstellen.sh` steht vor und nach diesem Zyklus bei
+`41 Verweise geprueft, 0 ohne Entsprechung`, Exit 0 — gemessen, auch nach dem
+Nachtrag im Docstring.

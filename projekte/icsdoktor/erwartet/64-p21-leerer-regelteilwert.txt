@@ -1,0 +1,1 @@
+FEHLER Zeile 8: P21 die Wiederholungsregel nennt COUNT ("") und UNTIL ("20260901T090000Z") zugleich; beide Regelteile sind einzeln erlaubt, aber nicht in derselben RRULE [RFC 5545 §3.3.10]
