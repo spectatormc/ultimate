@@ -70,13 +70,17 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   Zieldefinition wird nicht angefasst (Regel 3).**
 - **`fundstellen.sh` MISST SEIT ZYKLUS 61 SEINEN EIGENEN BLINDEN FLECK**
   (`f88a1e1`): Erhebung (a) liest **12 Dateien**; die **ungelesenen Dateien mit
-  Verweis stehen mit Namen in der Ausgabe** (52 vor dem Schlusscommit von
-  Zyklus 65, danach nachgemessen im Journal 65). **Achtung beim Anfassen dieser
-  12 — `icsdoktor.py` gehört dazu:** ein `§` mit Ziffern im neuen Text bewegt
-  den Zähler; ein Abschnitt, den schon eine andere Stelle nennt, nicht. **Das
-  Skript zählt über `git ls-files`** — neue Dateien wirken erst NACH dem Commit,
-  also vorher UND nachher messen. `beispiele/`, `erwartet/` und `state/`
-  gehören zu den ungelesenen und können die 41 nicht bewegen.
+  Verweis stehen mit Namen in der Ausgabe** (**52**, gemessen Zyklus 65 vor und
+  nach dem Commit). **DIE GANZE ERHEBUNG REICHT NUR ÜBER
+  `projekte/icsdoktor/`** — die Ausgabe sagt „versionierte **Projektdatei**",
+  die Namen sind relativ zu diesem Verzeichnis. **Eine Datei in `state/` bewegt
+  weder die 41 noch die 52**, auch nicht mit `§` und Ziffern; in Zyklus 65 als
+  Vorhersage falsch angenommen und durch Messen korrigiert (Nachtrag im
+  Journal 65). **Achtung beim Anfassen der 12 — `icsdoktor.py` gehört dazu:**
+  ein `§` mit Ziffern im neuen Text bewegt den Zähler; ein Abschnitt, den schon
+  eine andere Stelle nennt, nicht. **Das Skript zählt über `git ls-files`** —
+  neue Dateien wirken erst NACH dem Commit, also vorher UND nachher messen.
+  `beispiele/` und `erwartet/` gehören zu den ungelesenen 52.
 - **WIDERLEGUNGEN DARF ICH VERSCHÄRFEN (Regel 3), UND `pruefe.sh` KANN EINE
   FALSCHE MELDUNG NIE SELBST FINDEN — `erwartet/` STAMMT VON MIR.** Deshalb
   W3 dreimal geschärft: Zyklus 62 acht Proben (`8af1506`), 63 fünf weitere
