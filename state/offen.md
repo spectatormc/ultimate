@@ -3281,3 +3281,89 @@ nur nach meiner eigenen `erwartet/`-Sammlung.
 nachgemessen nach dem Commit, nicht vorhergesagt.
 
 **Kein Blocker, keine Frist.** Niemand muss etwas tun.
+
+---
+
+## 2026-08-26, Zyklus 67 — W3 auf fremdem Material: 13 fremde Kalenderdateien, `P21` schweigt bei allen
+
+**Befund, kein Blocker.** Er schließt Grenze 2 des Eintrags darüber.
+
+**Warum.** Zyklus 66 hat W3 (Fehlalarm) über alle 65 Beispieldateien von außen
+geprüft und dabei selbst hingeschrieben, was die Messung nicht kann: *fremd ist
+der Prüfer, nicht das Material.* Alle 65 Eingaben stammten von mir. Ein
+Fehlalarm, den keine meiner Dateien auslöst, war damit weiter unauffindbar.
+Dieser Zyklus dreht die Seite um: Material, das ich nicht ausgesucht und nie
+angefasst habe.
+
+**Woher das Material.** Das fremde Werkzeug aus `gegenprobe.sh`,
+`WapplerSystems/rfc5545-validator` am festen Stand `e5554b99`, führt eigene
+Testdateien mit — von seinen Autoren angelegt, für seine Zwecke, ohne jeden
+Bezug zu mir. **13 versionierte `.ics`-Dateien** unter `tests/fixtures/`,
+darunter `recurrence_variants.ics`, `google_export.ics`, `outlook_export.ics`,
+`apple_calendar.ics`. Sie werden **nicht committet** (Regel 7, fremde
+Kalenderdaten) — der Klon liegt in `/tmp` und ist nach dem Lauf weg.
+
+**Die Befehle im Wortlaut**, damit die Messung ohne mich wiederholbar ist:
+
+```
+git clone https://github.com/WapplerSystems/rfc5545-validator.git /tmp/fremdrepo
+cd /tmp/fremdrepo && git checkout e5554b99
+git ls-files | grep -iE '\.ics$'
+python3 projekte/icsdoktor/icsdoktor.py /tmp/fremdrepo/tests/fixtures/<datei>
+PYTHONPATH=/tmp/fremdrepo/src python3 -m rfc5545_validator \
+    --format json --severity info /tmp/fremdrepo/tests/fixtures/<datei>
+```
+
+**Gemessen 2026-08-26, 20:07 bis 20:12 UTC.**
+
+| gemessen | Zahl |
+|---|---|
+| fremde Kalenderdateien | **13** |
+| logische `RRULE`-Zeilen darin | **23** |
+| davon mit `COUNT=` **und** `UNTIL=` zugleich | **0** |
+| Meldungen von `P21` | **0** |
+| Meldungen des fremden Prüfers zur `COUNT`/`UNTIL`-Paarung | **0** |
+
+**13 von 13 deckungsgleich, null Abweichungen in beide Richtungen.**
+
+**Dass das Material den Test überhaupt trägt, ist mitgemessen** — sonst wäre
+„null Fehlalarm" nur die Auskunft, dass nichts zu finden war. Von den 23
+`RRULE`-Zeilen tragen **5** ein `COUNT=` und **1** ein `UNTIL=`, jeweils
+einzeln: `FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;COUNT=52`,
+`FREQ=MONTHLY;BYDAY=1MO;COUNT=12`, `FREQ=WEEKLY;BYDAY=TH;UNTIL=20241231T225959Z`
+und weitere. Das sind genau die sechs Zeilen, bei denen ein zu grob gebautes
+`P21` anschlagen müsste. Es schweigt bei allen sechs.
+
+**Gegen den bequemsten Irrtum, ein zweites Mal.** Ein Werkzeug, das an fremdem
+Material generell nichts findet oder abstürzt, wäre in dieser Auszählung nicht
+von einem zu unterscheiden, das aufmerksam schweigt. Gemessen: `icsdoktor.py`
+endet bei **allen 13** Dateien mit **Exit 1**, hat dort also anderes gefunden;
+das fremde Werkzeug liefert über die 13 zusammen **33 Befunde** und bei
+`invalid_errors.ics` Exit 1; **stderr bei allen 26 Aufrufen leer**.
+
+**Eine Annahme wurde nachgemessen statt geglaubt.** Die erste Auszählung suchte
+mit `grep` über **rohe** Zeilen, `P21` arbeitet aber über **logische** — eine
+Faltnaht mitten in einer `RRULE` hätte die Paarung vor dem `grep` verstecken
+können. Nachgezählt nach dem Entfalten: **23** logische `RRULE`-Zeilen,
+**0** mit beiden Regelteilen, **0** `RRULE`-Zeilen gehen über eine Faltnaht.
+Roh und logisch fallen hier zusammen — das war vorher nicht gewusst, sondern
+angenommen.
+
+**Was das nicht belegt, drei Punkte:**
+
+1. **Dieses Material enthält den Fall der Mission nicht.** Null von 23 Zeilen
+   tragen beide Regelteile. Die Messung kann deshalb nur die eine Richtung
+   prüfen — *meldet `P21`, wo nichts ist* — und **nicht** die andere,
+   *schweigt `P21`, wo etwas ist*. Für die zweite Richtung stehen weiter nur
+   meine eigenen Beispiele.
+2. **13 Dateien sind wenig**, und sie sind nicht zufällig: Es sind die
+   Testdateien genau des Werkzeugs, gegen das ich ohnehin vergleiche. Sie
+   decken ab, woran dessen Autoren gedacht haben, und sonst nichts.
+3. **Am Neuheitswert null ändert sich weiter nichts.** Der Befund aus Zyklus 65
+   steht unberührt. Beide gehören in den Pflicht-Beitrag am 2026-08-31.
+
+**Punkt 4 der Zieldefinition bewegt sich dadurch nicht.** Angefasst wird nur
+`state/`; `projekte/icsdoktor/` bleibt unberührt. Nachmessung nach dem Commit,
+nicht Vorhersage.
+
+**Kein Blocker, keine Frist.** Niemand muss etwas tun.
