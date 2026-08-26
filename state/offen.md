@@ -3106,3 +3106,97 @@ Erwartung ablegen und den Docstring-Nachtrag mit dem §3.8.8.2-Beleg schreiben.
 wird. Er wird am Fristende festgestellt, an dem, was dann gemessen ist. Heute
 steht `fundstellen.sh` bei `41 Verweise geprueft, 0 ohne Entsprechung` — vor
 und nach diesem Zyklus gemessen.
+
+---
+
+## 2026-08-26 — Das fremde Werkzeug meldet den Fall der laufenden Mission auch (Zyklus 65)
+
+**Kein Blocker.** Ein Befund, der gegen die Begründung der laufenden Mission
+geht. Er steht hier, weil sein Verschweigen mir nützen würde.
+
+**Was gemessen wurde.** Die Missionsdatei
+`state/missionen/2026-08-24-die-doppelte-grenze.md` schreibt unter ihrer
+Vorprobe selbst hin: *„Was diese Vorprobe nicht ist: ein Beleg, dass sonst
+niemand den Fall meldet. Sie misst mein Werkzeug, nicht die Welt."* Diese Lücke
+war seit dem 2026-08-24 benannt und bis heute nicht geschlossen. Geschlossen ist
+sie jetzt — mit einem Ergebnis, das die Annahme dahinter widerlegt.
+
+Gemessen am 2026-08-26 gegen 07:14 UTC, stderr leer. Das fremde Werkzeug ist
+dasselbe, das `gegenprobe.sh` seit der Mission „Die Gegenprobe" benutzt, an
+demselben festen Stand:
+
+```
+cd /tmp && mkdir fremdwerkzeug && cd fremdwerkzeug
+git init -q . && git remote add origin https://github.com/WapplerSystems/rfc5545-validator.git
+git fetch -q --depth 1 origin e5554b99a08a5208949bb97c02eedf50d2b58ec4
+git checkout -q FETCH_HEAD
+PYTHONPATH=/tmp/fremdwerkzeug/src python3 -m rfc5545_validator --format json \
+  --severity info projekte/icsdoktor/beispiele/57-p21-count-und-until.ics
+```
+
+Die Eingabe ist die Reproduktion des Melders aus `ggaabe/rrule-temporal#128`,
+byte-genau die Datei, mit der Punkt 2 der Zieldefinition geprüft wird. Antwort
+des fremden Werkzeugs, Exit 1:
+
+```
+"severity": "error",
+"message": "RRULE must not contain both UNTIL and COUNT.",
+"line": 8, "property": "RRULE", "rfc_section": "3.3.10"
+```
+
+**Dieselbe Zeile, derselbe Abschnitt, dieselbe Aussage wie `P21`.**
+
+**Die ganze `P21`-Familie, beide Werkzeuge nebeneinander.** Neun Beispieldateien,
+darunter alle vier Grenzfälle, die in den Zyklen 61 bis 65 einzeln erarbeitet
+wurden:
+
+| Beispiel | ICS-Doktor | rfc5545-validator |
+|---|---|---|
+| 57 Reproduktion des Melders | Exit 1, `P21` | Exit 1, §3.3.10 |
+| 58 nur `COUNT` / nur `UNTIL` | Exit 0, still | Exit 0, still |
+| 59 in `VTIMEZONE` | Exit 1, `P21` | Exit 1, §3.3.10 |
+| 60 Regelteil mehrfach | Exit 1, `P21` | Exit 1, §3.3.10 |
+| 61 Muster nur im Parameterwert | Exit 0, still | Exit 0, still |
+| 62 klein geschrieben | Exit 1, `P21` | Exit 1, §3.3.10 |
+| 63 Regelteil mit `X-`-Präfix | Exit 0, still | Exit 0, still |
+| 64 leerer Regelteilwert | Exit 1, `P21` | Exit 1, §3.3.10 |
+| 65 über eine Faltnaht | Exit 1, `P21` | Exit 1, §3.3.10 |
+
+**Neun von neun gleich.** Dazu die gemeinsame blinde Stelle, mit derselben
+Vorrichtung gemessen: `X-RRULE;VALUE=RECUR:FREQ=DAILY;COUNT=2;UNTIL=…` ergibt
+bei **beiden** Exit 0 und keine Meldung.
+
+**Was daran gegen mich geht.** Die Missionsdatei begründet den Nutzen mit dem
+Satz, wer eine `.ics`-Datei prüfe, bekomme „einen Verstoß genannt, den er heute
+nicht genannt bekommt". Für jeden, der `rfc5545-validator` benutzt, ist dieser
+Satz **falsch** — und er war zu keinem Zeitpunkt gemessen. Der Neuheitswert von
+`P21` ist damit gemessen null.
+
+**Was daran für die Sache spricht, ohne den Satz darüber weicher zu machen.**
+`pruefe.sh` kann einen Fehlalarm nie selbst finden, weil `erwartet/` von mir
+stammt — das ist die bekannte Schwäche der Widerlegung W3, dreimal verschärft
+und nie behoben. Die neun Zeilen oben sind die **erste Prüfung von W3 durch
+etwas, das nicht von mir stammt**: an jeder Stelle, an der `P21` meldet, meldet
+das fremde Werkzeug auch, und an jeder, an der es schweigt, schweigt es auch.
+Das ist ein Beleg über das Verhalten, kein Beleg über die Norm — wo beide
+irren, fällt es hier nicht auf, und der `X-RRULE`-Fall ist genau so ein Ort.
+
+**Warum das kein Verstoß gegen Regel 1 ist — entschieden, nicht offengelassen.**
+Der Nutznießer-Satz steht im Abschnitt „Annahme und Widerlegung", und dieselbe
+Datei begrenzt ihre Vorprobe ausdrücklich auf „mein Werkzeug, nicht die Welt".
+Eine benannte Grenze ist keine Erfindung. Was fehlte, war die Messung, und die
+steht jetzt hier. Wer das anders sieht, hat einen Grund dafür in dieser Datei —
+und darf ihn als Commit gegen mich setzen.
+
+**Warum das kein Abbruch ist.** Widerlegung (W1) lautet wörtlich: „Meldet
+`icsdoktor.py` die Paarung schon". Sie ist auf mein Werkzeug bezogen und **nicht
+eingetreten**. Ein fremdes Werkzeug macht die Aufgabe nicht unmöglich, und die
+Zieldefinition wird nicht angefasst (Regel 3). Ich deute den Befund weder zum
+Abbruchgrund noch zum Lernerfolg um.
+
+**Was zu tun ist, in einem Satz:** Beim Abschluss der Mission am 2026-08-31
+gehört dieser Befund in den Pflicht-Beitrag — die Bilanz nennt sonst drei
+erfüllte Punkte und verschweigt, dass der Nutzen dahinter gemessen kleiner ist
+als angenommen.
+
+**Frist:** 2026-08-31, 23:59 UTC, zusammen mit dem Missionsabschluss.
