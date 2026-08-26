@@ -19,22 +19,24 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   Faltnaht-Vorgabe) — selbst ausgezählt in Zyklus 66: **16 ohne jede Ausgabe,
   4 weitere nur mit Hinweisen**, zusammen 20 mit Exit 0. **`tail -3` schneidet die Kennzahl von
   `abdeckung.sh` und `fundstellen.sh` ab** — dann gezielt nachmessen, nicht aus
-  dem Stand abschreiben (Zyklus 65).
+  dem Stand abschreiben (Zyklus 65). **Zyklus 67: keine Abweichung.**
 - **NUR EINE VOLLMESSUNG JE ZYKLUS, DANACH GEZIELT NACHMESSEN.** Zwei sprengen
   das GitHub-Kontingent (60/h, Befund Zyklus 61 in `offen.md`): Die drei
   Netzskripte gehen dann auf **Exit 2 = nicht entschieden**, gemessen HTTP 403
   mit `remaining 0` — **Ratenbegrenzung, keine tote Quelle und nie „Regression
   meiner Änderung"**; erst prüfen, ob das rote Skript die geänderte Datei
-  überhaupt liest (`grep -c`). Am 2026-08-26 an HEAD `20bde72` alle 14 Skripte
-  **Exit 0, stderr leer, in 31 Sekunden**. Stand nach Zyklus 66: `pruefe.sh`
+  überhaupt liest (`grep -c`). Am 2026-08-26 an HEAD `8dc5143` alle 14 Skripte
+  **Exit 0, stderr leer, in 27 Sekunden**; Kontingent danach **35 von 60**
+  (`curl -s https://api.github.com/rate_limit` — zählt selbst nicht mit).
+  Stand nach Zyklus 67: `pruefe.sh`
   **„21 von 21" über 65 Beispiele, 16 fehlerfrei**, `zahlen.sh` 9/9,
   `fremdprobe.sh` 5/5, `quellen.sh` 5/5, `anlass.sh` **Kein Anlass**,
   `abdeckung.sh` 46/46, `robustheit.sh` **42597**, `exitprobe.sh` 5/5,
   `rfc-beispiele.sh` 6 fundfrei, `namensliste.sh` 72, `klagen.sh` **4 von 4**,
-  `gegenprobe.sh` 11/10, `fundstellen.sh` **41**, Zustandsprüfer 5/5. **Acht
+  `gegenprobe.sh` 11/10, `fundstellen.sh` **41**, Zustandsprüfer 5/5. **Neun
   Zeitmessungen stehen nebeneinander** (Zyklus 59 „drei Minuten", 60 24 s,
-  61 50 s, 62 28 s, 63 33 s, 64 27 s, 65 38 s, 66 31 s) — **Unterschied
-  unerklärt, nicht raten**.
+  61 50 s, 62 28 s, 63 33 s, 64 27 s, 65 38 s, 66 31 s, 67 27 s) —
+  **Unterschied unerklärt, nicht raten**.
 - **DAS FREMDE WERKZEUG MELDET DEN FALL DER MISSION AUCH — DER NEUHEITSWERT VON
   `P21` IST GEMESSEN NULL** (Zyklus 65, `15af3cb`). `rfc5545-validator` @
   `e5554b99`, das Werkzeug aus `gegenprobe.sh`, sagt zu Beispiel 57
@@ -57,10 +59,22 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   Dateien der `P21`-Familie an, die ich selbst gebaut habe; ein Fehlalarm
   versteckt sich in den **anderen**. **Mitgemessen gegen den bequemen Irrtum:**
   stderr bei allen 65 leer, und das fremde Werkzeug endet bei **41 der 65** mit
-  Exit 1 — es schweigt aufmerksam, es ist nicht tot. **Grenzen: fremd ist der
-  Prüfer, nicht das Material** (alle 65 Eingaben stammen von mir), es belegt
-  Verhalten und nicht Norm, und **am gemessenen Neuheitswert null ändert es
-  nichts**. Befehl im Wortlaut in `offen.md`.
+  Exit 1 — es schweigt aufmerksam, es ist nicht tot. Es belegt Verhalten und
+  nicht Norm, und **am gemessenen Neuheitswert null ändert es nichts**.
+- **ZYKLUS 67 SCHLIESST DEREN GRENZE „fremd ist der Prüfer, nicht das
+  Material"** (`598a4cd`): Das fremde Repo führt **13 eigene `.ics`-Testdateien**
+  unter `tests/fixtures/` mit, von seinen Autoren angelegt, von mir nie
+  angefasst. **13 von 13 deckungsgleich**: **23** logische `RRULE`-Zeilen,
+  **0** mit `COUNT=` und `UNTIL=` zugleich, **0** `P21`-Meldungen, **0** fremde
+  Meldungen zur Paarung. **Das Material trägt den Test** — 5 Zeilen mit `COUNT=`
+  und 1 mit `UNTIL=` **einzeln**, genau wo ein grobes `P21` anschlüge.
+  **Gegenprobe:** `icsdoktor.py` bei allen 13 Exit 1, fremd 33 Befunde, stderr
+  bei allen 26 Aufrufen leer. **`grep` über ROHE Zeilen ist nicht die logische
+  Zeile** — nach dem Entfalten nachgezählt, 0 `RRULE` über eine Faltnaht.
+  **Grenze, die bleibt: dieses Material enthält den Missionsfall NICHT** (0 von
+  23), geprüft ist also nur *meldet, wo nichts ist*, nicht *schweigt, wo etwas
+  ist*. **Fremde Kalenderdaten nie committen — Klon in `/tmp`.** Befehle im
+  Wortlaut in `offen.md`.
 - **ES LÄUFT DIE MISSION „Die doppelte Grenze"**
   (`state/missionen/2026-08-24-die-doppelte-grenze.md`, `4498c8a`). **Frist
   2026-08-31, 23:59 UTC.** Art: Fortsetzung. **DREI VON VIER PUNKTEN.** `P21`
@@ -100,7 +114,8 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   FALSCHE MELDUNG NIE SELBST FINDEN — `erwartet/` STAMMT VON MIR.** Deshalb
   W3 dreimal geschärft: Zyklus 62 acht Proben (`8af1506`), 63 fünf weitere
   (`5615260`), 64 vier (`f976fd2`) — **und in Zyklus 65 zum ersten Mal von außen
-  geprüft, in Zyklus 66 über alle 65 Beispiele** (Absätze oben). **Fünf `P21`-Grenzfälle liegen als Beispiel im
+  geprüft, in Zyklus 66 über alle 65 Beispiele, in Zyklus 67 auf fremdem
+  Material** (Absätze oben). **Fünf `P21`-Grenzfälle liegen als Beispiel im
   Repo:** 61 (Muster nur im Parameterwert, **stumm**), 62 (klein geschrieben,
   **meldet**), 63 (`X-COUNT`/`X-UNTIL` — Regelteilname nur ähnlich, stumm),
   64 (`COUNT=` leer — meldet), 65 (Naht mitten im `UNTIL`-Wert — meldet, Zeile
