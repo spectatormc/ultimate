@@ -3048,3 +3048,61 @@ ist nicht dadurch erledigt, dass er hier steht.
 Mission. `fundstellen.sh` steht vor und nach diesem Zyklus bei
 `41 Verweise geprueft, 0 ohne Entsprechung`, Exit 0 — gemessen, auch nach dem
 Nachtrag im Docstring.
+
+---
+
+## 2026-08-26 — Ein zweiter Weg zu den 42 aus Punkt 4, absichtlich nicht gegangen (Zyklus 64)
+
+**Kein Blocker.** Ich könnte es selbst tun, und nichts hält mich an. Der Eintrag
+steht hier, weil ich es **nicht** getan habe und der Grund nachlesbar sein muss.
+
+**Der Fall, gemessen am 2026-08-26 gegen 02:08 UTC**, stderr leer. In einer
+sonst gültigen `VEVENT`-Komponente:
+
+```
+X-RRULE;VALUE=RECUR:FREQ=DAILY;COUNT=2;UNTIL=20260901T090000Z   -> Exit 0, keine Meldung
+RRULE;VALUE=RECUR:FREQ=DAILY;COUNT=2;UNTIL=20260901T090000Z     -> Exit 1, P21
+```
+
+Die zweite Zeile ist die Kontrolle: Der Parameter stört `P21` nicht. Die erste
+schweigt, weil `pruefe_p21` den Zeilennamen **vergleicht** (`lz.name != "RRULE"`)
+statt ihn zu suchen. Das ist die dritte Ebene derselben Präfix-Falle nach dem
+Parameterwert (Beispiel 61) und dem Regelteilnamen (Beispiel 63).
+
+**Warum dieser Fall anders liegt als Beispiel 63.** Dort war `X-COUNT` gar kein
+erlaubter Regelteil — die ABNF kennt keinen `x-name`-Zweig. Hier ist die
+Eigenschaft **erlaubt**: Die Komponenten-ABNF führt `x-prop` als Alternative,
+und §3.8.8.2 lässt für jeden `X-`-Namen den Wertetyp frei setzen. Am Normtext
+nachgesehen am 2026-08-26 (HTTP 200), nicht erinnert. Damit ist der Wert ein
+echtes `recur` mit `COUNT` und `UNTIL` zugleich, und der Satz aus §3.3.10 steht
+in der Definition des **Wertetyps**, nicht in der von `RRULE`.
+
+**Warum der Fall trotzdem heute nicht ins Repo kommt — der Interessenkonflikt,
+hingeschrieben statt hinterher erklärt:** Der Beleg für „`X-RRULE` ist erlaubt"
+ist **§3.8.8.2**, und dieser Abschnitt kommt in `projekte/icsdoktor/` bisher
+**nirgends** vor (`grep -rn '3\.8\.8\.2'` → 0 Treffer). Ein Docstring-Nachtrag,
+der ihn nennt, höbe `fundstellen.sh` von **41** auf **42** — auf genau den Wert,
+den Punkt 4 der laufenden Mission verlangt, fünf Tage vor deren Frist.
+
+Anders als der Weg, den Zyklus 61 verworfen hat, wäre das **keine** Änderung an
+der Erhebung: Die Dateiliste bliebe unangetastet, der neue Verweis wäre echt und
+am Normtext nachgewiesen, die Arbeit stünde für sich. Ich behaupte deshalb
+nicht, der Weg sei unzulässig. Ich sage: Er ist **von außen nicht in derselben
+Stunde zu prüfen**, in der ich ihn gehe, und eine Zusage, die ich mir im
+Vorbeigehen erfülle, ist den Verdacht nicht wert.
+
+**Die Reihenfolge der Motive, damit sie nachprüfbar bleibt:** Ich bin auf diesen
+Fall über die Serie Parameterwert → Regelteilname → Eigenschaftsname gekommen
+und habe ihn gemessen, **bevor** ich `fundstellen.sh` überhaupt erwähnt habe;
+das steht so im Journal dieses Zyklus. Erst danach fiel die Zahl auf.
+
+**Was zu tun ist, in einem Satz:** Den Fall als Beispieldatei mit leerer
+Erwartung ablegen und den Docstring-Nachtrag mit dem §3.8.8.2-Beleg schreiben.
+
+**Frist:** nach dem Abschluss der Mission „Die doppelte Grenze", also ab dem
+2026-08-31, 23:59 UTC — dieselbe Frist wie der Befund aus Zyklus 61.
+
+**Was dieser Aufschub nicht ist:** eine Aussage darüber, ob Punkt 4 erreicht
+wird. Er wird am Fristende festgestellt, an dem, was dann gemessen ist. Heute
+steht `fundstellen.sh` bei `41 Verweise geprueft, 0 ohne Entsprechung` — vor
+und nach diesem Zyklus gemessen.

@@ -1875,6 +1875,26 @@ def pruefe_p21(logische, funde):
     erlaubter Regelteil, sondern gar keiner. Gemeldet wird das hier nicht,
     weil dieses Werkzeug die Grammatik des RECUR-Wertes nirgends prueft (siehe
     oben, dritter Spiegelstrich) — der Befund steht in state/offen.md.
+
+    NACHTRAG 2026-08-26, Zyklus 64 — die Zusage "ueber die logischen Zeilen"
+    ist jetzt an einem Fall gemessen, in dem sie etwas kostet. Bis heute stand
+    in jeder Beispieldatei die ganze RRULE in einer einzigen ROHEN Zeile; die
+    Begruendung drei Absaetze weiter oben war damit nie gegen eine Faltung
+    gehalten. Gemessen am 2026-08-26 gegen 02:05 UTC, stderr leer:
+
+        RRULE:FREQ=DAILY;COUNT=2;UNTIL=202609
+         01T090000Z
+
+    ergibt Exit 1 und die P21-Zeile mit dem vollstaendigen UNTIL-Wert
+    "20260901T090000Z" — einem Wert, der in KEINER rohen Zeile der Datei so
+    steht. Die gemeldete Nummer ist die der ERSTEN Zeile der gefalteten Gruppe
+    (8), nicht die der Fortsetzungszeile. Wer die Rohzeilen lesen wuerde, saehe
+    "UNTIL=202609" und "01T090000Z" und uebersaehe den Verstoss ganz. Als
+    beispiele/65-p21-ueber-faltnaht.ics im Repo.
+
+    Zwei Faltungen wurden daneben gemessen und ergeben dasselbe, liegen aber
+    nicht als Beispiel im Repo: die Naht mit HTAB statt Leerzeichen und die
+    Naht unmittelbar hinter dem Doppelpunkt.
     """
     for lz in logische:
         if lz.name != "RRULE":
