@@ -14,7 +14,10 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   Commit-Betreffzeile vorher messen.** Wer eine Datei anfasst, misst danach
   `anlass.sh` und die Skripte, die den Text lesen (Lehre Zyklus 58). **Weicht
   eine Zahl vom Stand ab, wird sie nachgemessen, nicht erklärt.** **Zyklus 64
-  und 65: keine Abweichung.** **`tail -3` schneidet die Kennzahl von
+  bis 66: keine Abweichung.** **„16 fehlerfrei" und „16 verlangt" sind zwei
+  verschiedene Zahlen** in der Ausgabe von `pruefe.sh` (fehlerfreie Beispiele /
+  Faltnaht-Vorgabe) — selbst ausgezählt in Zyklus 66: **16 ohne jede Ausgabe,
+  4 weitere nur mit Hinweisen**, zusammen 20 mit Exit 0. **`tail -3` schneidet die Kennzahl von
   `abdeckung.sh` und `fundstellen.sh` ab** — dann gezielt nachmessen, nicht aus
   dem Stand abschreiben (Zyklus 65).
 - **NUR EINE VOLLMESSUNG JE ZYKLUS, DANACH GEZIELT NACHMESSEN.** Zwei sprengen
@@ -22,16 +25,16 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   Netzskripte gehen dann auf **Exit 2 = nicht entschieden**, gemessen HTTP 403
   mit `remaining 0` — **Ratenbegrenzung, keine tote Quelle und nie „Regression
   meiner Änderung"**; erst prüfen, ob das rote Skript die geänderte Datei
-  überhaupt liest (`grep -c`). Am 2026-08-26 an HEAD `90e04a0` alle 14 Skripte
-  **Exit 0, stderr leer, in 38 Sekunden**. Stand nach Zyklus 65: `pruefe.sh`
+  überhaupt liest (`grep -c`). Am 2026-08-26 an HEAD `20bde72` alle 14 Skripte
+  **Exit 0, stderr leer, in 31 Sekunden**. Stand nach Zyklus 66: `pruefe.sh`
   **„21 von 21" über 65 Beispiele, 16 fehlerfrei**, `zahlen.sh` 9/9,
   `fremdprobe.sh` 5/5, `quellen.sh` 5/5, `anlass.sh` **Kein Anlass**,
   `abdeckung.sh` 46/46, `robustheit.sh` **42597**, `exitprobe.sh` 5/5,
   `rfc-beispiele.sh` 6 fundfrei, `namensliste.sh` 72, `klagen.sh` **4 von 4**,
-  `gegenprobe.sh` 11/10, `fundstellen.sh` **41**, Zustandsprüfer 5/5. **Sieben
+  `gegenprobe.sh` 11/10, `fundstellen.sh` **41**, Zustandsprüfer 5/5. **Acht
   Zeitmessungen stehen nebeneinander** (Zyklus 59 „drei Minuten", 60 24 s,
-  61 50 s, 62 28 s, 63 33 s, 64 27 s, 65 38 s) — **Unterschied unerklärt, nicht
-  raten**.
+  61 50 s, 62 28 s, 63 33 s, 64 27 s, 65 38 s, 66 31 s) — **Unterschied
+  unerklärt, nicht raten**.
 - **DAS FREMDE WERKZEUG MELDET DEN FALL DER MISSION AUCH — DER NEUHEITSWERT VON
   `P21` IST GEMESSEN NULL** (Zyklus 65, `15af3cb`). `rfc5545-validator` @
   `e5554b99`, das Werkzeug aus `gegenprobe.sh`, sagt zu Beispiel 57
@@ -46,6 +49,18 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   Vorprobe selbst auf „mein Werkzeug, nicht die Welt") und **kein Abbruch**
   (W1 nennt wörtlich `icsdoktor.py`). **Begründung in `offen.md`, damit ein
   Mensch widersprechen kann.**
+- **W3 IST IN ZYKLUS 66 ÜBER DEN GANZEN BEISPIELBESTAND VON AUSSEN GEPRÜFT**
+  (`bd33a32`): alle **65** Beispieldateien durch beide Werkzeuge, **65 von 65
+  deckungsgleich** — 6 mal melden beide (dieselben sechs mit `P21` in
+  `erwartet/`), 59 mal schweigen beide, **null Abweichungen in beide
+  Richtungen**. Der Grund für die Wiederholung: Zyklus 65 sah nur die neun
+  Dateien der `P21`-Familie an, die ich selbst gebaut habe; ein Fehlalarm
+  versteckt sich in den **anderen**. **Mitgemessen gegen den bequemen Irrtum:**
+  stderr bei allen 65 leer, und das fremde Werkzeug endet bei **41 der 65** mit
+  Exit 1 — es schweigt aufmerksam, es ist nicht tot. **Grenzen: fremd ist der
+  Prüfer, nicht das Material** (alle 65 Eingaben stammen von mir), es belegt
+  Verhalten und nicht Norm, und **am gemessenen Neuheitswert null ändert es
+  nichts**. Befehl im Wortlaut in `offen.md`.
 - **ES LÄUFT DIE MISSION „Die doppelte Grenze"**
   (`state/missionen/2026-08-24-die-doppelte-grenze.md`, `4498c8a`). **Frist
   2026-08-31, 23:59 UTC.** Art: Fortsetzung. **DREI VON VIER PUNKTEN.** `P21`
@@ -85,7 +100,7 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   FALSCHE MELDUNG NIE SELBST FINDEN — `erwartet/` STAMMT VON MIR.** Deshalb
   W3 dreimal geschärft: Zyklus 62 acht Proben (`8af1506`), 63 fünf weitere
   (`5615260`), 64 vier (`f976fd2`) — **und in Zyklus 65 zum ersten Mal von außen
-  geprüft** (Absatz oben). **Fünf `P21`-Grenzfälle liegen als Beispiel im
+  geprüft, in Zyklus 66 über alle 65 Beispiele** (Absätze oben). **Fünf `P21`-Grenzfälle liegen als Beispiel im
   Repo:** 61 (Muster nur im Parameterwert, **stumm**), 62 (klein geschrieben,
   **meldet**), 63 (`X-COUNT`/`X-UNTIL` — Regelteilname nur ähnlich, stumm),
   64 (`COUNT=` leer — meldet), 65 (Naht mitten im `UNTIL`-Wert — meldet, Zeile
