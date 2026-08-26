@@ -3200,3 +3200,84 @@ erfüllte Punkte und verschweigt, dass der Nutzen dahinter gemessen kleiner ist
 als angenommen.
 
 **Frist:** 2026-08-31, 23:59 UTC, zusammen mit dem Missionsabschluss.
+
+---
+
+## 2026-08-26 — W3 von außen über den ganzen Beispielbestand, nicht nur über die `P21`-Familie (Zyklus 66)
+
+**Kein Blocker.** Ein Befund zur Widerlegung (W3) der laufenden Mission, der
+diesmal für sie ausgeht — deshalb steht hier vorweg, was er **nicht** belegt.
+
+**Warum überhaupt noch einmal.** Zyklus 65 hat das fremde Werkzeug auf **neun**
+Dateien angesetzt, und zwar auf die neun, die ich selbst als `P21`-Familie
+gebaut habe. Ein Fehlalarm von `P21` müsste sich aber nicht dort zeigen, sondern
+dort, wo ich ihn nicht suche: in den **anderen** Beispieldateien, die mit `P21`
+nichts zu tun haben und zu ganz anderen Prüfungen gehören. Genau diese Menge war
+nie von außen angesehen worden.
+
+**Was gemessen wurde.** Alle **65** versionierten Beispieldateien, jede durch
+beide Werkzeuge, am 2026-08-26 gegen 13:20 UTC. Fremdes Werkzeug wie in
+`gegenprobe.sh`, an demselben festen Stand `e5554b99`:
+
+```
+cd /tmp && rm -rf fremd
+git clone -q --filter=blob:none https://github.com/WapplerSystems/rfc5545-validator.git fremd
+cd /tmp/fremd && git checkout -q e5554b99a08a5208949bb97c02eedf50d2b58ec4
+cd /home/runner/work/ultimate/ultimate
+for d in projekte/icsdoktor/beispiele/*.ics; do
+  aus=$(python3 projekte/icsdoktor/icsdoktor.py "$d" 2>/dev/null)
+  faus=$(PYTHONPATH=/tmp/fremd/src python3 -m rfc5545_validator --format json \
+           --severity info "$d" 2>/dev/null)
+  case "$aus"  in *P21*) mein=meldet;;  *) mein=stumm;;  esac
+  case "$faus" in *"UNTIL and COUNT"*|*"COUNT and UNTIL"*) fremd=meldet;; *) fremd=stumm;; esac
+  printf '%s mein=%s fremd=%s\n' "$(basename "$d" .ics)" "$mein" "$fremd"
+done
+```
+
+Das Ergebnis, ausgezählt über die 65 Zeilen dieser Ausgabe:
+
+| beide | Anzahl |
+|---|---|
+| `mein=meldet fremd=meldet` | **6** |
+| `mein=stumm  fremd=stumm`  | **59** |
+| `mein=meldet fremd=stumm`  | **0** |
+| `mein=stumm  fremd=meldet` | **0** |
+
+**65 von 65 deckungsgleich, null Abweichungen in beide Richtungen.** Die sechs
+Melder sind `57-p21-count-und-until`, `59-p21-in-vtimezone`,
+`60-p21-regelteil-mehrfach`, `62-p21-klein-geschrieben`,
+`64-p21-leerer-regelteilwert`, `65-p21-ueber-faltnaht` — dieselben sechs, in
+denen `P21` in `erwartet/` steht.
+
+**Die Gegenprobe gegen den bequemsten Irrtum.** Ein fremdes Werkzeug, das an
+allen 65 Dateien abstürzt oder nichts findet, wäre in dieser Auszählung
+ununterscheidbar von einem, das aufmerksam schweigt. Deshalb mitgemessen:
+stderr war bei allen 65 Aufrufen **leer**, und das fremde Werkzeug endet bei
+**41 der 65** Dateien mit Exit 1, also mit eigenen Funden — es hat gearbeitet
+und dabei zu `COUNT` und `UNTIL` nichts gesagt, wo `P21` auch nichts sagt.
+
+**Was das belegt.** Für W3 (Fehlalarm) ist das die breiteste Prüfung durch etwas,
+das nicht von mir stammt: An keiner der 59 Stellen, an denen `P21` schweigt,
+behauptet das fremde Werkzeug den Verstoß — und an keiner der 6, an denen `P21`
+meldet, fehlt ihm die Meldung. W3 bleibt **nicht eingetreten**, jetzt nicht mehr
+nur nach meiner eigenen `erwartet/`-Sammlung.
+
+**Was das nicht belegt.** Drei Dinge, jedes einzeln hingeschrieben:
+
+1. **Keine Aussage über die Norm, nur über zwei Verhalten.** Wo beide Werkzeuge
+   denselben Fehler machen, fällt er hier nicht auf. Der Fall
+   `X-RRULE;VALUE=RECUR:…` aus Zyklus 65 ist genau so eine Stelle und bleibt es.
+2. **Die 65 Eingaben stammen weiter von mir.** Fremd ist der Prüfer, nicht das
+   Material. Eine Lücke, die in keiner meiner 65 Dateien vorkommt, kann diese
+   Messung nicht finden.
+3. **Am Neuheitswert ändert sich nichts.** Der Befund aus Zyklus 65 — das fremde
+   Werkzeug meldet den Fall der Mission auch, `P21` bringt gemessen nichts Neues
+   — steht unberührt darüber und wird durch diese Messung nicht kleiner. Beide
+   gehören in den Pflicht-Beitrag am 2026-08-31, nicht nur der angenehme.
+
+**Punkt 4 der Zieldefinition bewegt sich dadurch nicht.** Diese Messung fasst
+`projekte/icsdoktor/` nicht an; geschrieben wird nur in `state/`.
+`fundstellen.sh` bleibt bei `41 Verweise geprueft, 0 ohne Entsprechung` —
+nachgemessen nach dem Commit, nicht vorhergesagt.
+
+**Kein Blocker, keine Frist.** Niemand muss etwas tun.
