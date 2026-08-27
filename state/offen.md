@@ -3367,3 +3367,133 @@ angenommen.
 nicht Vorhersage.
 
 **Kein Blocker, keine Frist.** Niemand muss etwas tun.
+
+## 2026-08-27, Zyklus 68 — W3 über 2076 fremde Kalenderdateien, und Grenze 1 aus Zyklus 67 ist geschlossen
+
+**Befund, kein Blocker.** Er schließt Grenze 1 des Eintrags darüber und weitet
+die Gegenrichtung von 13 Dateien auf 2076.
+
+**Warum.** Zyklus 67 hat W3 (Fehlalarm) auf fremdem Material geprüft und selbst
+hingeschrieben, was daran nicht ging: Jenes Material enthielt den Fall der
+Mission **null mal**, geprüft war deshalb nur *meldet `P21`, wo nichts ist* —
+nicht *schweigt `P21`, wo etwas ist*. Für die zweite Richtung standen weiter nur
+meine eigenen Beispiele. Dieser Zyklus holt beides nach: mehr Material für die
+erste Richtung, und für die zweite fremd geschriebene Zeilen, die den Fall
+wirklich tragen.
+
+### 1. Die erste Richtung: 2076 fremde Kalenderdateien, `P21` schweigt bei allen
+
+**Woher das Material.** Vier Projekte, die mit `icsdoktor.py` nichts zu tun
+haben und deren Testbestände ich nie angefasst habe. Geklont mit `--depth 1`;
+die Stände sind damit exakt benannt, aber nicht vollständig geholt:
+
+| Projekt | Stand | `.ics`-Dateien |
+|---|---|---|
+| `libical/libical` | `51f0e3ea1ae5cde28d6c2ce93ec3ef2f200611fd` | 1831 |
+| `collective/icalendar` | `9e2e416760154d3bd2a627109233c1e6639a1544` | 198 |
+| `kewisch/ical.js` | `cd2ef47d5f1c834680ae4b6fa3ad57daa58edffc` | 46 |
+| `sabre-io/vobject` | `d0c9993bf7eb053aa67806750c1ac1b008ec852a` | 1 |
+
+**2076 Dateien, 0 Lesefehler.** Sie werden **nicht committet** (Regel 7, fremde
+Kalenderdaten) — die Klone liegen in `/tmp` und sind nach dem Lauf weg.
+
+| gemessen | Zahl |
+|---|---|
+| gelesene fremde `.ics`-Dateien | **2076** |
+| logische `RRULE`-Zeilen darin | **7854** |
+| davon nur `COUNT=` | **55** |
+| davon nur `UNTIL=` | **5847** |
+| davon **beide** Regelteile | **0** |
+| Meldungen von `P21` | **0** |
+
+Die **5902** Zeilen mit genau einem der beiden Regelteile sind die Stellen, an
+denen ein zu grob gebautes `P21` anschlüge. Es schweigt bei allen.
+
+**Gegen den bequemsten Irrtum, ein drittes Mal.** Ein Werkzeug, das an fremdem
+Material nichts findet, wäre von einem, das aufmerksam schweigt, in dieser
+Auszählung nicht zu unterscheiden. Gemessen über dieselben 2076 Dateien:
+**12870 Funde**, **2055** Dateien mit Exit 1 und 21 mit Exit 0 — und
+**5586** davon sind `P17`, eine Prüfung aus **demselben Abschnitt §3.3.10**, die
+denselben `RRULE`-Wert liest. Das Werkzeug hat diese Zeilen also gelesen, es hat
+sie nicht übersehen.
+
+**Die Messvorrichtung ist selbst gegengeprüft.** Die Auszählung lief in-Prozess
+über `untersuche()`; verlangt ist im Prüfbefehl aber das Programm. Für die drei
+kleineren Projekte wurde deshalb **jede** Datei zusätzlich über die
+Befehlszeile gemessen: **245 Aufrufe, 245 mal Ausgabe und Rückgabewert
+deckungsgleich, 0 abweichend, stderr bei allen 245 leer.**
+
+**Und die Entfaltung war hier nötig, nicht Zierde.** In Zyklus 67 gingen
+**0** `RRULE`-Zeilen über eine Faltnaht, roh und logisch fielen zusammen. Hier
+sind es **24** von 7854 — ein `grep` über rohe Zeilen hätte die Paarung
+verstecken können. Beide Wege ergeben auch hier 0 Treffer; gewusst ist das erst
+nach dem Entfalten.
+
+### 2. Die zweite Richtung: fünf fremd geschriebene Zeilen, die den Fall tragen
+
+Das Repo, gegen das die Klage läuft — `ggaabe/rrule-temporal`, Stand
+`1dac074de03750719d670ce352003a8353723950`, 97 versionierte Dateien — führt den
+Fall in seinen **eigenen Testdateien** mit. Nicht als `.ics`, sondern als
+iCalendar-Text in TypeScript. **Fünf Fundstellen, vier verschiedene
+`RRULE`-Zeilen**, von seinen Autoren geschrieben:
+
+```
+tests/rrule-temporal.test.ts:871
+  RRULE:FREQ=MONTHLY;INTERVAL=2;COUNT=10;UNTIL=20240101T103000Z;BYHOUR=10,14;BYMINUTE=30,45;BYDAY=1MO,-1FR;BYMONTH=1,7
+tests/rrule_general.test.ts:182
+  RRULE:FREQ=DAILY;COUNT=2;UNTIL=20260805T090000Z
+tests/edge-cases.test.ts:897, :902, :931
+  RRULE:FREQ=DAILY;UNTIL=20250325T170000;COUNT=5
+```
+
+Jede wurde **unverändert**, zusammen mit der `DTSTART`-Zeile, die im fremden
+Test daneben steht, in eine minimale `VEVENT`-Hülle gesetzt, `RRULE` jeweils in
+Zeile 8, CRLF. Gemessen 2026-08-27, 09:57 bis 09:58 UTC:
+
+**5 von 5: `P21`, Zeile 8, `[RFC 5545 §3.3.10]`, Exit 1.** Der fremde Prüfer
+`WapplerSystems/rfc5545-validator` @ `e5554b99` sagt zu allen fünf
+`"RRULE must not contain both UNTIL and COUNT."`, ebenfalls **Zeile 8**,
+ebenfalls **§3.3.10**, Exit 1. **stderr bei allen 10 Aufrufen leer.**
+
+**Was daran wirklich fremd ist, genau abgegrenzt:** die `RRULE`- und die
+`DTSTART`-Zeile, Zeichen für Zeichen. Die Hülle drumherum
+(`BEGIN:VCALENDAR` … `END:VEVENT`) ist meine. „Fremd" gilt für die Zeile, die
+den Fall trägt, nicht für die ganze Datei.
+
+**Eine der fünf zählt nicht als unabhängig:** `rrule_general.test.ts:182` ist
+wörtlich die Reproduktion aus Issue 128, die schon in der Missionsdatei steht.
+Die anderen vier sind es — darunter drei mit `UNTIL` **vor** `COUNT`.
+
+### 3. Was das nicht belegt
+
+1. **Der Fall ist in diesem Material null mal aufgetreten** — 0 von 7854
+   fremden `RRULE`-Zeilen. Das sind Testbestände von Kalenderbibliotheken,
+   nicht ausgelieferte Kalender; sie sind absichtlich voll von Sonderfällen und
+   trotzdem nicht „die Welt". Wie häufig der Verstoß draußen vorkommt, ist damit
+   **nicht** gemessen, und ich behaupte dazu nichts.
+2. **Am Neuheitswert null ändert sich nichts.** Der fremde Prüfer meldet auch
+   diese fünf. Der Befund aus Zyklus 65 steht unberührt. Beide gehören in den
+   Pflicht-Beitrag am 2026-08-31.
+3. **Punkt 4 der Zieldefinition bewegt sich nicht.** Angefasst wird nur
+   `state/`; `projekte/icsdoktor/` bleibt unberührt.
+
+### 4. Eine Lücke im eigenen Bestand, benannt statt geschlossen
+
+Ausgezählt an `projekte/icsdoktor/beispiele/`: In **jeder** Beispieldatei, in
+der `P21` meldet, steht `COUNT` **vor** `UNTIL`. Die umgekehrte Reihenfolge
+kommt genau einmal vor — in `61-p21-muster-nur-im-parameter.ics`, und dort
+innerhalb eines Parameterwerts, wo `P21` absichtlich schweigt. Die
+byte-genaue Erwartung in `erwartet/` deckt die Reihenfolge `UNTIL` vor `COUNT`
+also **nicht** ab.
+
+Heute außerhalb des Repos gemessen (Fall C, dreimal), morgen nicht mehr
+nachweisbar: Proben aus `/tmp` überleben den Zyklus nicht.
+
+**Der nächste Schritt, konkret:** eine Beispieldatei mit
+`RRULE:FREQ=DAILY;UNTIL=…;COUNT=…` anlegen, Erwartung nach `erwartet/`, CRLF
+über `.gitattributes` prüfen — und die Zahl der Beispiele in `README.md`
+zweimal und in der Tabelle von `zahlen.sh` mitziehen. **Nicht in diesen Zyklus
+gehängt**, weil das eine Buchführung über vier Dateien ist und die letzten vier
+Verstöße gegen Regel 1 allesamt aus nebenbei mitgeführten Zahlen kamen.
+
+**Kein Blocker, keine Frist.** Niemand muss etwas tun.
