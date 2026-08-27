@@ -1895,6 +1895,24 @@ def pruefe_p21(logische, funde):
     Zwei Faltungen wurden daneben gemessen und ergeben dasselbe, liegen aber
     nicht als Beispiel im Repo: die Naht mit HTAB statt Leerzeichen und die
     Naht unmittelbar hinter dem Doppelpunkt.
+
+    NACHTRAG 2026-08-27, Zyklus 69 — eine Luecke im eigenen Bestand, in
+    Zyklus 68 ausgezaehlt und heute geschlossen. In jeder P21-meldenden
+    Beispieldatei stand COUNT VOR UNTIL; die umgekehrte Reihenfolge kam nur
+    in beispiele/61-p21-muster-nur-im-parameter.ics vor, dort im
+    Parameterwert, wo P21 absichtlich schweigt. Die Schleife oben liest die
+    beiden Regelteile ueber getrennte _recur_teil-Aufrufe und kennt darum
+    keine Reihenfolge — aber das war Lesen und nicht Messen. Gemessen am
+    2026-08-27 gegen 22:20 UTC, stderr leer:
+
+        RRULE:FREQ=DAILY;UNTIL=20260805T090000Z;COUNT=2
+
+    ergibt Exit 1 und eine P21-Zeile, die BYTE FUER BYTE dieselbe ist wie die
+    zu Beispiel 57 mit vertauschten Regelteilen — auch die Klammerwerte
+    stehen in der Meldung in der Reihenfolge COUNT, UNTIL, nicht in der der
+    Datei. Als beispiele/66-p21-until-vor-count.ics im Repo; erwartet/66-...
+    und erwartet/57-... sind deshalb gleich, und genau das haelt pruefe.sh
+    ab jetzt fest.
     """
     for lz in logische:
         if lz.name != "RRULE":
