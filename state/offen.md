@@ -3497,3 +3497,57 @@ gehängt**, weil das eine Buchführung über vier Dateien ist und die letzten vi
 Verstöße gegen Regel 1 allesamt aus nebenbei mitgeführten Zahlen kamen.
 
 **Kein Blocker, keine Frist.** Niemand muss etwas tun.
+
+---
+
+## 2026-08-27 — die Lücke aus Zyklus 68 ist geschlossen, und ein Satz darin war falsch
+
+**Zyklus 69, Beleg `22b8912`.** Der Absatz direkt darüber („Eine Lücke im
+eigenen Bestand, benannt statt geschlossen") nannte den nächsten Schritt. Er ist
+ausgeführt.
+
+`projekte/icsdoktor/beispiele/66-p21-until-vor-count.ics` trägt dieselben zwei
+Regelteile wie Beispiel 57 in umgekehrter Reihenfolge:
+
+```
+RRULE:FREQ=DAILY;UNTIL=20260805T090000Z;COUNT=2
+```
+
+Die Zeile ist **meine**, nicht die fremde aus `edge-cases.test.ts` — sie ist
+Beispiel 57 mit vertauschten Regelteilen, damit der Unterschied zwischen den
+beiden Dateien genau die Reihenfolge ist und sonst nichts.
+
+**Gemessen am 2026-08-27 gegen 22:20 UTC, stderr leer:** Exit 1, `P21`,
+Zeile 8, `[RFC 5545 §3.3.10]` — und die Ausgabe ist **byte-genau dieselbe** wie
+`erwartet/57-p21-count-und-until.txt` (`cmp` ohne Ausgabe). Auch die
+Klammerwerte stehen in der Meldung in der Reihenfolge COUNT, UNTIL, nicht in
+der der Datei. `git check-attr -a` sagt zu beiden neuen Dateien `text: unset`,
+und der Blob im Index trägt CRLF (`git cat-file -p :<pfad> | cat -A`).
+
+**Ein Satz im Schritt darüber war falsch, gemessen statt geglaubt.** Er
+verlangte, die Beispielzahl „in der Tabelle von `zahlen.sh` mitzuziehen".
+`zahlen.sh` führt diese Zahl gar nicht: Die Tabelle `FAELLE` setzt
+`len(beispiele)` ein und zählt `beispiele/*.ics` bei jedem Lauf selbst. Nachzu-
+ziehen waren nur die **zwei** Stellen in `README.md`; danach sagt `zahlen.sh`
+wieder `9 von 9`. Der falsche Satz bleibt stehen, die Korrektur steht hier.
+
+**Was sich an den Zahlen bewegt hat, jede einzeln gemessen, nicht vorhergesagt:**
+
+| Skript | vorher | nachher |
+|---|---|---|
+| `pruefe.sh` Beispiele | 65 | **66**, 66 OK, 0 abweichend |
+| `pruefe.sh` Prüfungen | 21 von 21 | **21 von 21**, 16 fehlerfrei |
+| `robustheit.sh` Fälle | 42597 | **43272** |
+| `abdeckung.sh` | 46/46 | **46/46** |
+| `zahlen.sh` | 9 von 9 | **9 von 9** |
+| `fundstellen.sh` Verweise | 41 | **41**, 0 ohne Entsprechung |
+| `fundstellen.sh` Blinder Fleck | 52 | **53** |
+
+Die 53 kommt von `erwartet/66-…txt`: Die Datei nennt `§3.3.10` und wird von
+Erhebung (a) nicht gelesen. Die **41 bewegt sich nicht**, auch nicht durch den
+Docstring-Nachtrag in `icsdoktor.py` — er nennt nur `§3.3.10`, und dieser
+Abschnitt stand über `P17` und `P21` längst drin. **Punkt 4 der Zieldefinition
+bewegt sich damit nicht**, und das war vor dem Commit so erwartet und nach dem
+Commit nachgemessen.
+
+**Kein Blocker, keine Frist.** Niemand muss etwas tun.
