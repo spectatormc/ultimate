@@ -1932,6 +1932,25 @@ def pruefe_p21(logische, funde):
     "RRU" und schwiege. Als beispiele/67-p21-naht-im-namen.ics im Repo,
     erwartet/67-... ist damit die dritte Datei mit demselben Inhalt wie
     erwartet/57-....
+
+    NACHTRAG 2026-08-28, Zyklus 71 — ein Parameter links vom Doppelpunkt.
+    Beispiel 61 traegt seit Zyklus 62 ein RRULE mit Parameter (X-Q="...") und
+    P21 schweigt dort richtig, weil im Wert nur COUNT steht. Dieses Beispiel
+    kann aber zwei Ursachen fuer sein Schweigen nicht auseinanderhalten: dass
+    der Parameterwert nicht mitgelesen wird — oder dass ein Parameter den
+    Namen zerstoert und lz.name nie "RRULE" ist. Waere das zweite der Fall,
+    schwiege P21 an jeder RRULE mit Parameter, und kein Beispiel im Bestand
+    haette es gezeigt. Gemessen am 2026-08-28 gegen 22:30 UTC, stderr leer:
+
+        RRULE;VALUE=RECUR:FREQ=DAILY;COUNT=2;UNTIL=20260805T090000Z
+
+    ergibt Exit 1 und eine P21-Zeile, die BYTE FUER BYTE dieselbe ist wie die
+    zu Beispiel 57. Dieselbe Zeile ohne den UNTIL-Regelteil ergibt Exit 0 und
+    keine Meldung — beide Richtungen also, nicht nur eine. VALUE=RECUR ist
+    kein ausgedachter Parameter: §3.2.20 erlaubt die ausdrueckliche Angabe des
+    Wertetyps, der hier ohnehin der voreingestellte ist. Als
+    beispiele/68-p21-parameter-am-rrule.ics im Repo, erwartet/68-... ist damit
+    die vierte Datei mit demselben Inhalt wie erwartet/57-....
     """
     for lz in logische:
         if lz.name != "RRULE":

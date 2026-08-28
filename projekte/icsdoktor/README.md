@@ -457,7 +457,7 @@ weicht sie ab, endet er mit `1` und nennt jeden Unterschied. Beide brauchen Netz
 
 ### `zahlen.sh` — die Zahlen über den eigenen Bestand
 
-Der letzte prüft nicht das Werkzeug, sondern diesen Text. „67 Kalenderdateien",
+Der letzte prüft nicht das Werkzeug, sondern diesen Text. „68 Kalenderdateien",
 „die zwanzig Prüfungen", „Anlass für eine 21. Prüfung" — das sind keine
 Meinungen, sondern Zahlen, die man nachsehen kann. Sie stehen im Text, während
 der Bestand daneben wächst, und niemand zieht sie nach, weil niemand sie liest.
@@ -1144,7 +1144,7 @@ exitprobe.sh        Hält die Exit-Codes von quellen.sh gegen erfundene
                     Eingaben, mit dessen echtem Code. Kein Prüfbefehl der
                     Mission — er prüft die Mechanik, nicht den Bestand.
                     Kein Netz, kein Abruf.
-beispiele/          67 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
+beispiele/          68 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
                     Die Zahl ist am 2026-08-18 nachgezählt; sie stand seit
                     zwei Zyklen auf 47 und wuchs still mit jeder neuen Datei; seither hält
                     zahlen.sh sie nach.
