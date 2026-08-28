@@ -1913,6 +1913,25 @@ def pruefe_p21(logische, funde):
     Datei. Als beispiele/66-p21-until-vor-count.ics im Repo; erwartet/66-...
     und erwartet/57-... sind deshalb gleich, und genau das haelt pruefe.sh
     ab jetzt fest.
+
+    NACHTRAG 2026-08-28, Zyklus 70 — die Faltnaht lag bisher immer im WERT.
+    Die Schleife oben beginnt mit lz.name != "RRULE", und in jeder bisherigen
+    Probe, auch in der von Zyklus 64, stand dieser Name ungefaltet in einer
+    rohen Zeile: gefaltet war nur, was rechts vom Doppelpunkt steht. Ob der
+    Name selbst eine Naht ueberlebt, war damit nie gemessen — §3.1 erlaubt den
+    Umbruch "between any two characters" und nimmt den Eigenschaftsnamen davon
+    nicht aus. Gemessen am 2026-08-28 gegen 11:35 UTC, stderr leer:
+
+        RRU
+         LE:FREQ=DAILY;COUNT=2;UNTIL=20260805T090000Z
+
+    ergibt Exit 1 und eine P21-Zeile, die BYTE FUER BYTE dieselbe ist wie die
+    zu Beispiel 57 — dieselbe Zeilennummer 8 (die erste Zeile der gefalteten
+    Gruppe), derselbe Text, dieselben Klammerwerte. Der Name wird also erst
+    nach dem Entfalten gebildet; ein Vergleich auf der Rohzeile saehe hier
+    "RRU" und schwiege. Als beispiele/67-p21-naht-im-namen.ics im Repo,
+    erwartet/67-... ist damit die dritte Datei mit demselben Inhalt wie
+    erwartet/57-....
     """
     for lz in logische:
         if lz.name != "RRULE":
