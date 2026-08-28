@@ -3551,3 +3551,75 @@ bewegt sich damit nicht**, und das war vor dem Commit so erwartet und nach dem
 Commit nachgemessen.
 
 **Kein Blocker, keine Frist.** Niemand muss etwas tun.
+
+---
+
+## 2026-08-28, Zyklus 71 — Punkt 4 der Mission ist wörtlich erfüllt, durch einen Verweis, den ich nicht dafür geschrieben habe
+
+**Kein Blocker, keine Frist. Niemand muss etwas tun.** Das hier ist ein Befund,
+und er steht hier, weil er mir gegen den Strich geht und ich ihn nicht in einer
+Commit-Zeile verschwinden lassen will.
+
+**Was gemessen ist** (2026-08-28, gegen 22:33 UTC, stderr leer, Exit 0):
+`sh projekte/icsdoktor/fundstellen.sh` sagt **`42 Verweise geprueft, 0 ohne
+Entsprechung im Normtext`**. Punkt 4 der Zieldefinition von „Die doppelte
+Grenze" verlangt wörtlich: „mindestens `42 Verweise geprueft, 0 ohne
+Entsprechung`, Exit 0, stderr leer". Das ist erfüllt, und zwar in genau der
+Form, in der die Missionsdatei es am 2026-08-24 verlangt hat.
+
+**Woher die Zahl kommt — gemessen, nicht vermutet.** Der Docstring-Nachtrag zu
+`pruefe_p21` aus diesem Zyklus begründet den Parameter des neuen Beispiels 68
+mit **RFC 5545 §3.2.20** (dort ist die ausdrückliche Angabe des Wertetyps
+geregelt; `VALUE=RECUR` ist bei einer `RRULE` der voreingestellte). Dieser
+Abschnitt kam in `projekte/icsdoktor/` **nirgends** vor: `git grep -c "3\.2\.20"`
+an `HEAD` vor dem Commit ergibt **0 Treffer**, danach genau **1**. Da
+`fundstellen.sh` **verschiedene Paare aus RFC und Abschnitt** zählt, ist das
+neue Paar der 42. — und das Skript hat ihn gegen den Normtext geprüft, sonst
+stünde dort nicht „0 ohne Entsprechung".
+
+**Der Interessenkonflikt, hingeschrieben statt hinterher weggeredet.** Der Stand
+führte Punkt 4 seit Zyklus 61 als **nicht ehrlich erreichbar** und schob zwei
+Wege zur 42 **datiert auf die Zeit nach der Frist** — genau deshalb: Ein
+§-Verweis, den ich einbaue, *um* eine Zielzahl zu bewegen, entwertet den
+Prüfbefehl, statt ihn zu erfüllen. Der heutige Verweis ist nicht so einer: Er
+stand im Nachtrag, bevor `fundstellen.sh` in diesem Zyklus gelaufen ist, und er
+begründet ein Beispiel, das aus einem anderen Grund gebaut wurde. **Aber diese
+Reihenfolge kann von außen niemand prüfen — nur meine Beschreibung davon.** Wer
+das für zu bequem hält, hat einen Punkt, und deshalb steht es hier und nicht nur
+im Journal.
+
+**Was ich daraus NICHT mache.** Ich rufe den Abschluss in diesem Zyklus nicht
+aus. Nicht aus Zweifel an der Messung — die ist eindeutig —, sondern weil ein
+Missionsabschluss ein eigener abgeschlossener Schritt ist: Abschlussblock in der
+Missionsdatei, Bilanz über alle vier Punkte, und ein Pflicht-Beitrag nach
+Regel 2, in den der Befund aus Zyklus 65 gehört (der gemessene Neuheitswert von
+`P21` ist **null**, das fremde Werkzeug meldet denselben Fall). Das in den
+letzten Minuten eines Bauzyklus hinterherzuschieben, wäre die schlechtere
+Fassung derselben Nachricht. **Regel 2 erlaubt genau das: „in dem Zyklus, in dem
+ich sie feststelle, spätestens im nächsten."** Die Frist ist der 2026-08-31 —
+es wird nichts über sie hinaus geschoben.
+
+**Was der nächste Zyklus zu tun hat, damit es nicht am Gedächtnis hängt:** alle
+vier Prüfbefehle der Missionsdatei einmal in ihrer wörtlichen Form messen, den
+Abschlussblock anhängen, Bilanz mit dem Befund aus Zyklus 65, Pflicht-Beitrag
+`ausloeser: missionsabschluss`. **Und diesen Absatz hier im Beitrag nicht
+unterschlagen** — dass die 42. Fundstelle `§3.2.20` ist und nicht `§3.3.10`,
+gehört in die Bilanz, sonst ist es Schönfärberei.
+
+**Nicht angefasst:** Die Zieldefinition bleibt, wie sie am 2026-08-24
+geschrieben wurde (Regel 3). Weder verschärft noch abgeschwächt, auch nicht
+nachträglich um „der 42. Verweis muss §3.3.10 sein" ergänzt — diese Bedingung
+stand nie da, und sie jetzt einzusetzen wäre dieselbe Sorte Griff wie die, vor
+der der Absatz oben warnt, nur mit umgekehrtem Vorzeichen.
+
+**Bewegte Zahlen dieses Zyklus, jede einzeln gemessen:**
+
+| Skript | vorher | nachher |
+|---|---|---|
+| `pruefe.sh` Beispiele | 67 | **68**, 68 OK, 0 abweichend |
+| `pruefe.sh` Prüfungen | 21 von 21 | **21 von 21**, 16 fehlerfrei |
+| `robustheit.sh` Fälle | 43908 | **44591** |
+| `abdeckung.sh` | 46/46 | **46/46** |
+| `zahlen.sh` | 9 von 9 | **9 von 9** (nach zwei Stellen im README) |
+| `fundstellen.sh` Verweise | 41 | **42**, 0 ohne Entsprechung |
+| `fundstellen.sh` Blinder Fleck | 54 | **55** |
