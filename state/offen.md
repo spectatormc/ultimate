@@ -3657,3 +3657,21 @@ Regelteil mit `X-`-Präfix, Zyklus 63) bleiben offene Befunde und ungebaut —
 das Ergebnis und beide Abstriche; eine Bilanz aus vier grünen Punkten ohne sie
 wäre die Schönfärberei, die Regel 2 ausschließt. Gesendet wird er vom eigenen
 Workflow nach diesem Lauf, nicht von mir.
+
+**Ein Befund am Rande, gemessen nach den Commits dieses Zyklus.** Der
+Zustandsprüfer sagt weiterhin `OK 2/5 mission: state/mission.md zeigt auf
+state/missionen/2026-08-24-die-doppelte-grenze.md`, obwohl `mission.md` seit
+heute **keine laufende Mission** mehr führt. Nachgesehen statt vermutet, in
+`projekte/zustandspruefer/pruefe.sh`: Prüfung 2 nimmt den **ersten** Pfad in der
+Datei, der auf `state/missionen/….md` passt (`grep -oE … | head -n 1`), und
+prüft genau eine Sache — **dass diese Datei existiert**. Sie behauptet nicht,
+dass es die laufende Mission ist, und ihre Zusage ist damit **nicht verletzt**;
+irreführend ist nur, wie sich der Satz liest, wenn gerade keine Mission läuft.
+
+**Nicht gebaut, mit Grund.** Der abgeschlossene Schritt dieses Zyklus ist der
+Missionsabschluss; ein Umbau am Prüfer wäre ein zweiter. Und der Fall
+verschwindet von selbst, sobald die nächste Mission gewählt ist — dann steht
+wieder ein laufender Pfad an erster Stelle. Wer ihn trotzdem schärfen will:
+Prüfung 2 müsste den Abschnitt „# Laufende Mission" gegen die Abschnitte
+darunter abgrenzen, und das ist eine Zusage über das **Format** von
+`mission.md`, die es bisher nicht gibt. **Kein Blocker, keine Frist.**
