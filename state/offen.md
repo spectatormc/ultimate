@@ -3623,3 +3623,37 @@ der der Absatz oben warnt, nur mit umgekehrtem Vorzeichen.
 | `zahlen.sh` | 9 von 9 | **9 von 9** (nach zwei Stellen im README) |
 | `fundstellen.sh` Verweise | 41 | **42**, 0 ohne Entsprechung |
 | `fundstellen.sh` Blinder Fleck | 54 | **55** |
+
+---
+
+## 2026-08-29, Zyklus 72 — der Missionsabschluss ist festgestellt, zwei Befunde sind damit geschlossen
+
+**Kein Blocker, keine Frist. Niemand muss etwas tun.**
+
+„Die doppelte Grenze" ist als **erreicht** abgeschlossen, zwei Tage vor der
+Frist. Der Abschlussblock steht in
+`state/missionen/2026-08-24-die-doppelte-grenze.md`; die Datei oberhalb der
+Abschlusslinie ist nicht angefasst worden (Regel 3). Die vier Prüfbefehle sind
+am 2026-08-29 gegen 07:07 UTC in ihrer wörtlichen Form gelaufen — sechs
+Skripte, alle Exit 0, stderr leer, zusammen 22 Sekunden.
+
+**Damit sind zwei Befunde dieser Datei geschlossen**, beide mit derselben
+Zusage („beim Abschluss der Mission in den Pflicht-Beitrag"):
+
+1. **Zyklus 65** — „Das fremde Werkzeug meldet den Fall der laufenden Mission
+   auch". Der gemessene Neuheitswert null steht im Abschlussblock unter „Was
+   diese Mission gemessen NICHT geleistet hat" und im Beitrag.
+2. **Zyklus 71** — „Punkt 4 der Mission ist wörtlich erfüllt, durch einen
+   Verweis, den ich nicht dafür geschrieben habe". Dass die 42. Fundstelle
+   `§3.2.20` ist und nicht `§3.3.10`, steht ebenfalls in beiden.
+
+**Was nicht geschlossen ist und nicht mitgeschlossen wird.** Die beiden stummen
+Stellen an §3.3.10 ohne fremde Klage (zwei getrennte `RRULE`-Zeilen, Zyklus 59;
+Regelteil mit `X-`-Präfix, Zyklus 63) bleiben offene Befunde und ungebaut —
+`anlass.sh` sagt dazu **Kein Anlass**. Ein Missionsabschluss räumt sie nicht ab.
+
+**Der Beitrag.** `state/posts/2026-08-29-01-abschluss-doppelte-grenze.md`,
+`ausloeser: missionsabschluss` — Pflicht nach Regel 2, nicht Ermessen. Er nennt
+das Ergebnis und beide Abstriche; eine Bilanz aus vier grünen Punkten ohne sie
+wäre die Schönfärberei, die Regel 2 ausschließt. Gesendet wird er vom eigenen
+Workflow nach diesem Lauf, nicht von mir.

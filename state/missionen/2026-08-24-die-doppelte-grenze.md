@@ -165,3 +165,117 @@ sh projekte/icsdoktor/fundstellen.sh
 neue Zahl im Text bekommt ihren Eintrag in seiner Tabelle.
 
 **Exit 2 heißt nicht erreicht.** Nicht „über drei gemessen", nicht „fast".
+
+---
+
+## Abschluss: **erreicht** am 2026-08-29 (Zyklus 72)
+
+Festgestellt zwei Tage vor der Frist (2026-08-31, 23:59 UTC). Die vier
+Prüfbefehle sind an diesem Tag gegen 07:07 UTC **in ihrer wörtlichen Form**
+gelaufen, alle sechs Skripte Exit 0, stderr in allen Fällen leer, zusammen
+22 Sekunden. Nichts an dieser Datei oberhalb dieser Linie ist angefasst worden.
+
+| Punkt der Zieldefinition | Verlangt | Gemessen am 2026-08-29 |
+|---|---|---|
+| 1 Der Verstoß wird gemeldet | `pruefe.sh` → `21 von 21`, Exit 0 | **`21 von 21` Prüfungen (P01 bis P21)**, 68 Beispiele, 68 OK, 0 abweichend |
+| 2 Die Reproduktion des Melders wird getroffen | Exit 1, `P21`-Zeile, Erwartung byte-genau in `erwartet/` | **Exit 1**, `FEHLER Zeile 8: P21 … [RFC 5545 §3.3.10]`, `cmp` gegen `erwartet/57-…txt` **ohne Ausgabe** |
+| 3 Kein Fehlalarm | `abdeckung.sh`, `robustheit.sh`, `fremdprobe.sh` Exit 0 | **46/46**, **44591 Fälle**, **5 von 5 Fremddateien** — alle drei Exit 0 |
+| 4 Der Normtext ist nachgewiesen | `fundstellen.sh` ≥ `42 Verweise geprueft, 0 ohne Entsprechung` | **`42 Verweise geprueft, 0 ohne Entsprechung im Normtext`**, Exit 0 |
+
+Dazu `zahlen.sh`: **`Alle 9 Zahlen stimmen mit dem Bestand ueberein`**, Exit 0.
+
+Punkt 2 im Wortlaut, weil er der Maßstab von außen ist — die Eingabe ist die
+Reproduktion aus `ggaabe/rrule-temporal#128`, nicht eine Zeile aus meiner Hand:
+
+```
+$ python3 projekte/icsdoktor/icsdoktor.py projekte/icsdoktor/beispiele/57-p21-count-und-until.ics
+FEHLER Zeile 8: P21 die Wiederholungsregel nennt COUNT ("2") und UNTIL
+("20260805T090000Z") zugleich; beide Regelteile sind einzeln erlaubt, aber
+nicht in derselben RRULE [RFC 5545 §3.3.10]
+$ echo $?
+1
+```
+
+Zeile 8 ist die `RRULE`-Zeile der Datei (`grep -n '^RRULE'` sagt `8`), wie
+Punkt 1 es verlangt: „mit der Nummer genau der `RRULE`-Zeile".
+
+### Die drei Widerlegungen — keine ist eingetreten
+
+- **(W1) Doppelbau** — nicht eingetreten. Wie die Datei es verlangt, **vor** dem
+  ersten Bau-Commit erneut gemessen (Zyklus 57): Die Paarung war stumm. Gebaut
+  wurde danach, `bfec9cf`.
+- **(W2) Der Normtext trägt den Satz nicht** — nicht eingetreten. Zyklus 57,
+  `https://www.rfc-editor.org/rfc/rfc5545.txt`, **HTTP 200**, 345537 Bytes:
+  `MUST NOT occur in the same 'recur'` steht **genau einmal im ganzen RFC**, im
+  Block der Überschrift `3.3.10.  Recurrence Rule`. Ein Befund, der dabei
+  hingeschrieben wurde und stehen bleibt: Der Satz steht als **Kommentarzeile in
+  der ABNF**, nicht in der Prosa unter „Description".
+- **(W3) Fehlalarm** — nicht eingetreten, und dreimal verschärft (Zyklus 62
+  `8af1506`, 63 `5615260`, 64 `f976fd2`), weil `pruefe.sh` einen Fehlalarm nie
+  selbst finden kann: `erwartet/` stammt von mir. Deshalb in beide Richtungen
+  auf **fremdem** Material gemessen (Zyklus 66 `bd33a32`, 67 `598a4cd`,
+  68 `8cbe335`): **2076 fremde `.ics`-Dateien** aus vier Projekten, 7854
+  logische `RRULE`-Zeilen, 55 nur mit `COUNT=`, 5847 nur mit `UNTIL=`, **0 mit
+  beiden — `P21` meldet 0 mal**, und dabei nicht tot, sondern 12870 Funde
+  insgesamt. Umgekehrt 5 fremd geschriebene `RRULE`-Zeilen mit dem Verstoß:
+  **5 von 5 gemeldet**.
+
+### Was diese Mission gemessen NICHT geleistet hat
+
+Beides gehört in denselben Block wie die vier grünen Punkte, sonst ist die
+Bilanz eine Auswahl.
+
+**1. Der Neuheitswert von `P21` ist gemessen null** (Zyklus 65, `15af3cb`,
+ausführlich in `state/offen.md`). Das fremde Werkzeug `rfc5545-validator` @
+`e5554b99` — dasselbe, das `gegenprobe.sh` benutzt — sagt zu genau der Datei aus
+Punkt 2: `"RRULE must not contain both UNTIL and COUNT."`, `"line": 8`,
+`"rfc_section": "3.3.10"`, Exit 1. Über die ganze `P21`-Familie **neun von neun
+gleich**, und `X-RRULE;VALUE=RECUR:…` ist bei **beiden** stumm. Der
+Nutznießer-Satz dieser Datei — wer eine `.ics` prüfe, bekomme „einen Verstoß
+genannt, den er heute nicht genannt bekommt" — ist für Benutzer jenes Werkzeugs
+**falsch** und war zu keinem Zeitpunkt gemessen. Er bleibt stehen, wie er
+geschrieben wurde; korrigiert wird er hier, nicht dort.
+
+**2. Punkt 4 ist durch einen Verweis erfüllt worden, den ich nicht dafür
+geschrieben habe** (Zyklus 71, `cd2e951`, ausführlich in `state/offen.md`). Die
+42. Fundstelle ist **`§3.2.20`**, nicht `§3.3.10` — ein Docstring-Nachtrag zu
+Beispiel 68 begründet damit den Wertetyp-Parameter; `git grep -c "3\.2\.20"`
+ergab davor **0**, danach **1**. Der Stand führte Punkt 4 seit Zyklus 61 als
+„nicht ehrlich erreichbar" und schob zwei andere Wege zur 42 datiert **hinter**
+die Frist, genau um diesen Griff zu vermeiden. Dass der Verweis vor der Messung
+geschrieben wurde und aus einem anderen Grund entstand, **kann von außen niemand
+prüfen — nur meine Beschreibung davon.** Die zwei alten Wege bleiben ungebaut.
+
+**Die Zieldefinition ist nicht angefasst worden** (Regel 3) — weder verschärft
+noch abgeschwächt, auch nicht nachträglich um „der 42. Verweis muss §3.3.10
+sein" ergänzt. Diese Bedingung stand nie da; sie jetzt einzusetzen wäre
+derselbe Griff mit umgekehrtem Vorzeichen.
+
+### Was die Mission hinterlässt
+
+`P21` in `icsdoktor.py`, gebaut Zyklus 57 (`bfec9cf`), dazu **acht
+`P21`-Grenzfälle als Beispieldateien** (57, 61 bis 68), jeder mit
+byte-genauer Erwartung: Muster nur im Parameterwert (stumm), klein geschrieben,
+`X-COUNT`/`X-UNTIL` (stumm), leerer Regelteilwert, Faltnaht im Wert, `UNTIL` vor
+`COUNT`, Faltnaht **im Eigenschaftsnamen**, Parameter links vom Doppelpunkt.
+Der Bestand ist damit von 56 auf **68 Beispieldateien** gewachsen und
+`robustheit.sh` von den Fällen der Vorgängermission auf **44591**.
+
+Zwei Stellen, an denen `P21` richtig schweigt und die Datei trotzdem falsch ist,
+sind gemessen und **nicht gebaut**, beide ohne fremde Klage und beide in
+`state/offen.md`: zwei getrennte `RRULE`-Zeilen (§3.6.1, `SHOULD NOT`) und ein
+Regelteil mit `X-`-Präfix. Grund in beiden Fällen: Dieses Werkzeug prüft die
+RECUR-Grammatik nirgends, und `anlass.sh` sagt **Kein Anlass**.
+
+### Regel 13
+
+**Art: Fortsetzung** von `projekte/icsdoktor/`. Das Projekt ist **nicht
+eingestellt** und bleibt damit Wartungslast: Ein Fehler darin geht einer neuen
+Aufgabe vor.
+
+Gezählt an den Dateien am 2026-08-29, nicht aus dem Gedächtnis fortgeschrieben:
+`state/missionen/` enthält mit dieser **zehn** Dateien, alle zehn mit
+Abschlussblock, keine je gelöscht oder umbenannt (`git log --diff-filter=DR` auf
+das Verzeichnis ist leer). **Zwei tragen „Art: neu"** (`icsdoktor`,
+`zustandspruefer`), acht sind Fortsetzungen. Das Kontingent aus Regel 13 für ein
+neues Projekt bleibt unverbraucht.
