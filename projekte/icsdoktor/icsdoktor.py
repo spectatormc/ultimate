@@ -348,21 +348,38 @@ def pruefe_p03(zeilen, funde):
 
 
 def entfalte(zeilen):
-    """Fortsetzungszeilen anhaengen, je ein WSP-Zeichen entfernen (§3.1)."""
-    logische = []
+    """Fortsetzungszeilen anhaengen, je ein WSP-Zeichen entfernen (§3.1).
+
+    Geklebt wird auf BYTE-Ebene, dekodiert wird erst danach. Das ist keine
+    Stilfrage: §3.1 haelt in einer Note fest, dass eine Faltung mitten in einer
+    UTF-8-Mehrbyte-Sequenz liegen kann, und verlangt vom Leser, die
+    urspruengliche Sequenz trotzdem wiederherzustellen ("implementations need
+    to unfold lines in such a way to properly restore the original sequence").
+
+    Bis 2026-08-30 dekodierte dieses Werkzeug je physischer Zeile und klebte
+    erst den Text. Bei einer Faltung zwischen C3 und B3 war jede Haelfte fuer
+    sich kein gueltiges UTF-8 — aus 'Kraków' wurde 'Krak��w', aus
+    einem Zeichen zwei, und jeder Index dahinter verschob sich um eins. Gemessen
+    am 2026-08-30 an HEAD 8087299 (ungueltig: {23: b'\\xc3', 24: b'\\xb3'}).
+
+    Weil die Bytes zuerst zusammenkommen, faellt auch die Versatzrechnung fuer
+    die Tabelle aus dekodiere() weg: sie entsteht ueber der fertigen logischen
+    Zeile und stimmt damit von selbst.
+    """
+    stuecke = []                          # je logische Zeile: [nr, rohbytes]
     for i, z in enumerate(zeilen):
-        ist_fortsetzung = i > 0 and z.text[:1] in (" ", "\t")
-        if ist_fortsetzung and logische:
-            # Die Tabelle aus dekodiere() wandert mit dem Text. Verschoben wird
-            # um die Laenge des bisherigen Stuecks, vermindert um das eine
-            # WSP-Zeichen, das §3.1 hier entfernt. Bleibt das aus, zeigt eine
-            # Meldung auf einer gefalteten Zeile auf das falsche Byte.
-            versatz = len(logische[-1].text) - 1
-            for stelle, rohbytes in z.ungueltig.items():
-                logische[-1].ungueltig[versatz + stelle] = rohbytes
-            logische[-1].text += z.text[1:]
+        # Auf Bytes geprueft statt auf Text: SP und HTAB sind ASCII, ein
+        # UTF-8-Anfangsbyte 0x20 oder 0x09 ist immer genau dieses Zeichen.
+        ist_fortsetzung = i > 0 and z.rohbytes[:1] in (b" ", b"\t")
+        if ist_fortsetzung and stuecke:
+            # Das eine WSP-Byte, das §3.1 hier entfernt.
+            stuecke[-1][1] += z.rohbytes[1:]
         else:
-            logische.append(Logisch(z.nr, z.text, z.ungueltig))
+            stuecke.append([z.nr, z.rohbytes])
+    logische = []
+    for nr, rohbytes in stuecke:
+        text, ungueltig = dekodiere(rohbytes)
+        logische.append(Logisch(nr, text, ungueltig))
     return logische
 
 
