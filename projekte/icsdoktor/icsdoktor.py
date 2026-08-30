@@ -1986,6 +1986,120 @@ def pruefe_p21(logische, funde):
             "3.3.10"))
 
 
+def _sequenzlaenge(byte):
+    """Laenge der UTF-8-Sequenz, die mit diesem Byte beginnt — 0, wenn es
+    keine beginnt (ASCII, Folgebyte oder ein in UTF-8 unzulaessiges Byte).
+
+    Die Grenzen sind die aus RFC 3629 §4: C2..DF beginnt zwei Oktette,
+    E0..EF drei, F0..F4 vier. C0, C1 und alles ab F5 beginnt gar nichts.
+    """
+    if 0xC2 <= byte <= 0xDF:
+        return 2
+    if 0xE0 <= byte <= 0xEF:
+        return 3
+    if 0xF0 <= byte <= 0xF4:
+        return 4
+    return 0
+
+
+def _gespaltene_sequenz(links, rechts):
+    """Die Sequenz, die eine Faltnaht zwischen links und rechts spaltet.
+
+    Rueckgabe (sequenz, davor, laenge) oder None. 'davor' ist die Zahl der
+    Oktette, die noch links der Naht stehen.
+
+    Gemeldet wird nur, was ueber die Naht hinweg eine *gueltige* Sequenz
+    ergibt: Die zusammengesetzten Bytes werden mit decode("utf-8") geprueft,
+    das auch ueberlange Formen, Surrogate und Werte oberhalb U+10FFFF
+    zurueckweist. Diese Strenge ist Widerlegung 3 der Mission Die gespaltene
+    Sequenz — ohne sie meldete jede Datei mit kaputten Bytes am Zeilenende
+    eine gespaltene Sequenz, die keine ist.
+    """
+    # Folgebytes am Ende von links abzaehlen; davor muss das Startbyte stehen.
+    # Mehr als drei koennen es nicht sein, eine UTF-8-Sequenz ist hoechstens
+    # vier Oktette lang.
+    k = 0
+    while k < 3 and k + 1 <= len(links) and 0x80 <= links[-(k + 1)] <= 0xBF:
+        k += 1
+    if k + 1 > len(links):
+        return None
+    laenge = _sequenzlaenge(links[-(k + 1)])
+    if laenge == 0:
+        return None
+    davor = k + 1
+    if laenge <= davor:
+        # Die Sequenz ist links der Naht vollstaendig — eine erlaubte
+        # Faltung zwischen zwei Zeichen, kein Fund.
+        return None
+    sequenz = bytes(links[-davor:]) + bytes(rechts[:laenge - davor])
+    if len(sequenz) != laenge:
+        return None
+    try:
+        sequenz.decode("utf-8")
+    except UnicodeDecodeError:
+        return None
+    return sequenz, davor, laenge
+
+
+def _bytes_zitat(rohbytes):
+    """'C3 B3' — Oktette im Klartext, nicht als Zeichen."""
+    return " ".join("%02X" % b for b in rohbytes)
+
+
+def pruefe_p22(zeilen, funde):
+    """§3.1: Die Faltung liegt mitten in einer UTF-8-Mehrbyte-Sequenz.
+
+    Der Fall aus TravellersMeet/travellers #426 (Punkt 2): Ein Exportpfad
+    faltet nach Zeichen statt nach Oktetten, und die Naht landet zwischen zwei
+    Oktetten desselben Zeichens. §3.1 haelt das in einer Note fest:
+
+        Note: It is possible for very simple implementations to generate
+        improperly folded lines in the middle of a UTF-8 multi-octet
+        sequence.  For this reason, implementations need to unfold lines
+        in such a way to properly restore the original sequence.
+
+    HINWEIS und nicht FEHLER, und das ist keine Milde, sondern der Wortlaut:
+    Der Satz steht in einer Note, nicht in der ABNF, und er enthaelt kein
+    MUST NOT fuer den Erzeuger. Was er normativ verlangt, verlangt er vom
+    Leser — genau das tut entfalte() seit dem 2026-08-30. Wer daraus einen
+    FEHLER machte, verschaerfte die Norm, statt sie zu pruefen. Dieselbe
+    Erwaegung traegt P03 fuer sein SHOULD NOT.
+
+    Zitiert werden OKTETTE, nie das Zeichen. An dieser Stelle der Datei steht
+    kein Zeichen, sondern eine halbe Sequenz; wer 'ó' zitierte, nennte etwas,
+    das der Nutzer nirgends findet — derselbe Schaden, den der Docstring von
+    dekodiere() beschreibt.
+
+    Gelesen werden die physischen Zeilen, wie bei P10: Gesucht ist die
+    Faltstelle, nicht der fertige Text. Die Bytes links der Naht werden ueber
+    mehrere Fortsetzungen mitgezogen, damit auch eine Naht direkt hinter einer
+    anderen Naht noch ihr Startbyte findet.
+    """
+    links = b""
+    vorige_nr = None
+    for i, z in enumerate(zeilen):
+        ist_fortsetzung = i > 0 and z.rohbytes[:1] in (b" ", b"\t")
+        if not ist_fortsetzung:
+            links = bytes(z.rohbytes)
+            vorige_nr = z.nr
+            continue
+        rechts = bytes(z.rohbytes[1:])
+        befund = _gespaltene_sequenz(links, rechts)
+        if befund is not None:
+            sequenz, davor, laenge = befund
+            funde.append(Fund(
+                HINWEIS, vorige_nr, "P22",
+                "Faltung trennt die UTF-8-Sequenz %s nach %d von %d Oktetten; "
+                "die Fortsetzung steht in Zeile %d. Die Note zu §3.1 nennt das "
+                "improperly folded — wer die physischen Zeilen einzeln "
+                "dekodiert, statt vorher zu entfalten, macht aus einem Zeichen "
+                "zwei Ersatzzeichen"
+                % (_bytes_zitat(sequenz), davor, laenge, z.nr),
+                "3.1"))
+        links += rechts
+        vorige_nr = z.nr
+
+
 _BOM_UTF8 = b"\xef\xbb\xbf"
 
 
@@ -2061,7 +2175,7 @@ def pruefe_p20(rohdaten, funde):
 
 
 def untersuche(rohdaten):
-    """Alle einundzwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle zweiundzwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     rohdaten, hatte_bom = pruefe_p20(rohdaten, funde)
     zeilen = zerlege_physisch(rohdaten)
@@ -2101,6 +2215,7 @@ def untersuche(rohdaten):
     pruefe_p18(logische, funde)
     pruefe_p19(komponenten, funde)
     pruefe_p21(logische, funde)
+    pruefe_p22(zeilen, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))

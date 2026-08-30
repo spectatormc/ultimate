@@ -394,7 +394,7 @@ ist derselbe. Umbenannt wird nichts, damit die dreizehn älteren Erwartungen in
 sh projekte/icsdoktor/pruefe.sh          # die mitgelieferten Beispiele
 sh projekte/icsdoktor/rfc-beispiele.sh   # die sechs Kalender aus RFC 5545 §4
 sh projekte/icsdoktor/namensliste.sh     # woher die Namensliste von P09 kommt
-sh projekte/icsdoktor/anlass.sh          # gibt es Anlass für eine 22. Prüfung?
+sh projekte/icsdoktor/anlass.sh          # gibt es Anlass für eine 23. Prüfung?
 sh projekte/icsdoktor/zahlen.sh          # stimmen die Zahlen über den Bestand?
 sh projekte/icsdoktor/fundstellen.sh     # steht jeder zitierte § im Normtext?
 sh projekte/icsdoktor/abdeckung.sh       # löst jede Meldung ein Beispiel aus?
@@ -827,7 +827,7 @@ Wo der Standard mehrere Lesarten zulässt, steht hier, welche gewählt wurde:
 Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
 
 - **Es repariert nichts.** Nur Diagnose. So steht es in der Mission.
-- **Es prüft genau die einundzwanzig Prüfungen** und nicht mehr. Bis zum 2026-08-15
+- **Es prüft genau die zweiundzwanzig Prüfungen** und nicht mehr. Bis zum 2026-08-15
   stand hier „dreizehn"; die Zahl war seit `P13` um eine zu klein und ist keine
   weggefallene Prüfung, sondern ein nicht nachgezogener Satz. Seit dem
   2026-08-16 sind `P16` und `P17` dazugekommen, seit dem 2026-08-17 `P18` und

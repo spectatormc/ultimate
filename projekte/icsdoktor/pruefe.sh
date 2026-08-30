@@ -121,14 +121,18 @@ ausgeloest_faltnaht=0
 # sondern zur Wartungslast, und zaehlt aus demselben Grund wie P11 nicht in
 # die Zusage der Faltnaht.
 # Seit dem 2026-08-24 steht P21 mit darin, aus der Mission Die doppelte Grenze.
+# Seit dem 2026-08-30 steht P22 mit darin, aus der Mission Die gespaltene
+# Sequenz. Sie liest wieder die Faltnaht wie P09 und P10 — und zaehlt trotzdem
+# nicht in die Zusage der Faltnaht, weil deren zehn Pruefungen abgeschlossen
+# sind und nicht nachtraeglich billiger werden duerfen.
 for code in P01 P02 P03 P04 P05 P06 P07 P08 P09 P10 P11 P12 P13 P14 P15 P16 \
-            P17 P18 P19 P20 P21; do
+            P17 P18 P19 P20 P21 P22; do
     if ! grep -q " $code " "$erwartet"/*.txt; then
         fehlt="$fehlt $code"
     else
         ausgeloest=$((ausgeloest + 1))
         case "$code" in
-            P11|P12|P13|P14|P15|P16|P17|P18|P19|P20|P21) ;;
+            P11|P12|P13|P14|P15|P16|P17|P18|P19|P20|P21|P22) ;;
             *) ausgeloest_faltnaht=$((ausgeloest_faltnaht + 1)) ;;
         esac
     fi
@@ -148,7 +152,7 @@ done
 # die Zusage von der Zahl handelt und nicht vom Satzbau — der Nenner wird
 # mitgedruckt, damit "21 von 21" nicht durch Weglassen entstehen kann.
 if [ -z "$fehlt" ]; then
-    printf 'Abdeckung: %d von %d Pruefungen ausgeloest (P01 bis P21)\n' \
+    printf 'Abdeckung: %d von %d Pruefungen ausgeloest (P01 bis P22)\n' \
         "$ausgeloest" "$verlangt"
 else
     printf 'Abdeckung: %d von %d Pruefungen ausgeloest — unvollstaendig, nie ' \
