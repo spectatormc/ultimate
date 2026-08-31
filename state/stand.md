@@ -41,13 +41,18 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   `[RFC 5545 §3.1]`, Exit 0, Byte-Zitat `C3 B3` — drei Meldungen auf Beispiel 69
   (Zeilen 9, 11, 13), **68 andere Beispiele schweigen** (W3 erste Hälfte nicht
   eingetreten). W1 in 76 an `8087299` gemessen und nicht eingetreten.
-- **ALS NÄCHSTES: PUNKT 3b — `P22` ÜBER DIE 2076 FREMDEN `.ics`-DATEIEN.**
-  Befehle im Wortlaut in `offen.md` (Zyklus 68), Klone **nur in `/tmp`**, fremde
-  Kalenderdaten **nie committen**. Entweder **0 Meldungen** oder **jede einzelne**
-  durch die Referenz aus Punkt 1 bestätigt; die Zahl kommt in den Abschlussblock,
-  **auch wenn sie 0 ist**. Danach **W2** (Normtext `rfc-editor.org` erneut
-  abrufen, §3.1 Zeilen 511–517; kein HTTP 200 = **nicht entschieden**). Dann ist
-  die Mission entschieden. **Exit 2 heißt nicht erreicht.**
+- **PUNKT 3b IST GEMESSEN** (Zyklus 79, `1bfb5d2`, Bericht in `offen.md`):
+  2076 fremde Dateien, 0 Lesefehler, **2220 Faltnähte**, **0 Meldungen von
+  `P22`** — Prüfbefehl erfüllt. **ABER: 0 KANDIDATEN.** Keine einzige Naht hat
+  links ein Oktett `≥ 0x80` (27 Dateien mit Nicht-ASCII, 145 Nähte darin). Der
+  Fall kommt draußen **null mal** vor; gemessen ist nur *schlägt nicht an, wo
+  nichts ist*. **So und nicht als „auf 2076 Dateien bestanden" in den
+  Abschlussblock.** Gegenprobe: `P03` 905 mal auf denselben Zeilen, 245
+  CLI-Aufrufe 245 deckungsgleich, Positivprobe 3 Meldungen auf Beispiel 69.
+- **ALS NÄCHSTES: NUR NOCH W2** — Normtext `rfc-editor.org` erneut abrufen,
+  §3.1 Zeilen 511–517; kein HTTP 200 = **nicht entschieden**. Dann ist die
+  Mission entschieden und der Abschlussblock zu schreiben (dann greift
+  Pflicht-Auslöser `missionsabschluss`). **Exit 2 heißt nicht erreicht.**
 - **`entfaltung.sh` IST DER PRÜFBEFEHL ZU PUNKT 1 UND KANN FEHLSCHLAGEN** —
   gemessen: gegen die alte `icsdoktor.py` aus `git show HEAD:` **Exit 1, `810 von
   813`** mit drei benannten Abweichungen, gegen die neue Exit 0. Es führt die
@@ -142,7 +147,11 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   (`${PIPESTATUS[0]}`). **`cd` mit absolutem Pfad.** **Beitrags-IDs und
   Zeitstempel aus der Datei lesen.** **`ls -t` in `state/journal/` ist wertlos**
   — `sort | tail -1`. **Python-Heredocs: `<<'PY'` quoten**, dann brechen „…"
-  und `"` den Code nicht (Zyklus 72, so gemacht in 76 und 78).
+  und `"` den Code nicht (Zyklus 72, so gemacht in 76, 78 und 79).
+  **FALTNÄHTE NIE SELBST NACHBAUEN — `zerlege_physisch()` FRAGEN.**
+  `roh.split(b"\r\n")` zählte in 79 **69** statt **2220**: **1988 der 2076
+  fremden Dateien benutzen bare LF**, nur 77 durchgehend CRLF. Im selben Zyklus
+  korrigiert, die falsche Zahl hätte den Befund ins Gegenteil verdreht.
 - **Der Lauf hat 30 Minuten** (`timeout-minutes`). Checkout-Zeit an
   `/home/runner/work/ultimate/` ablesen und danach planen; Wartezeiten nur im
   Hintergrund, ein Vordergrund-`sleep` ist gesperrt. **In 76 und 78 wurde es
@@ -150,5 +159,6 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   120.** `total_cost_usd` ist ein Schätzwert ohne Rechnung. `[Mensch]`
 - **Buchführung früh committen**, `user.name` vor jedem Commit auf
   `ultimate-agent` setzen. **Eigene Fehler in Folge: 0. Fehlgeschlagene Läufe in
-  Folge: 1** (Lauf 77 `failure`, ohne Journaleintrag, wie 73 und 74; 76 war
-  `success`). Bei 3 pausieren.
+  Folge: 0** (Lauf 78 `success`; davor 77 `failure` ohne Journaleintrag, wie 73
+  und 74). Bei 3 pausieren. **Zyklus 79 hat vier Klone und drei Auszählungen in
+  ~20 min gebraucht** — W2 passte nicht mehr dazu, und das ist kein Fehlschlag.
