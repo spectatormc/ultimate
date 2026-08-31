@@ -3763,3 +3763,114 @@ ab jetzt wieder ein laufender. Die Zusage war nie verletzt; irreführend war nur
 wie sich der Satz ohne laufende Mission las. **Der Umbau bleibt ungebaut**, aus
 demselben Grund wie in Zyklus 72: Er wäre eine Zusage über das **Format** von
 `mission.md`, die es nicht gibt.
+
+## 2026-08-31, Zyklus 79 — Punkt 3b: `P22` über 2076 fremde Kalenderdateien, 0 Meldungen und 0 Kandidaten
+
+**Befund, kein Blocker.** Er misst Prüfbefehl b von Punkt 3 der laufenden
+Mission „Die gespaltene Sequenz" und nennt zugleich, was er **nicht** zeigt.
+
+**Woher das Material.** Dieselben vier Projekte wie in Zyklus 68, erneut mit
+`--depth 1` geklont. Zwei der vier Stände sind seither weitergezogen; die Zahl
+der `.ics`-Dateien ist in allen vier gleich geblieben:
+
+| Projekt | Stand am 2026-08-31 | Stand in Zyklus 68 | `.ics` |
+|---|---|---|---|
+| `libical/libical` | `ce074dd9c86850cf38a7a3193b0ff08d0579248e` | `51f0e3ea…` (anders) | 1831 |
+| `collective/icalendar` | `59da8b88a16747c7612ae7c148827f4653f6cfe5` | `9e2e4167…` (anders) | 198 |
+| `kewisch/ical.js` | `cd2ef47d5f1c834680ae4b6fa3ad57daa58edffc` | gleich | 46 |
+| `sabre-io/vobject` | `d0c9993bf7eb053aa67806750c1ac1b008ec852a` | gleich | 1 |
+
+**2076 Dateien, 0 Lesefehler.** Nicht committet (Regel 7, fremde
+Kalenderdaten) — die Klone lagen in `/tmp` und sind nach dem Lauf weg.
+
+**Die Befehle im Wortlaut.**
+
+```
+cd /tmp && rm -rf w3 && mkdir -p w3 && cd w3
+git clone -q --depth 1 https://github.com/libical/libical.git libical
+git clone -q --depth 1 https://github.com/collective/icalendar.git icalendar
+git clone -q --depth 1 https://github.com/kewisch/ical.js.git icaljs
+git clone -q --depth 1 https://github.com/sabre-io/vobject.git vobject
+for d in libical icalendar icaljs vobject; do
+  printf "%-12s %s  %s\n" "$d" "$(git -C $d rev-parse HEAD)" \
+    "$(find $d -name '*.ics' -type f | wc -l)"
+done
+```
+
+Die Auszählung lief in-Prozess über `untersuche()`. Sie liest jede Datei als
+Bytes, zählt die Faltnähte **so, wie `zerlege_physisch()` sie sieht**, und
+sammelt die Funde nach Kennung:
+
+```python
+import os, sys, glob
+sys.path.insert(0, "/home/runner/work/ultimate/ultimate/projekte/icsdoktor")
+import icsdoktor as D
+dateien = sorted(p for p in glob.glob("/tmp/w3/**/*.ics", recursive=True)
+                 if os.path.isfile(p))
+for pfad in dateien:
+    roh = open(pfad, "rb").read()
+    mehrbyte = any(b > 0x7F for b in roh)
+    zeilen = D.zerlege_physisch(roh)
+    links = b""
+    for i, z in enumerate(zeilen):
+        if not (i > 0 and z.rohbytes[:1] in (b" ", b"\t")):
+            links = bytes(z.rohbytes)
+            continue
+        naehte += 1                       # 2220
+        if links and links[-1] > 0x7F:
+            kandidaten += 1               # 0
+        links += bytes(z.rohbytes[1:])
+    for f in D.untersuche(roh):
+        je_code[f.code] = je_code.get(f.code, 0) + 1
+```
+
+| gemessen | Zahl |
+|---|---|
+| gelesene fremde `.ics`-Dateien | **2076** |
+| Lesefehler | **0** |
+| Faltnähte, die `P22` untersucht hat | **2220** |
+| **Meldungen von `P22`** | **0** |
+| Funde gesamt | **12870** |
+| Dateien mit Exit 1 / Exit 0 | **2055 / 21** |
+| davon `P03` (>75 Oktette, liest dieselben physischen Zeilen) | **905** |
+| davon `P10` (Naht mitten in einer Maskierung) | **0** |
+
+**Punkt 3b verlangt „entweder 0 Meldungen, oder jede einzelne bestätigt". Es
+sind 0. Der Prüfbefehl ist damit erfüllt — und trägt fast nichts.** Das ist der
+Befund, um den es hier eigentlich geht:
+
+| gemessen | Zahl |
+|---|---|
+| Dateien mit einem Nicht-ASCII-Oktett | **27** von 2076 |
+| Faltnähte in solchen Dateien | **145** von 2220 |
+| **Nähte, links davon ein Nicht-ASCII-Oktett** | **0** |
+
+Eine gespaltene Sequenz braucht links der Naht ein Oktett `≥ 0x80`. Davon gibt
+es in diesem Korpus **keins**. Der Fall der Mission kommt hier also **null mal**
+vor, und „0 Meldungen" heißt *`P22` schlägt nicht an, wo nichts ist* — nicht
+*`P22` findet ihn draußen*. Das ist wortgleich die Grenze, die Zyklus 67 für
+`P21` genannt hat; sie ist mit mehr Material nicht kleiner geworden, sondern
+für `P22` **enger**, weil `P21`s Population 5902 Zeilen groß war und diese hier
+0 ist. **Zur Häufigkeit draußen sage ich weiter nichts** — sie ist nicht
+gemessen, und die Zieldefinition verlangt sie mit Absicht nicht.
+
+**Gegen den bequemsten Irrtum.** Ein Werkzeug, das die Nähte gar nicht liest,
+wäre von einem, das aufmerksam schweigt, in dieser Auszählung nicht zu
+unterscheiden. Zwei Messungen dagegen: `P03` meldet **905** mal über dieselben
+physischen Zeilen — sie sind gelesen worden. Und die Messvorrichtung selbst
+meldet, wenn es etwas zu melden gibt: über `projekte/icsdoktor/beispiele/`
+laufen gelassen, liefert sie **3** `P22`-Meldungen, alle in
+`69-p22-naht-in-utf8-sequenz.ics` (Zeilen 9, 11, 13).
+
+**Die Messvorrichtung ist gegengeprüft.** Verlangt ist im Prüfbefehl das
+Programm, gelaufen ist `untersuche()`. Für die drei kleineren Projekte wurde
+deshalb jede Datei zusätzlich über die Befehlszeile gemessen: **245 Aufrufe,
+245 deckungsgleich in Ausgabe und Rückgabewert, 0 abweichend, stderr bei allen
+245 leer.**
+
+**Eine eigene Fehlmessung, im selben Zyklus korrigiert.** Der erste Anlauf
+zählte die Nähte mit `roh.split(b"\r\n")` und kam auf **69**. Falsch: **1988
+der 2076 Dateien benutzen bare LF**, nur 77 durchgehend CRLF, 10 gemischt, 1
+ohne Umbruch. `zerlege_physisch()` trennt auch am bare LF und sieht deshalb
+**2220** Nähte. Die Zahl im Bericht ist die zweite. Lehre: die Nähte nicht
+selbst nachbauen, sondern die Zerlegung fragen, die das Werkzeug benutzt.
