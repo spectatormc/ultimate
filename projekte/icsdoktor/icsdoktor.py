@@ -67,6 +67,15 @@ damit die erste Pruefung, die nicht eine Luecke schliesst, sondern eine falsche
 Auskunft — und die einzige, die vor allen anderen laeuft, weil sie das Byte
 entfernt, das die anderen in die Irre schickt.
 
+P23 kommt aus der Mission Die stumme Zeitzone,
+state/missionen/2026-08-31-die-stumme-zeitzone.md, und sieht zum ersten Mal in
+eine Unterkomponente hinein statt nur in die Komponente selbst: VTIMEZONE
+braucht TZID und mindestens eine STANDARD- oder DAYLIGHT-Unterkomponente, und
+jede von beiden braucht DTSTART, TZOFFSETFROM und TZOFFSETTO (§3.6.5). Der
+Anlass ist nextcloud/integration_davc #93 — eine Klage ueber einen Konsumenten,
+deren Datei gueltig ist. Sie hat zum Hinsehen gefuehrt und belegt nichts; das
+steht so im Docstring der Pruefung und in der Missionsdatei.
+
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
 Aufruf:
@@ -2100,6 +2109,95 @@ def pruefe_p22(zeilen, funde):
         vorige_nr = z.nr
 
 
+def pruefe_p23(komponenten, funde):
+    """§3.6.5: VTIMEZONE traegt TZID, mindestens eine Unterkomponente, und
+    jede STANDARD/DAYLIGHT traegt DTSTART, TZOFFSETFROM und TZOFFSETTO.
+
+    DER NORMTEXT, an seiner Fundstelle. rfc5545.txt, Abschnitt "3.6.5.  Time
+    Zone Component" ab Zeile 3453, abgerufen am 2026-08-31 (HTTP 200, 345537
+    Bytes) und in state/missionen/2026-08-31-die-stumme-zeitzone.md zitiert.
+    Drei Pflichten, jede eine eigene Zeile der Grammatik:
+
+        Zeile 3466:       ; 'tzid' is REQUIRED, but MUST NOT occur more
+        Zeile 3484:       ; One of 'standardc' or 'daylightc' MUST occur
+        Zeilen 3505-3510: ; The following are REQUIRED,
+                          ; but MUST NOT occur more than once.
+                          dtstart / tzoffsetto / tzoffsetfrom /
+
+    Die dritte steht in tzprop, dem Rumpf von standardc und daylightc. Deshalb
+    sieht (c) nur in STANDARD und DAYLIGHT nach, und nur dort, wo sie nach der
+    Grammatik hingehoeren — innerhalb einer VTIMEZONE. Eine STANDARD-Komponente
+    an einer anderen Stelle ist ein anderer Fehler als ein fehlendes DTSTART,
+    und ihn hier zu melden hiesse, eine falsche Ursache zu nennen.
+
+    WAS DIESE PRUEFUNG NICHT TUT. Die zweite Haelfte jeder der drei Zeilen —
+    "MUST NOT occur more than once" — bleibt ungeprueft. Eine VTIMEZONE mit
+    zwei TZID oder eine STANDARD mit zwei TZOFFSETTO meldet dieses Werkzeug
+    nicht. Das ist keine Nachlaessigkeit, sondern der Zuschnitt der Mission Die
+    stumme Zeitzone: Sie nennt in ihrem Punkt 1 genau drei Faelle, und die
+    Zieldefinition darf verschaerft, aber nicht nachtraeglich um Faelle
+    erweitert werden, die dann als Erfolg mitgezaehlt wuerden. Der Befund steht
+    ohne Frist in state/offen.md.
+
+    Ebenso ungeprueft bleibt, ob das TZID einer VTIMEZONE zu den
+    TZID-Parametern an DTSTART und DTEND passt. Das ist §3.2.19 und eine andere
+    Stelle als §3.6.5; die Missionsdatei schliesst die Frage ausdruecklich aus.
+
+    DER ANLASS AUS DER WELT — und was er nicht traegt.
+    nextcloud/integration_davc #93, eroeffnet 2026-07-04, am 2026-08-31 als
+    offen abgerufen: "Parser extracts 1884 VTIMEZONE epoch instead of DTSTART,
+    making events invisible". Der Melder klagt ueber einen Konsumenten, und die
+    Datei in seiner Klage ist gueltig — eine Transition von 1884 verstoesst
+    gegen nichts. Diese Pruefung haette den Fall des Melders nicht gefunden und
+    findet ihn nicht. Sie steht auf dem Normtext, nicht auf der Klage; die
+    Klage war der Anlass hinzusehen, mehr nicht. Das steht hier, weil es sonst
+    beim Lesen des Codes wie ein geschlossener Fehlerbericht aussaehe.
+
+    WARUM DER FALL BIS HEUTE STUMM WAR. anlass.sh sagte zu dieser Stelle am
+    2026-08-31 "betrachtet: 7 Komponenten, Treffer: 0" — im eigenen
+    Beispielbestand gab es keinen Kandidaten. Kein Kandidat im eigenen Bestand
+    ist kein Beleg dafuer, dass es den Fall draussen nicht gibt; er ist der
+    Grund, warum niemand ihn bemerkt hat.
+    """
+    kinder = {}
+    for komp in komponenten:
+        if komp.elternteil is not None:
+            kinder.setdefault(id(komp.elternteil), []).append(komp)
+
+    for komp in komponenten:
+        if komp.name == "VTIMEZONE":
+            if not komp.hole("TZID"):
+                funde.append(Fund(
+                    FEHLER, komp.zeile, "P23",
+                    "VTIMEZONE ab Zeile %d hat kein TZID; die Eigenschaft ist "
+                    "Pflicht und benennt die Zeitzone, auf die sich jedes "
+                    "TZID= in dieser Datei beruft" % komp.zeile,
+                    "3.6.5"))
+            unter = [k.name for k in kinder.get(id(komp), [])]
+            if not [n for n in unter if n in ("STANDARD", "DAYLIGHT")]:
+                funde.append(Fund(
+                    FEHLER, komp.zeile, "P23",
+                    "VTIMEZONE ab Zeile %d hat weder eine STANDARD- noch eine "
+                    "DAYLIGHT-Unterkomponente; mindestens eine von beiden ist "
+                    "Pflicht, sonst nennt die Zeitzone keinen einzigen "
+                    "Versatz zu UTC" % komp.zeile,
+                    "3.6.5"))
+            continue
+        if komp.name not in ("STANDARD", "DAYLIGHT"):
+            continue
+        if komp.elternteil is None or komp.elternteil.name != "VTIMEZONE":
+            continue
+        for name in ("DTSTART", "TZOFFSETFROM", "TZOFFSETTO"):
+            if komp.hole(name):
+                continue
+            funde.append(Fund(
+                FEHLER, komp.zeile, "P23",
+                "%s ab Zeile %d hat kein %s; die Eigenschaft ist in einer "
+                "STANDARD- oder DAYLIGHT-Unterkomponente Pflicht"
+                % (komp.name, komp.zeile, name),
+                "3.6.5"))
+
+
 _BOM_UTF8 = b"\xef\xbb\xbf"
 
 
@@ -2175,7 +2273,7 @@ def pruefe_p20(rohdaten, funde):
 
 
 def untersuche(rohdaten):
-    """Alle zweiundzwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle dreiundzwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     rohdaten, hatte_bom = pruefe_p20(rohdaten, funde)
     zeilen = zerlege_physisch(rohdaten)
@@ -2216,6 +2314,7 @@ def untersuche(rohdaten):
     pruefe_p19(komponenten, funde)
     pruefe_p21(logische, funde)
     pruefe_p22(zeilen, funde)
+    pruefe_p23(komponenten, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))

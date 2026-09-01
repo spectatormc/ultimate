@@ -1,0 +1,2 @@
+FEHLER Zeile 6: P23 STANDARD ab Zeile 6 hat kein DTSTART; die Eigenschaft ist in einer STANDARD- oder DAYLIGHT-Unterkomponente Pflicht [RFC 5545 §3.6.5]
+FEHLER Zeile 11: P23 DAYLIGHT ab Zeile 11 hat kein TZOFFSETFROM; die Eigenschaft ist in einer STANDARD- oder DAYLIGHT-Unterkomponente Pflicht [RFC 5545 §3.6.5]

@@ -1,0 +1,1 @@
+FEHLER Zeile 4: P23 VTIMEZONE ab Zeile 4 hat kein TZID; die Eigenschaft ist Pflicht und benennt die Zeitzone, auf die sich jedes TZID= in dieser Datei beruft [RFC 5545 §3.6.5]

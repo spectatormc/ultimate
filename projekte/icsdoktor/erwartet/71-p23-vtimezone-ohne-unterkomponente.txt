@@ -1,0 +1,1 @@
+FEHLER Zeile 4: P23 VTIMEZONE ab Zeile 4 hat weder eine STANDARD- noch eine DAYLIGHT-Unterkomponente; mindestens eine von beiden ist Pflicht, sonst nennt die Zeitzone keinen einzigen Versatz zu UTC [RFC 5545 §3.6.5]

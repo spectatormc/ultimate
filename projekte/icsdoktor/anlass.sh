@@ -54,8 +54,8 @@
 # Anlass". Wer mit einem zweiten Leser misst, misst den zweiten Leser mit.
 #
 # WAS DIESES SKRIPT NICHT IST. Kein Prueflauf des Werkzeugs — es meldet nichts
-# ueber die zweiundzwanzig gebauten Pruefungen und ersetzt pruefe.sh nicht. Es
-# beantwortet genau eine Frage: Gibt es einen Anlass, die 23. zu bauen?
+# ueber die dreiundzwanzig gebauten Pruefungen und ersetzt pruefe.sh nicht. Es
+# beantwortet genau eine Frage: Gibt es einen Anlass, die 24. zu bauen?
 #
 # Beide Zahlen in diesem Absatz standen seit dem 2026-08-18 falsch — sie
 # nannten den Stand vor P20. Seither rechnet zahlen.sh sie nach.
@@ -282,28 +282,19 @@ def fehlt_valarm(komp, alle):
     return fehlt_satz([e for e in noetig if not komp.hole(e)])
 
 
-def fehlt_vtimezone(komp, alle):
-    """§3.6.5: "'tzid' is REQUIRED, but MUST NOT occur more than once."
-
-    Dass eine der beiden Unterkomponenten vorkommen muss ("One of 'standardc'
-    or 'daylightc' MUST occur"), steht hier mit, weil es dieselbe Zeile der
-    ABNF ist. Gezaehlt wird nur das Fehlen; die Obergrenze "MUST NOT occur
-    more than once" prueft dieser Fall nicht, weil die Begruendung in
-    state/offen.md sie nicht nennt.
-    """
-    fehlt = [] if komp.hole("TZID") else ["TZID"]
-    kinder = [k for k in alle
-              if k.elternteil is komp and k.name in ("STANDARD", "DAYLIGHT")]
-    if not kinder:
-        fehlt.append("STANDARD oder DAYLIGHT")
-    return fehlt_satz(fehlt)
-
-
-def fehlt_zeitzonenteil(komp, alle):
-    """§3.6.5, standardc und daylightc: "The following are REQUIRED, but MUST
-    NOT occur more than once: dtstart / tzoffsetto / tzoffsetfrom"."""
-    return fehlt_satz([e for e in ("DTSTART", "TZOFFSETTO", "TZOFFSETFROM")
-                       if not komp.hole(e)])
+# HIER STANDEN fehlt_vtimezone und fehlt_zeitzonenteil — entfernt am
+# 2026-09-01 (Zyklus 82), aus demselben Grund und nach demselben Muster wie
+# untilcount_im_rrule weiter unten. Beide massen einen Anlass fuer eine
+# Pruefung, die es nicht gab; seit Zyklus 82 gibt es sie. pruefe_p23 in
+# icsdoktor.py meldet alle drei Pflichten aus §3.6.5 mit Zeile, Kennung und
+# [RFC 5545 §3.6.5]. Der Code ist nicht verloren: Er steht in der
+# Git-Historie und, in der Sache identisch, als pruefe_p23.
+#
+# Dass die Zahl der Faelle dabei von drei auf einen faellt, ist keine
+# weichgeklopfte Messung, sondern genau das, was dieses Skript sagt: Ein
+# Anlass verschwindet hier nicht, weil er erledigt waere, sondern weil er
+# gebaut ist. Wer nachrechnen will, ob P23 den Fall wirklich trifft, liest
+# nicht dieses Skript, sondern pruefe.sh und beispiele/70 bis 73.
 
 
 # HIER STAND untilcount_im_rrule, dazu zaehlt_rrule — entfernt am 2026-08-24
@@ -322,14 +313,6 @@ def zaehlt_komponente(komp, alle):
 FAELLE = (
     ("VALARM, aktionsabhaengige Pflichten", "3.6.6", ("VALARM",),
      fehlt_valarm,
-     "pruefe_p19, Docstring; state/offen.md, Zyklus 29",
-     "Komponenten", zaehlt_komponente),
-    ("VTIMEZONE, Pflichteigenschaften", "3.6.5", ("VTIMEZONE",),
-     fehlt_vtimezone,
-     "pruefe_p19, Docstring; state/offen.md, Zyklus 29",
-     "Komponenten", zaehlt_komponente),
-    ("STANDARD/DAYLIGHT, Pflichteigenschaften", "3.6.5",
-     ("STANDARD", "DAYLIGHT"), fehlt_zeitzonenteil,
      "pruefe_p19, Docstring; state/offen.md, Zyklus 29",
      "Komponenten", zaehlt_komponente),
 )
