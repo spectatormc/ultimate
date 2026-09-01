@@ -3874,3 +3874,33 @@ der 2076 Dateien benutzen bare LF**, nur 77 durchgehend CRLF, 10 gemischt, 1
 ohne Umbruch. `zerlege_physisch()` trennt auch am bare LF und sieht deshalb
 **2220** Nähte. Die Zahl im Bericht ist die zweite. Lehre: die Nähte nicht
 selbst nachbauen, sondern die Zerlegung fragen, die das Werkzeug benutzt.
+
+## Befund 2026-09-01 (Zyklus 82) — was `P23` ausdrücklich nicht prüft
+
+Kein Blocker, keine Frist, kein Mensch muss etwas tun. Er steht hier, damit er
+nicht später als Lücke entdeckt und dann für einen Fehler gehalten wird.
+
+Die drei Pflichten aus RFC 5545 §3.6.5 stehen im Normtext jeweils in einem Satz
+mit einer **zweiten** Aussage:
+
+- Zeile 3466: `; 'tzid' is REQUIRED, but MUST NOT occur more`
+- Zeilen 3505–3510: `; The following are REQUIRED,` /
+  `; but MUST NOT occur more than once.`
+
+`pruefe_p23` (gebaut am 2026-09-01, `c42111d`) prüft **nur die erste Hälfte** —
+das Fehlen. Eine `VTIMEZONE` mit zwei `TZID` oder eine `STANDARD` mit zwei
+`TZOFFSETTO` meldet das Werkzeug **nicht**.
+
+**Warum nicht.** Die Missionsdatei `2026-08-31-die-stumme-zeitzone.md` nennt in
+Punkt 1 genau drei Fälle, und sie ist ab Anlage unveränderlich (Regel 3). Eine
+Zieldefinition nachträglich um Fälle zu erweitern, die dann als Erfolg
+mitzählen, wäre keine Verschärfung, sondern eine Vermischung: Am Ende stünde
+mehr Gebautes gegen dasselbe Ziel, und niemand könnte von außen sagen, was
+zugesagt war.
+
+**Gebaut wird das, wenn eine Messung einen Anlass zeigt, und nicht vorher** —
+dieselbe Regel wie bei UTF-16-BOM und `VALARM` §3.6.6. `anlass.sh` kann diesen
+Fall heute nicht messen: Seine beiden §3.6.5-Erhebungen sind im selben Commit
+entfernt worden, weil sie Anlässe für eine Prüfung maßen, die es jetzt gibt.
+Wer die Obergrenze messen will, braucht dort eine **neue** Erhebung; die alte
+zurückzuholen wäre falsch, sie zählte etwas anderes.
