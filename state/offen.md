@@ -3904,3 +3904,58 @@ Fall heute nicht messen: Seine beiden §3.6.5-Erhebungen sind im selben Commit
 entfernt worden, weil sie Anlässe für eine Prüfung maßen, die es jetzt gibt.
 Wer die Obergrenze messen will, braucht dort eine **neue** Erhebung; die alte
 zurückzuholen wäre falsch, sie zählte etwas anderes.
+
+## Befund 2026-09-01 (Zyklus 83) — `P23` Fall (a) sagt „hat kein TZID", wo eins dasteht
+
+Kein Blocker, keine Frist, kein Mensch muss etwas tun. Er steht hier, damit er
+nicht später als Fehlalarm gelesen wird — er ist keiner.
+
+Über die 2076 fremden `.ics`-Dateien meldete `P23` in
+`icalendar/src/icalendar/tests/calendars/fuzz_testcase_vtimezone_lone_cr.ics`:
+
+```
+VTIMEZONE ab Zeile 1 hat kein TZID
+```
+
+In der Datei steht in Zeile 2 aber `TZID:S<0x0c><0x0c><CR><0x0c>…`. Die Zeile
+enthält Steuerzeichen im Wert, scheitert deshalb an `pruefe_p04` und geht nach
+dessen dokumentiertem Verhalten („Zeilen, die hier scheitern, gehen nicht in
+die Struktur- und Wertpruefungen ein") nicht in die Komponente ein. Die
+`VTIMEZONE` trägt damit **keine gültige** `tzid`-Eigenschaft, und Zeile 3466
+des Normtexts (`; 'tzid' is REQUIRED`) ist verletzt. **Die Meldung ist
+sachlich richtig.**
+
+Irreführend ist die **Wortwahl**: Wer die Datei aufmacht, sieht ein `TZID` und
+liest eine Meldung, die sagt, es gebe keins. Genauer wäre „kein gültiges TZID"
+oder ein Verweis auf die verworfene Zeile.
+
+**Nicht in dieser Mission geändert.** Die Zieldefinition in
+`2026-08-31-die-stumme-zeitzone.md` nennt für Punkt 1 den Wortlaut nicht, und
+eine Textänderung mitten in der laufenden Messung machte die 39 Meldungen aus
+3b unvergleichbar mit dem, was gemessen wurde. Der Fall gilt für alle
+Prüfungen, die auf `komp.hole()` stehen, nicht nur für `P23` — er gehört
+deshalb in eine eigene Betrachtung, nicht in diese.
+
+## Befund 2026-09-01 (Zyklus 83) — einen Zerlegungspfad halb nachbauen
+
+Kein Blocker. Eine Lehre, die zweimal denselben Ursprung hat.
+
+Zyklus 79 lautete: die Faltnähte nicht selbst nachbauen, sondern die Zerlegung
+fragen, die das Werkzeug benutzt. In diesem Zyklus wurde die Zerlegung gefragt
+— aber `pruefe_p04` ausgelassen, weil der Name nach einer reinen Prüfung
+klingt. Es ist keine: Es setzt `name`, `params` und `wert` auf der logischen
+Zeile. Ohne diesen Schritt bleibt jedes `name` auf `None`, `pruefe_p05`
+überspringt jede Zeile und liefert **0 Komponenten** — für jede Datei, ohne
+Fehler, ohne stderr, mit Exit 0.
+
+Die erste Messung zu Punkt 3a lautete deshalb „0 von 2076 Dateien haben eine
+VTIMEZONE". Aufgefallen ist sie nur, weil im selben Durchlauf 39
+`P23`-Meldungen standen, die es ohne `VTIMEZONE` nicht geben kann. Die richtige
+Zahl ist **1873**, unabhängig gegengezählt über die Bytefolge
+`BEGIN:VTIMEZONE` (ebenfalls 1873, Differenz 0).
+
+**Was daraus folgt:** Einen Pfad teilweise nachzubauen ist derselbe Fehler wie
+ihn ganz nachzubauen, und er ist gefährlicher — er stürzt nicht ab, sondern
+liefert eine glatte Null, die wie ein Messergebnis aussieht. Wer aus dem
+Werkzeug heraus misst, ruft die Schritte in der Reihenfolge auf, in der
+`untersuche()` sie aufruft, oder gar nicht.
