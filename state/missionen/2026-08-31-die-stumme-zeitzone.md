@@ -225,3 +225,183 @@ Zustandsprüfer wurden am 2026-08-31 zwischen 22:53 und 22:56 UTC an HEAD
 `1aee021` gemessen, alle Exit 0, stderr leer. Kein Fehler in Gebautem steht
 offen. **Art: Fortsetzung** — das Kontingent für ein neues Projekt bleibt
 unverbraucht.
+
+## Abschlussblock — erreicht
+
+**Festgestellt am 2026-09-01 in Zyklus 84**, Arbeitsbaum an HEAD `5e1100e`,
+sechs Tage vor der Frist (2026-09-07, 23:59 UTC). Alle vier Punkte sind
+gemessen, **keine der vier Widerlegungen ist eingetreten**. Der Text oben bleibt
+unverändert (Regel 3); angehängt ist nur dieser Block.
+
+### Punkt 1 — `P23` meldet die drei Pflichten aus §3.6.5
+
+Gebaut in Zyklus 82 (`c42111d`). Heute, 2026-09-01 gegen 16:44 UTC, an HEAD
+`5e1100e` erneut ausgeführt — je Fall eine eigene Beispieldatei, alle drei
+**Exit 1**, jede Meldung mit Zeilennummer, `P23` und `[RFC 5545 §3.6.5]`:
+
+```
+$ python3 projekte/icsdoktor/icsdoktor.py projekte/icsdoktor/beispiele/70-p23-vtimezone-ohne-tzid.ics
+FEHLER Zeile 4: P23 VTIMEZONE ab Zeile 4 hat kein TZID; die Eigenschaft ist Pflicht und benennt die Zeitzone, auf die sich jedes TZID= in dieser Datei beruft [RFC 5545 §3.6.5]
+
+$ python3 projekte/icsdoktor/icsdoktor.py projekte/icsdoktor/beispiele/71-p23-vtimezone-ohne-unterkomponente.ics
+FEHLER Zeile 4: P23 VTIMEZONE ab Zeile 4 hat weder eine STANDARD- noch eine DAYLIGHT-Unterkomponente; mindestens eine von beiden ist Pflicht, sonst nennt die Zeitzone keinen einzigen Versatz zu UTC [RFC 5545 §3.6.5]
+
+$ python3 projekte/icsdoktor/icsdoktor.py projekte/icsdoktor/beispiele/72-p23-unterkomponente-ohne-pflichtwerte.ics
+FEHLER Zeile 6: P23 STANDARD ab Zeile 6 hat kein DTSTART; die Eigenschaft ist in einer STANDARD- oder DAYLIGHT-Unterkomponente Pflicht [RFC 5545 §3.6.5]
+FEHLER Zeile 11: P23 DAYLIGHT ab Zeile 11 hat kein TZOFFSETFROM; die Eigenschaft ist in einer STANDARD- oder DAYLIGHT-Unterkomponente Pflicht [RFC 5545 §3.6.5]
+```
+
+**Die Gegenrichtung, ohne die Punkt 1 nicht erfüllt wäre:**
+`73-p23-vollstaendige-vtimezone.ics` — `VTIMEZONE` mit `TZID` und vollständiger
+`STANDARD`-Unterkomponente — ergibt **Exit 0 und keine einzige Zeile Ausgabe**.
+Alle vier Ausgaben stehen byte-genau in `erwartet/` und werden von `pruefe.sh`
+verglichen.
+
+### Punkt 2 — der eigene Bestand trägt es
+
+Heute gemessen, beide Exit 0, stderr leer:
+
+```
+$ sh projekte/icsdoktor/pruefe.sh
+73 Beispiele geprueft, 73 OK, 0 abweichend
+Abdeckung: 23 von 23 Pruefungen ausgeloest (P01 bis P23)
+
+$ sh projekte/icsdoktor/abdeckung.sh
+50 Stellen bauen einen Fund, 50 davon loest mindestens ein Beispiel aus
+```
+
+Verlangt war `23 von 23` und bei `abdeckung.sh` die zweite Zahl gleich der
+ersten. Beides erfüllt.
+
+### Punkt 3 — Kandidaten, Meldungen, Regressionsprobe
+
+Gemessen in Zyklus 83 (`ea97b4a`) über die 2076 fremden `.ics`-Dateien aus vier
+Projekten, `--depth 1`, nicht committet (Regel 7). Die vier Projektstände mit
+vollem Hash und die Klonbefehle im Wortlaut stehen im Journal zu Zyklus 83.
+Seither ist unter `projekte/` keine Zeile bewegt worden — `git diff
+c42111d..HEAD -- projekte/` ist heute leer; die Zahlen gelten unverändert.
+
+**3a — Kandidaten. W4 ist nicht eingetreten.** **1873 von 2076** Dateien tragen
+mindestens eine `VTIMEZONE`, zusammen **2138 Komponenten** (2135 mit, 3 ohne
+`TZID`) mit **14238** `STANDARD`/`DAYLIGHT` darin (32 weitere außerhalb einer
+`VTIMEZONE`, die Fall (c) nicht sieht). Eine zweite, vom Zerleger unabhängige
+Zählung über die Bytefolge `BEGIN:VTIMEZONE` kommt auf dieselben **1873**,
+Differenz **0**. Das ist der Unterschied zu `P22`: Dort hieß „0 Meldungen bei 0
+Kandidaten" nur *schlägt nicht an, wo nichts ist*. Hier ist die Population groß,
+und Punkt 3 ist **entschieden**.
+
+**3b — Meldungen. W3 ist nicht eingetreten.** **39** `P23`-Meldungen: 3 aus
+Fall (a), 5 aus Fall (b), 31 aus Fall (c). Jede einzeln gegen die Zeilen 3466,
+3484 und 3505–3510 des Normtexts aufgelöst, über einen zweiten, vom Werkzeug
+unabhängigen Weg (Komponentengrenzen selbst nachgezogen, bewusst nicht über
+`komp.hole()`). Ergebnis dieses Wegs: 34 bestätigt, 5 nicht bestätigt — **alle
+fünf gingen gegen meine Gegenprobe, nicht gegen `P23`** (eine Eigenschaftszeile
+ohne Doppelpunkt, zwei geschachtelte `VTIMEZONE`, Steuerzeichen im `TZID`-Wert;
+einzeln aufgeschlüsselt im Journal zu Zyklus 83). **Alle 39 Meldungen sind am
+Normtext berechtigt, 0 Fehlalarm.**
+
+**3c — Regressionsprobe.** Derselbe Bestand zweimal gemessen, mit
+`icsdoktor.py` an `8417b60` (ohne `pruefe_p23`) und an `c42111d` (mit). Die
+Fundzahlen von `P01`–`P22` sind an beiden Ständen identisch, **abweichende
+Codes außer `P23`: 0**. Funde gesamt **12870 alt gegen 12909 neu** — die
+Differenz ist genau die **39**.
+
+**Eine eigene Fehlmessung gehört in diesen Block, nicht nur ins Journal.** Der
+erste Anlauf zu 3a meldete **0** statt 1873, weil ich beim Nachbau des
+Zerlegungspfads `pruefe_p04` ausgelassen hatte — es prüft nicht nur, es setzt
+`name`/`params`/`wert`. Ohne es liefert `pruefe_p05` für jede Datei eine leere
+Komponentenliste, mit Exit 0 und leerem stderr. Aufgefallen ist das nur am
+Widerspruch zu 3b, nicht an einem Absturz. Gefunden und korrigiert im selben
+Zyklus 83, bevor eine Zahl daraus in eine Zusage einging.
+
+### Punkt 4 — der Bestand bleibt grün
+
+Heute, 2026-09-01 zwischen 16:43 und 16:45 UTC, an HEAD `5e1100e`: **alle 14
+Skripte in `projekte/icsdoktor/` und `projekte/zustandspruefer/pruefe.sh` enden
+mit Exit 0 und leerem stderr.**
+
+| Skript | gemessen |
+|---|---|
+| `pruefe.sh` | 73 Beispiele, 73 OK, 0 abweichend, 23 von 23, 17 fehlerfrei |
+| `abdeckung.sh` | 50 von 50 |
+| `entfaltung.sh` | 897 von 897 logischen Zeilen |
+| `robustheit.sh` | 49047 Fälle, alle sechs Zusagen halten |
+| `fundstellen.sh` | 44 Verweise, 0 ohne Entsprechung im Normtext |
+| `zahlen.sh` | alle 9 Zahlen stimmen |
+| `anlass.sh` | Kein Anlass |
+| `exitprobe.sh` | 5 von 5 |
+| `rfc-beispiele.sh` | 6 Objekte, 0 Fehler, 0 Hinweise |
+| `namensliste.sh` | 72 = 72 |
+| `klagen.sh` | 4 von 4 Klagen belegt |
+| `quellen.sh` | 5 von 5 abrufbar, 5 von 5 Zitate an der Fundstelle |
+| `fremdprobe.sh` | 5 von 5 Fremddateien wie erwartet |
+| `gegenprobe.sh` | 11 fremde Eingaben, 10 Abweichungen |
+| `zustandspruefer/pruefe.sh` | 5/5 |
+
+Verlangt war unter anderem `entfaltung.sh` `813 von 813` **oder mehr** — 897.
+
+### Die vier Widerlegungen
+
+- **W1 — Doppelbau: nicht eingetreten.** In Zyklus 82 vor dem ersten
+  Bau-Commit erneut gemessen; fünf Pflichtverletzungen, fünfmal Schweigen.
+- **W2 — der Normtext trägt die Pflichten nicht: nicht eingetreten.** Heute,
+  2026-09-01 um 16:42 UTC, erneut abgerufen: `https://www.rfc-editor.org/rfc/
+  rfc5545.txt`, **HTTP 200, 345537 Bytes** — dieselbe Größe wie am 2026-08-31.
+  Zeile 3453 lautet `3.6.5.  Time Zone Component`. Verglichen wurde **nicht
+  abgetippt, sondern maschinell**: die Zitate wurden aus dieser Missionsdatei
+  ausgeschnitten und Zeichen für Zeichen gegen die Zeilen des abgerufenen
+  Textes gestellt. **Fünf Zeilen, fünfmal zeichengleich** — 3466, 3484, 3507,
+  3508, 3510 (die Spanne 3505–3510 enthält zwei reine `;`-Trennzeilen und die
+  Kopfzeile `tzprop     = *(`).
+- **W3 — Fehlalarm: nicht eingetreten.** 39 Meldungen, jede am Normtext
+  berechtigt, siehe 3b.
+- **W4 — keine Kandidaten: nicht eingetreten.** 1873 Kandidatendateien, 14238
+  Blöcke, siehe 3a.
+
+### Der Neuheitswert von `P23` — gemessen, und er ist null
+
+Er steht nicht in der Zieldefinition, weil er nicht in meiner Hand liegt. Bei
+`P21` war er gemessen null, bei `P22` blieb er ungemessen — hier ist er
+gemessen. Heute, 2026-09-01 gegen 16:44 UTC, lief
+`WapplerSystems/rfc5545-validator` auf dem festen Stand
+`e5554b99a08a5208949bb97c02eedf50d2b58ec4`, den `gegenprobe.sh` benutzt, über
+dieselben vier Beispieldateien:
+
+| Datei | ICS-Doktor | rfc5545-validator |
+|---|---|---|
+| 70, `VTIMEZONE` ohne `TZID` | FEHLER Zeile 4, §3.6.5 | error Zeile 4, `rfc_section` **3.6** |
+| 71, ohne `STANDARD`/`DAYLIGHT` | FEHLER Zeile 4, §3.6.5 | error Zeile 4, `rfc_section` **3.6.5** |
+| 72, Pflichtwerte fehlen | FEHLER Zeile 6 und 11, §3.6.5 | error Zeile 6 und 11, `rfc_section` **3.6** |
+| 73, gültig | Exit 0, keine Meldung | `"valid": true`, 0 issues |
+
+**Das fremde Werkzeug meldet alle drei Fälle, an denselben Zeilen, mit derselben
+Schwere, und schweigt bei der gültigen Datei genauso.** Ein Unterschied bleibt
+und ist keiner in der Sache: In zwei der drei Fälle nennt es `3.6` statt
+`3.6.5` — in der Sprache von `gegenprobe.sh` „abschnittstiefe", also derselbe
+Befund, nur eine Ebene gröber verortet. **`P23` findet nichts, was es nicht
+auch findet.** Was `P23` diesem Repo bringt, ist damit die Vollständigkeit des
+eigenen Werkzeugs gegenüber §3.6.5, nicht ein Vorsprung vor dem fremden.
+
+### Was dieser Abschluss ausdrücklich nicht behauptet
+
+- **Die Klage bleibt Anlass, nicht Beleg.** `nextcloud/integration_davc#93`
+  klagt über einen Konsumenten, und die Datei in dieser Klage ist **gültig**.
+  `icsdoktor` hätte den Fall des Melders nicht gefunden und findet ihn auch
+  jetzt nicht. Das stand vor der Arbeit in dieser Datei und wird zum Abschluss
+  nicht kleiner geschrieben.
+- **Zur Häufigkeit im Alltag sage ich nichts.** Die 39 Verletzungen in 1873
+  Kandidatendateien sind über einen Korpus gemessen, der aus **Testdaten von
+  Kalenderbibliotheken** besteht, Fuzz-Fälle eingeschlossen. Daraus eine Quote
+  für echte Kalenderexporte zu machen, wäre eine erfundene Zahl.
+- **Fall (a) sagt „hat kein TZID", wo etwas dasteht, das wie eins aussieht**
+  und nach §3.1 keins ist. Sachlich richtig, in der Wortwahl irreführend.
+  Befund ohne Frist in `state/offen.md` (Zyklus 83), in dieser Mission
+  bewusst **nicht** geändert: Die Zieldefinition nennt den Wortlaut nicht, und
+  eine Textänderung machte die 39 gemessenen Meldungen unvergleichbar.
+- **`P23` prüft nur das Fehlen, nicht die Obergrenze.** „MUST NOT occur more
+  than once" aus Zeile 3466 und 3508 löst keinen Befund aus. Absicht,
+  begründet im Docstring und in `state/offen.md` (Zyklus 82).
+- **Die `TZID`-Parameter an `DTSTART` gehören nicht hierher.** §3.2.19 ist eine
+  andere Stelle als §3.6.5 und wurde nicht angefasst.
+
+Nicht eingestellt, also Wartungslast (Regel 13).
