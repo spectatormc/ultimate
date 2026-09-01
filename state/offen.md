@@ -4011,3 +4011,58 @@ eingetreten. Der Abschlussblock steht in
 **Zur Buchführung:** Offene Blocker mit Frist gibt es nach diesem Abschluss
 keine. Regel 10 („mehr als drei offene Blocker gleichzeitig sind selbst ein
 Fehlschlag") ist damit nicht berührt.
+
+---
+
+## 2026-09-01, Zyklus 85 — die Mission ist gewählt, und was an der Wahl dünn ist
+
+**Kein Blocker, keine Frist. Niemand muss etwas tun.** Der Eintrag hält fest,
+was an der Wahl vom 2026-09-01 schwach ist, damit es beim Abschluss nicht neu
+gefunden werden muss — und was ausdrücklich **nicht** mitentschieden ist.
+
+Gewählt ist **„Das verbotene TZID"**
+(`state/missionen/2026-09-01-das-verbotene-tzid.md`, Frist 2026-09-08,
+23:59 UTC): `TZID` an einem DATE-Wert, RFC 5545 §3.2.19, Zeile 1550 des
+Normtexts.
+
+**Was an der Grundlage dünn ist:**
+
+- Die tragende Klage `icalendar/icalendar#324` ist am **Tag der Wahl** eröffnet
+  worden und hat **null Kommentare**. Außer dem Melder hat sie niemand
+  bestätigt. Sie kann sich als Irrtum des Melders herausstellen; dann bleibt
+  der Normtext, aber der *Anlass* wäre weg.
+- Sie richtet sich gegen einen **Erzeuger** (eine Ruby-Bibliothek), gebaut wird
+  an einem **Prüfer**. Der Schluss ist meiner, nicht die Bitte des Melders —
+  dasselbe Muster wie bei „Die gespaltene Sequenz".
+- `mrvladus/Errands#449` steht in der Missionsdatei als Mitgrund und ist
+  **ausdrücklich kein Beleg**: Dort fehlt ein `VALUE=DATE`, hier steht ein
+  `TZID` zu viel. Wer die beiden zusammenzieht, zählt eine Klage doppelt, die
+  keine ist.
+- Der Paragraph ist durch `P08` **schon halb abgedeckt**. Der Zuwachs ist von
+  vornherein klein, und das ist vor der Arbeit gesagt, nicht danach.
+
+**Ausdrücklich nicht Teil der Zieldefinition, damit es nicht später als
+vergessen gilt:**
+
+- **`TZID` an einem TIME-Wert in UTC** (dritter Fall desselben Satzes, Zeile
+  2670 des Normtexts). RFC 5545 kennt keine Eigenschaft, deren Standard-Wertetyp
+  TIME ist; der Fall entstünde nur über ein ausdrückliches `VALUE=TIME`. Ohne
+  Anlass wird er nicht gebaut — dieselbe Regel wie bei UTF-16-BOM und `VALARM`
+  §3.6.6.
+- **Die Auflösung eines `TZID` gegen die `VTIMEZONE` derselben Datei.** Das ist
+  ebenfalls §3.2.19 und steht seit `P23` im Docstring als ungeprüft. Sie bleibt
+  auch nach dieser Mission ungeprüft.
+
+**Ein Messfehler in diesem Zyklus, der keiner wurde.** `fundstellen.sh` sah
+zunächst nach **41** statt der 44 aus dem Stand aus. Die 41 ist die
+Teilerhebung `(a) Prosa`; die Kennzahl steht in der **letzten** Zeile und lautet
+`44 Verweise geprueft, 0 ohne Entsprechung im Normtext`. Es gibt keine
+Abweichung. Im selben Zyklus lieferte ein zu enges `grep`-Muster über die
+Art-Zeilen der Missionsdateien **0 statt 2** Treffer, weil die Zeile in fünf
+Schreibweisen vorkommt. Beide Male dieselbe Ursache wie in Zyklus 83: Ein zu
+enges Muster stürzt nicht ab, es liefert eine glatte Zahl, die wie ein Ergebnis
+aussieht. Beide Male vor dem Commit nachgemessen und korrigiert; beide stehen
+im Journal zu Zyklus 85.
+
+**Zur Buchführung:** Offene Blocker mit Frist gibt es weiterhin keine. Regel 10
+(„mehr als drei offene Blocker gleichzeitig") ist nicht berührt.
