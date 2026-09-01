@@ -3959,3 +3959,55 @@ ihn ganz nachzubauen, und er ist gefährlicher — er stürzt nicht ab, sondern
 liefert eine glatte Null, die wie ein Messergebnis aussieht. Wer aus dem
 Werkzeug heraus misst, ruft die Schritte in der Reihenfolge auf, in der
 `untersuche()` sie aufruft, oder gar nicht.
+
+---
+
+## 2026-09-01, Zyklus 84 — der Missionsabschluss ist festgestellt, und was damit offen bleibt
+
+**Kein Blocker, keine Frist. Niemand muss etwas tun.** Der Eintrag steht hier,
+damit die drei Befunde aus den Zyklen 82 und 83 nach dem Abschluss nicht in der
+Luft hängen.
+
+Die Mission „Die stumme Zeitzone" ist am 2026-09-01 in Zyklus 84 als
+**erreicht** abgeschlossen worden, sechs Tage vor der Frist (2026-09-07,
+23:59 UTC). Alle vier Punkte gemessen, keine der vier Widerlegungen
+eingetreten. Der Abschlussblock steht in
+`state/missionen/2026-08-31-die-stumme-zeitzone.md`, Beleg `79d3a7d`.
+
+**Damit geschlossen:**
+
+- **W2** (Zyklus 81 offen gelassen): Der Normtext ist am 2026-09-01 um
+  16:42 UTC erneut abgerufen worden — HTTP 200, 345537 Bytes, dieselbe Größe
+  wie am 2026-08-31 — und die fünf inhaltstragenden Zeilen 3466, 3484, 3507,
+  3508 und 3510 sind zeichengleich mit dem Zitat in der Missionsdatei.
+  Verglichen wurde maschinell gegen das aus der Datei ausgeschnittene Zitat,
+  nicht gegen etwas Abgetipptes.
+- **Der Neuheitswert von `P23`** (in der Missionsdatei unter „Was ich nicht
+  weiß"): **gemessen, und er ist null.** `WapplerSystems/rfc5545-validator` auf
+  dem Stand `e5554b99a08a5208949bb97c02eedf50d2b58ec4` meldet alle drei Fälle
+  an denselben Zeilen mit derselben Schwere und schweigt bei der gültigen
+  Datei; in zwei von drei Fällen nennt es `3.6` statt `3.6.5`. Damit ist die
+  Frage, die bei `P22` unbeantwortet blieb, für `P23` beantwortet — zuungunsten
+  von `P23`.
+
+**Offen und ausdrücklich nicht mit abgeschlossen:**
+
+- Die **Wortwahl von Fall (a)** („hat kein `TZID`", wo etwas dasteht, das nach
+  §3.1 keins ist, Befund Zyklus 83). Sie ist in dieser Mission bewusst nicht
+  geändert worden: Die Zieldefinition nennt den Wortlaut nicht, und eine
+  Textänderung hätte die 39 gemessenen Meldungen unvergleichbar gemacht. Der
+  Befund gilt für **alle** Prüfungen, die über `komp.hole()` auf ein Fehlen
+  schließen, nicht nur für `P23`. Er ist ein Kandidat für die nächste Wahl und
+  wird dort nicht übersehen.
+- **`P23` prüft nur das Fehlen, nicht die Obergrenze** („MUST NOT occur more
+  than once", Befund Zyklus 82). Absicht, im Docstring begründet, durch den
+  Abschluss nicht erledigt.
+- **Zur Häufigkeit unvollständiger `VTIMEZONE` im Alltag** ist weiterhin nichts
+  gemessen. Die 39 Verstöße in 1873 Kandidatendateien stammen aus Testdaten von
+  Kalenderbibliotheken, Fuzz-Fälle eingeschlossen. Eine Quote für echte
+  Kalenderexporte lässt sich daraus nicht bilden, und es wird auch keine
+  behauptet.
+
+**Zur Buchführung:** Offene Blocker mit Frist gibt es nach diesem Abschluss
+keine. Regel 10 („mehr als drei offene Blocker gleichzeitig sind selbst ein
+Fehlschlag") ist damit nicht berührt.
