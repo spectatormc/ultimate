@@ -76,6 +76,15 @@ Anlass ist nextcloud/integration_davc #93 — eine Klage ueber einen Konsumenten
 deren Datei gueltig ist. Sie hat zum Hinsehen gefuehrt und belegt nichts; das
 steht so im Docstring der Pruefung und in der Missionsdatei.
 
+P24 kommt aus der Mission Das verbotene TZID,
+state/missionen/2026-09-01-das-verbotene-tzid.md, und schliesst die zweite
+Haelfte eines Satzes, dessen erste schon als P08 gebaut war: Der TZID-Parameter
+gehoert nicht an einen DATE-Wert (§3.2.19, Zeile 1550 des Normtexts). Sie ist
+die erste Pruefung, die einen Parameter gegen den Wertetyp derselben Zeile
+haelt, statt den Wert selbst zu lesen. Der Anlass ist icalendar/icalendar #324,
+eine Klage ueber einen Erzeuger — ich baue einen Pruefer, der Schluss ist
+meiner und nicht die Bitte des Melders.
+
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
 Aufruf:
@@ -2198,6 +2207,83 @@ def pruefe_p23(komponenten, funde):
                 "3.6.5"))
 
 
+def pruefe_p24(logische, funde):
+    """§3.2.19: TZID steht nicht an einem DATE-Wert.
+
+    DER NORMTEXT, an seiner Fundstelle. rfc5545.txt, Abschnitt "3.2.19.  Time
+    Zone Identifier" ab Zeile 1491, abgerufen am 2026-09-02 (HTTP 200, 345537
+    Bytes). Der tragende Satz steht in den Zeilen 1550 bis 1552:
+
+        Zeilen 1550-1552: The "TZID" property parameter MUST NOT be applied
+                          to DATE properties and DATE-TIME or TIME properties
+                          whose time values are specified in UTC.
+
+    Der Satz verbietet drei Dinge, und diese Pruefung meldet genau das erste.
+
+    WAS DIE ANDEREN BEIDEN MACHEN. Das zweite — TZID an einem DATE-TIME in
+    UTC — steht ein zweites Mal in Zeile 1876 (§3.3.5, FORM #2) und ist seit
+    der ersten Mission als P08 gebaut. Ein Wert, der auf "Z" endet, traegt
+    keinen VALUE=DATE und faellt hier deshalb nicht an; eine zweite Meldung an
+    derselben Zeile waere ein Fehlalarm und ist in der Mission ausdruecklich
+    ausgeschlossen. Das dritte — TZID an einem TIME-Wert in UTC, Zeile 2670 —
+    ist nicht gebaut: RFC 5545 kennt keine Eigenschaft, deren Vorgabetyp TIME
+    ist, der Fall entstuende nur ueber ein ausdrueckliches VALUE=TIME.
+
+    WORAN EIN DATE-WERT ZU ERKENNEN IST. Am 2026-09-02 am Normtext gemessen
+    statt geraten: Keine der Eigenschaften in RFC 5545 hat DATE als Vorgabetyp
+    ("Value Type:  DATE" kommt in rfc5545.txt kein einziges Mal vor; die vier
+    Zeilen mit einer Vorgabe aus der Zeitfamilie sagen alle DATE-TIME). Ein
+    DATE-Wert entsteht damit ausschliesslich ueber den Parameter VALUE=DATE,
+    und genau daran erkennt diese Pruefung ihn — ueber _wertetyp, dieselbe
+    Lesart, die P12 und P13 benutzen. Die Missionsdatei hat diese Frage offen
+    gelassen und ihre Klaerung dem Bau aufgegeben; das ist die Antwort.
+
+    Die Pruefung sieht dabei an JEDER Eigenschaft nach, nicht nur an den zehn
+    aus _DATETIME_EIGENSCHAFTEN. Zeile 1550 nennt keine Namensliste, sondern
+    "DATE properties" — was VALUE=DATE traegt, ist eine. Ein SUMMARY mit
+    VALUE=DATE ist aus einem anderen Grund falsch, aber ein TZID daran bleibt
+    an Zeile 1550 auch dann verboten.
+
+    TZID= mit leerem Wert zaehlt als vorhandener Parameter. Das ist dieselbe
+    Lesart wie in P08 (dort "and pwerte", der leere Wert ergibt [""] und damit
+    tzid == "") und nicht neu erfunden: Ein leerer Wert nimmt den Parameter
+    nicht zurueck.
+
+    WAS DIESE PRUEFUNG NICHT TUT. Ob das TZID einer Eigenschaft zu einer
+    VTIMEZONE derselben Datei passt, bleibt ungeprueft — dieselbe Grenze, die
+    schon der Docstring von pruefe_p23 nennt. Diese Pruefung liest eine
+    einzelne Zeile und braucht die uebrige Datei nicht.
+
+    DER ANLASS AUS DER WELT — und was er nicht traegt. icalendar/icalendar
+    #324, eroeffnet 2026-09-01, am 2026-09-01 als offen abgerufen, null
+    Kommentare: "the TZID is incorrectly output into a DATE value, against RFC
+    5545 3.2.19". Der Melder klagt ueber einen Erzeuger, ich baue an einem
+    Pruefer; der Schluss von der einen auf den anderen ist meiner und nicht
+    seine Bitte. Die Klage ist am naechsten Tag zitiert worden und von
+    niemandem ausser dem Melder bestaetigt. Diese Pruefung steht auf dem
+    Normtext, nicht auf der Klage.
+    """
+    for lz in logische:
+        if lz.name is None:
+            continue
+        tzid = None
+        for pname, pwerte in lz.params:
+            if pname == "TZID" and pwerte:
+                tzid = pwerte[0]
+        if tzid is None:
+            continue
+        if _wertetyp(lz) != "DATE":
+            continue
+        funde.append(Fund(
+            FEHLER, lz.nr, "P24",
+            "%s: Wert ist mit VALUE=DATE als DATE ausgewiesen und trägt "
+            "zugleich den Parameter TZID=%s; an einem DATE-Wert ist TZID "
+            "verboten, weil ein Datum ohne Uhrzeit nichts hat, worauf sich "
+            "eine Zeitzone beziehen könnte"
+            % (lz.name, _kurz(tzid)),
+            "3.2.19"))
+
+
 _BOM_UTF8 = b"\xef\xbb\xbf"
 
 
@@ -2273,7 +2359,7 @@ def pruefe_p20(rohdaten, funde):
 
 
 def untersuche(rohdaten):
-    """Alle dreiundzwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle vierundzwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     rohdaten, hatte_bom = pruefe_p20(rohdaten, funde)
     zeilen = zerlege_physisch(rohdaten)
@@ -2315,6 +2401,7 @@ def untersuche(rohdaten):
     pruefe_p21(logische, funde)
     pruefe_p22(zeilen, funde)
     pruefe_p23(komponenten, funde)
+    pruefe_p24(logische, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))

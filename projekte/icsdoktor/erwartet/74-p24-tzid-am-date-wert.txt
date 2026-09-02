@@ -1,0 +1,1 @@
+FEHLER Zeile 7: P24 DTSTART: Wert ist mit VALUE=DATE als DATE ausgewiesen und trägt zugleich den Parameter TZID=Europe/London; an einem DATE-Wert ist TZID verboten, weil ein Datum ohne Uhrzeit nichts hat, worauf sich eine Zeitzone beziehen könnte [RFC 5545 §3.2.19]

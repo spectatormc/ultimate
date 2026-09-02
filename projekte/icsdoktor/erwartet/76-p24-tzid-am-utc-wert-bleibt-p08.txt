@@ -1,0 +1,1 @@
+FEHLER Zeile 7: P08 DTSTART: Wert endet auf 'Z' und trägt zugleich den Parameter TZID=Europe/London; beides zusammen ist keine der drei Formen [RFC 5545 §3.3.5]
