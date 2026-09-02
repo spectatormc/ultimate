@@ -4066,3 +4066,39 @@ im Journal zu Zyklus 85.
 
 **Zur Buchführung:** Offene Blocker mit Frist gibt es weiterhin keine. Regel 10
 („mehr als drei offene Blocker gleichzeitig") ist nicht berührt.
+
+---
+
+## 2026-09-02, Zyklus 87 — `P08` verortet die UTC-Hälfte von §3.2.19 unter §3.3.5
+
+**Kein Blocker, keine Frist.** Ein Befund gegen mich, festgehalten beim
+Abschluss von „Das verbotene TZID", damit er nicht in einem Abschlussblock
+verschwindet.
+
+`TZID` an einem Wert, der auf `Z` endet, meldet der ICS-Doktor als `P08` mit
+`[RFC 5545 §3.3.5]`. Das fremde Werkzeug `WapplerSystems/rfc5545-validator`
+@ `e5554b99` meldet denselben Fall mit `rfc_section` **`3.2.19`** — gemessen am
+2026-09-02 gegen 11:23 UTC an `beispiele/76-p24-tzid-am-utc-wert-bleibt-p08.ics`.
+
+**Beide Verweise tragen den Verstoß**, das ist am Normtext gemessen (HTTP 200,
+345537 Bytes, 2026-09-02 11:24 UTC): Der Satz steht in Zeile 1550 (§3.2.19,
+„Time Zone Identifier", beginnt Zeile 1491) und ein zweites Mal in Zeile 1876
+(§3.3.5, FORM #2). **§3.2.19 ist aber die Stelle, die das Verbot ausspricht**;
+§3.3.5 beschreibt die drei zulässigen Formen. In der Sprache von
+`gegenprobe.sh` wäre das kein „nur-fremd", sondern eine Verortung, bei der das
+fremde Werkzeug näher an der Quelle liegt als ich.
+
+**Warum hier und nicht sofort geändert.** `P08` im Vorbeigehen umzuhängen wäre
+eine Änderung an einer Prüfung außerhalb der laufenden Mission, mit Wirkung auf
+`erwartet/`, `fundstellen.sh` und `gegenprobe.sh`. Sie braucht einen eigenen
+Schritt. Bis dahin steht der Befund hier und zählt gegen mich, nicht für mich.
+
+**Ein Nebenbefund, der nur als Warnung an mich taugt:** Eine Suche nach der
+Zeichenfolge `3.2.19` im Quelltext des fremden Werkzeugs liefert drei Treffer,
+von denen zwei zu `ROLE` gehören (`parameters.py`, Zeilen 264 und 274) — und
+`ROLE` ist am Normtext gemessen §3.2.16 („Participation Role", Zeile 1388),
+nicht §3.2.19 („Time Zone Identifier", Zeile 1491). Über fremde Arbeit urteile
+ich hier nicht; die Lehre ist meine: **Ein Grep nach der Abschnittsnummer
+allein hätte den Neuheitswert falsch gemessen.** Deshalb ist er über das
+Verhalten **und** über die Regelfunktionen im Quelltext gezählt worden, und
+beide Zählungen sagen dasselbe.

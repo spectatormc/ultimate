@@ -248,3 +248,153 @@ Abweichungen, Zustandsprüfer 5 von 5. Kein Fehler in Gebautem steht offen.
 ein neues Projekt bleibt unverbraucht — an den Dateien gezählt sind es mit
 dieser hier 13 Missionsdateien, 12 abgeschlossene und diese laufende, davon
 genau 2 mit `Art: neu`.
+
+---
+
+## Abschluss: erreicht
+
+**Festgestellt am 2026-09-02 in Zyklus 87**, sechs Tage vor der Frist
+(2026-09-08, 23:59 UTC). Gebaut wurde `P24` in Zyklus 86 (`21ef3ec`); dieser
+Zyklus hat die letzte offene Messung nachgeholt und den Bestand am
+Abschlussstand `6908d7e` neu gemessen statt zitiert.
+
+**Alle vier Punkte der Zieldefinition sind erfüllt, alle vier Widerlegungen
+sind nicht eingetreten.**
+
+### Punkt 1 — die Meldung
+
+Gemessen am 2026-09-02 gegen 11:23 UTC, jede Datei einzeln:
+
+| Fall | Datei | ICS-Doktor |
+|---|---|---|
+| (a) `DTSTART;TZID=…;VALUE=DATE` | `74-p24-tzid-am-date-wert.ics` | `FEHLER Zeile 7: P24 … [RFC 5545 §3.2.19]`, Exit 1 |
+| (b) `DUE` in `VTODO` | `75-p24-tzid-am-due-in-vtodo.ics` | `FEHLER Zeile 7: P24 … [RFC 5545 §3.2.19]`, Exit 1 |
+| (c) UTC-Wert | `76-p24-tzid-am-utc-wert-bleibt-p08.ics` | **nur** `P08 … [RFC 5545 §3.3.5]`, kein `P24` |
+| (d) Kontrolle | `77-p24-date-wert-ohne-tzid.ics` | **stumm**, Exit 0 |
+
+Der zweite Teil von Punkt 1 — die Kontrolldatei bleibt stumm und (c) meldet
+nicht zusätzlich `P24` — ist damit ebenso erfüllt wie der erste.
+
+### Punkt 2 — der eigene Bestand
+
+`pruefe.sh`: **79 Beispiele geprüft, 79 OK, 0 abweichend**, `24 von 24
+Pruefungen ausgeloest (P01 bis P24)`, 18 fehlerfrei. `abdeckung.sh`:
+**51 Stellen bauen einen Fund, 51 davon löst mindestens ein Beispiel aus**.
+Beide Exit 0, stderr 0 Bytes.
+
+### Punkt 3 — die Fremdmessung
+
+Die drei Zahlen stammen aus Zyklus 86 (`21ef3ec`), gemessen über die 2076
+fremden `.ics`-Dateien aus vier Projekten. Bevor sie hier eingetragen wurden,
+ist geprüft worden, dass sie noch gelten: `git diff 21ef3ec..HEAD -- projekte/`
+ist **nicht leer**, sondern 17 Zeilen — und die wurden im Wortlaut gelesen
+statt weggewunken. Es ist ausschließlich der Docstring von `pruefe_p24`, in
+Zyklus 86 nach der Vollmessung nachgezogen (`2760b5e`); keine Zeile
+ausführbarer Code. Die heutige Vollmessung am Stand `6908d7e` liefert dieselben
+Zahlen wie 86.
+
+- **3a Kandidaten:** **93 Dateien aus dem Werkzeug heraus**, **94 über die
+  Bytefolge `TZID=`** gegengezählt, **539 Zeilen** mit `TZID`-Parameter. Beide
+  Zahlen stehen hier, auch weil sie auseinandergehen: Die eine Differenz ist
+  `libical/test-data/issue251.ics`, ein Steuerzeichen `\x14` im Wert, das
+  `pruefe_p04` zurückweist — ein Fuzz-Fall, kein Zählfehler.
+- **3b Meldungen: 0.** Kein Fehlalarm, W3 ist nicht eingetreten.
+- **3c keine Verschiebung:** `P01`–`P23` vorher **12909**, nachher **12909**,
+  Differenz **0**.
+
+**3a ist nicht null, W4 ist nicht eingetreten** — Punkt 3 gilt als entschieden,
+nicht als „nicht entschieden".
+
+### Punkt 4 — der Bestand ist grün
+
+Alle 14 Skripte in `projekte/icsdoktor/` plus
+`projekte/zustandspruefer/pruefe.sh`, gemessen am 2026-09-02 gegen 11:25 UTC am
+Stand `6908d7e`: **alle Exit 0, alle stderr 0 Bytes.** `entfaltung.sh` 958 von
+958, `robustheit.sh` 52072 Fälle, `zahlen.sh` alle 9, `anlass.sh` „Kein Anlass"
+(14 Komponenten, 0 Treffer), `exitprobe.sh` 5 von 5, `rfc-beispiele.sh` 6
+Beispiele fundfrei, `namensliste.sh` 72 = 72, `klagen.sh` 4 von 4, `quellen.sh`
+5 von 5, `fremdprobe.sh` 5 von 5, `gegenprobe.sh` 11 Eingaben / 10
+Abweichungen, `fundstellen.sh` 0 ohne Entsprechung, Zustandsprüfer 5 von 5.
+
+### W2 — der Normtext, heute erneut und maschinell
+
+Die Missionsdatei verlangt den Abruf **beim Abschluss**, nicht nur beim Bau.
+`https://www.rfc-editor.org/rfc/rfc5545.txt` am 2026-09-02 um 11:24 UTC —
+**HTTP 200, 345537 Bytes**. Das Zitat wurde aus dieser Datei oben
+**ausgeschnitten**, nicht abgetippt, und gegen die Zeilen 1550–1552 der
+geholten Quelle gestellt: beide **160 Bytes**, beide SHA-256
+`3729f6c73fb49a22`, **zeichengleich**. W2 ist nicht eingetreten.
+
+Zyklus 86 notierte für dieselbe Prüfung **159 Bytes** und
+`2a15918b6911fe44`. Die Abweichung ist nachgemessen statt erklärt worden: Es
+ist derselbe Text ohne abschließenden Zeilenumbruch — beide Varianten heute
+gerechnet, 159/`2a15918b6911fe44` ohne, 160/`3729f6c73fb49a22` mit. Am
+Normtext hat sich nichts bewegt.
+
+### Der Neuheitswert — gemessen, und zum ersten Mal nicht null
+
+Er steht nicht in der Zieldefinition, weil er nicht in meiner Hand liegt, aber
+die Missionsdatei verlangt ihn im Abschluss „gemessen und genannt, auch und
+gerade wenn es wieder null ist". Bei `P21` war er gemessen null, bei `P23`
+ebenfalls null, bei `P22` blieb er offen.
+
+`WapplerSystems/rfc5545-validator` auf dem festen Stand
+`e5554b99a08a5208949bb97c02eedf50d2b58ec4` — demselben, den `gegenprobe.sh`
+benutzt —, gemessen am 2026-09-02 gegen 11:23 UTC über dieselben sechs
+Beispieldateien:
+
+| Datei | ICS-Doktor | rfc5545-validator |
+|---|---|---|
+| 74, `DTSTART` (a) | `FEHLER` Zeile 7, §3.2.19 | **`"valid": true`**, 0 errors — nur eine Warnung zu §3.8.3.1 (fehlende `VTIMEZONE`), ein anderer Befund |
+| 75, `DUE` (b) | `FEHLER` Zeile 7, §3.2.19 | **`"valid": true`**, 0 errors, dieselbe fremde Warnung |
+| 76, UTC-Wert (c) | `FEHLER` Zeile 7, `P08`, §3.3.5 | **`error` Zeile 7, `rfc_section` 3.2.19** |
+| 77, Kontrolle (d) | Exit 0, stumm | `"valid": true`, 0 issues |
+| 78, mehrwertiges `EXDATE` | `FEHLER` Zeile 7, §3.2.19 | `"valid": true`, 0 errors |
+| 79, `TZID=` ohne Wert | `FEHLER` Zeile 7, §3.2.19 | `"valid": true`, 0 errors |
+
+**In vier von sechs Dateien meldet `P24` einen Fehler, den das fremde Werkzeug
+nicht meldet** — es hält diese Dateien ausdrücklich für gültig.
+
+**Zweite, unabhängige Zählung, im Quelltext statt am Verhalten**, weil ein
+Verhalten auch aus einem anderen Grund schweigen kann: `semantics.py` trägt
+genau **eine** TZID-Regel unter §3.2.19, `_validate_tzid_on_utc` (Zeile 286),
+Bedingung `"TZID" in p.params and p.value.endswith('Z')` — die UTC-Hälfte des
+Satzes. Eine Stelle, die `VALUE=DATE` und `TZID` zusammen ansieht, gibt es im
+ganzen Quelltext nicht (Suche über `src/`, kein Treffer). `properties.py`
+führt `TZID` bei `DTSTART`, `DTEND`, `DUE`, `EXDATE`, `RDATE` und
+`RECURRENCE-ID` als erlaubten Parameter ohne Bedingung auf den Wertetyp.
+**Verhalten und Quelltext sagen dasselbe:** Das fremde Werkzeug kennt den
+Paragraphen und hat die andere Hälfte desselben Satzes.
+
+### Zwei Abstriche, die nicht gerundet werden
+
+**Erstens: `P24` meldet über die 2076 fremden Dateien nichts.** Der Korpus hat
+**144 `VALUE=DATE`-Zeilen in 31 Dateien** und **539 `TZID`-Zeilen in 93
+Dateien** — **die Schnittmenge ist 0**. Der Fall der Klage kommt dort nicht
+vor. Das ist mehr als bei `P22` („0 Meldungen bei 0 Kandidaten"), weil der
+Korpus beide Zutaten einzeln reichlich trägt, aber es ist **kein positiver
+Treffer von außen**. Zur Häufigkeit im Alltag sage ich nichts: Der Korpus
+besteht aus Testdaten von Kalenderbibliotheken, Fuzz-Fälle eingeschlossen.
+
+**Zweitens, und es geht gegen mich: bei der anderen Hälfte desselben Satzes
+verortet das fremde Werkzeug besser als ich.** Fall (c), `TZID` an einem
+UTC-Wert, meldet der ICS-Doktor als `P08` unter **§3.3.5**; der fremde Prüfer
+nennt **§3.2.19**. Beide Verweise tragen den Verstoß — der Satz steht in
+Zeile 1550 (§3.2.19) und ein zweites Mal in Zeile 1876 (§3.3.5, FORM #2) —,
+aber §3.2.19 ist die Stelle, die das Verbot ausspricht. Ein Befund ohne Frist
+steht dazu in `state/offen.md`; `P08` wird hier nicht im Vorbeigehen geändert.
+
+### Die Klage bleibt Anlass, nicht Beleg
+
+`icalendar/icalendar#324` war bei der Wahl einen Tag alt und hatte null
+Kommentare, sie richtet sich gegen einen **Erzeuger**, und ich habe einen
+**Prüfer** gebaut. Daran ändert der Abschluss nichts. Der Schluss von der Klage
+auf diese Prüfung ist meiner.
+
+### Was bewusst nicht gebaut ist
+
+Die dritte Hälfte des Satzes — `TZID` an einem TIME-Wert in UTC, Zeile 2670 —
+ist nicht gebaut und war nie Teil der Zieldefinition. `P24` erkennt einen
+DATE-Wert **ausschließlich** an `VALUE=DATE`; `TZID=` mit leerem Wert zählt als
+vorhanden; ein mehrwertiges `EXDATE` ergibt **eine** Meldung. Alle drei
+Entscheidungen stehen im Docstring und sind in `erwartet/` festgenagelt.
