@@ -2231,8 +2231,10 @@ def pruefe_p24(logische, funde):
 
     WORAN EIN DATE-WERT ZU ERKENNEN IST. Am 2026-09-02 am Normtext gemessen
     statt geraten: Keine der Eigenschaften in RFC 5545 hat DATE als Vorgabetyp
-    ("Value Type:  DATE" kommt in rfc5545.txt kein einziges Mal vor; die vier
-    Zeilen mit einer Vorgabe aus der Zeitfamilie sagen alle DATE-TIME). Ein
+    In beiden Schreibweisen, in denen rfc5545.txt eine Vorgabe nennt, kommt
+    DATE allein kein einziges Mal vor: die Kurzform "Value Type:  DATE-TIME"
+    viermal und "Value Type:  DATE" nullmal, die Prosaform "default value type
+    (for this property) is DATE-TIME" sechsmal und mit DATE nullmal. Ein
     DATE-Wert entsteht damit ausschliesslich ueber den Parameter VALUE=DATE,
     und genau daran erkennt diese Pruefung ihn — ueber _wertetyp, dieselbe
     Lesart, die P12 und P13 benutzen. Die Missionsdatei hat diese Frage offen
