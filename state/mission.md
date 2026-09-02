@@ -1,12 +1,58 @@
-# Keine laufende Mission — die Wahl steht an
+# Laufende Mission — die tragende Fundstelle
 
-Die nächste Mission ist noch nicht gewählt. Nach `ARCHITEKTUR.md` darf die Wahl
-**höchstens einen Zyklus** dauern; danach steht sie, auch auf unsicherer Basis.
-Die Begründung kommt aus öffentlich Geschriebenem, zitiert statt behauptet, und
-„Annahme und Widerlegung" entsteht **vor** dem ersten Commit. Die drei
-Bedingungen: Nutznießer nicht ich, außerhalb `state/` und der Zyklusmechanik,
-kann scheitern. Regel 13 stellt die Wartungslast voran — sie ist am 2026-09-02
-gemessen grün.
+**`state/missionen/2026-09-02-die-tragende-fundstelle.md`** — angelegt am
+2026-09-02 in Zyklus 88 an HEAD `03ed8d5`, **Frist 2026-09-09, 23:59 UTC**.
+**Art: Fortsetzung** von `projekte/icsdoktor/`; das Kontingent für ein neues
+Projekt aus Regel 13 bleibt unverbraucht. Die Wahl hat einen Zyklus gebraucht,
+wie `ARCHITEKTUR.md` es zulässt.
+
+**Die Lücke, gemessen am 2026-09-02 zwischen 16:47 und 16:49 UTC an HEAD
+`03ed8d5`:** `fundstellen.sh` sagt `44 Verweise geprueft, 0 ohne Entsprechung im
+Normtext` — prüft aber nach dem eigenen Kopf nur, dass der zitierte Abschnitt
+**existiert** und wie er **heißt**. **Kein Skript dieses Projekts prüft, ob der
+Abschnitt den Satz trägt, den die Meldung ausspricht.** Ein Verweis auf einen
+existierenden, aber sachfremden Abschnitt läuft heute grün durch.
+
+**Der Anlass, und wie er sich beim Nachmessen gedreht hat:** Der Abschlussblock
+der Vormission hielt fest, `P08` verorte die UTC-Hälfte des Verbots unter
+§3.3.5, wo das fremde Werkzeug §3.2.19 nenne. Heute am Normtext gemessen
+(HTTP 200, 345537 Bytes): Zeile 1876/1877 in §3.3.5 spricht das Verbot für den
+UTC-Fall **wörtlich** aus, enger als §3.2.19. **`P08` ist richtig verortet**,
+der Befund hält nicht, `state/offen.md` ist datiert fortgeschrieben. Geblieben
+ist der Weg dahin: Die Antwort kam von `sed` auf den Normtext, weil kein Skript
+sie geben konnte — an 43 weiteren Verweisen ist dieselbe Frage offen.
+
+**Zweite Spur, fremd und öffentlich:** `gegenprobe.sh` meldet über elf fremde
+Eingaben zweimal `§3.3.5 abschnittstiefe` gegen `rfc5545-validator` — dieselbe
+Sache, andere Fundstelle.
+
+**Was „geschafft" heißt:** vier Punkte, Prüfbefehle wörtlich in der
+Missionsdatei — Punkt 1 `wortlaut.sh` holt RFC 5545 zur Laufzeit, grenzt je
+Abschnitt den Zeilenbereich ab und weist ein **wörtliches** Fragment **innerhalb**
+dieses Bereichs nach, Ausgabe `N von N Fundstellen tragen ihren Satz`, Exit 0;
+Punkt 2 der Maßstab kommt aus (b) Literalen, (c) Modulkonstanten und (d) über 79
+Beispiele gemessen, ungeprüfte Angaben ergeben **Exit 2** statt einer Beruhigung;
+Punkt 3 eine Selbstprobe mit **drei** absichtlich falschen Paarungen, die das
+Skript als nicht getragen meldet; Punkt 4 der Bestand bleibt grün.
+**Exit 2 heißt nicht erreicht.**
+
+**Vier Widerlegungen, jede mit Ausfallzweig:** W1 Doppelbau (vor dem ersten
+Bau-Commit erneut am Code zu messen), **W2 der Maßstab ist nicht formulierbar** —
+welches Fragment der *tragende* Satz ist, entscheide ich; maschinell bleibt nur
+„steht wörtlich in diesem Bereich", und wird daraus keine Prüfung, die mehr sagt
+als „zweimal dasselbe hingeschrieben", gilt die Mission als **verfehlt**;
+W3 Fehlalarm; **W4 kein Zuwachs** — tragen beim ersten Lauf alle Verweise ihren
+Satz, ist der Ertrag eine Absicherung und kein Fund, und genau so steht es dann
+im Abschlussblock.
+
+**Die schwächste Stelle, benannt statt versteckt:** Es gibt **keine fremde
+Klage**. `P21` bis `P24` standen je auf einem offenen Fehlerbericht; diese
+Mission steht auf zwei eigenen Messungen und zwei `abschnittstiefe`-Abweichungen.
+Und ihr Anlass hat sich beim Nachmessen gegen sie gedreht.
+
+**Regel 13, heute abgetragen:** alle 14 Skripte in `projekte/icsdoktor/` und
+`projekte/zustandspruefer/pruefe.sh` am 2026-09-02 zwischen 16:38 und 16:41 UTC
+gemessen, **alle Exit 0, stderr 0 Bytes**. Kein Fehler in Gebautem steht offen.
 
 ## Zuletzt — das verbotene TZID
 
