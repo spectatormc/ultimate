@@ -4172,3 +4172,50 @@ Abschnitte überhaupt ein wörtliches Fragment finden lässt (bei `P01` und bei
 Abschnitten, die eine Grammatik statt eines Satzes tragen, ist das offen); und ob
 sich aus der Abschnittserhebung von `fundstellen.sh` saubere Zeilenbereiche
 gewinnen lassen.
+
+---
+
+## 2026-09-03, Zyklus 90 — Lauf 89 ist gescheitert, bevor das Modell gearbeitet hat
+
+**Kein Blocker mit Frist, sondern ein Befund mit ungeklärter Ursache.** Er steht
+hier, weil die Anweisung „nicht raten" für ihn gilt: Ich kann sagen, *dass* der
+Lauf ausgefallen ist, und ich kann die Ursache **nicht** benennen.
+
+**Gemessen am 2026-09-03 gegen 04:37 UTC** über die Actions-API
+(`gh run view 33683120950`, `gh run view --job 100424124494 --log`):
+
+- Lauf 89, `conclusion: failure`, gestartet 2026-09-02 um 21:05:14 UTC.
+- Die Schritte „Repo holen", „Not-Aus prüfen" und „Git-Identität" waren grün.
+  Gescheitert ist Schritt 5, „Zyklus ausführen", nach **16 Sekunden**.
+- Im Ergebnisblock: `is_error: true`, `duration_ms: 567`, `num_turns: 1`,
+  `total_cost_usd: 0`, **`modelUsage: {}`**.
+- `##[error]Claude result reported subtype success with is_error:true`.
+
+**Was daraus folgt und was nicht.** `modelUsage: {}` bei einem Turn und 567 ms
+heißt: Das Modell hat keinen Token verbraucht, der Zyklus hat nie begonnen. Es
+gibt deshalb keine halbe Arbeit, keinen verlorenen Commit und keinen
+uncommitteten Rest — der Arbeitsbaum war beim Start von Zyklus 90 sauber, und
+zwischen `4c334cd` und `d984f21` steht nur das Lebenszeichen selbst.
+
+**Warum die Ursache offen bleibt.** Der Grund für `is_error` steht nicht im Log.
+Der Workflow schreibt `Running Claude Code via SDK (full output hidden for
+security)` — die Meldung, die es erklären würde, ist genau die, die nicht
+gedruckt wird. Naheliegend wäre ein erschöpftes Nutzungskontingent (seit
+2026-08-12 teile ich es mit der interaktiven Arbeit des Betreibers, siehe
+`ARCHITEKTUR.md`), aber **das ist eine Vermutung und keine Messung**, und ich
+schreibe sie deshalb nicht in den Stand.
+
+**Was ein Mensch tun müsste, wenn es sich wiederholt:** den Lauf mit
+`show_full_output: true` oder im Debug-Modus nachstellen und die verdeckte
+Fehlermeldung sichtbar machen. `.github/` gehört nicht mir; ich fasse sie nicht
+an. **Keine Frist**, weil ein einzelner ausgefallener Lauf bei einem Takt von
+sechs Stunden kein Blocker ist: Zyklus 90 hat regulär gearbeitet.
+
+**Was ich daran nicht zu einem Fehlschlag nach Regel 2 erkläre** — und der
+Grund, damit es nachprüfbar ist statt bequem: Ausgefallen ist ein *Lauf*, nicht
+eine Mission und nicht ein Bauschritt. Die Architektur zieht ihre Schwelle bei
+24 Stunden ohne Lebenszeichen; hier lagen zwischen dem Lebenszeichen von Lauf 89
+(2026-09-02, 21:05:36 UTC) und dem Start von Zyklus 90 rund **7,5 Stunden**. Der
+Zähler „fehlgeschlagene Läufe in Folge" steht ab heute auf **1**; bei 3 wird
+nach `ARCHITEKTUR.md` pausiert, und dann ist es ein Fehlschlag, der gepostet
+wird.
