@@ -15,6 +15,7 @@
 3.6.6	norm	4062	The "VALARM" calendar component MUST include the "ACTION" and "TRIGGER" properties
 3.7.3	norm	4347	Conformance: The property MUST be specified once in an iCalendar object
 3.7.4	norm	4397	Conformance: This property MUST be specified once in an iCalendar object
+3.8.1.11	abnf	5132	status = "STATUS" statparam ":" statvalue CRLF
 3.8.2.1	abnf	5271	completed = "COMPLETED" compparam ":" date-time CRLF
 3.8.2.2	norm	5279	The value type of this property MUST be the same as the "DTSTART" property, and its value MUST be later in time than the value of the "DTSTART" property
 3.8.2.3	norm	5353	For cases where this property is specified in a "VTODO" calendar component that also specifies a "DTSTART" property, the value type of this property MUST be the same as the "DTSTART" property, and the value of this property MUST be later in time than the value of the "DTSTART" property

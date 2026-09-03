@@ -2286,6 +2286,113 @@ def pruefe_p24(logische, funde):
             "3.2.19"))
 
 
+# Der Wertevorrat von STATUS, je Komponente. Ausgeschnitten aus der
+# Format-Definition von §3.8.1.11, rfc5545.txt (HTTP 200, 345537 Bytes,
+# abgerufen am 2026-09-03), Zeilen 5140-5142, 5145-5148 und 5159-5161.
+#
+# WARUM DAS EIN dict UND KEINE MENGE IST. Die Norm nennt drei Vorraete und
+# nicht einen: statvalue-event, statvalue-todo, statvalue-jour. IN-PROCESS ist
+# in einer VTODO richtig und in einem VEVENT falsch, CONFIRMED umgekehrt.
+# Wer die drei Listen zu einer Menge zusammenwirft, baut eine Pruefung, die
+# genau die Haelfte der Faelle nicht sieht — und merkt es nicht, weil die
+# offensichtlichen Faelle (ein frei erfundener Wert) trotzdem anschlagen.
+_STATUSVORRAT = {
+    "VEVENT":   ("TENTATIVE", "CONFIRMED", "CANCELLED"),
+    "VTODO":    ("NEEDS-ACTION", "COMPLETED", "IN-PROCESS", "CANCELLED"),
+    "VJOURNAL": ("DRAFT", "FINAL", "CANCELLED"),
+}
+
+
+def pruefe_p25(komponenten, funde):
+    """§3.8.1.11: STATUS traegt einen Wert, den die Norm fuer diese
+    Komponente aufzaehlt.
+
+    DER NORMTEXT, an seiner Fundstelle. rfc5545.txt, Abschnitt "3.8.1.11.
+    Status" ab Zeile 5103, abgerufen am 2026-09-03 (HTTP 200, 345537 Bytes)
+    und in state/missionen/2026-09-03-der-erfundene-status.md zitiert. Die
+    Format-Definition steht ab Zeile 5132 und nennt drei getrennte Vorraete:
+
+        Zeilen 5140-5142: statvalue-event = "TENTATIVE" / "CONFIRMED"
+                          / "CANCELLED"   ;Status values for a "VEVENT"
+        Zeilen 5145-5148: statvalue-todo  = "NEEDS-ACTION" / "COMPLETED"
+                          / "IN-PROCESS" / "CANCELLED"
+        Zeilen 5159-5161: statvalue-jour  = "DRAFT" / "FINAL" / "CANCELLED"
+
+    WARUM EINE ABNF-AUFZAEHLUNG HIER EIN VERBOT IST. Der Abschnitt enthaelt
+    keinen MUST-Satz ueber den Wert; die Zieldefinition der Mission hat genau
+    das als Widerlegung W2 vorgesehen. Die Grammatik traegt den Zwang
+    trotzdem, und zwar aus ihrer eigenen Form: statvalue ist als Auswahl
+    dreier abgeschlossener Alternativenlisten definiert, ohne
+    iana-token-Zweig und ohne x-name-Zweig:
+
+        Zeilen 5136-5138: statvalue       = (statvalue-event
+                                          /  statvalue-todo
+                                          /  statvalue-jour)
+
+    Beides kommt in RFC 5545 an anderen Stellen vor, wo ein Wert erweiterbar
+    sein soll. Der Vorrat von CLASS steht im selben Dokument und endet anders
+    — am 2026-09-03 an derselben geholten Datei gemessen, nicht erinnert:
+
+        Zeilen 4625-4626: classvalue = "PUBLIC" / "PRIVATE" / "CONFIDENTIAL"
+                                     / iana-token / x-name
+
+    Wo RFC 5545 einen Wert offen halten will, schreibt es das hin. Bei
+    statvalue steht es nicht da. Ein anderer Statuswert ist deshalb kein
+    unbekannter, sondern ein von der Grammatik nicht erzeugbarer.
+
+    Damit ist auch die dritte offene Frage der Missionsdatei beantwortet: Ein
+    STATUS mit X-Praefix ist nach derselben Lesart ein FEHLER, weil §3.8.1.11
+    fuer den Wert keinen Erweiterungsweg nennt. Diese Pruefung erfindet dafuer
+    keine mildere Meldungsart.
+
+    WARUM DIE KOMPONENTE MITENTSCHEIDET, UND WELCHE. Gemeint ist die
+    unmittelbar umgebende Komponente, nicht die aeusserste. Ein STATUS in
+    einer VALARM innerhalb eines VEVENT wird nicht am Vorrat des VEVENT
+    gemessen — die VALARM ist die Komponente, in der die Eigenschaft steht.
+    Das ist die Stelle, an der ein Fehlalarm entstuende (Widerlegung W3), und
+    sie kostet keinen Aufwand ausser der Entscheidung, sie richtig zu treffen.
+
+    WO DIESE PRUEFUNG SCHWEIGT, UND WARUM. §3.8.1.11 nennt genau drei
+    Vorraete. Fuer VFREEBUSY, VTIMEZONE, VALARM und jede andere Komponente
+    nennt der zitierte Abschnitt keinen — und was er nicht sagt, spricht
+    diese Pruefung nicht aus. Dass STATUS dort ueberhaupt nichts zu suchen
+    hat, folgt aus den Komponenten-Grammatiken in §3.6.4 bis §3.6.6 und nicht
+    aus §3.8.1.11; es waere eine andere Pruefung mit einer anderen
+    Fundstelle. Eine Meldung mit dem Verweis [RFC 5545 §3.8.1.11] an dieser
+    Stelle wuerde eine falsche Ursache nennen.
+
+    GROSS- UND KLEINSCHREIBUNG. Verglichen wird ohne Ruecksicht darauf, weil
+    §3.1 die Werte einer Aufzaehlung fuer case-insensitive erklaert. Die
+    Richtung ist ausserdem die vorsichtige: Ein status:confirmed bleibt
+    stumm, statt einen Fehlalarm zu erzeugen.
+
+    DER ANLASS AUS DER WELT — und was er nicht traegt. ietf-tools/datatracker
+    #11394, eroeffnet 2026-08-06, am 2026-09-03 als offen abgerufen, null
+    Kommentare: "agenda.ics uses invalid STATUS 'RESCHEDULED TO ...' instead
+    of CANCELLED per RFC 5545". Der Bericht ist eine maschinell
+    zusammengefasste Sammelaufgabe aus sieben aelteren Meldungen, kein
+    Einzelbericht eines betroffenen Nutzers, und er klagt ueber einen
+    Erzeuger, waehrend hier ein Pruefer entsteht. Diese Pruefung steht auf dem
+    Normtext, nicht auf der Klage; die Klage war der Anlass hinzusehen.
+    """
+    for komp in komponenten:
+        vorrat = _STATUSVORRAT.get(komp.name)
+        if vorrat is None:
+            continue
+        for zeile, wert in komp.hole("STATUS"):
+            if wert.upper() in vorrat:
+                continue
+            funde.append(Fund(
+                FEHLER, zeile, "P25",
+                "STATUS: %s ist in der Komponente %s kein zulässiger Wert; "
+                "RFC 5545 "
+                "zählt für diese Komponente %s auf und lässt daneben keinen "
+                "weiteren Wert zu"
+                % (_kurz(wert) if wert else "der leere Wert",
+                   komp.name, ", ".join(vorrat)),
+                "3.8.1.11"))
+
+
 _BOM_UTF8 = b"\xef\xbb\xbf"
 
 
@@ -2361,7 +2468,7 @@ def pruefe_p20(rohdaten, funde):
 
 
 def untersuche(rohdaten):
-    """Alle vierundzwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle fünfundzwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     rohdaten, hatte_bom = pruefe_p20(rohdaten, funde)
     zeilen = zerlege_physisch(rohdaten)
@@ -2404,6 +2511,7 @@ def untersuche(rohdaten):
     pruefe_p22(zeilen, funde)
     pruefe_p23(komponenten, funde)
     pruefe_p24(logische, funde)
+    pruefe_p25(komponenten, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))

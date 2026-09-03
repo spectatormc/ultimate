@@ -54,8 +54,8 @@
 # Anlass". Wer mit einem zweiten Leser misst, misst den zweiten Leser mit.
 #
 # WAS DIESES SKRIPT NICHT IST. Kein Prueflauf des Werkzeugs — es meldet nichts
-# ueber die vierundzwanzig gebauten Pruefungen und ersetzt pruefe.sh nicht. Es
-# beantwortet genau eine Frage: Gibt es einen Anlass, die 25. zu bauen?
+# ueber die fünfundzwanzig gebauten Pruefungen und ersetzt pruefe.sh nicht. Es
+# beantwortet genau eine Frage: Gibt es einen Anlass, die 26. zu bauen?
 #
 # Beide Zahlen in diesem Absatz standen seit dem 2026-08-18 falsch — sie
 # nannten den Stand vor P20. Seither rechnet zahlen.sh sie nach.

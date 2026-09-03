@@ -1,0 +1,1 @@
+FEHLER Zeile 9: P25 STATUS: IN-PROCESS ist in der Komponente VEVENT kein zulässiger Wert; RFC 5545 zählt für diese Komponente TENTATIVE, CONFIRMED, CANCELLED auf und lässt daneben keinen weiteren Wert zu [RFC 5545 §3.8.1.11]

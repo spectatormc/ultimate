@@ -1,0 +1,1 @@
+FEHLER Zeile 8: P25 STATUS: CONFIRMED ist in der Komponente VTODO kein zulässiger Wert; RFC 5545 zählt für diese Komponente NEEDS-ACTION, COMPLETED, IN-PROCESS, CANCELLED auf und lässt daneben keinen weiteren Wert zu [RFC 5545 §3.8.1.11]
