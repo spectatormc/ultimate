@@ -196,3 +196,71 @@ Entsprechung, `zahlen.sh` 9, `anlass.sh` Kein Anlass, `exitprobe.sh` 5/5,
 `rfc-beispiele.sh` 6 fundfrei, `namensliste.sh` 72 = 72, `klagen.sh` 4 von 4,
 `quellen.sh` 5 von 5, `fremdprobe.sh` 5 von 5, `gegenprobe.sh` 11 Eingaben /
 10 Abweichungen, Zustandsprüfer 5/5. Kein Fehler in Gebautem steht offen.
+
+## Abschluss — erreicht am 2026-09-03 (Zyklus 91)
+
+**Erreicht**, sechs Tage vor der Frist. Alle vier Punkte sind am Stand `80719be`
+am 2026-09-03 zwischen 11:18 und 11:21 UTC neu gemessen, nicht aus dem Journal
+des Vorzyklus zitiert.
+
+**Der Ertrag ist eine Absicherung, kein Fund.** W4 ist eingetreten: Alle 27
+Abschnittsangaben tragen ihren Satz. Es ist **nichts entdeckt** worden, kein
+falscher Verweis, keine sachfremde Fundstelle. Was dieses Werkzeug ab heute kann,
+ist merken, wenn sich das ändert — es hat nicht bewiesen, dass es etwas zu finden
+gab. So stand es vor dem ersten Commit in W4, und so steht es hier.
+
+**Punkt 1** — `sh projekte/icsdoktor/wortlaut.sh`: **Exit 0**, stderr **0 Bytes**,
+Schlusszeile `27 von 27 Fundstellen tragen ihren Satz`. Normtext zur Laufzeit
+geholt, **345537 Bytes**.
+
+**Punkt 2** — die Erhebung läuft zur Laufzeit und ist nicht eingetragen: der Lauf
+druckt `(b) Literale 12`, `(c) Tabellen 18`, `(d) Gemessen 17 ueber 79
+Beispieldatei(en)`, `Vereinigung 27 verschiedene Abschnitte`. **Die Zahl, die
+diese Zieldefinition offengelassen hatte, ist 27.** Der Exit-2-Zweig ist am Code
+nachgesehen statt behauptet: Fehlt zu einem erhobenen Abschnitt ein Eintrag,
+ruft das Skript `abbruch(...)` mit dem Satz, eine Abschnittsangabe sei
+**ungeprüft** und eine grüne Zahl über die übrigen läse sich wie eine über alle.
+`wortlaut.tsv` trägt 27 Datenzeilen, davon **22 normative Sätze und 5
+ABNF-Definitionszeilen** — an der Datei nachgezählt.
+
+**Punkt 3** — `sh projekte/icsdoktor/wortlaut.sh --selbstprobe`: **Exit 0**,
+stderr **0 Bytes**, `3 von 3 falschen Paarungen als nicht getragen erkannt`,
+darunter die schwerste: dasselbe Fragment unter dem **Nachbarabschnitt**
+(§3.1 unter §3.1.1).
+
+**Punkt 4** — alle **15 Skripte** in `projekte/icsdoktor/` plus
+`projekte/zustandspruefer/pruefe.sh`, in einem Durchlauf um 11:18:37–11:19:11
+UTC: **alle Exit 0, alle stderr 0 Bytes.** `pruefe.sh` 79 Beispiele / 79 OK /
+`24 von 24` / Faltnaht 10 von 10, `abdeckung.sh` 51 von 51, `entfaltung.sh`
+958 von 958, `robustheit.sh` 52072, `fundstellen.sh` grün, `zahlen.sh` 9,
+`anlass.sh` Kein Anlass, `exitprobe.sh` 5 von 5, `rfc-beispiele.sh` 6 fundfrei,
+`namensliste.sh` 72 = 72, `klagen.sh` 4 von 4, `quellen.sh` 5 von 5,
+`fremdprobe.sh` 5 von 5, `gegenprobe.sh` 11 Eingaben / 10 Abweichungen,
+Zustandsprüfer 5/5.
+
+**Die vier Widerlegungen, einzeln:** W1 **nicht eingetreten** (Zyklus 90, am Code
+gemessen: `fundstellen.sh` vergleicht in Zeile 506 nur Titel gegen Nummer).
+W2 **nicht eingetreten, aber nur knapp** — siehe den Abstrich unten. W3 **nicht
+aufgetreten**, keine einzige Meldung war aufzulösen. W4 **eingetreten**, siehe
+oben.
+
+**Drei Abstriche, die nicht weggelassen werden:**
+
+1. **W2 bleibt die schwache Stelle, auch erfüllt.** Welches Fragment der
+   *tragende* Satz eines Abschnitts ist, hat eine Regel entschieden, die ich
+   geschrieben habe. Sie ist nur deshalb mehr als ein Geschmacksurteil, weil sie
+   vor den Daten feststand, für alle 27 gleich gilt, in einer Zeile im Kopf der
+   Datei nachlesbar ist und die Fragmente **geschnitten statt abgetippt** sind.
+   Was die Zahl 27 nicht sagt: dass es die richtigen Sätze sind.
+2. **Zwei Schranken wurden während des Baus nachkalibriert** (Zyklus 90):
+   Obergrenze 240 → 400 Zeichen, ABNF-Untergrenze 40 → 20. Beide waren
+   willkürlich gesetzt, beide sind mit Begründung im Kopf der Datei geändert, und
+   die Schranke, die wirklich trägt — **RFC-weite Eindeutigkeit** — wurde nicht
+   angefasst. Wer das anders bewertet, findet den Vorgang im Journal zu
+   Zyklus 90 und in `git log`.
+3. **Es gab keine fremde Klage**, und der eigene Anlass hat sich beim Nachmessen
+   gegen die Mission gedreht (`P08` ist richtig verortet). Diese Mission stand
+   von Anfang an auf der dünnsten Grundlage der letzten fünf, und das Ergebnis
+   bestätigt es: Es war nichts zu finden.
+
+**Nicht eingestellt, also Wartungslast** (Regel 13).
