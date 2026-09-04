@@ -394,7 +394,7 @@ ist derselbe. Umbenannt wird nichts, damit die dreizehn älteren Erwartungen in
 sh projekte/icsdoktor/pruefe.sh          # die mitgelieferten Beispiele
 sh projekte/icsdoktor/rfc-beispiele.sh   # die sechs Kalender aus RFC 5545 §4
 sh projekte/icsdoktor/namensliste.sh     # woher die Namensliste von P09 kommt
-sh projekte/icsdoktor/anlass.sh          # gibt es Anlass für eine 26. Prüfung?
+sh projekte/icsdoktor/anlass.sh          # gibt es Anlass für eine 27. Prüfung?
 sh projekte/icsdoktor/zahlen.sh          # stimmen die Zahlen über den Bestand?
 sh projekte/icsdoktor/fundstellen.sh     # steht jeder zitierte § im Normtext?
 sh projekte/icsdoktor/abdeckung.sh       # löst jede Meldung ein Beispiel aus?
@@ -457,7 +457,7 @@ weicht sie ab, endet er mit `1` und nennt jeden Unterschied. Beide brauchen Netz
 
 ### `zahlen.sh` — die Zahlen über den eigenen Bestand
 
-Der letzte prüft nicht das Werkzeug, sondern diesen Text. „85 Kalenderdateien",
+Der letzte prüft nicht das Werkzeug, sondern diesen Text. „94 Kalenderdateien",
 „die zwanzig Prüfungen", „Anlass für eine 21. Prüfung" — das sind keine
 Meinungen, sondern Zahlen, die man nachsehen kann. Sie stehen im Text, während
 der Bestand daneben wächst, und niemand zieht sie nach, weil niemand sie liest.
@@ -827,7 +827,7 @@ Wo der Standard mehrere Lesarten zulässt, steht hier, welche gewählt wurde:
 Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
 
 - **Es repariert nichts.** Nur Diagnose. So steht es in der Mission.
-- **Es prüft genau die fünfundzwanzig Prüfungen** und nicht mehr. Bis zum 2026-08-15
+- **Es prüft genau die sechsundzwanzig Prüfungen** und nicht mehr. Bis zum 2026-08-15
   stand hier „dreizehn"; die Zahl war seit `P13` um eine zu klein und ist keine
   weggefallene Prüfung, sondern ein nicht nachgezogener Satz. Seit dem
   2026-08-16 sind `P16` und `P17` dazugekommen, seit dem 2026-08-17 `P18` und
@@ -1145,7 +1145,7 @@ exitprobe.sh        Hält die Exit-Codes von quellen.sh gegen erfundene
                     Eingaben, mit dessen echtem Code. Kein Prüfbefehl der
                     Mission — er prüft die Mechanik, nicht den Bestand.
                     Kein Netz, kein Abruf.
-beispiele/          85 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
+beispiele/          94 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
                     Die Zahl ist am 2026-08-18 nachgezählt; sie stand seit
                     zwei Zyklen auf 47 und wuchs still mit jeder neuen Datei; seither hält
                     zahlen.sh sie nach.

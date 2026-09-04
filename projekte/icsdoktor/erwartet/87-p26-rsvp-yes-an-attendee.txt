@@ -1,0 +1,1 @@
+FEHLER Zeile 9: P26 ATTENDEE: der Parameter RSVP trägt YES; RFC 5545 zählt dafür TRUE und FALSE auf und lässt daneben keinen weiteren Wert zu [RFC 5545 §3.2.17]

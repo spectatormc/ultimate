@@ -1,0 +1,1 @@
+FEHLER Zeile 9: P26 RECURRENCE-ID: der Parameter RANGE trägt THISANDPRIOR; RFC 5545 zählt dafür THISANDFUTURE auf und lässt daneben keinen weiteren Wert zu [RFC 5545 §3.2.13]

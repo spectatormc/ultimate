@@ -1,0 +1,1 @@
+FEHLER Zeile 9: P26 TRANSP: BUSY ist kein zulässiger Wert; RFC 5545 zählt OPAQUE und TRANSPARENT auf und lässt daneben keinen weiteren Wert zu [RFC 5545 §3.8.2.7]

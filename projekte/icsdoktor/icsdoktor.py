@@ -85,6 +85,14 @@ haelt, statt den Wert selbst zu lesen. Der Anlass ist icalendar/icalendar #324,
 eine Klage ueber einen Erzeuger — ich baue einen Pruefer, der Schluss ist
 meiner und nicht die Bitte des Melders.
 
+P26 kommt aus der Mission Die geschlossene Liste,
+state/missionen/2026-09-04-die-geschlossene-liste.md, und ist die erste
+Pruefung, die einen PARAMETERwert gegen einen geschlossenen Vorrat haelt:
+TRANSP (§3.8.2.7), RSVP (§3.2.17) und RANGE (§3.2.13) zaehlt RFC 5545 je in
+einer abgeschlossenen Liste auf, bei RANGE mit genau einem Wert. Sie hat
+keinen fremden Fehlerbericht hinter sich, sondern eine eigene Messung am
+Normtext — das steht so im Docstring der Pruefung und in der Missionsdatei.
+
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
 Aufruf:
@@ -2393,6 +2401,118 @@ def pruefe_p25(komponenten, funde):
                 "3.8.1.11"))
 
 
+# Drei geschlossene Wertevorraete. Ausgeschnitten aus den Format-Definitionen
+# von rfc5545.txt (HTTP 200, 345537 Bytes, abgerufen am 2026-09-04), Zeile
+# 5650-5652, Zeile 1443 und Zeile 1295.
+#
+# WARUM ZWEI TABELLEN UND NICHT EINE. TRANSP ist eine Eigenschaft, RSVP und
+# RANGE sind Parameter. Der Wert einer Eigenschaft steht hinter dem ':' und
+# kommt einmal vor; ein Parameterwert steht vor dem ':', kann als Liste
+# auftreten und haengt an einer beliebigen Eigenschaft. Wer beides in eine
+# Tabelle wirft, muss beim Lesen entscheiden, welche Haelfte gemeint ist —
+# und traegt genau dort den Fehlalarm ein, den W3 der Mission beschreibt.
+_TRANSPVORRAT = ("OPAQUE", "TRANSPARENT")
+_PARAMETERVORRAT = {
+    "RSVP":  (("TRUE", "FALSE"), "3.2.17"),
+    "RANGE": (("THISANDFUTURE",), "3.2.13"),
+}
+
+
+def pruefe_p26(logische, funde):
+    """§3.8.2.7, §3.2.17, §3.2.13: drei geschlossene Listen als geschlossene
+    Listen behandeln.
+
+    DIE GATTUNG, NICHT DER EINZELFALL. P25 haelt einen EIGENSCHAFTSwert gegen
+    einen geschlossenen Vorrat. RSVP und RANGE sind PARAMETERwerte, und bis
+    zu dieser Pruefung hat dieses Werkzeug keinen einzigen Parameterwert gegen
+    einen geschlossenen Vorrat gehalten — am 2026-09-04 am Quelltext gemessen:
+    RSVP und RANGE kamen darin ueberhaupt nicht vor, TRANSP nur als Name in
+    der Namensliste (Zeile 167). P24 liest zwar einen Parameter, prueft aber
+    nicht seinen Wert, sondern haelt sein Vorhandensein gegen den Wertetyp
+    derselben Zeile.
+
+    DER NORMTEXT, an seinen drei Fundstellen. rfc5545.txt, am 2026-09-04 um
+    11:29 UTC abgerufen (HTTP 200, 345537 Bytes) und in
+    state/missionen/2026-09-04-die-geschlossene-liste.md zitiert:
+
+        Zeilen 5650-5652: transvalue = "OPAQUE"      ;Blocks
+                                     / "TRANSPARENT" ;Does not block
+        Zeile 1443:       rsvpparam  = "RSVP" "=" ("TRUE" / "FALSE")
+        Zeile 1295:       rangeparam = "RANGE" "=" "THISANDFUTURE"
+
+    WARUM EINE ABNF-AUFZAEHLUNG HIER EIN VERBOT IST. Das ist Widerlegung W2
+    der Mission und dieselbe Frage wie bei P25, hier mit einem staerkeren
+    Beleg: Keine der drei Produktionen hat einen iana-token- oder
+    x-name-Zweig, und rangeparam nennt genau EINEN zulaessigen Wert. Ein
+    Vorrat, den die Grammatik auf ein einziges Wort festlegt, ist kein
+    Vorschlag. Der Gegensatz steht im selben Dokument und ist am selben Tag an
+    derselben Datei gemessen worden, nicht erinnert:
+
+        Zeile 4625:       classvalue     = "PUBLIC" / "PRIVATE"
+                                         / "CONFIDENTIAL" / iana-token
+        Zeilen 1219-1221: partstat-event = ... / x-name / iana-token
+
+    Wo RFC 5545 einen Wert offen halten will, schreibt es das hin. Genau
+    deshalb sind CLASS, PARTSTAT und ROLE in dieser Pruefung NICHT enthalten,
+    obwohl der Stand sie als Kandidaten fuehrte: CLASS:INTERNAL und
+    PARTSTAT=X-MEINS sind kein Verstoss, und eine Meldung darueber waere ein
+    Fehlalarm. Sie sind vor der ersten Zeile Code am Normtext gefallen.
+
+    WO DIESE PRUEFUNG SCHWEIGT, UND WARUM. Sie prueft den WERT und nicht den
+    ORT. Ein TRANSP in einer VTODO ist nach der Komponenten-Grammatik von
+    §3.6.2 falsch platziert — das folgt nicht aus §3.8.2.7 und waere eine
+    andere Pruefung mit einer anderen Fundstelle. Dasselbe gilt fuer ein RANGE
+    an einer anderen Eigenschaft als RECURRENCE-ID: §3.2.13 sagt, welche Werte
+    der Parameter tragen darf, nicht wo er stehen darf. Eine Meldung mit
+    diesen Verweisen an jenen Stellen wuerde eine falsche Ursache nennen.
+
+    MEHRERE PARAMETERWERTE. rsvpparam und rangeparam nennen je einen Wert
+    ohne Kommaliste; die Datei kann trotzdem RSVP=TRUE,FALSE schreiben. Dann
+    wird jeder Wert einzeln gehalten und jeder unzulaessige einzeln gemeldet.
+    Dass zwei Werte an dieser Stelle schon fuer sich zu viel sind, folgt aus
+    derselben Produktion, ist aber eine andere Aussage — sie wird hier nicht
+    ausgesprochen.
+
+    GROSS- UND KLEINSCHREIBUNG. Verglichen wird ohne Ruecksicht darauf, weil
+    §3.1 die Werte einer Aufzaehlung fuer case-insensitive erklaert. Die
+    Richtung ist die vorsichtige: rsvp=true bleibt stumm, statt einen
+    Fehlalarm zu erzeugen.
+
+    ES GIBT KEINE FREMDE KLAGE. P21 bis P25 standen je auf einem offenen
+    Fehlerbericht; diese Pruefung steht auf einer eigenen Messung am Normtext.
+    Am 2026-09-04 gegen 11:31 UTC in fuenf Anlaeufen ueber gh search issues
+    gesucht, kein einschlaegiger Treffer. Das ist die schwaechste Stelle
+    dieser Mission, sie steht in der Missionsdatei und sie steht hier.
+    """
+    for lz in logische:
+        if lz.name is None:
+            continue
+        if lz.name == "TRANSP" and lz.wert.upper() not in _TRANSPVORRAT:
+            funde.append(Fund(
+                FEHLER, lz.nr, "P26",
+                "TRANSP: %s ist kein zulässiger Wert; RFC 5545 zählt OPAQUE "
+                "und TRANSPARENT auf und lässt daneben keinen weiteren Wert "
+                "zu"
+                % (_kurz(lz.wert) if lz.wert else "der leere Wert"),
+                "3.8.2.7"))
+        for pname, pwerte in lz.params:
+            eintrag = _PARAMETERVORRAT.get(pname)
+            if eintrag is None:
+                continue
+            vorrat, abschnitt = eintrag
+            for wert in pwerte:
+                if wert.upper() in vorrat:
+                    continue
+                funde.append(Fund(
+                    FEHLER, lz.nr, "P26",
+                    "%s: der Parameter %s trägt %s; RFC 5545 zählt dafür %s "
+                    "auf und lässt daneben keinen weiteren Wert zu"
+                    % (lz.name, pname,
+                       _kurz(wert) if wert else "den leeren Wert",
+                       " und ".join(vorrat)),
+                    abschnitt))
+
+
 _BOM_UTF8 = b"\xef\xbb\xbf"
 
 
@@ -2468,7 +2588,7 @@ def pruefe_p20(rohdaten, funde):
 
 
 def untersuche(rohdaten):
-    """Alle fünfundzwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle sechsundzwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     rohdaten, hatte_bom = pruefe_p20(rohdaten, funde)
     zeilen = zerlege_physisch(rohdaten)
@@ -2512,6 +2632,7 @@ def untersuche(rohdaten):
     pruefe_p23(komponenten, funde)
     pruefe_p24(logische, funde)
     pruefe_p25(komponenten, funde)
+    pruefe_p26(logische, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))
