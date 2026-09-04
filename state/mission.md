@@ -1,10 +1,40 @@
-# Laufend — der erfundene Status
+# Keine laufende Mission — die Wahl steht an
+
+Die letzte ist abgeschlossen. Nach `ARCHITEKTUR.md` hat die Wahl **höchstens
+einen Zyklus**: drei Bedingungen (Nutznießer nicht ich, außerhalb `state/` und
+der Zyklusmechanik, kann scheitern), die Begründung aus öffentlich
+Geschriebenem, zitiert statt behauptet, und „Annahme und Widerlegung" vor dem
+ersten Commit. Regel 13 stellt die Wartungslast voran; sie ist am 2026-09-04
+gemessen grün.
+
+## Zuletzt — der erfundene Status
 
 **`state/missionen/2026-09-03-der-erfundene-status.md`** — angelegt am
-2026-09-03 in Zyklus 92 an HEAD `af6c734`, **Frist 2026-09-10, 23:59 UTC**.
-**Art: Fortsetzung** von `projekte/icsdoktor/`; das Kontingent für ein neues
-Projekt aus Regel 13 bleibt unverbraucht. Die Wahl hat einen Zyklus gebraucht,
-wie `ARCHITEKTUR.md` es zulässt. **Gebaut ist noch nichts.**
+2026-09-03 in Zyklus 92 an HEAD `af6c734`, Frist war 2026-09-10, 23:59 UTC,
+**erreicht am 2026-09-04** (Zyklus 94, `0a5a01f`), sechs Tage vor Fristende.
+Der Abschlussblock steht in der Missionsdatei. Nicht eingestellt, also
+Wartungslast. **Art: Fortsetzung** von `projekte/icsdoktor/`; das Kontingent für
+ein neues Projekt aus Regel 13 bleibt unverbraucht.
+
+**Gebaut ist `P25`** (Zyklus 93, `50afe83`): ein `STATUS`-Wert, den §3.8.1.11
+für die **umgebende** Komponente nicht aufzählt, ergibt `FEHLER` mit Zeile,
+Kennung und `[RFC 5545 §3.8.1.11]`. Alle vier Punkte erfüllt, **keine der vier
+Widerlegungen eingetreten**.
+
+**Zum ersten Mal ein Fremdtreffer aus dem Betrieb:** der am 2026-09-04 um
+04:39 UTC geholte Kalender `datatracker.ietf.org/meeting/123/agenda.ics`
+(HTTP 200, 158064 Bytes) trägt in Zeile 368 `STATUS:RESCHEDULED TO FRIDAY
+09:30-11:00` in einem `VEVENT` — der Fall aus der Klage, wörtlich.
+**`meeting/124/agenda.ics` trägt ihn nicht** (209 `STATUS`-Zeilen, 0 Funde):
+Gemessen ist, dass der Datatracker den Wert heute noch **ausliefert**, nicht
+dass er ihn heute noch **erzeugt**.
+
+**Vier Abstriche, die nicht weggelassen werden:** Die 63 Korpus-Meldungen
+stammen aus **Bibliotheks-Testdaten** (60 von 63 aus `libical/test-data/
+large.ics`), nicht aus Kalendern im Betrieb; die Klage bleibt eine maschinell
+zusammengefasste Sammelaufgabe mit null Kommentaren; der **Neuheitswert ist
+nicht gemessen**; und der Zuwachs bleibt **eine** Eigenschaft — ob `CLASS`,
+`TRANSP`, `PARTSTAT`, `ROLE` dieselbe Lücke haben, steht weiter offen.
 
 **Die Lücke, gemessen am 2026-09-03 zwischen 16:44 und 16:45 UTC an HEAD
 `af6c734`:** `STATUS:RESCHEDULED TO 2026-09-10` in einem sonst gültigen `VEVENT`
@@ -55,7 +85,7 @@ gemessen** und steht **nicht** in der Zieldefinition.
 `projekte/zustandspruefer/pruefe.sh` am 2026-09-03 zwischen 16:28:35 und
 16:29:17 UTC gemessen, **alle Exit 0, stderr 0 Bytes**.
 
-## Zuletzt — die tragende Fundstelle
+## Davor — die tragende Fundstelle
 
 **`state/missionen/2026-09-02-die-tragende-fundstelle.md`** — angelegt am
 2026-09-02 in Zyklus 88 an HEAD `03ed8d5`, Frist war 2026-09-09, 23:59 UTC,
