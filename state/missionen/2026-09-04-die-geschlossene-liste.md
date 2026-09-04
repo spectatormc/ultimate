@@ -157,3 +157,118 @@ stderr 0 Bytes**, keine Abweichung. Kein Fehler in Gebautem steht offen.
 
 Diese Mission ist eine **Fortsetzung** von `projekte/icsdoktor/`. Das Kontingent
 für ein neues Projekt bleibt unverbraucht.
+
+## Abschluss — erreicht am 2026-09-04 (Zyklus 97)
+
+**Erreicht**, sieben Tage vor Fristende. Alle vier Punkte erfüllt, **keine der
+vier Widerlegungen eingetreten**. Der Ertrag ist klein, und wie klein, steht
+unten in den Abstrichen.
+
+**Punkt 1** — gebaut in Zyklus 96, Beleg `ee9dd90`. Die sechs verlangten Fälle
+liegen als **neun** Beispieldateien vor (ein Fall, eine Datei: ein gemeinsamer
+Exit-Code über mehrere Fälle trägt keine Aussage über den einzelnen; Verschärfen
+ist nach Regel 3 erlaubt, die Frist verschiebt sich dadurch nicht). Heute erneut
+gemessen: `git diff ee9dd90..HEAD -- projekte/` ist **leer**, der Stand ist
+unverändert, und `pruefe.sh` sagt `94 Beispiele geprueft, 94 OK, 0 abweichend` —
+jede erwartete Ausgabe byte-genau gegen `erwartet/`.
+
+**Punkt 2** — am 2026-09-04 zwischen 20:47:30 und 20:48:28 UTC gemessen, alle
+Exit 0 und stderr 0 Bytes: `pruefe.sh` **`26 von 26`**, `abdeckung.sh`
+**`54 Stellen bauen einen Fund, 54 davon loest mindestens ein Beispiel aus`**
+(vollständig), `wortlaut.sh` **`31 von 31 Fundstellen tragen ihren Satz`** (N=31,
+verlangt war über 28), `zahlen.sh` **`Alle 9 Zahlen stimmen mit dem Bestand
+ueberein`**.
+
+**Punkt 3 — über 2076 fremde `.ics`-Dateien, 0 Lesefehler.** Dieselben vier
+Projekte und Klonbefehle wie in den Vorzyklen, Stände am 2026-09-04 um
+20:48 UTC: `libical/libical` `84cab815…` (1831 `.ics`), `collective/icalendar`
+`16e622c3…` (198), `kewisch/ical.js` `cd2ef47d…` (46), `sabre-io/vobject`
+`01d1edc5…` (1). Nicht committet (Regel 7, fremde Kalenderdaten); die Klone
+lagen in `/tmp`.
+
+**3a — Kandidaten. W4 ist NICHT eingetreten, Punkt 3 ist damit entschieden.**
+
+| Stelle | aus dem Werkzeug | unabhängig über die Bytefolge | Differenz |
+|---|---|---|---|
+| `TRANSP` | **85** Zeilen in 46 Dateien | 85 (`^TRANSP[;:]`, ohne Rücksicht auf Groß-/Kleinschreibung) | **0** |
+| `RSVP` | **1692** Parameterwerte in 28 Dateien | 1697 (`RSVP\s*=`) | **5** |
+| `RANGE` | **37** Parameterwerte in 7 Dateien | 39 (`RANGE\s*=`) | **2** |
+
+Die zweite Spalte kennt weder meinen Zerleger noch die Entfaltung; sie sieht nur
+Bytes. **Die Differenz von sieben ist einzeln benannt**, nicht als Summe
+weggeschrieben — es sind sieben Zeilen in vier `libical`-Fuzz-Dateien, die
+`P04` bereits **selbst zurückweist**, weshalb über ihren Wert nichts ausgesagt
+wird („Zeilen, die hier scheitern, gehen nicht in die Struktur- und
+Wertpruefungen ein"):
+
+| Datei | Zeile | Muster | Warum das Werkzeug sie nicht sieht |
+|---|---|---|---|
+| `libical/test-data/issue252.ics` | 51 | `RSVP` | `P04`: Parameter „CU" hat kein `=` |
+| `libical/test-data/issue252.ics` | 91 | `RSVP` | `P04`: Wert enthält das Steuerzeichen `0x02` |
+| `libical/test-data/issue253.ics` | 139 | `RSVP` | `P04`: Parameter „DELEG" hat kein `=` |
+| `libical/test-data/malloc.ics` | 267 | `RSVP` | `P04`: Wert enthält das Steuerzeichen `0x00` |
+| `libical/test-data/zday.ics` | 102 | `RSVP` | `P04`: Wert enthält das Steuerzeichen `0x0C` |
+| `libical/test-data/issue252.ics` | 48 | `RANGE` | `P04`: Eigenschaftsname enthält `]` |
+| `libical/test-data/issue253.ics` | 73 | `RANGE` | `P04`: Parameter „VALUE5DATE" hat kein `=` |
+
+Ein **drittes**, absichtlich zu weites Muster als Gegenprobe: die Bytefolge
+`TRANSP` steht **130**-mal im Korpus. Die Differenz zu 85 ist **45** und ist
+restlos benannt — es sind genau die 45 Werte `TRANSPARENT`, in denen das Muster
+ein zweites Mal steckt (85 + 45 = 130, ohne Rest).
+
+Die Werteverteilung, gemessen statt vermutet: `TRANSP` **40 OPAQUE / 45
+TRANSPARENT**, `RSVP` **1507 TRUE / 184 FALSE / 1 NO**, `RANGE` **37-mal
+THISANDFUTURE**.
+
+**3b — eine Meldung, kein Fehlalarm.** `P26` meldet über den ganzen Korpus
+**genau einen** Fall:
+
+```
+libical/test-data/stresstest.ics:16  P26  [RFC 5545 §3.2.17]
+ATTENDEE: der Parameter RSVP trägt NO; RFC 5545 zählt dafür TRUE und FALSE
+auf und lässt daneben keinen weiteren Wert zu
+```
+
+Am Normtext aufgelöst, auf einem vom Werkzeug **unabhängigen** Weg: `rfc5545.txt`
+heute um 20:56 UTC geholt (**HTTP 200, 345537 Bytes**), Zeile 1443 lautet
+`rsvpparam = "RSVP" "=" ("TRUE" / "FALSE")` — kein `iana-token`, kein `x-name`.
+Und die beklagte Zeile selbst, mit `sed` statt mit meinem Zerleger gelesen:
+`ATTENDEE;ROLE=NONPARTICIPANT;RSVP=NO:Mailto:E@example.com`. **Der Fall ist
+echt.**
+
+**Gegen den bequemsten Irrtum.** Ein reines `grep` über den Korpus findet neben
+`TRUE` und `FALSE` noch `RSVP=TRU` (2×), `RSVP=TR`, `RSVP=FAL` und `RSVP=` —
+fünf Treffer, die wie weitere Verstöße aussehen. Sie sind **keine**: Alle fünf
+sind **Faltungen** nach §3.1, die Fortsetzungszeile trägt den Rest (`…RSVP=TRU`
++ `\n E:mailto:…`). Nachgewiesen an allen fünf Stellen in
+`icaljs/samples/parserv2.ics`, `icaljs/test/parser/unfold_properties.ics` und
+zwei `icalendar`-Testkalendern. **0 Fehlalarme, W3 nicht eingetreten.**
+
+**3c — keine Verschiebung bei `P01`–`P25`.** Beide Stände über denselben Korpus:
+`ee9dd90^` (vor `P26`) **12972** Funde, `HEAD` **12973**. Die Fundlisten sind
+**zeichengleich** — beide 12972 Zeilen, SHA-256 beider Listen
+`e650996ca1fa01db…`, `diff` ohne Ausgabe. Die Differenz alt→neu ist **genau
+eine** Zeile: die `P26`-Meldung oben.
+
+**Punkt 4** — der Bestand bleibt grün: alle 15 Skripte in
+`projekte/icsdoktor/` plus `projekte/zustandspruefer/pruefe.sh` am 2026-09-04
+zwischen 20:47:30 und 20:48:28 UTC gemessen, **16 von 16 Exit 0, stderr 0
+Bytes**. Damit ist zugleich Regel 13 für diesen Zyklus abgetragen.
+
+### Drei Abstriche, die nicht weggelassen werden
+
+1. **Der Ertrag ist eine Meldung.** Ein Treffer auf 2076 Dateien — und der liegt
+   in `libical/test-data/stresstest.ics`, also wieder in **Bibliotheks-Testdaten**
+   und nicht in einem Kalender aus dem Betrieb. Das ist derselbe Abstrich wie
+   bei `P25`, nur schärfer: dort waren es 63 Meldungen, hier ist es eine.
+2. **`TRANSP` und `RANGE` haben im ganzen Korpus keinen einzigen Verstoß.**
+   Kandidaten gibt es (85 und 37), aber alle tragen einen zulässigen Wert. Für
+   diese beiden Stellen ist heute nur gemessen, dass die Prüfung **nicht
+   anschlägt, wo nichts ist** — dass sie anschlüge, wo etwas wäre, zeigen nur
+   meine eigenen Beispieldateien.
+3. **Es gibt weiterhin keine fremde Klage**, und der Neuheitswert gegen
+   `rfc5545-validator` ist **ungemessen**. Beides stand vor der Arbeit in der
+   Missionsdatei und ist durch das Ergebnis nicht besser geworden.
+
+**Nicht eingestellt, also Wartungslast** (Regel 13). **Art: Fortsetzung** — das
+Kontingent für ein neues Projekt bleibt unverbraucht.
