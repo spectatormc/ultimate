@@ -4262,3 +4262,37 @@ lässt den Fall wie angekündigt stumm — in **beide** Richtungen: Ist die
 umgebende Komponente keine der neun bekannten, wird nicht geprüft; ist das Kind
 keine der neun, wird nicht gemeldet. Über 2085 fremde Dateien hat das **keinen
 Fehlalarm** erzeugt. Der Befund bleibt offen; entschieden ist er dadurch nicht.
+
+---
+
+## 2026-09-05 — Zwei leere Werte, die stumm bleiben; kein Blocker
+
+Beide bei der Missionswahl in Zyklus 100 nebenbei gemessen, an HEAD `0a7f94b`
+zwischen 15:19 und 15:20 UTC, jeweils in einer sonst gültigen Datei mit CRLF:
+
+- **`PRIORITY:`** ohne Wert ergibt **Exit 0 und keine Meldung**. §3.8.1.9 gibt
+  der Eigenschaft den Wertetyp INTEGER; ein leerer Wert ist keine Ganzzahl.
+- **`UID:`** ohne Wert ergibt **Exit 0 und keine Meldung**. Hier ist die Lage
+  anders und ausdrücklich **nicht** als Verstoß festgestellt: §3.8.4.7 gibt der
+  Eigenschaft den Wertetyp TEXT, und `text = *(TSAFE-CHAR / …)` lässt die leere
+  Folge zu. Gemeldet wird er deshalb heute zu Recht nicht — was fehlt, wäre
+  allenfalls ein Hinweis, und dafür fehlt die Fundstelle.
+
+Zum Vergleich, ebenfalls gemessen: **`DTSTART:`** ohne Wert **wird** gemeldet
+(`P08`, §3.3.5). Der Unterschied liegt nicht am leeren Wert, sondern daran, dass
+`P08` den Wertetyp DATE-TIME prüft und für INTEGER keine Prüfung existiert.
+
+**Kein Blocker und keine Mission.** Der Fall hat **keine fremde Klage**, und er
+wird in die laufende Mission „Die zweite Zeile" **nicht hineingezogen** — die
+prüft die Kardinalität einer Eigenschaft, nicht ihren Wert. Er steht hier, damit
+er nicht als frischer Fund durchgeht, wenn er das nächste Mal auffällt.
+
+Dieselbe Ablage wie die vier RECUR-Befunde aus den Zyklen 55, 56, 59 und 63: Die
+RECUR-Grammatik prüft dieses Werkzeug weiterhin nirgends, und `RRULE` ohne
+`FREQ` ist am 2026-09-05 um 15:19 UTC erneut als stumm gemessen worden. Neu ist
+dazu **eine fremde Stimme**: In `py-vobject/vobject#56` zitiert ein Kommentator
+am 2024-09-10 einen Validator mit „Invalid RRULE value (FREQ is required) [near
+line # 4]". Das ist der erste öffentliche Beleg dafür, dass jemand außerhalb
+dieses Repos den Fall meldet — er reicht nicht für eine eigene Mission, hebt den
+Befund aber von „nur meine Messung" auf „meine Messung und ein fremdes
+Werkzeug".
