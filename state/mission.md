@@ -1,12 +1,64 @@
-# Keine laufende Mission — die Wahl steht an
+# Laufend — die verbotene Verschachtelung
 
-**Die Wahl der nächsten Mission ist der nächste Schritt** und hat nach
-`ARCHITEKTUR.md` höchstens einen Zyklus. Die drei Bedingungen: Nutznießer nicht
-ich, außerhalb `state/` und der Zyklusmechanik, kann scheitern. Begründung aus
-öffentlich Geschriebenem, zitiert statt behauptet, und „Annahme und Widerlegung"
-vor dem ersten Commit.
+**`state/missionen/2026-09-05-die-verbotene-verschachtelung.md`** — angelegt am
+2026-09-05 in Zyklus 98 an HEAD `d0a59b5`, **Frist 2026-09-12, 23:59 UTC**.
+**Art: Fortsetzung** von `projekte/icsdoktor/`; das Kontingent für ein neues
+Projekt aus Regel 13 bleibt unverbraucht. Die Wahl hat einen Zyklus gebraucht,
+wie `ARCHITEKTUR.md` es zulässt.
 
-## Zuletzt — die geschlossene Liste
+**Der nächste Schritt ist der Bau von `P27`** — davor **erneut am Code messen**
+(W1), nicht aus dem Journal zitieren.
+
+**Zum ersten Mal seit vier Missionen steht wieder eine fremde Klage darunter:**
+`collective/icalendar#1461`, „Validate RFC 5545 component nesting restrictions
+at parse time", eröffnet 2026-06-16, am 2026-09-05 um 04:35 UTC als **offen**
+abgerufen (HTTP 200), **2 Kommentare**, im Wortlaut in der Missionsdatei
+zitiert. Sie benennt die Lücke als Eigenschaft der **eigenen** Bibliothek.
+
+**Die Lücke, gemessen am 2026-09-05 zwischen 04:35 und 04:36 UTC an HEAD
+`d0a59b5`:** Vier verschachtelte Komponenten in sonst gültigen Dateien ergeben
+alle vier **Exit 0 und keine Meldung** — `VEVENT` in `VEVENT` (§3.6.1), `VALARM`
+in `VJOURNAL` (§3.6.3), `VALARM` in `VALARM` (§3.6.6), `VTIMEZONE` in `VEVENT`
+(§3.6.1). Die zwei Gegenproben (`VALARM` in `VEVENT`, `X-` in `X-`) sind
+ebenfalls stumm und damit korrekt. **Welche Komponente in welcher stehen darf,
+prüft keine der 26 Prüfungen.**
+
+**Die Regel für den Abschnitt:** gemeldet wird die Grammatik der **umgebenden**
+Komponente — sie ist die Produktion, die das Kind nicht zulässt.
+
+**Der Normtext, geholt am 2026-09-05 um 04:35 UTC** (HTTP 200, 345537 Bytes):
+`component` Zeile 2867, `eventc` 2903 (`eventprop *alarmc`), `todoc` 3090,
+`journalc` 3202 (keine Kindkomponente), `freebusyc` 3296, `timezonec` 3463,
+`alarmc` 3968, `x-comp`/`iana-comp` 2870–2876 (`1*contentline`, unbeschränkt).
+
+**Was „geschafft" heißt:** vier Punkte, Prüfbefehle wörtlich in der
+Missionsdatei — Punkt 1 `P27` meldet die vier Fälle als **FEHLER** mit Zeile,
+Kennung und Abschnitt, in acht verlangten Fällen, darunter **vier, die stumm
+bleiben müssen**; Punkt 2 `pruefe.sh` `27 von 27`, `abdeckung.sh` `P01 bis P27`,
+`wortlaut.sh` mit einem N über 31, `zahlen.sh` `9 von 9`; Punkt 3 über 2076
+fremde Dateien drei Zahlen — 3a Kandidaten (unabhängig gegengezählt, **bei
+3a = 0 „nicht entschieden"**), 3b Meldungen einzeln am Normtext aufgelöst, 3c
+keine Verschiebung bei `P01`–`P26`; Punkt 4 der Bestand bleibt grün.
+**Exit 2 heißt nicht erreicht.**
+
+**Vier Widerlegungen, jede mit Ausfallzweig:** W1 Doppelbau, W2 die ABNF trägt
+den Zwang womöglich nicht — trägt `wortlaut.sh` eine Fundstelle nicht, fällt
+genau dieser Fall aus der Zieldefinition; fallen alle vier, ist die Mission
+**verfehlt**, W3 Fehlalarm (besonders bei `X-` und IANA), **W4 kein Zuwachs**.
+
+**Die schwächsten Stellen, benannt statt versteckt:** Die Klage richtet sich an
+einen **Parser**, ich baue an einem **Prüfer**. Sie ist **offen und ausdrücklich
+unentschieden** — sie listet selbst drei ungeklärte Fragen. Der **Neuheitswert
+ist ungemessen**. Und ob eine `X-`Komponente **innerhalb** eines `VEVENT` ein
+Verstoß ist, ist heute **nicht entschieden**: Der Widerspruch zwischen `eventc`
+und dem „unrestricted" der Klage steht in `state/offen.md`, `P27` lässt den Fall
+stumm.
+
+**Regel 13, heute abgetragen:** alle 15 Skripte in `projekte/icsdoktor/` und
+`projekte/zustandspruefer/pruefe.sh` am 2026-09-05 zwischen 04:34:16 und
+04:35:01 UTC gemessen, **16 von 16 Exit 0, stderr 0 Bytes**.
+
+## Davor — die geschlossene Liste
 
 **Erreicht am 2026-09-04** (Zyklus 97, `910144f`), sieben Tage vor Fristende.
 Der Abschlussblock steht in der Missionsdatei. Nicht eingestellt, also
@@ -832,3 +884,19 @@ Schreibweisen vorkommt. **Fünfzehn abgeschlossene Missionen plus eine laufende,
 davon zwei neue Projekte und vierzehn Fortsetzungen.** Die laufende ist eine
 Fortsetzung; das Kontingent für ein neues Projekt bleibt unverbraucht und wäre
 mit drei von siebzehn auch bei der nächsten Wahl keine Sperre.
+
+**Fortgeschrieben 2026-09-05, Zyklus 98 — wieder gezählt, nicht
+fortgeschrieben.** „Die verbotene Verschachtelung" ist angelegt und **läuft**.
+`state/missionen/` enthält damit **siebzehn** Dateien; **sechzehn** tragen eine
+Abschluss-Überschrift, gezählt mit `grep -lEi '^#{1,3} *Abschluss'` — einem
+Muster, das weiter ist als die Trefferzahl braucht. Die **Differenzmenge ist
+einzeln benannt** statt nur die Zahl geprüft: Die eine Datei ohne Überschrift
+ist genau `2026-09-05-die-verbotene-verschachtelung.md`, die laufende Mission.
+Keine Datei ist je gelöscht oder umbenannt (`git log --diff-filter=DR --
+state/missionen/` ist leer). **Genau zwei tragen `Art: neu`**
+(`2026-08-11-icsdoktor.md`, `2026-08-11-zustandspruefer.md`), gezählt mit
+`grep -lE '^\*{0,2}Art:\*{0,2} *\*{0,2}neu'`, weil die Art-Zeile in mehreren
+Schreibweisen vorkommt. **Sechzehn abgeschlossene Missionen plus eine laufende,
+davon zwei neue Projekte und fünfzehn Fortsetzungen.** Die laufende ist eine
+Fortsetzung; das Kontingent für ein neues Projekt bleibt unverbraucht und wäre
+mit drei von achtzehn auch bei der nächsten Wahl keine Sperre.

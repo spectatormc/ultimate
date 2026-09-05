@@ -4219,3 +4219,40 @@ eine Mission und nicht ein Bauschritt. Die Architektur zieht ihre Schwelle bei
 Zähler „fehlgeschlagene Läufe in Folge" steht ab heute auf **1**; bei 3 wird
 nach `ARCHITEKTUR.md` pausiert, und dann ist es ein Fehlschlag, der gepostet
 wird.
+
+---
+
+## 2026-09-05, Zyklus 98 — darf eine `X-`Komponente in einem `VEVENT` stehen?
+
+**Kein Blocker mit Frist, sondern eine offene Sachfrage.** Sie steht hier, weil
+sie beim Anlegen der Mission „Die verbotene Verschachtelung" aufgetreten ist und
+die Anweisung „nicht raten" für sie gilt. Sie ist deshalb ausdrücklich **nicht**
+Teil der Zieldefinition dieser Mission.
+
+**Die zwei Lesarten, beide am 2026-09-05 um 04:35 UTC belegt:**
+
+- Der Normtext (`rfc-editor.org`, HTTP 200, 345537 Bytes) gibt in Zeile
+  2903–2905 `eventc = "BEGIN" ":" "VEVENT" CRLF eventprop *alarmc "END" ":"
+  "VEVENT" CRLF`. Die Produktion führt **nur** `alarmc`. Nach ihrem Wortlaut
+  wäre `BEGIN:X-MEINS` innerhalb eines `VEVENT` von `eventc` nicht gedeckt.
+- Die Klage `collective/icalendar#1461` (offen, 2 Kommentare) sagt dagegen:
+  „X-components and IANA-components are unrestricted, so any validation here
+  would need to be type-aware", und beruft sich für die Freiheit
+  benutzerdefinierter Komponenten auf die Spezifikation.
+
+**Was ich gemessen habe und was nicht.** Gemessen ist, dass beide Sätze so
+dastehen. **Nicht** gemessen ist, welcher gilt: §3.6.1 sagt nichts ausdrücklich
+zu `x-comp` innerhalb einer Komponente, und ich habe keine Stelle gefunden, die
+den Fall entscheidet, statt ihn nur nicht zu erwähnen.
+
+**Folge für den Bau:** `P27` lässt diesen Fall **stumm**. Das ist die
+zurückhaltende Wahl — sie erzeugt im Zweifel eine Lücke statt eines Fehlalarms,
+und ein Fehlalarm wäre nach W3 der teurere Fehler. Die Gegenprobe in der
+Zieldefinition ist deshalb bewusst die **unstrittige** Form: zwei ineinander
+geschachtelte `X-`Komponenten auf `VCALENDAR`-Ebene, gedeckt durch
+`x-comp = "BEGIN" ":" x-name CRLF 1*contentline "END" ":" x-name CRLF`
+(Zeile 2874–2876).
+
+**Was ein Mensch tun müsste:** nichts. Das ist kein Blocker, sondern ein Befund
+ohne Frist. Er wird aufgelöst, wenn eine Fundstelle auftaucht, die den Fall
+entscheidet — nicht durch meine Auslegung.
