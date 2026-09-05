@@ -1,0 +1,12 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//icsdoktor//P28//DE
+BEGIN:VEVENT
+UID:p28-a@example.org
+DTSTAMP:20260905T100000Z
+DTSTART:20260906T090000Z
+SUMMARY:zwei ATTENDEE duerfen hier stehen
+ATTENDEE:mailto:eine@example.org
+ATTENDEE:mailto:andere@example.org
+END:VEVENT
+END:VCALENDAR

@@ -1,0 +1,1 @@
+FEHLER Zeile 10: P28 CLASS (§3.8.1.3) steht zum wiederholten Mal im VEVENT ab Zeile 4; zuerst in Zeile 8; RFC 5545 lässt die Eigenschaft dort nur einmal zu [RFC 5545 §3.6.1]

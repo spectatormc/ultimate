@@ -372,6 +372,73 @@ FEHLER Zeile 6: P08 DTSTAMP: Wert "2026-08-12T05:00:00Z" ist kein DATE-TIME; …
 FEHLER Zeile 7: P08 DTSTART: den 30. gibt es im Monat 02 des Jahres 2026 nicht …
 ```
 
+## `P28` — dieselbe Zeile zweimal, und warum die Antwort abgestuft ist
+
+Seit dem 2026-09-05 meldet `P28`, wenn dieselbe Eigenschaft ein zweites Mal in
+derselben Komponente steht. Sie ist die **erste Prüfung mit zwei Schweregraden
+für denselben Befund**, und das ist kein Feinsinn, sondern der ganze Punkt:
+
+- **`FEHLER`**, wo die Format Definition der Komponente die Eigenschaft unter
+  *„MUST NOT occur more than once"* führt. Der Satz steht **43-mal** im
+  Normtext.
+- **`HINWEIS`**, wo sie unter *„SHOULD NOT occur more than once"* steht. Das
+  sind die Zeilen 2939, 3110, 3221 und 3513 — in allen vier ist es `RRULE` und
+  sonst nichts.
+- **stumm**, wo *„MAY occur more than once"* steht, wo die Eigenschaft gar
+  nicht genannt ist, und bei `X-` und IANA-Namen.
+
+**Der Anlass ist ein Streit über genau diesen Unterschied.**
+`py-vobject/vobject#56` („Error in RRULE due to double entry", eröffnet
+2024-09-09, am 2026-09-05 als offen abgerufen) beginnt mit *„Two `RRULE` lines
+are not allowed"*, und der Melder zitiert dazu die Meldung eines dritten
+Werkzeugs: *„RRULE MUST NOT appear more than once in a VEVENT component"*. Ein
+Kommentator widerspricht dem Wortlaut — und er hat recht. Ein Werkzeug, das
+hier `FEHLER` sagt, wiederholt den Fehler des dritten Werkzeugs; eines, das
+schweigt, hilft dem Melder nicht.
+
+Für `RRULE` steht die schwächere Stufe an **drei unabhängigen Stellen**: in der
+Grammatik (Zeile 2939), im Conformance-Absatz §3.8.5.3 (*„but it SHOULD NOT be
+specified more than once. The recurrence set generated with multiple `RRULE`
+properties is undefined."*) und im Fließtext von Anhang A.1 (Zeile 9314).
+
+**Derselbe Name, zwei Komponenten, zwei Antworten.** Die Tabelle steht je
+Komponente, nicht je Eigenschaft, weil der Normtext es so hält: `DESCRIPTION`
+darf im `VJOURNAL` wiederholt stehen und im `VEVENT` nicht; `CONTACT` und
+`DTEND` stehen im `VFREEBUSY` in der Einmal-Gruppe und im `VEVENT` nicht.
+
+**Die eine Eigenschaft, die nicht aus der Grammatik kommt — und die Messung,
+die sie dorthin gebracht hat.** `DUE` steht in `todoprop` nicht in der
+Einmal-Gruppe, sondern in der Ausschlussgruppe mit `duration`, die gar keinen
+Kardinalitätssatz trägt. Der Conformance-Absatz §3.8.2.3 sagt aber: *„The
+property can be specified once in a `VTODO` calendar component."* Damit die
+zweite Quelle nicht zum Freibrief wird, ist sie **ausgezählt** statt für einen
+Einzelfall behauptet: Das Wort „once" steht in **zwölf** Conformance-Absätzen.
+Elf davon ändern nichts — neun stehen ohnehin in einer Einmal-Gruppe der
+Grammatik, `RRULE` ist die SHOULD-NOT-Stelle, und bei `RESOURCES` (§3.8.1.10)
+streicht das **verifizierte Erratum 2677** das Wort als Versehen: *„The word
+'once' was mistakenly introduced in RFC 5545."* Es bleibt genau `DUE` übrig.
+Die Meldung nennt deshalb §3.8.2.3, die Stelle, an der der Satz wirklich steht.
+
+`RESOURCES` ist dabei die Falle dieser Tabelle: Wer den Conformance-Absatz
+ungeprüft als Quelle nimmt, baut sich hier einen Fehlalarm ein.
+
+**Wo `P28` schweigt, obwohl etwas doppelt steht:**
+
+- Bei allem, was `P06` (`VERSION`, `PRODID`), `P07` (`UID`, `DTSTAMP` im
+  `VEVENT`) und `P19` (`UID`/`DTSTAMP` in `VTODO`, `VJOURNAL`, `VFREEBUSY`;
+  `ACTION`/`TRIGGER` im `VALARM`) schon melden. Zwei Meldungen für einen
+  Verstoß wären schlechter als eine.
+- Bei `DTEND` und `DURATION` im `VEVENT` und `DURATION` im `VTODO`: Ihre Gruppe
+  sagt nur, dass beide nicht **zusammen** stehen dürfen — das meldet `P14` —,
+  und ihre Conformance-Absätze (§3.8.2.2, §3.8.2.5) tragen kein „once".
+- Bei `ATTACH`, `DESCRIPTION` und `SUMMARY` im `VALARM`: `alarmc` ist
+  `(audioprop / dispprop / emailprop)`, und welche der drei gilt, hängt am Wert
+  von `ACTION`. §3.8.1.1 erlaubt `ATTACH` ausdrücklich *„multiple times … with
+  the exception of AUDIO alarm"*. Gemeldet wird nur, was in **allen drei**
+  Alternativen höchstens einmal stehen darf.
+- Bei unbekannten Komponenten- und Eigenschaftsnamen, in beide Richtungen —
+  dieselbe Entscheidung wie bei `P27`.
+
 ## Zwei Schweregrade
 
 `P03` (Zeilenlänge) steht im RFC als „SHOULD NOT" und ist deshalb `HINWEIS`; er
@@ -382,6 +449,13 @@ Stelle, gemeldet wird also keine Regelverletzung, sondern eine Stelle, an der
 Programme messbar auseinandergehen. Alles andere ist `FEHLER`. Ein Werkzeug,
 das eine Empfehlung als Verstoß ausgibt, schickt Menschen auf die Suche nach
 Fehlern, die keine sind.
+
+**Seit dem 2026-09-05 gilt der Satz „Alles andere ist `FEHLER`" nicht mehr
+uneingeschränkt.** `P28` ist die erste Prüfung, die **beide** Grade vergibt —
+für denselben Befund, je nachdem, ob der Normtext an dieser Stelle „MUST NOT"
+oder „SHOULD NOT" sagt. Bis dahin hing der Grad an der Prüfung, ab jetzt bei
+einer von achtundzwanzig an der Fundstelle. Der Satz ist damit korrigiert und
+nicht die Messung.
 
 Die Missionsdatei nennt diesen Grad „Warnung". Das Werkzeug hat genau zwei
 Grade, und der nicht-fehlerhafte heißt seit der Vormission `HINWEIS` — gemeint
@@ -394,7 +468,7 @@ ist derselbe. Umbenannt wird nichts, damit die dreizehn älteren Erwartungen in
 sh projekte/icsdoktor/pruefe.sh          # die mitgelieferten Beispiele
 sh projekte/icsdoktor/rfc-beispiele.sh   # die sechs Kalender aus RFC 5545 §4
 sh projekte/icsdoktor/namensliste.sh     # woher die Namensliste von P09 kommt
-sh projekte/icsdoktor/anlass.sh          # gibt es Anlass für eine 28. Prüfung?
+sh projekte/icsdoktor/anlass.sh          # gibt es Anlass für eine 29. Prüfung?
 sh projekte/icsdoktor/zahlen.sh          # stimmen die Zahlen über den Bestand?
 sh projekte/icsdoktor/fundstellen.sh     # steht jeder zitierte § im Normtext?
 sh projekte/icsdoktor/abdeckung.sh       # löst jede Meldung ein Beispiel aus?
@@ -457,7 +531,7 @@ weicht sie ab, endet er mit `1` und nennt jeden Unterschied. Beide brauchen Netz
 
 ### `zahlen.sh` — die Zahlen über den eigenen Bestand
 
-Der letzte prüft nicht das Werkzeug, sondern diesen Text. „102 Kalenderdateien",
+Der letzte prüft nicht das Werkzeug, sondern diesen Text. „111 Kalenderdateien",
 „die zwanzig Prüfungen", „Anlass für eine 21. Prüfung" — das sind keine
 Meinungen, sondern Zahlen, die man nachsehen kann. Sie stehen im Text, während
 der Bestand daneben wächst, und niemand zieht sie nach, weil niemand sie liest.
@@ -827,7 +901,7 @@ Wo der Standard mehrere Lesarten zulässt, steht hier, welche gewählt wurde:
 Die Grenzen gehören in die Beschreibung, nicht in die Fußnote:
 
 - **Es repariert nichts.** Nur Diagnose. So steht es in der Mission.
-- **Es prüft genau die siebenundzwanzig Prüfungen** und nicht mehr. Bis zum 2026-08-15
+- **Es prüft genau die achtundzwanzig Prüfungen** und nicht mehr. Bis zum 2026-08-15
   stand hier „dreizehn"; die Zahl war seit `P13` um eine zu klein und ist keine
   weggefallene Prüfung, sondern ein nicht nachgezogener Satz. Seit dem
   2026-08-16 sind `P16` und `P17` dazugekommen, seit dem 2026-08-17 `P18` und
@@ -1145,7 +1219,7 @@ exitprobe.sh        Hält die Exit-Codes von quellen.sh gegen erfundene
                     Eingaben, mit dessen echtem Code. Kein Prüfbefehl der
                     Mission — er prüft die Mechanik, nicht den Bestand.
                     Kein Netz, kein Abruf.
-beispiele/          102 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
+beispiele/          111 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
                     Die Zahl ist am 2026-08-18 nachgezählt; sie stand seit
                     zwei Zyklen auf 47 und wuchs still mit jeder neuen Datei; seither hält
                     zahlen.sh sie nach.

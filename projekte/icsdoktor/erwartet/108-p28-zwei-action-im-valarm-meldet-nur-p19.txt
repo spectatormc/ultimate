@@ -1,0 +1,1 @@
+FEHLER Zeile 11: P19 ACTION (§3.8.6.1) steht zum wiederholten Mal im VALARM ab Zeile 9; zuerst in Zeile 10 [RFC 5545 §3.6.6]

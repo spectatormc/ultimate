@@ -1,0 +1,1 @@
+HINWEIS Zeile 10: P28 RRULE (§3.8.5.3) steht zum wiederholten Mal im VEVENT ab Zeile 4; zuerst in Zeile 8; RFC 5545 sagt dazu SHOULD NOT und nicht MUST NOT; die erzeugte Menge ist undefiniert [RFC 5545 §3.6.1]

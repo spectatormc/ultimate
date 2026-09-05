@@ -1,0 +1,1 @@
+FEHLER Zeile 9: P28 DUE (§3.8.2.3) steht zum wiederholten Mal im VTODO ab Zeile 4; zuerst in Zeile 7; RFC 5545 lässt die Eigenschaft dort nur einmal zu [RFC 5545 §3.6.2]

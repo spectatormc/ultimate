@@ -16,21 +16,40 @@
 3.6.4	norm	3382	When present in a "VFREEBUSY" calendar component, the "DTSTART" and "DTEND" properties SHOULD be specified prior to any "FREEBUSY" properties
 3.6.5	norm	3453	In this situation, each "VTIMEZONE" MUST represent a unique time zone definition
 3.6.6	norm	4062	The "VALARM" calendar component MUST include the "ACTION" and "TRIGGER" properties
+3.7.1	abnf	4272	calscale = "CALSCALE" calparam ":" calvalue CRLF
+3.7.2	norm	4296	Description: When used in a MIME message entity, the value of this property MUST be the same as the Content-Type "method" parameter value
 3.7.3	norm	4347	Conformance: The property MUST be specified once in an iCalendar object
 3.7.4	norm	4397	Conformance: This property MUST be specified once in an iCalendar object
+3.8.1.3	norm	4576	If not specified in a component that allows this property, the default value is PUBLIC. Applications MUST treat x-name and iana-token values they don't recognize the same way as they would the PRIVATE value
+3.8.1.5	norm	4688	Phoenix design team MUST attend this meeting.\nRSVP to team leader.
+3.8.1.6	norm	4760	Value Type: FLOAT. The value MUST be two SEMICOLON-separated FLOAT values
+3.8.1.7	abnf	4882	location = "LOCATION" locparam ":" text CRLF
+3.8.1.8	abnf	4947	percent = "PERCENT-COMPLETE" pctparam ":" integer CRLF
+3.8.1.9	abnf	5010	priority = "PRIORITY" prioparam ":" priovalue CRLF
 3.8.1.11	abnf	5132	status = "STATUS" statparam ":" statvalue CRLF
+3.8.1.12	abnf	5215	summary = "SUMMARY" summparam ":" text CRLF
 3.8.2.1	abnf	5271	completed = "COMPLETED" compparam ":" date-time CRLF
 3.8.2.2	norm	5279	The value type of this property MUST be the same as the "DTSTART" property, and its value MUST be later in time than the value of the "DTSTART" property
 3.8.2.3	norm	5353	For cases where this property is specified in a "VTODO" calendar component that also specifies a "DTSTART" property, the value type of this property MUST be the same as the "DTSTART" property, and the value of this property MUST be later in time than the value of the "DTSTART" property
 3.8.2.4	norm	5420	Value Type: The default value type is DATE-TIME. The time value MUST be one of the forms defined for the DATE-TIME value type
 3.8.2.5	norm	5495	When the "DURATION" property relates to a "DTSTART" property that is specified as a DATE value, then the "DURATION" property MUST be specified as a "dur-day" or "dur-week" value
 3.8.2.7	norm	5636	Events that consume actual time for the individual or resource associated with the calendar SHOULD be recorded as OPAQUE, allowing them to be detected by free/busy time searches
+3.8.3.1	norm	5690	Conformance: This property MUST be specified in a "VTIMEZONE" calendar component
+3.8.3.3	norm	5815	This property MUST only be specified in a "VTIMEZONE" calendar component
+3.8.3.4	abnf	5871	tzoffsetto = "TZOFFSETTO" toparam ":" utc-offset CRLF
+3.8.3.5	abnf	5920	tzurl = "TZURL" tzurlparam ":" uri CRLF
+3.8.4.2	abnf	6123	contact = "CONTACT" contparam ":" text CRLF
+3.8.4.3	norm	6174	This property MUST be specified in an iCalendar object that specifies the publication of a calendar user's busy time
 3.8.4.4	norm	6262	This property MUST have the same value type as the "DTSTART" property contained within the recurring component
+3.8.4.6	norm	6472	If the URL property and Content-Location MIME header are both specified, they MUST point to the same resource
 3.8.4.7	norm	6525	Conformance: The property MUST be specified in the "VEVENT", "VTODO", "VJOURNAL", or "VFREEBUSY" calendar components
 3.8.5.1	norm	6593	However, in such cases, the original "DTSTART" date MUST still be maintained by the calendaring and scheduling system because the original "DTSTART" value has inherent usage dependencies by other properties such as the "RECURRENCE-ID"
 3.8.5.2	abnf	6753	rdate = "RDATE" rdtparam ":" rdtval *("," rdtval) CRLF
+3.8.5.3	norm	6806	Conformance: This property can be specified in recurring "VEVENT", "VTODO", and "VJOURNAL" calendar components as well as in the "STANDARD" and "DAYLIGHT" sub-components of the "VTIMEZONE" calendar component, but it SHOULD NOT be specified more than once
 3.8.6.1	norm	7368	Conformance: This property MUST be specified once in a "VALARM" calendar component
+3.8.6.2	norm	7403	If the alarm triggers more than once, then this property MUST be specified along with the "DURATION" property
 3.8.6.3	norm	7443	Value Type: The default value type is DURATION. The value type can be set to a DATE-TIME value type, in which case the value MUST specify a UTC-formatted DATE-TIME value
 3.8.7.1	abnf	7603	created = "CREATED" creaparam ":" date-time CRLF
 3.8.7.2	norm	7639	Conformance: This property MUST be included in the "VEVENT", "VTODO", "VJOURNAL", or "VFREEBUSY" calendar components
 3.8.7.3	norm	7701	Description: The property value MUST be specified in the UTC time format
+3.8.7.4	norm	7756	Recurrence instances of a recurring component MAY have different sequence numbers

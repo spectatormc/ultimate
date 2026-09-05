@@ -101,6 +101,14 @@ UMGEBENDEN Komponente, denn sie ist die Produktion, die das Kind nicht
 zulaesst. Hinter ihr steht eine offene fremde Klage, collective/icalendar
 #1461.
 
+P28 kommt aus der Mission Die zweite Zeile,
+state/missionen/2026-09-05-die-zweite-zeile.md, und ist die erste Pruefung mit
+zwei Schweregraden fuer denselben Befund: dieselbe Eigenschaft ein zweites Mal
+in derselben Komponente ist FEHLER, wo die Grammatik "MUST NOT occur more than
+once" sagt, und HINWEIS, wo sie "SHOULD NOT occur more than once" sagt. Der
+Anlass ist eine offene fremde Klage, py-vobject/vobject #56, in der ein
+Kommentator genau diesen Unterschied gegen ein drittes Werkzeug geltend macht.
+
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
 Aufruf:
@@ -2635,6 +2643,214 @@ def pruefe_p27(komponenten, funde):
             abschnitt))
 
 
+# Die Kardinalitaet je Komponente, ausgelesen aus den Format Definitions in
+# §3.6 bis §3.6.6 von rfc5545.txt (abgerufen am 2026-09-05, HTTP 200,
+# 345537 Bytes, 9411 Zeilen). Aufbau je Eintrag:
+#
+#   KOMPONENTE: (abschnitt, einmal, sollnicht)
+#
+# 'abschnitt' ist der Abschnitt der UMGEBENDEN Komponente und landet in der
+# Klammer der Meldung — dieselbe Entscheidung wie bei P27. 'einmal' und
+# 'sollnicht' sind Tupel aus (EIGENSCHAFT, eigener Abschnitt); der eigene
+# Abschnitt steht in der Meldung in Klammern, so wie P07 und P19 es tun.
+#
+# WAS HIER NICHT STEHT UND WARUM — die Auslassungen sind die eigentliche
+# Arbeit an dieser Tabelle, nicht die Eintraege.
+#
+# 1. DIE PFLICHTPAARE, DIE SCHON JEMAND MELDET. P06 meldet PRODID und VERSION
+#    im VCALENDAR, P07 UID und DTSTAMP im VEVENT, P19 UID und DTSTAMP in
+#    VTODO/VJOURNAL/VFREEBUSY und ACTION und TRIGGER im VALARM. Sie stehen in
+#    der Grammatik in derselben Einmal-Gruppe wie der Rest, sind hier aber
+#    ausgelassen: zwei Meldungen fuer einen Verstoss waeren schlechter als
+#    eine. Wer die Tabelle gegen den Normtext liest, findet genau diese acht
+#    Paare als Luecke — sie ist Absicht und keine Nachlaessigkeit.
+# 2. DTEND UND DURATION IM VEVENT, DURATION IM VTODO. Ihre Gruppe traegt
+#    keinen Kardinalitaetssatz, sondern einen ueber Ausschluss: "Either
+#    'dtend' or 'duration' MAY appear in a 'eventprop', but 'dtend' and
+#    'duration' MUST NOT occur in the same 'eventprop'." Dass beide nicht
+#    zusammen stehen duerfen, meldet P14. Dass eines von beiden zweimal steht,
+#    sagt weder diese Zeile noch der Conformance-Absatz von DTEND (§3.8.2.2)
+#    oder DURATION (§3.8.2.5) — beide sagen "can be specified in", ohne
+#    "once". Also stumm. Im VFREEBUSY steht DTEND dagegen ausdruecklich in der
+#    Einmal-Gruppe (Zeile 3316 ff.) und wird dort gemeldet; derselbe Name,
+#    zwei Komponenten, zwei Antworten.
+# 3. RESOURCES. Der Conformance-Absatz §3.8.1.10 sagt "can be specified once
+#    in VEVENT or VTODO" — und genau dieses Wort streicht das verifizierte
+#    Erratum 2677 (verifiziert 2011-01-20): "The word 'once' was mistakenly
+#    introduced in RFC 5545." Die Grammatik fuehrt resources unter "MAY occur
+#    more than once". RESOURCES bleibt stumm. Das ist die Falle dieser
+#    Tabelle: Wer den Conformance-Absatz ungeprueft als Quelle nimmt, baut
+#    hier einen Fehlalarm ein.
+# 4. IM VALARM NUR, WAS IN ALLEN DREI ALTERNATIVEN GILT. alarmc ist
+#    "(audioprop / dispprop / emailprop)". ACTION, TRIGGER, DURATION und
+#    REPEAT stehen in allen drei unter "MUST NOT occur more than once".
+#    ATTACH steht nur in audioprop; §3.8.1.1 erlaubt es ausdruecklich
+#    "multiple times ... with the exception of AUDIO alarm". DESCRIPTION und
+#    SUMMARY stehen nur in zwei der drei. Welche Alternative gilt, haengt am
+#    Wert von ACTION — den liest diese Pruefung nicht. Also nur die vier, und
+#    davon meldet P19 schon zwei.
+# 5. X-PROP UND IANA-PROP, in beide Richtungen. Unbekannte Komponenten werden
+#    gar nicht geprueft, unbekannte Eigenschaftsnamen nicht gemeldet. Dieselbe
+#    Entscheidung wie bei P27.
+_KARDINALITAET = {
+    # calprops, Zeile 2840 ff. PRODID und VERSION: siehe Punkt 1.
+    "VCALENDAR": ("3.6", (
+        ("CALSCALE", "3.7.1"), ("METHOD", "3.7.2"),
+    ), ()),
+    # eventprop, Zeile 2907 ff. DTSTAMP und UID: siehe Punkt 1.
+    "VEVENT": ("3.6.1", (
+        ("DTSTART", "3.8.2.4"), ("CLASS", "3.8.1.3"), ("CREATED", "3.8.7.1"),
+        ("DESCRIPTION", "3.8.1.5"), ("GEO", "3.8.1.6"),
+        ("LAST-MODIFIED", "3.8.7.3"), ("LOCATION", "3.8.1.7"),
+        ("ORGANIZER", "3.8.4.3"), ("PRIORITY", "3.8.1.9"),
+        ("SEQUENCE", "3.8.7.4"), ("STATUS", "3.8.1.11"),
+        ("SUMMARY", "3.8.1.12"), ("TRANSP", "3.8.2.7"), ("URL", "3.8.4.6"),
+        ("RECURRENCE-ID", "3.8.4.4"),
+    ), (("RRULE", "3.8.5.3"),)),
+    # todoprop, Zeile 3094 ff. DUE kommt nicht von dort, sondern aus §3.8.2.3:
+    # siehe den Docstring von pruefe_p28, Abschnitt "Die zweite Quelle".
+    "VTODO": ("3.6.2", (
+        ("CLASS", "3.8.1.3"), ("COMPLETED", "3.8.2.1"), ("CREATED", "3.8.7.1"),
+        ("DESCRIPTION", "3.8.1.5"), ("DTSTART", "3.8.2.4"), ("GEO", "3.8.1.6"),
+        ("LAST-MODIFIED", "3.8.7.3"), ("LOCATION", "3.8.1.7"),
+        ("ORGANIZER", "3.8.4.3"), ("PERCENT-COMPLETE", "3.8.1.8"),
+        ("PRIORITY", "3.8.1.9"), ("RECURRENCE-ID", "3.8.4.4"),
+        ("SEQUENCE", "3.8.7.4"), ("STATUS", "3.8.1.11"),
+        ("SUMMARY", "3.8.1.12"), ("URL", "3.8.4.6"), ("DUE", "3.8.2.3"),
+    ), (("RRULE", "3.8.5.3"),)),
+    # jourprop, Zeile 3206 ff. DESCRIPTION steht hier — anders als im VEVENT —
+    # unter "MAY occur more than once" und fehlt deshalb.
+    "VJOURNAL": ("3.6.3", (
+        ("CLASS", "3.8.1.3"), ("CREATED", "3.8.7.1"), ("DTSTART", "3.8.2.4"),
+        ("LAST-MODIFIED", "3.8.7.3"), ("ORGANIZER", "3.8.4.3"),
+        ("RECURRENCE-ID", "3.8.4.4"), ("SEQUENCE", "3.8.7.4"),
+        ("STATUS", "3.8.1.11"), ("SUMMARY", "3.8.1.12"), ("URL", "3.8.4.6"),
+    ), (("RRULE", "3.8.5.3"),)),
+    # fbprop, Zeile 3300 ff. CONTACT steht hier in der Einmal-Gruppe und im
+    # VEVENT unter "MAY occur more than once"; DTEND ebenso. Siehe Punkt 2.
+    "VFREEBUSY": ("3.6.4", (
+        ("CONTACT", "3.8.4.2"), ("DTSTART", "3.8.2.4"), ("DTEND", "3.8.2.2"),
+        ("ORGANIZER", "3.8.4.3"), ("URL", "3.8.4.6"),
+    ), ()),
+    # timezonec, Zeile 3465 ff.
+    "VTIMEZONE": ("3.6.5", (
+        ("TZID", "3.8.3.1"), ("LAST-MODIFIED", "3.8.7.3"),
+        ("TZURL", "3.8.3.5"),
+    ), ()),
+    # tzprop, Zeile 3505 ff. — gilt fuer STANDARD und DAYLIGHT gleichermassen,
+    # beide fuehren in ihrer Produktion nichts als tzprop.
+    "STANDARD": ("3.6.5", (
+        ("DTSTART", "3.8.2.4"), ("TZOFFSETTO", "3.8.3.4"),
+        ("TZOFFSETFROM", "3.8.3.3"),
+    ), (("RRULE", "3.8.5.3"),)),
+    "DAYLIGHT": ("3.6.5", (
+        ("DTSTART", "3.8.2.4"), ("TZOFFSETTO", "3.8.3.4"),
+        ("TZOFFSETFROM", "3.8.3.3"),
+    ), (("RRULE", "3.8.5.3"),)),
+    # audioprop / dispprop / emailprop, Zeile 3972 ff. ACTION und TRIGGER:
+    # siehe Punkt 1, der Rest siehe Punkt 4.
+    "VALARM": ("3.6.6", (
+        ("DURATION", "3.8.2.5"), ("REPEAT", "3.8.6.2"),
+    ), ()),
+}
+
+
+def pruefe_p28(komponenten, funde):
+    """§3.6 bis §3.6.6: dieselbe Eigenschaft ein zweites Mal in derselben
+    Komponente — abgestuft, so wie der Normtext selbst abstuft.
+
+    Aus der Mission Die zweite Zeile,
+    state/missionen/2026-09-05-die-zweite-zeile.md.
+
+    DREI STUFEN, WEIL DER NORMTEXT DREI HAT. Das ist der ganze Inhalt dieser
+    Pruefung; eine Ja/Nein-Antwort waere hier die falsche Antwort.
+
+        FEHLER   wo die Format Definition der Komponente die Eigenschaft
+                 unter "MUST NOT occur more than once" fuehrt (43 Zeilen im
+                 Normtext tragen diesen Satz).
+        HINWEIS  wo sie sie unter "SHOULD NOT occur more than once" fuehrt
+                 (Zeilen 2939, 3110, 3221, 3513 — in allen vier ist es
+                 'rrule' und sonst nichts).
+        stumm    wo sie unter "MAY occur more than once" steht, wo sie gar
+                 nicht genannt ist, und bei X- und IANA-Namen.
+
+    DER ANLASS, und warum die Abstufung nicht Feinsinn ist. py-vobject/vobject
+    #56 "Error in RRULE due to double entry", eroeffnet 2024-09-09, am
+    2026-09-05 als offen abgerufen. Punkt 1 des Melders lautet woertlich "Two
+    RRULE lines are not allowed", und er zitiert dazu die Meldung eines
+    dritten Werkzeugs: "RRULE MUST NOT appear more than once in a VEVENT
+    component". Ein Kommentator widerspricht dem Wortlaut, und er hat recht.
+    Ein Werkzeug, das hier FEHLER sagt, wiederholt den Fehler des dritten
+    Werkzeugs; ein Werkzeug, das schweigt, hilft dem Melder nicht.
+
+    Fuer RRULE steht die schwaechere Stufe an drei unabhaengigen Stellen:
+
+        Zeile 2939: ; The following is OPTIONAL,
+                    ; but SHOULD NOT occur more than once.
+                    ; rrule /
+        Zeile 6810: [§3.8.5.3] ... but it SHOULD NOT be specified more than
+                    once.  The recurrence set generated with multiple "RRULE"
+                    properties is undefined.
+        Zeile 9314: [Anhang A.1, Fliesstext] 2. The "RRULE" property SHOULD
+                    NOT occur more than once in a component.
+
+    DIE ZWEITE QUELLE — und die einzige Eigenschaft, die daraus kommt. Die
+    Grammatik ist nicht die einzige Stelle, an der RFC 5545 eine Kardinalitaet
+    ausspricht: Jeder Eigenschaftsabschnitt hat einen Conformance-Absatz, und
+    zwoelf davon enthalten das Wort "once" (am 2026-09-05 gezaehlt, §3.8.1.1,
+    §3.8.1.3, §3.8.1.8, §3.8.1.10, §3.8.1.11, §3.8.2.3, §3.8.2.4, §3.8.2.7,
+    §3.8.4.6, §3.8.5.3, §3.8.6.1, §3.8.7.1). Elf davon aendern nichts: neun
+    stehen ohnehin in einer Einmal-Gruppe der Grammatik, RRULE ist die
+    SHOULD-NOT-Stelle, und bei RESOURCES (§3.8.1.10) streicht das verifizierte
+    Erratum 2677 das Wort "once" als Versehen.
+
+    Es bleibt genau eine Eigenschaft uebrig: DUE. §3.8.2.3 sagt "The property
+    can be specified once in a 'VTODO' calendar component"; in der Grammatik
+    von todoprop steht 'due' dagegen in der Ausschlussgruppe mit 'duration'
+    und traegt dort keinen Kardinalitaetssatz. Deshalb meldet diese Pruefung
+    DUE als FEHLER, nennt in der Meldung aber §3.8.2.3 — die Stelle, an der
+    der Satz wirklich steht. Bei DTEND und DURATION fehlt das Wort "once" im
+    Conformance-Absatz, und beide bleiben stumm; siehe Punkt 2 ueber der
+    Tabelle. Ohne diese Zaehlung waere DUE eine Behauptung ueber den Normtext
+    gewesen statt eine Auskunft aus ihm.
+
+    WELCHE ZEILE GEMELDET WIRD: die zweite. Dort steht die Zeile zu viel, und
+    dort kann man sie wegnehmen. Die erste wird als Zeilennummer genannt,
+    damit man den Vergleich sieht — dasselbe Format wie P06, P07 und P19.
+    Stehen drei Zeilen desselben Namens da, entstehen zwei Meldungen: die
+    zweite und die dritte sind je eine Zeile zu viel.
+
+    WO DIESE PRUEFUNG SCHWEIGT, steht in dem langen Kommentar ueber
+    _KARDINALITAET. Kurz: bei allem, was P06, P07 und P19 schon melden, bei
+    der Ausschlussgruppe dtend/duration/due-duration, bei RESOURCES, bei
+    ATTACH/DESCRIPTION/SUMMARY im VALARM und bei X- und IANA-Namen.
+    """
+    for komp in komponenten:
+        eintrag = _KARDINALITAET.get(komp.name)
+        if eintrag is None:
+            # x-comp / iana-comp und alles, was diese Grammatik nicht kennt.
+            continue
+        abschnitt, einmal, sollnicht = eintrag
+        for schwere, vorrat in ((FEHLER, einmal), (HINWEIS, sollnicht)):
+            for eigenschaft, eigen_abschnitt in vorrat:
+                treffer = komp.hole(eigenschaft)
+                for zeile, _ in treffer[1:]:
+                    if schwere == FEHLER:
+                        schluss = ("RFC 5545 lässt die Eigenschaft dort nur "
+                                   "einmal zu")
+                    else:
+                        schluss = ("RFC 5545 sagt dazu SHOULD NOT und nicht "
+                                   "MUST NOT; die erzeugte Menge ist "
+                                   "undefiniert")
+                    funde.append(Fund(
+                        schwere, zeile, "P28",
+                        "%s (§%s) steht zum wiederholten Mal im %s ab Zeile "
+                        "%d; zuerst in Zeile %d; %s"
+                        % (eigenschaft, eigen_abschnitt, komp.name,
+                           komp.zeile, treffer[0][0], schluss),
+                        abschnitt))
+
+
 _BOM_UTF8 = b"\xef\xbb\xbf"
 
 
@@ -2710,7 +2926,7 @@ def pruefe_p20(rohdaten, funde):
 
 
 def untersuche(rohdaten):
-    """Alle siebenundzwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle achtundzwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     rohdaten, hatte_bom = pruefe_p20(rohdaten, funde)
     zeilen = zerlege_physisch(rohdaten)
@@ -2756,6 +2972,7 @@ def untersuche(rohdaten):
     pruefe_p25(komponenten, funde)
     pruefe_p26(logische, funde)
     pruefe_p27(komponenten, funde)
+    pruefe_p28(komponenten, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))
