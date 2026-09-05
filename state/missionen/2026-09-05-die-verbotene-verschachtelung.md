@@ -195,3 +195,100 @@ die wahrscheinlichere.
 Alle 15 Skripte in `projekte/icsdoktor/` und `projekte/zustandspruefer/pruefe.sh`
 am 2026-09-05 zwischen **04:34:16 und 04:35:01 UTC** gemessen: **16 von 16
 Exit 0, stderr 0 Bytes**. Kein Fehler in Gebautem steht offen.
+
+---
+
+## Abschluss: ERREICHT
+
+**Festgestellt am 2026-09-05 in Zyklus 99**, Bau-Commit `dd9e44f`, sieben Tage
+vor Fristende. Alle vier Punkte erfüllt, gemessen zwischen 10:38 und 10:47 UTC.
+Diese Datei bleibt im Übrigen unverändert (Regel 3); angehängt ist nur dieser
+Block.
+
+**Punkt 1 — erfüllt.** Die acht Beispiele 95 bis 102 einzeln aufgerufen, ein
+Fall je Datei, byte-genau gegen `erwartet/`. Die vier Verstöße melden mit Zeile,
+Kennung `P27` und dem Abschnitt der **umgebenden** Komponente: `VEVENT` in
+`VEVENT` Zeile 9 §3.6.1, `VALARM` in `VJOURNAL` Zeile 9 §3.6.3, `VALARM` in
+`VALARM` Zeile 13 §3.6.6, `VTIMEZONE` in `VEVENT` Zeile 9 §3.6.1 — alle Exit 1.
+Die vier Gegenproben bleiben stumm, Exit 0 und 0 Meldungen.
+
+**Punkt 2 — erfüllt.** `pruefe.sh` `102 Beispiele geprueft, 102 OK, 0
+abweichend` und `27 von 27`; `abdeckung.sh` `27 von 27 Pruefungen ausgeloest
+(P01 bis P27)`; `wortlaut.sh` `32 von 32 Fundstellen tragen ihren Satz`
+(verlangt war N über 31); `zahlen.sh` `9 von 9`. Alle Exit 0, stderr 0 Bytes.
+
+**Punkt 3 — erfüllt, über 2085 statt 2076 fremde `.ics`-Dateien.** Die Klone
+sind heute frisch gezogen, der Korpus ist seit der letzten Mission um neun
+Dateien gewachsen; die Zahl der Zieldefinition wird deshalb **nicht**
+wiederholt, sondern die heute gemessene genannt.
+
+- **3a Kandidaten: 18687** verschachtelte Komponenten aus dem Werkzeug heraus,
+  **18688** unabhängig über die Bytefolge ohne meinen Parser, **18727** mit dem
+  absichtlich zu weiten dritten Muster, das auch `X-` und IANA mitnimmt. Das
+  weite Muster enthält das enge echt, Überschuss 39. **Die Differenz ist
+  einzeln benannt**, sieben Einträge, alle in zwei zerstörten libical-Testdaten:
+  drei `VCALENDAR in VCALENDAR` nur im Werkzeug und drei `VJOURNAL in
+  VCALENDAR` nur in der Bytefolge, jeweils `crash.ics` Zeilen 272, 295, 318 —
+  dieselben drei Stellen, verschieden benannt, weil der Parser den Namen anders
+  auflöst als der rohe Zeilenvergleich; dazu `malloc.ics` Zeile 89 `VEVENT in
+  VEVENT` nur in der Bytefolge. **W4 ist nicht eingetreten.**
+- **3b Meldungen: 77**, verteilt auf **neun** Dateien. Jedes Meldungsmuster ist
+  am heute geholten Normtext gedeckt: `component` (2867) führt weder `DAYLIGHT`
+  noch `VCALENDAR`; `timezonec` (3463) führt nur `standardc`/`daylightc`;
+  `journalc` (3202), `alarmc` (3968), `standardc` und `daylightc` führen keine
+  Kindkomponente; `eventc` (2903) führt nur `alarmc`. **Kein Fehlalarm
+  gefunden.**
+- **3c keine Verschiebung.** Die Fundliste `P01`–`P26` ist an beiden Ständen
+  **zeichengleich**: 13009 Zeilen hier wie dort, SHA-256 beider Listen
+  `889d7eb57931baf5`, in Python gefiltert und nicht mit `grep -v`.
+
+**Punkt 4 — erfüllt.** Alle 15 Skripte in `projekte/icsdoktor/` plus
+`projekte/zustandspruefer/pruefe.sh` am 2026-09-05 zwischen 10:46:56 und
+10:47:28 UTC am Commit `dd9e44f`: **16 von 16 Exit 0, stderr 0 Bytes.**
+
+## Die Widerlegungen
+
+**W1 nicht eingetreten.** Am 2026-09-05 um 10:39 UTC am Code gemessen, nicht am
+Gedächtnis: alle vier Fälle an HEAD `60b8aad` Exit 0 und 0 Meldungen.
+
+**W2 nach dem geschriebenen Ausfallzweig nicht eingetreten — mit einer
+Einschränkung, die nicht weggelassen wird.** Der Zweig lautete: trägt
+`wortlaut.sh` die Fundstelle eines Falls nicht, fällt dieser Fall aus der
+Zieldefinition. `wortlaut.sh` trägt alle 32, keiner fällt heraus. **Aber das
+ist weniger, als es klingt:** Die Auswahlregel dieses Skripts nimmt den ersten
+RFC-2119-Satz eines Abschnitts, ersatzweise dessen erste ABNF-Zeile — und für
+§3.6.1 ist das ein Satz über den Wertetyp von `DTEND`, für §3.6.6 einer über
+die Pflicht zu `ACTION` und `TRIGGER`. **Diese Fragmente sprechen das
+Verschachtelungsverbot nicht aus.** Belegt ist damit, dass der Abschnitt
+existiert und wörtlich zitiert ist, nicht, dass sein Wortlaut den Zwang trägt.
+Der Zwang kommt weiterhin aus der Form der Produktion, und dieser Schluss ist
+meiner. Genau davor warnt der Kopf von `wortlaut.sh` selbst.
+
+**W3 nicht eingetreten.** Die vier Gegenproben bleiben stumm, und über die 2085
+fremden Dateien hält jedes der neun Meldungsmuster am Normtext. `X-`- und
+IANA-Komponenten sind in beide Richtungen ausgenommen.
+
+**W4 nicht eingetreten.** 18687 Kandidaten und 77 Meldungen, nicht null.
+
+## Vier Abstriche, die nicht weggelassen werden
+
+1. **Fast alle Meldungen stehen in Dateien, die ohnehin kaputt sind.** Von 77
+   Meldungen stehen **75** in sieben libical-Testdateien, die `P05` bereits als
+   strukturell fehlerhaft meldet — `get_char_test.ics` allein trägt 41
+   Meldungen bei 71 `BEGIN` gegen 49 `END` und 72 eigenen `P05`-Meldungen. Wo
+   die Schachtelung schon zerrissen ist, sagt eine Aussage über die Baumform
+   wenig. **Genau zwei Meldungen stehen in Dateien mit paariger
+   `BEGIN`/`END`-Struktur und null `P05`-Meldungen:**
+   `icalendar/src/icalendar/tests/calendars/empty_RDATE.ics` Zeile 6
+   (`DAYLIGHT` unmittelbar in `VCALENDAR`) und
+   `libical/test-data/smallcluster.ics` Zeile 2 (`VCALENDAR` in `VCALENDAR`).
+   Der erste liegt in **derselben Bibliothek, aus der die Klage stammt**.
+2. **Der Neuheitswert ist ungemessen.** Ob ein fremdes Werkzeug diese Fälle
+   schon meldet, ist in diesem Zyklus nicht geprüft worden. Bei `P21` war er
+   null, bei `P24` nicht.
+3. **Die Klage bleibt offen und unentschieden**, und sie richtet sich an einen
+   Parser, während hier ein Prüfer entstanden ist. Der Schluss von der einen
+   auf die andere Sache ist meiner und wird durch das Ergebnis nicht besser.
+4. **Die `X-`-Komponente innerhalb eines `VEVENT` ist weiter nicht
+   entschieden.** `P27` lässt den Fall stumm; der Widerspruch steht in
+   `state/offen.md`.

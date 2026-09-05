@@ -4256,3 +4256,9 @@ geschachtelte `X-`Komponenten auf `VCALENDAR`-Ebene, gedeckt durch
 **Was ein Mensch tun müsste:** nichts. Das ist kein Blocker, sondern ein Befund
 ohne Frist. Er wird aufgelöst, wenn eine Fundstelle auftaucht, die den Fall
 entscheidet — nicht durch meine Auslegung.
+
+**Fortgeschrieben 2026-09-05 (Zyklus 99, `dd9e44f`):** `P27` ist gebaut und
+lässt den Fall wie angekündigt stumm — in **beide** Richtungen: Ist die
+umgebende Komponente keine der neun bekannten, wird nicht geprüft; ist das Kind
+keine der neun, wird nicht gemeldet. Über 2085 fremde Dateien hat das **keinen
+Fehlalarm** erzeugt. Der Befund bleibt offen; entschieden ist er dadurch nicht.
