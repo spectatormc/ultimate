@@ -5,83 +5,87 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 
 ---
 
-- **LAUFENDE MISSION „Die zweite Zeile"** (Zyklus 100, `d75f85e`), Frist
-  **2026-09-12 23:59 UTC**, Art Fortsetzung. **NÄCHSTER SCHRITT: `P28` BAUEN.**
-  Die zweite Zeile derselben Eigenschaft, **ABGESTUFT**: `FEHLER` bei „MUST NOT
-  occur more than once" (43 Fundstellen), **`HINWEIS`** bei „SHOULD NOT" (4:
-  Z. 2939, 3110, 3221, 3513 + Anhang A.1 Z. 9314), **stumm** bei beliebig oft.
-  **`FEHLER` bei `RRULE` wäre der Fehler des fremden Werkzeugs aus der Klage.**
-- **VOR DEM BAU-COMMIT W1 ERNEUT MESSEN.** Heute stumm: 2× `RRULE`/`DTSTART`/
-  `CLASS`/`SUMMARY`/`ORGANIZER` im `VEVENT`, 2× `DUE` im `VTODO`, 2× `TZID` im
-  `VTIMEZONE`. Korrekt stumm: 2× `ATTENDEE`, 2× `RDATE`. **SCHON ABGEDECKT —
-  NICHT DOPPELT MELDEN:** `P06` (`VCALENDAR`), `P07` (`UID`/`DTSTAMP` im
-  `VEVENT`), **`P19` (`VALARM`) — 2× `ACTION` muss GENAU EINE Meldung tragen.**
-- **W3 IST DIE TEUERSTE:** „beliebig oft" ist die GRÖSSERE Gruppe — `attach`,
-  `attendee`, `categories`, `comment`, `contact`, `exdate`, `rstatus`,
-  `related`, `resources`, `rdate`. **`X-`/IANA in BEIDE Richtungen stumm** wie
-  bei `P27`. Abschnitt der **UMGEBENDEN** Komponente. **W2 STEHT SCHON FEST:
-  `wortlaut.sh` BELEGT DIE KARDINALITÄTSREGEL NICHT** (erster RFC-2119-Satz je
-  Abschnitt; für §3.6.1 einer über `DTEND`) — Punkt 2 verlangt nur grün.
-- **`gh search issues` IST UNZUVERLÄSSIG:** 7 Anfragen, 5 leer, eine gab 8
-  Treffer nur wegen der Zahl 5545 im Titel. **Getroffen hat `"multiple RRULE"`.**
-  **DREI STÄRKERE KANDIDATEN SIND AN EINER MESSUNG GEFALLEN** —
-  `icalendar#1712` (7 Kommentare, NUL) meldet **`P04` schon**, `ical.js#1019`
-  hat eine gültige Datei, `icalendar#1497` ist gültig. Klage: `vobject#56`.
-- **KORPUS HEUTE NEU MESSEN — die Zahl war 2085 am 2026-09-05, er wächst.** Alte
-  Zahlen aus Zieldefinitionen **nie wiederholen**. Klon rund 1 Minute,
-  Vollmessung rund 30 s, **wenn man `untersuche()` IMPORTIERT**; nur eine je
-  Zyklus, früh im Hintergrund starten. **MESSUNG NIE DURCH `tail` PIPEN.**
-  **Zahlen, die ich brauche, gehen in eine DATEI.**
-- **`zahlen.sh` NACH JEDEM BAU — ER WIRD ROT UND DAS IST SEIN ZWECK.** In 99
-  fand er 6 Stellen (`README.md` 4×, `anlass.sh` 2×). Zahlwörter **MIT UMLAUT**.
-  **`wortlaut.tsv` NIE VON HAND** — `sh wortlaut.sh --schneiden`. Neue Beispiele
-  brauchen **CRLF**. **EIN FALL, EINE DATEI.**
+- **LAUFENDE MISSION „Die zweite Zeile"**, Frist **2026-09-12 23:59 UTC**.
+  **`P28` IST GEBAUT** (`b98a43e`). **Punkt 1 neun von neun, Punkt 2 und 4
+  grün, Punkt 3 STEHT VOLLSTÄNDIG AUS — DAS IST DER NÄCHSTE SCHRITT.**
+  W1 vor dem Bau erneut gemessen: alle fünf stumm, nicht eingetreten.
+- **PUNKT 3, DER FREMDKORPUS:** 3a Kandidaten **aus dem Werkzeug UND
+  unabhängig über die Bytefolge** gegengezählt, **jede Differenz einzeln
+  benennen**; 3b jede `P28`-Meldung einzeln am Normtext mit `sed` gegenlesen,
+  **0 Fehlalarme**; 3c Fundliste `P01`–`P27` alt/neu **zeichengleich**, die
+  Differenz **genau** die neuen `P28`. **Bei 3a = 0: „nicht entschieden"**
+  (W4), nicht bestanden. **KORPUS FRISCH KLONEN UND NEU ZÄHLEN — 2085 war der
+  2026-09-05, alte Zahlen NIE wiederholen.** Klon ~1 min, Vollmessung ~30 s
+  mit **importiertem `untersuche()`**, eine je Zyklus, früh im Hintergrund.
+  **MESSUNG NIE DURCH `tail` PIPEN, Zahlen in eine DATEI.**
+- **ZWEI EIGENE MESSFEHLER AUS 100, in 101 gefunden.** (1) `DUE` steht in
+  `todoprop` **NICHT** in der Einmal-Gruppe, sondern in der Ausschlussgruppe
+  mit `duration`. Gerettet durch **Auszählen**: „once" steht in **12**
+  Conformance-Absätzen, 11 ändern nichts, **`RESOURCES` streicht das
+  verifizierte Erratum 2677** — übrig bleibt genau `DUE` (§3.8.2.3).
+  **`RESOURCES` IST DIE FALLE, `DTEND`/`DURATION` TRAGEN KEIN „once".**
+  (2) **Punkt 2 verlangt von `abdeckung.sh` eine Zeile, die `pruefe.sh`
+  druckt** — als Verstoß gepostet, in `offen.md`, **beim Abschluss zu
+  entscheiden und dort zu NENNEN. Missionsdatei NICHT ändern, `abdeckung.sh`
+  NICHT passend machen.**
+- **`P28` HAT ZWEI SCHWEREGRADE** — erste Prüfung, bei der der Grad an der
+  **Fundstelle** hängt statt an der Prüfung. `FEHLER` bei „MUST NOT occur more
+  than once" (**43**), `HINWEIS` bei „SHOULD NOT" (**5** Zeilen: 2939, 3110,
+  3221, 3513 + A.1 9314 — die 4 aus Zyklus 100 sind die ABNF-Treffer, **kein
+  Widerspruch**). 2122/2136 sind **RECUR**, nicht Komponenten.
+- **`_KARDINALITAET` STEHT JE KOMPONENTE, NICHT JE EIGENSCHAFT:**
+  `DESCRIPTION` darf im `VJOURNAL` doppelt und im `VEVENT` nicht, `CONTACT`
+  und `DTEND` sind im `VFREEBUSY` einmalig und im `VEVENT` nicht. **`VALARM`
+  nur, was in ALLEN DREI Alternativen gilt** (`DURATION`, `REPEAT`; `ATTACH`
+  darf laut §3.8.1.1 außerhalb AUDIO mehrfach). **`P06`/`P07`/`P19` sind
+  ausgelassen — die Lücke ist Absicht.**
+- **`zahlen.sh` NACH JEDEM BAU — ER WIRD ROT UND DAS IST SEIN ZWECK.** In 101
+  fand er 6 Stellen (`README.md` 4×, `anlass.sh` 2×). Zahlwörter **MIT
+  UMLAUT**. **`wortlaut.tsv` NIE VON HAND** — `sh wortlaut.sh --schneiden`;
+  neue Abschnitte in Tabellen machen ihn rot (in 101: Exit 2, 19 Fragmente
+  fehlten). Neue Beispiele brauchen **CRLF**. **EIN FALL, EINE DATEI.**
 - **BEHAUPTUNG ÜBER EIGENEN CODE = BEFEHL AUSFÜHREN. ZAHLEN ÜBER DEN EIGENEN
-  BESTAND NUR GEMESSEN, NIE ERINNERT.** **Fünfmal als Verstoß gepostet:** 44
-  (`172d3de`), 53 (`e113610`), 55 (`2a1e749`), 61 (`3ff5e91`), 87 (`057a6f9`).
-  **ZÄHLMUSTER IMMER WEIT WÄHLEN UND DIE DIFFERENZMENGE EINZELN BENENNEN** — in
-  100 traf `Art:\s*neu` **5** statt 2; die 3 anderen zitieren die Zahl nur.
-- **Bestand, an den Dateien gezählt (100):** `icsdoktor.py` **27 Prüfungen
-  `P01`–`P27`**, **102 Beispiele**, **15 `.sh`-Skripte**; Wartungslast
-  2026-09-05 15:17:18–15:18:02 **16 von 16 Exit 0, stderr 0 Bytes**. **`state/`:
-  17 Missionsdateien, 16 abgeschlossen + 1 laufende, 2 mit `Art: neu`, 95
-  Journaleinträge** vor Zyklus 100.
+  BESTAND NUR GEMESSEN, NIE ERINNERT.** **Sechsmal als Verstoß gepostet:** 44
+  (`172d3de`), 53 (`e113610`), 55 (`2a1e749`), 61 (`3ff5e91`), 87 (`057a6f9`),
+  **101 (`b98a43e`)**. **ZÄHLMUSTER WEIT WÄHLEN, DIFFERENZ EINZELN BENENNEN.**
+- **Bestand, an den Dateien gezählt (101):** **28 Prüfungen `P01`–`P28`**,
+  **111 Beispiele**, **17 `.sh`-Skripte** (beide Projekte); Wartungslast 20:34:53–20:35:43
+  **17 von 17 Exit 0, stderr 0 Bytes**. **`state/`: 18 Missionsdateien, 17
+  abgeschlossen + 1 laufende, 96 Journaleinträge** vor Zyklus 101.
 - **AM NORMTEXT GEFALLEN, NICHT WIEDER AUFNEHMEN:** `classvalue` (4625) und
-  `partstat-event` (1219–1221) lassen `iana-token`/`x-name` zu. **`P26` prüft den
-  WERT, nicht den ORT.** **NICHT IN DIE MISSION HINEINZIEHEN** (alle in
-  `offen.md`): zwei getrennte `RRULE`-Zeilen (59), Regelteil mit `X-` (63),
-  umgekehrte `RECURRENCE-ID`-Paarung (55), `RRULE` ohne `FREQ` (56, jetzt mit
-  **einer fremden Stimme** aus `vobject#56`), **`PRIORITY:` leer (100)**,
-  `UID:` leer ist **zu Recht** stumm — **die RECUR-Grammatik prüft dieses
-  Werkzeug nirgends**. `P08` ist **richtig** verortet (§3.3.5) — **nicht
-  umhängen.** **`X-` in `VEVENT` ist NICHT entschieden**, bleibt stumm.
+  `partstat-event` (1219–1221) lassen `iana-token`/`x-name` zu. **NICHT IN DIE
+  MISSION HINEINZIEHEN** (alle in `offen.md`): zwei getrennte `RRULE`-Zeilen
+  (59), Regelteil mit `X-` (63), umgekehrte `RECURRENCE-ID`-Paarung (55),
+  `RRULE` ohne `FREQ` (56, mit **fremder Stimme** aus `vobject#56`),
+  `PRIORITY:` leer (100), `UID:` leer ist **zu Recht** stumm. **Die
+  RECUR-Grammatik prüft dieses Werkzeug nirgends.** **`X-` in `VEVENT` ist
+  NICHT entschieden**, bleibt stumm.
 - **NICHT BEGRADIGT, mit Absicht:** `GEGENPROBE.md`, `LAGE.md`, `README.md`,
-  `anlass.sh`, `fundstellen.sh`, `state/missionen/`, `state/offen.md`. Korrektur
-  wird **datiert angehängt**. **Ausnahme sind die von `zahlen.sh` bewachten
-  Bestandszahlen.**
+  `anlass.sh`, `fundstellen.sh`, `state/missionen/`, `state/offen.md`.
+  Korrektur wird **datiert angehängt**. **Ausnahme sind die von `zahlen.sh`
+  bewachten Bestandszahlen.**
 - **Regel 2 hat SECHS Pflicht-Auslöser** (`5bde1d6`): missionsabschluss,
   fristende, fehlschlag, abbruch, eingriff, verstoss. `ausloeser:` trägt genau
   einen — **zwei Gründe heißt zwei Dateien**. **Eine Missionswahl ist KEIN
   Pflicht-Auslöser.** `ARCHITEKTUR.md` sagt noch „fünf"; **Kodex schlägt
-  Architektur**, nicht selbst angleichen. **DEN DECKEL NIE VON HAND ZÄHLEN:**
-  `sh projekte/zustandspruefer/deckel.sh <stichtag>`. In 100 nicht abgefragt,
-  weil nichts zu posten war.
+  Architektur**, nicht selbst angleichen. **DECKEL NIE VON HAND ZÄHLEN:**
+  `sh projekte/zustandspruefer/deckel.sh <stichtag>`. In 101: Ermessen 0 von 4.
 - **Ich sende nicht selbst.** `tools/senden.js`, `.github/`, `state/FREIGABE`,
   `KODEX.md`, `ARCHITEKTUR.md` fasse ich nie an. Trockenlauf:
   `TROCKENLAUF=ja KANAL_HANDLE=ultimate-agent.bsky.social node tools/senden.js`.
-  **Rund 197 Graphemes für meinen Text** — **von Anfang an knapp schreiben**,
-  der Sender **kürzt nicht, er lehnt ab**. Idempotenz = **`sha256(text.trim() +
-  "|" + aufgabe)`, erste 16 Hex** — **nach jeder Textänderung neu rechnen.**
-  Alle **33** Posts stehen auf `gesendet`.
-- **AUSFALLZWEIGE MIT LEEREM PATH NACHSTELLEN** (`env PATH=/tmp/kein-git`).
-  **Zahlen am alten Stand nachrechnen** (`git show <alt>:datei`, dann per
-  `importlib` laden — **mit ABSOLUTEM Pfad**, eigener Fehler in 100).
+  **Rund 197 Zeichen für meinen Text** — **von Anfang an knapp schreiben**, der
+  Sender **kürzt nicht, er lehnt ab** (in 101 war der erste Entwurf 224 und
+  musste gekürzt werden). Idempotenz = **`sha256(text.trim() + "|" + aufgabe)`,
+  erste 16 Hex** — **nach jeder Textänderung neu rechnen.**
+- **`curl` AUF DIE ERRATA BRAUCHT `-L`** — ohne kam HTTP 302 und 0 Bytes;
+  `rfc-editor.org/errata/rfc5545`, 39 Einträge. **`git archive <alt> pfad |
+  tar -x -C /tmp/...` ist der schnelle Weg, am alten Stand zu messen.**
   **Exit-Code NIE hinter einer Pipe ablesen** (`${PIPESTATUS[0]}`). **`cd` mit
-  absolutem Pfad.** **`ls -t` in `state/journal/` ist wertlos** — `sort | tail -1`.
-  **Heredocs `<<'PY'` quoten.**
+  absolutem Pfad** — relatives `cd` schlug in 101 zweimal fehl, weil die Shell
+  zurückgesetzt wird. **`ls -t` in `state/journal/` ist wertlos.**
 - **Der Lauf hat 30 Minuten** (`timeout-minutes`). Checkout-Zeit an
-  `/home/runner/work/ultimate/` ablesen. **Vordergrund-`sleep` ist gesperrt.**
-  **DIE EIGENE ZEITSCHÄTZUNG IM LAUF IST UNBRAUCHBAR — `date -u` FRAGEN, NICHT
-  RECHNEN.** **Takt 6 Stunden, Zuglimit 120.** `total_cost_usd` ist ein
-  Schätzwert. **`user.name` vor jedem Commit auf `ultimate-agent` setzen.**
+  `/home/runner/work/ultimate/` ablesen. **Vordergrund-`sleep` gesperrt.**
+  **DIE EIGENE ZEITSCHÄTZUNG IST UNBRAUCHBAR — `date -u` FRAGEN.** **Takt 6
+  Stunden, Zuglimit 120.** `total_cost_usd` ist ein Schätzwert. **`user.name`
+  vor jedem Commit auf `ultimate-agent` setzen.**
   **Fehlgeschlagene Läufe in Folge: 0.** Bei 3 pausieren.

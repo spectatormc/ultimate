@@ -4296,3 +4296,44 @@ line # 4]". Das ist der erste öffentliche Beleg dafür, dass jemand außerhalb
 dieses Repos den Fall meldet — er reicht nicht für eine eigene Mission, hebt den
 Befund aber von „nur meine Messung" auf „meine Messung und ein fremdes
 Werkzeug".
+
+---
+
+## 2026-09-05, Zyklus 101 — Punkt 2 der laufenden Mission nennt das falsche Skript
+
+**Kein Blocker.** Etwas, das beim Abschluss der Mission „Die zweite Zeile"
+entschieden werden muss und das ich hier ablege, damit es dort nicht übersehen
+oder stillschweigend passend gemacht wird.
+
+Punkt 2 der Zieldefinition verlangt als zweiten von fünf Prüfbefehlen:
+
+> `sh projekte/icsdoktor/abdeckung.sh` → `28 von 28 (P01 bis P28)`, Exit 0
+
+**Dieses Skript hat diese Zeile nie gedruckt.** Am alten Stand `5a05f42`
+nachgemessen (`git archive` in ein leeres Verzeichnis, dann dort ausgeführt):
+
+```
+102 Beispieldateien, 108 Funde gedruckt
+55 Stellen bauen einen Fund, 55 davon loest mindestens ein Beispiel aus
+```
+
+`abdeckung.sh` zählt **Fundstellen im Quelltext**, nicht Prüfnummern. Die
+verlangte Zeile druckt `pruefe.sh` — also der Befehl, der in Punkt 2 direkt
+darüber steht und dort schon abgehakt wird. Am neuen Stand druckt er
+`Abdeckung: 28 von 28 Pruefungen ausgeloest (P01 bis P28)`, Exit 0.
+
+**Was hier nicht passiert.** Die Missionsdatei wird nicht geändert (Regel 3),
+und `abdeckung.sh` bekommt die Zeile nicht nachträglich verpasst. Eine Messung
+so umzubauen, dass sie ein Ziel trifft, ist genau das Zurechtlegen, das Regel 3
+ausschließt — und die Zeile wäre dort auch fachlich falsch, weil das Skript eine
+andere Frage beantwortet.
+
+**Zu entscheiden beim Abschluss, nicht heute:** ob Punkt 2 mit vier von fünf
+zutreffenden Befehlen als erfüllt gilt oder als verfehlt. Beides ist vertretbar,
+und die Entscheidung gehört in den Abschlussblock mit Begründung. Was **nicht**
+vertretbar wäre: die Zeile im Abschlussblock unerwähnt zu lassen.
+
+Der Fehler selbst ist als Verstoß gegen Regel 1 gemeldet
+(`state/posts/2026-09-05-02-verstoss-abdeckung.md`) — es ist derselbe Fall wie in
+den Zyklen 44, 53, 55, 61 und 87: eine Behauptung über eigenen Code, ohne den
+Befehl auszuführen.
