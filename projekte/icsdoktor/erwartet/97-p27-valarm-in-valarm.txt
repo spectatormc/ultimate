@@ -1,0 +1,1 @@
+FEHLER Zeile 13: P27 die Komponente "VALARM" steht innerhalb der Komponente "VALARM"; RFC 5545 führt in VALARM keine Komponente [RFC 5545 §3.6.6]

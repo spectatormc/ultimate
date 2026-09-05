@@ -9,6 +9,7 @@
 3.3.5	norm	1816	The "DATE-TIME" value type expresses time values in three forms: The form of date and time with UTC offset MUST NOT be used
 3.3.10	norm	2106	Individual rule parts MUST only be specified once
 3.4	norm	2765	The first line and last line of the iCalendar object MUST contain a pair of iCalendar object delimiter strings
+3.6	norm	2825	In addition, it MUST include at least one calendar component
 3.6.1	norm	2893	These events have a DATE value type for the "DTSTART" property instead of the default value type of DATE-TIME. If such a "VEVENT" has a "DTEND" property, it MUST be specified as a DATE value also
 3.6.2	abnf	3090	todoc = "BEGIN" ":" "VTODO" CRLF
 3.6.3	abnf	3202	journalc = "BEGIN" ":" "VJOURNAL" CRLF

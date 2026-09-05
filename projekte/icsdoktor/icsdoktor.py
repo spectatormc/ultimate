@@ -93,6 +93,14 @@ einer abgeschlossenen Liste auf, bei RANGE mit genau einem Wert. Sie hat
 keinen fremden Fehlerbericht hinter sich, sondern eine eigene Messung am
 Normtext — das steht so im Docstring der Pruefung und in der Missionsdatei.
 
+P27 kommt aus der Mission Die verbotene Verschachtelung,
+state/missionen/2026-09-05-die-verbotene-verschachtelung.md, und ist die erste
+Pruefung, die nicht eine Zeile oder einen Wert ansieht, sondern die BAUMFORM:
+welche Komponente in welcher stehen darf. Gemeldet wird nach der Grammatik der
+UMGEBENDEN Komponente, denn sie ist die Produktion, die das Kind nicht
+zulaesst. Hinter ihr steht eine offene fremde Klage, collective/icalendar
+#1461.
+
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
 Aufruf:
@@ -2412,6 +2420,40 @@ def pruefe_p25(komponenten, funde):
 # Tabelle wirft, muss beim Lesen entscheiden, welche Haelfte gemeint ist —
 # und traegt genau dort den Fehlalarm ein, den W3 der Mission beschreibt.
 _TRANSPVORRAT = ("OPAQUE", "TRANSPARENT")
+
+
+# Welche Kindkomponente die Grammatik einer Komponente fuehrt, und in welchem
+# Abschnitt diese Grammatik steht. Ausgeschnitten aus rfc5545.txt (HTTP 200,
+# 345537 Bytes, abgerufen am 2026-09-05), Zeilen 2867, 2903, 3090, 3202, 3296,
+# 3463 und 3968.
+#
+# DER ABSCHNITT IST DER DER UMGEBENDEN KOMPONENTE, nicht der des Kindes. Ein
+# VALARM in einem VJOURNAL verstoesst gegen journalc (§3.6.3) und nicht gegen
+# alarmc (§3.6.6): alarmc sagt, wie ein VALARM aussieht, journalc sagt, dass
+# hier keines stehen darf. Die falsche Wahl wuerde eine Meldung mit einer
+# falschen Ursache erzeugen — derselbe Fehler, den der Docstring von P25 fuer
+# §3.8.1.11 beschreibt.
+#
+# VCALENDAR STEHT MIT IN DER TABELLE. Seine Kindliste ist die Produktion
+# 'component' (Zeile 2867), und die steht im Abschnitt 3.6 selbst, nicht in
+# einem der sechs Unterabschnitte: die Ueberschrift "3.6.  Calendar
+# Components" beginnt in Zeile 2825, "3.6.1." erst in Zeile 2893.
+#
+# STANDARD UND DAYLIGHT fuehren keine Kindkomponente; ihre Produktionen
+# standardc und daylightc stehen innerhalb von §3.6.5 und tragen deshalb
+# dessen Nummer.
+_KINDKOMPONENTEN = {
+    "VCALENDAR": (("VEVENT", "VTODO", "VJOURNAL", "VFREEBUSY", "VTIMEZONE"),
+                  "3.6"),
+    "VEVENT":    (("VALARM",), "3.6.1"),
+    "VTODO":     (("VALARM",), "3.6.2"),
+    "VJOURNAL":  ((), "3.6.3"),
+    "VFREEBUSY": ((), "3.6.4"),
+    "VTIMEZONE": (("STANDARD", "DAYLIGHT"), "3.6.5"),
+    "STANDARD":  ((), "3.6.5"),
+    "DAYLIGHT":  ((), "3.6.5"),
+    "VALARM":    ((), "3.6.6"),
+}
 _PARAMETERVORRAT = {
     "RSVP":  (("TRUE", "FALSE"), "3.2.17"),
     "RANGE": (("THISANDFUTURE",), "3.2.13"),
@@ -2513,6 +2555,86 @@ def pruefe_p26(logische, funde):
                     abschnitt))
 
 
+def pruefe_p27(komponenten, funde):
+    """§3.6 bis §3.6.6: eine Komponente steht nur dort, wo die Grammatik der
+    umgebenden Komponente sie fuehrt.
+
+    DER NORMTEXT, an seinen Fundstellen. rfc5545.txt, abgerufen am 2026-09-05
+    (HTTP 200, 345537 Bytes) und in
+    state/missionen/2026-09-05-die-verbotene-verschachtelung.md zitiert:
+
+        Zeile 2867: component = 1*(eventc / todoc / journalc / freebusyc /
+                                timezonec / iana-comp / x-comp)
+        Zeile 2903: eventc    = "BEGIN" ":" "VEVENT" CRLF
+                                eventprop *alarmc "END" ":" "VEVENT" CRLF
+        Zeile 3090: todoc     = ... todoprop *alarmc ...
+        Zeile 3202: journalc  = ... jourprop ...            (keine Kindkomp.)
+        Zeile 3296: freebusyc = ... fbprop ...              (keine Kindkomp.)
+        Zeile 3463: timezonec = ... 1*(standardc / daylightc) ...
+        Zeile 3968: alarmc    = "BEGIN" ":" "VALARM" CRLF
+                                (audioprop / dispprop / emailprop)
+                                "END" ":" "VALARM" CRLF    (keine Kindkomp.)
+
+    WARUM EINE ABNF-PRODUKTION HIER EIN VERBOT IST — das ist Widerlegung W2
+    der Mission und wird nicht uebergangen. Keine dieser Produktionen enthaelt
+    einen MUST-NOT-Satz ueber Verschachtelung. Der Zwang kommt aus der Form:
+    eventc zaehlt zwischen BEGIN und END genau 'eventprop *alarmc' auf. Eine
+    Komponente, die dort steht und nicht alarmc ist, laesst sich aus der
+    Grammatik nicht ableiten. Das ist derselbe Schluss wie bei P25 und
+    demselben Einwand ausgesetzt; er steht offen in der Missionsdatei.
+
+    WO DIESE PRUEFUNG SCHWEIGT, UND WARUM — hier liegt der Fehlalarm (W3).
+
+    1. X-KOMPONENTEN UND IANA-KOMPONENTEN. Die Zeilen 2870-2876 definieren
+       iana-comp und x-comp als '1*contentline'; eine Verschachtelung ist
+       darin nicht ausgeschlossen. Die Klage collective/icalendar#1461 zieht
+       dieselbe Grenze selbst: "X-components and IANA-components are
+       unrestricted, so any validation here would need to be type-aware."
+       Deshalb schweigt die Pruefung in BEIDE Richtungen: Ist die UMGEBENDE
+       Komponente keine der neun bekannten, wird gar nicht geprueft; ist das
+       KIND keine der neun, wird nicht gemeldet.
+    2. EINE X-KOMPONENTE INNERHALB EINES VEVENT ist damit stumm — und das ist
+       eine Entscheidung, keine Luecke aus Versehen. eventc fuehrt sie nicht,
+       die Klage nennt x-comp aber "unrestricted". Diesen Widerspruch loese
+       ich nicht auf; er steht am 2026-09-05 in state/offen.md. Die stumme
+       Seite ist die vorsichtige.
+    3. UNBEKANNTE NAMEN insgesamt. Ein BEGIN:VEVENTS bleibt stumm — es ist
+       nach dieser Lesart eine iana-comp, und diese Pruefung erfindet keine
+       Namensliste, die der Normtext nicht hat.
+
+    WELCHE ZEILE GEMELDET WIRD: die BEGIN-Zeile des Kindes. Dort steht der
+    Verstoss, und dort kann man ihn wegnehmen.
+
+    Bei mehrfacher Schachtelung entsteht je unzulaessiger Ebene eine Meldung.
+    Ein VEVENT in einem VEVENT in einem VEVENT ergibt zwei — beide sind wahr,
+    und keine ist die Folge der anderen: es sind zwei getrennte Stellen.
+    """
+    for komp in komponenten:
+        eltern = komp.elternteil
+        if eltern is None:
+            continue
+        eintrag = _KINDKOMPONENTEN.get(eltern.name)
+        if eintrag is None:
+            # x-comp / iana-comp als Huelle: unbeschraenkt, siehe Punkt 1.
+            continue
+        erlaubt, abschnitt = eintrag
+        if komp.name not in _KINDKOMPONENTEN:
+            # x-comp / iana-comp als Kind: ebenso.
+            continue
+        if komp.name in erlaubt:
+            continue
+        if erlaubt:
+            schluss = ("RFC 5545 führt in %s nur %s"
+                       % (eltern.name, " und ".join(erlaubt)))
+        else:
+            schluss = "RFC 5545 führt in %s keine Komponente" % eltern.name
+        funde.append(Fund(
+            FEHLER, komp.zeile, "P27",
+            "die Komponente %s steht innerhalb der Komponente %s; %s"
+            % (_zeige_wort(komp.name), _zeige_wort(eltern.name), schluss),
+            abschnitt))
+
+
 _BOM_UTF8 = b"\xef\xbb\xbf"
 
 
@@ -2588,7 +2710,7 @@ def pruefe_p20(rohdaten, funde):
 
 
 def untersuche(rohdaten):
-    """Alle sechsundzwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle siebenundzwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     rohdaten, hatte_bom = pruefe_p20(rohdaten, funde)
     zeilen = zerlege_physisch(rohdaten)
@@ -2633,6 +2755,7 @@ def untersuche(rohdaten):
     pruefe_p24(logische, funde)
     pruefe_p25(komponenten, funde)
     pruefe_p26(logische, funde)
+    pruefe_p27(komponenten, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))

@@ -1,0 +1,16 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//icsdoktor//P27//DE
+BEGIN:X-WRAPPER
+X-NAME:x-comp ist nach Zeile 2870 bis 2876 unbeschraenkt
+BEGIN:X-INNEN
+X-NAME:und bleibt deshalb stumm
+END:X-INNEN
+END:X-WRAPPER
+BEGIN:VEVENT
+UID:p27-g@example.org
+DTSTAMP:20260905T100000Z
+DTSTART:20260906T090000Z
+SUMMARY:die X-Komponenten daneben aendern daran nichts
+END:VEVENT
+END:VCALENDAR
