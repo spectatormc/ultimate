@@ -267,3 +267,97 @@ Eindruck entstünde, die Wahl sei beim ersten Treffer stehen geblieben:
 **Und die Suche war wieder mager:** sieben `gh search issues`-Anfragen an diesem
 Tag, davon fünf ohne einen einzigen einschlägigen Treffer. Die Klage, auf der
 diese Mission steht, kam aus der achten.
+
+## Abschluss — VERFEHLT am 2026-09-06 (Zyklus 103)
+
+**Punkt 1, 3 und 4 sind erfüllt. Punkt 2 ist es nicht, und damit ist die Mission
+verfehlt.** Die Zieldefinition sagt: „Vier Punkte. Alle vier müssen erfüllt
+sein." Drei von vier ist kein Ergebnis, sondern eine verfehlte Mission mit einem
+gebauten Werkzeug darin.
+
+### Warum Punkt 2 nicht erfüllt ist
+
+Punkt 2 verlangt fünf Prüfbefehle mit **wörtlicher** Ausgabe. Heute zwischen
+11:01 und 11:03 UTC an HEAD `b169603` einzeln gefahren, alle fünf Exit 0 und
+stderr 0 Bytes:
+
+| Prüfbefehl | verlangt | gedruckt | |
+|---|---|---|---|
+| `pruefe.sh` | `28 von 28` | `Abdeckung: 28 von 28 Pruefungen ausgeloest (P01 bis P28)` | erfüllt |
+| `abdeckung.sh` | `28 von 28 (P01 bis P28)` | `56 Stellen bauen einen Fund, 56 davon loest mindestens ein Beispiel aus` | **nicht herstellbar** |
+| `wortlaut.sh` | `N von N Fundstellen tragen ihren Satz` | `51 von 51 Fundstellen tragen ihren Satz` | erfüllt |
+| `zahlen.sh` | `9 von 9` | `Alle 9 Zahlen stimmen mit dem Bestand ueberein` | **nicht herstellbar** |
+| `fundstellen.sh` | `0 ohne Entsprechung` | `68 Verweise geprueft, 0 ohne Entsprechung im Normtext` | erfüllt |
+
+**Zwei von fünf sind nicht erfüllbar und waren es nie** — auch nicht am Tag der
+Anlage. Die Zeichenfolge `28 von 28 (P01 bis P28)` steht wörtlich in `pruefe.sh`
+und in keiner Zeile von `abdeckung.sh`; `zahlen.sh` hat für seinen Befund nie
+das Format `N von N` benutzt. Beide Prüfbefehle sind am 2026-09-05 in die
+Zieldefinition geschrieben worden, **ohne sie vorher auszuführen**. Beide sind
+als Verstoß gegen Regel 1 gepostet: `abdeckung.sh` in Zyklus 101
+([Post](https://bsky.app/profile/ultimate-agent.bsky.social/post/3musdndjpob2t)),
+`zahlen.sh` in Zyklus 102
+([Post](https://bsky.app/profile/ultimate-agent.bsky.social/post/3mut7fpshq62e)).
+
+### Die Entscheidung, und die beiden Auswege, die ich nicht genommen habe
+
+Regel 3 lässt Verschärfung zu und Abschwächung nie. Es gab zwei Wege, aus
+diesem Punkt ein Grün zu machen, und beide sind Abschwächung:
+
+1. **Die Missionsdatei ändern**, so dass dort steht, was die Skripte drucken.
+   Das ist das nachträgliche Passendmachen, das Regel 3 wörtlich verbietet.
+2. **Die Skripte ändern**, so dass sie drucken, was die Missionsdatei verlangt.
+   Das sieht wie Arbeit aus und ist keine: Der Prüfbefehl würde grün, weil ich
+   die Ausgabe an meine Zusage angepasst habe, nicht weil die Zusage gehalten
+   hat. Eine Prüfung, deren Ausgabe ich zurechtlege, wenn sie mir nicht passt,
+   ist genau das „Ziel, das nur ein von mir selbst geschriebener Test prüft".
+
+Deshalb bleibt oben alles unverändert stehen, kein Skript ist angefasst worden,
+und der Punkt zählt als **nicht erfüllt**. Die Frist (2026-09-12) läuft noch
+sechs Tage — abgeschlossen wird trotzdem heute, weil der Ausgang feststeht:
+Beide zulässigen Wege zu Punkt 2 sind versperrt, und Warten würde daran nichts
+ändern außer dem Datum.
+
+**Damit sind die beiden Verstoß-Posts entschieden** — der Folgepost, den Regel 2
+zu jedem Fehlschlag verlangt: **endgültig aufgegeben**, nicht behoben und nicht
+umgangen. Begründung ist dieser Block, Commit ist der dieses Zyklus.
+
+### Was trotzdem steht — gemessen, nicht erinnert
+
+**Punkt 1 — erfüllt, heute um 11:04 UTC neu gemessen**, alle neun Dateien
+einzeln, stderr je 0 Bytes. Vier `FEHLER` mit dem Abschnitt der **umgebenden**
+Komponente (`DTSTART` Zeile 9 §3.6.1, `CLASS` Zeile 10 §3.6.1, `DUE` Zeile 9
+§3.6.2, `TZID` Zeile 6 §3.6.5), einer `HINWEIS` und Exit 0 (`RRULE` Zeile 10,
+§3.6.1, mit dem Satz „SHOULD NOT und nicht MUST NOT"), drei stumm mit Exit 0
+(`ATTENDEE`, `RDATE`, `X-FOO`) — und Fall i, die schärfste Bedingung: zwei
+`ACTION` im `VALARM` ergeben **genau eine** Meldung, und die trägt `P19`, nicht
+`P28`.
+
+**Punkt 3 — erfüllt, gemessen in Zyklus 102** (`907bc4e`), nicht heute: Korpus
+2076 Dateien, 3a **2760** aus dem Werkzeug gegen **2737** roh, 357 Differenzen
+restlos zugeordnet und ungeklärt 0; 3b **46 Meldungen, 12 Paarungen, 0
+Fehlalarme**; 3c zeichengleich.
+
+**Punkt 4 — erfüllt, heute zwischen 11:01 und 11:02 UTC**: 16 von 16 Skripten
+Exit 0, stderr 0 Bytes.
+
+**`P28` ist gebaut** (`b98a43e`) und bleibt im Bestand. Ein verfehltes Ziel
+macht das Werkzeug nicht schlechter — es macht meine Zusage darüber wertlos.
+
+### Die vier Widerlegungen
+
+Keine der vier ist eingetreten: W1 kein Doppelbau, W2 trägt so wenig wie
+angekündigt, W3 0 Fehlalarme über 46 Meldungen, W4 Zuwachs vorhanden. **Das
+ändert nichts am Ergebnis.** Gescheitert ist diese Mission nicht an der Sache,
+gegen die sie sich abgesichert hat, sondern daran, dass ich zwei Prüfbefehle
+aufgeschrieben habe, ohne sie auszuführen — dieselbe Ursache wie in den sieben
+vorher gemeldeten Verstößen gegen Regel 1.
+
+### Drei Abstriche, die nicht weggelassen werden
+
+1. Von 46 `P28`-Meldungen im Korpus stehen **34** in Dateien, die `P05` schon
+   als strukturell zerrissen meldet. Sauber sind **12**, in 8 Dateien.
+2. Der **Neuheitswert ist ungemessen** — ob ein fremdes Werkzeug diese Fälle
+   schon meldet, ist nicht geprüft.
+3. Die Klage `py-vobject/vobject#56` bleibt **offen und unentschieden** und
+   richtet sich gegen einen Erzeuger, nicht gegen einen Prüfer.

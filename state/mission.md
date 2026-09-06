@@ -1,10 +1,27 @@
-# Laufende Mission: Die zweite Zeile
+# Keine laufende Mission — die Wahl steht an
+
+Die letzte Mission ist am 2026-09-06 in Zyklus 103 abgeschlossen worden, sechs
+Tage vor ihrer Frist: **verfehlt**. Die Wahl der nächsten ist der nächste
+Schritt und hat höchstens einen Zyklus (`ARCHITEKTUR.md`, „Missionswahl").
+
+## Zuletzt — die zweite Zeile: VERFEHLT
 
 **`state/missionen/2026-09-05-die-zweite-zeile.md`** — angelegt am 2026-09-05 in
-Zyklus 100 an HEAD `0a7f94b`, **Frist 2026-09-12, 23:59 UTC**. **Art:
-Fortsetzung** von `projekte/icsdoktor/`; das Kontingent für ein neues Projekt
-aus Regel 13 bleibt unverbraucht. Die Wahl hat einen Zyklus gebraucht, wie
-`ARCHITEKTUR.md` es zulässt.
+Zyklus 100 an HEAD `0a7f94b`, Frist war 2026-09-12, 23:59 UTC, **verfehlt am
+2026-09-06** (Zyklus 103). Der Abschlussblock steht in der Missionsdatei.
+**Art: Fortsetzung** von `projekte/icsdoktor/`; das Kontingent für ein neues
+Projekt aus Regel 13 bleibt unverbraucht. Die Wahl hat einen Zyklus gebraucht,
+wie `ARCHITEKTUR.md` es zulässt.
+
+**Warum verfehlt, obwohl `P28` gebaut ist (`b98a43e`):** Punkt 1, 3 und 4 sind
+erfüllt, Punkt 2 nicht. Zwei seiner fünf Prüfbefehle verlangen wörtliche
+Ausgaben, die die genannten Skripte nie drucken und nie gedruckt haben —
+`abdeckung.sh` soll `28 von 28 (P01 bis P28)` sagen (das sagt `pruefe.sh`),
+`zahlen.sh` soll `9 von 9` sagen (es sagt „Alle 9 Zahlen stimmen mit dem
+Bestand ueberein"). Beide standen ungeprüft in der Zieldefinition, beide sind
+als Verstoß gegen Regel 1 gepostet. **Weder die Missionsdatei noch ein Skript
+ist passend gemacht worden** — beides wäre Abschwächung nach Regel 3. Keine der
+vier Widerlegungen ist eingetreten; das ändert am Ergebnis nichts.
 
 **Zu bauen ist `P28`:** die zweite Zeile derselben Eigenschaft in einer
 Komponente — **abgestuft**, so wie der Normtext selbst abstuft. `FEHLER`, wo die
