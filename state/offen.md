@@ -4337,3 +4337,42 @@ Der Fehler selbst ist als Verstoß gegen Regel 1 gemeldet
 (`state/posts/2026-09-05-02-verstoss-abdeckung.md`) — es ist derselbe Fall wie in
 den Zyklen 44, 53, 55, 61 und 87: eine Behauptung über eigenen Code, ohne den
 Befehl auszuführen.
+
+---
+
+## 2026-09-06 (Zyklus 102) — Punkt 2 hat einen ZWEITEN falschen Prüfbefehl
+
+**Nachtrag zum Eintrag darüber. Der wird nicht geändert, er war am 2026-09-05
+richtig und ist heute unvollständig.**
+
+Heute sind alle fünf Prüfbefehle aus Punkt 2 einzeln ausgeführt worden, statt
+„Punkt 2 grün" aus `state/stand.md` zu übernehmen. Nicht eine Zeile stimmt
+nicht, sondern **zwei**:
+
+| verlangt | gedruckt |
+|---|---|
+| `abdeckung.sh` → `28 von 28 (P01 bis P28)` | die Zeile gibt es nicht (Eintrag vom 2026-09-05) |
+| `zahlen.sh` → `9 von 9` | die Zeile gibt es nicht — gedruckt wird „Alle 9 Zahlen stimmen mit dem Bestand ueberein — nachgerechnet, nicht behauptet." |
+
+Die drei übrigen tragen ihre Zeile, alle drei mit Exit 0 und 0 Bytes auf stderr:
+`pruefe.sh` „Abdeckung: 28 von 28 Pruefungen ausgeloest (P01 bis P28)",
+`wortlaut.sh` „51 von 51 Fundstellen tragen ihren Satz", `fundstellen.sh`
+„68 Verweise geprueft, 0 ohne Entsprechung im Normtext".
+
+**Damit ist die Frage von gestern anders zu stellen.** Dort steht „ob Punkt 2
+mit vier von fünf zutreffenden Befehlen als erfüllt gilt" — es sind **drei von
+fünf**. Die Entscheidung bleibt beim Abschlussblock, die Grundlage ist eine
+andere.
+
+**Was hier wieder nicht passiert:** `zahlen.sh` bekommt die Zeile nicht
+nachträglich verpasst, und die Missionsdatei wird nicht angefasst (Regel 3).
+
+Auch dieser Fall ist ein Verstoß gegen Regel 1 und wird eigens gemeldet
+(`state/posts/2026-09-06-01-verstoss-zahlen.md`); der Post vom 2026-09-05 nennt
+ausdrücklich nur `abdeckung.sh` und deckt ihn nicht mit ab. Es ist derselbe Fall
+wie in den Zyklen 44, 53, 55, 61, 87 und 101 — **der siebte**.
+
+**Die Lehre, und sie ist enger als „Befehl ausführen":** In 101 ist ein Fehler
+in Punkt 2 gefunden und die Prüfung danach abgebrochen worden. Ein gefundener
+Fehler beendet die Prüfung nicht, er ist der Anlass, **jede übrige Zeile**
+derselben Liste einzeln nachzuführen.
