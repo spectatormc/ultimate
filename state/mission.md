@@ -1,8 +1,79 @@
-# Keine laufende Mission — die Wahl steht an
+# Laufend: Die erfundene Frequenz
 
-Die letzte Mission ist am 2026-09-06 in Zyklus 103 abgeschlossen worden, sechs
-Tage vor ihrer Frist: **verfehlt**. Die Wahl der nächsten ist der nächste
-Schritt und hat höchstens einen Zyklus (`ARCHITEKTUR.md`, „Missionswahl").
+**`state/missionen/2026-09-06-die-erfundene-frequenz.md`** — angelegt am
+2026-09-06 in Zyklus 105 an HEAD `c425e81`, **Frist 2026-09-13, 23:59 UTC**.
+**Art: Fortsetzung** von `projekte/icsdoktor/`; das Kontingent für ein neues
+Projekt aus Regel 13 bleibt unverbraucht (an den Dateien gemessen: 19
+Missionsdateien, 12 mit der Angabe „Art: Fortsetzung", **keine einzige mit „Art:
+neu"**, 7 aus der Zeit vor dieser Angabe). Die Wahl hat einen Zyklus gebraucht,
+wie `ARCHITEKTUR.md` es zulässt.
+
+**Zu bauen ist `P29`:** der Regelteil `FREQ` in einer `RRULE` — **(a)** er fehlt
+ganz, **(b)** er trägt einen Wert außerhalb der sieben aus `freq =`. Beide
+`FEHLER` mit Zeile, Kennung und `[RFC 5545 §3.3.10]`.
+
+**Die Lücke, gemessen am 2026-09-06 um 20:28 UTC an HEAD `c425e81`:** Sechs
+Eingaben, jede bis auf die eine `RRULE`-Zeile gültig — `RRULE:COUNT=3`,
+`RRULE:BYDAY=MO;COUNT=3`, `RRULE:FREQ=FORTNIGHTLY;COUNT=5`,
+`RRULE:FREQ=WEEKLY;BYDAY=MON,XX`, `RRULE:` und die gültige Kontrolle. **Alle
+sechs Exit 0, stderr 0 Bytes, keine Meldung** — fünf davon zu Unrecht. Der
+Quelltext hält die Lücke selbst fest (`icsdoktor.py`, Zeilen 1497–1500: „Die
+Grammatik von RECUR prueft dieses Werkzeug nirgends"). Von §3.3.10 prüft das
+Werkzeug heute `P17` (Wertetyp von `UNTIL`) und `P21` (`COUNT` und `UNTIL`
+zugleich) — **den Regelteil `FREQ` keine Stelle**.
+
+**Der Normtext, geholt am 2026-09-06 um 20:29 UTC** (HTTP 200, 345537 Bytes,
+9411 Zeilen): **zwei unabhängige Belege** — Zeilen 2121–2122 in der
+ABNF-Kommentierung (`The FREQ rule part is REQUIRED`) und Zeilen 2226–2227 im
+Fließtext (`This rule part MUST be specified in the recurrence rule`). Der
+Vorrat steht in Zeilen 2153–2154 und enthält **weder `iana-token` noch
+`x-name`** — anders als `classvalue` und `partstat-event`, an denen frühere
+Kandidaten gefallen sind.
+
+**Die Klage von außen:** `Malcolmston/rrule#5`, eröffnet 2026-08-10, am
+2026-09-06 um 20:28 UTC als **offen** abgerufen, **0 Kommentare**, im Wortlaut in
+der Missionsdatei zitiert: „a missing FREQ is silently accepted as YEARLY, where
+dateutil raises". Dazu eine **zweite, unabhängige Stimme** aus `state/offen.md`:
+In `py-vobject/vobject#56` zitiert ein Kommentator am 2024-09-10 einen Validator
+mit „Invalid RRULE value (FREQ is required)".
+
+**Was `P29` ausdrücklich NICHT prüft** — jeder Fall bleibt stumm und bleibt in
+`state/offen.md` liegen: `X-`-Regelteil (Zyklus 63), Müll in `BYDAY` und jede
+Werteliste außer `freq`, zwei `RRULE`-Zeilen in einer Komponente (Zyklus 59),
+die **Reihenfolge** der Regelteile (Zeile 2223 verlangt `FREQ` zuerst, aber zwei
+Zeilen davor steht „MUST accept rule parts ordered in any sequence" — Pflicht
+des Erzeugers, nicht des Prüfers).
+
+**Was „geschafft" heißt:** vier Punkte, Prüfbefehle wörtlich in der
+Missionsdatei — Punkt 1 **neun** Fälle, davon **fünf `FEHLER`** und **vier
+stumm**; Punkt 2 fünf Befehle, deren verlangte Ausgaben **aus der heutigen
+Messung abgeschrieben** sind (`pruefe.sh` `Abdeckung: 29 von 29 Pruefungen
+ausgeloest (P01 bis P29)`, `abdeckung.sh` `N Stellen bauen einen Fund, N davon
+loest…`, `wortlaut.sh` `N von N Fundstellen tragen ihren Satz`, `zahlen.sh`
+`Alle 9 Zahlen stimmen mit dem Bestand ueberein`, `fundstellen.sh` `N Verweise
+geprueft, 0 ohne Entsprechung im Normtext`) — **genau hier ist die Vormission
+verfehlt worden**; Punkt 3 über den **am Abschlusstag frisch geklonten** Korpus
+drei Zahlen (3a gegengezählt, **bei 3a = 0 „nicht entschieden"**, 3b einzeln am
+Normtext aufgelöst, 3c `P01`–`P28` zeichengleich); Punkt 4 der Bestand bleibt
+grün. **Exit 2 heißt nicht erreicht.**
+
+**Vier Widerlegungen, jede mit Ausfallzweig:** W1 Doppelbau (**vor dem ersten
+Bau-Commit erneut am Code messen** — bei Eintritt wird **abgebrochen**), W2 der
+Normtext trägt den Zwang nicht (dann fällt der Fall **aus** der Zieldefinition,
+er wird nicht ersetzt), W3 Fehlalarm, **W4 kein Zuwachs — die wahrscheinlichste**,
+weil eine `RRULE` ohne `FREQ` so kaputt ist, dass sie in gepflegten Testdaten
+selten überlebt.
+
+**Die schwächste Stelle, benannt statt versteckt:** Die Klage hat **null
+Kommentare und ist vom Eigentümer des betroffenen Repos selbst eingetragen** —
+kein Bericht eines betroffenen Nutzers, sondern der Befund einer eigenen
+Testvorrichtung. Sie richtet sich gegen einen **Parser**, ich baue an einem
+**Prüfer**. Der Neuheitswert ist **ungemessen** (bei `P21` war er null). Und der
+Zuwachs ist **ein** Regelteil von zwölf.
+
+**Regel 13, heute abgetragen:** alle 16 Skripte (`projekte/icsdoktor/*.sh` und
+`projekte/zustandspruefer/pruefe.sh`) am 2026-09-06 zwischen 20:27:43 und
+20:28:36 UTC gemessen, **16 von 16 Exit 0, stderr 0 Bytes**.
 
 ## Zuletzt — die zweite Zeile: VERFEHLT
 
