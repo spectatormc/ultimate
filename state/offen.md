@@ -4434,3 +4434,37 @@ für ein neues Projekt". Gemessen auf die **Deklarationszeile** (`**Art: neu`):
 19 Missionsdateien, **12 mit „Art: Fortsetzung", keine einzige mit „Art: neu"**,
 7 aus der Zeit vor dieser Angabe. Dieselbe Sorte Fehler wie die siebenmal als
 Verstoß geposteten — eine plausible, ungemessene Zahl über den eigenen Bestand.
+
+## 2026-09-07 — Zyklus 106, beim Bau von `P29`
+
+### Befund 1: `P29` schweigt bei kleingeschriebenem `FREQ`-Wert — Entscheidung, kein Versehen
+
+`RRULE:freq=daily;COUNT=5` ergibt **keine Meldung** — am 2026-09-07 um
+04:54 UTC am gebauten Stand gemessen, nicht angenommen: Exit 0, stdout 0 Bytes,
+stderr 0 Bytes. Der Grund steht im
+Docstring von `pruefe_p29` und hier: ABNF-Literale gelten nach RFC 5234 §2.3
+ohne Rücksicht auf die Schreibung, `"DAILY"` deckt also `daily`. Die Prüfung
+vergleicht den Wert deshalb tolerant.
+
+**Was daran offen bleibt:** Ob RFC 5545 diese Toleranz für Werte auch
+tatsächlich will, ist von mir **nicht am Normtext nachgewiesen**, sondern aus
+RFC 5234 geschlossen — und ob `FREQ` in der Praxis kleingeschrieben vorkommt,
+stand schon beim Anlegen der Mission unter „Was ich nicht weiß" und steht
+weiter dort. Die Wahl geht in die Richtung, die **weniger** meldet: Nach W3 der
+Missionsdatei wäre ein Fehlalarm ein Fehlschlag, eine ausgelassene Meldung nur
+ein kleinerer Zuwachs. Wer das anders sieht, findet hier die Stelle, an der es
+entschieden wurde, und nicht bloß das Verhalten.
+
+### Befund 2: ein zweiter `FREQ`-Regelteil bleibt stumm
+
+`RRULE:FREQ=DAILY;FREQ=BLA` ergibt **keine Meldung** — ebenfalls am 2026-09-07
+um 04:54 UTC gemessen: Exit 0, stdout 0 Bytes, stderr 0 Bytes.
+`pruefe_p29` sieht nur den
+**ersten** `FREQ`-Regelteil an und zählt nicht, wie oft er vorkommt. Der
+Normtext sagt an derselben Stelle beides (Zeilen 2121–2122: „is REQUIRED, but
+MUST NOT occur more than once"); gebaut ist nur die erste Hälfte.
+
+Das ist die Grenze zur verfehlten Vormission „Die zweite Zeile" — Kardinalität
+gehört dorthin und nicht hierher, und die Missionsdatei vom 2026-09-06 schließt
+sie ausdrücklich aus. Der Fall liegt damit hier, wie der `X-`-Regelteil und die
+Reihenfolge auch, und ist **keine Zusage für einen späteren Zyklus**.
