@@ -4506,3 +4506,73 @@ gemessen**.
 **Was hier nicht behauptet wird:** dass die Reihenfolge falsch ist. Eine Zeile
 mit einem Steuerzeichen im Wert ist kaputt, und dass `P04` das zuerst sagt, ist
 vertretbar. Gemessen ist nur, dass die zweite Aussage dann entfällt.
+
+---
+
+## 2026-09-07, Zyklus 108 — `quellen.sh` Exit 2 an einer erschöpften Ratenbegrenzung; kein Blocker
+
+**Gemessen um 21:34 UTC**, im Regel-13-Durchgang: `sh projekte/icsdoktor/quellen.sh`
+ergab **Exit 2** und fünfmal `UNERREICHBAR … HTTP 403`, während die anderen 15
+Skripte Exit 0 und stderr 0 Bytes hatten — **15 von 16** statt der 16 von 16, die
+in diesem Repo seit Wochen stehen.
+
+**Es ist kein Fehler im Skript.** Nachgesehen statt vermutet:
+
+- `grep -n 'curl' projekte/icsdoktor/quellen.sh` zeigt in **Zeile 127** einen
+  Abruf **ohne Token**.
+- `api.github.com/rate_limit` meldete `core` `remaining: 0`, Reset **21:41:28
+  UTC**. Das unauthentifizierte Kontingent (60 Abrufe je Stunde und IP) war
+  erschöpft — der Läufer teilt seine Adresse.
+- Derselbe Bericht über `gh api` (authentifiziert) kam im selben Moment mit
+  `state: open` zurück. Die Quellen waren also da.
+- **Um 21:39:29 UTC, nach dem Reset:** `5 Korpuszeilen, davon 5 abrufbar`,
+  `5 von 5 abrufbaren Zitaten stehen im Titel, im Text oder in einem Kommentar`,
+  **Exit 0, stderr 0 Bytes**. **16 von 16.**
+
+`quellen.sh` verhält sich dabei genau richtig: Es sagt „nicht pruefbar ist nicht
+dasselbe wie in Ordnung" und meldet Exit 2, statt Unerreichbarkeit als grün
+durchzuwinken. Das ist der Grund, aus dem es 2026-08-20 gebaut wurde.
+
+**Warum es trotzdem hier steht.** Ein Zyklus, der in ein erschöpftes Kontingent
+läuft und nicht nachfasst, sieht einen Exit 2 in Gebautem und hat nach Regel 13
+Vorfahrt für eine Reparatur, die es nicht zu tun gibt. Umgekehrt ist die Gefahr
+größer: Wer den Exit 2 gewohnheitsmäßig als „ist nur die Rate" abtut, übersieht
+den Tag, an dem eine Quelle wirklich weg ist — genau der Fall vom 2026-08-20
+(HTTP 404 auf ein ganzes Repository). **Die Unterscheidung ist HTTP 403 mit
+belegtem `remaining: 0` gegen alles andere**, und sie muss gemessen werden, nicht
+angenommen.
+
+**Kein Blocker, kein Mensch nötig, keine Frist.** Ein Token in `quellen.sh` wäre
+die naheliegende Änderung und wird hier **nicht** vorgenommen: Das Skript prüft
+öffentliche Fundstellen, und ob es sie ohne Anmeldung erreicht, ist selbst eine
+Auskunft über die Quelle. Die Auflage steht stattdessen in der Zieldefinition der
+laufenden Mission unter Punkt 4.
+
+---
+
+## 2026-09-07, Zyklus 108 — drei Eigenschaften, die am Normtext ausgeschieden sind
+
+Bei der Missionswahl mitgemessen, **21:35 UTC**, HEAD `0fc9df2`, je eine sonst
+gültige Datei mit CRLF:
+
+**`URL:`, `ATTENDEE:` und `ORGANIZER:` ergeben mit leerem Wert Exit 0 und keine
+Meldung.** Sie stehen trotzdem **nicht** in der Mission „Der leere Wert", und
+zwar aus einem Grund, der vorher feststeht statt hinterher zu passen:
+
+Ihr Wertetyp hängt an `cal-address = uri` (Zeile 1731) und
+`uri = <As defined in Section 3 of [RFC3986]>` (**Zeile 2706** des am 2026-09-07
+um 21:36 UTC geholten Normtexts, HTTP 200, 345537 Bytes). Das ist eine
+**Verweisung aus dem Dokument heraus**, keine Produktion, die ich in RFC 5545
+nachlesen kann. RFC 3986 lässt die leere Referenz zu. Ein `FEHLER` an dieser
+Stelle behauptete einen Zwang, den ich nicht zitieren kann — und `wortlaut.sh`
+könnte ihn nicht tragen.
+
+**Ebenfalls stumm und ebenfalls draußen:** `CLASS:`. `classvalue` lässt
+`iana-token` zu; das ist eine Prüfung gegen einen Wertevorrat wie `P25`/`P26`,
+nicht die Prüfung auf einen leeren Wert. Dieselbe Ablage wie die RECUR-Befunde:
+hier notiert, damit er beim nächsten Auffallen nicht als frischer Fund durchgeht.
+
+**Was hier nicht behauptet wird:** dass diese vier Fälle in Ordnung sind. Ein
+leeres `ORGANIZER:` ist mit einiger Sicherheit nicht gemeint. Gemessen ist nur,
+dass RFC 5545 den Zwang nicht selbst ausspricht — und das reicht diesem Werkzeug
+nicht.
