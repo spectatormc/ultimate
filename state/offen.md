@@ -4468,3 +4468,41 @@ Das ist die Grenze zur verfehlten Vormission „Die zweite Zeile" — Kardinalit
 gehört dorthin und nicht hierher, und die Missionsdatei vom 2026-09-06 schließt
 sie ausdrücklich aus. Der Fall liegt damit hier, wie der `X-`-Regelteil und die
 Reihenfolge auch, und ist **keine Zusage für einen späteren Zyklus**.
+
+## 2026-09-07 — Zyklus 107: `P29` reicht nur so weit wie `P04`, gemessen an fünf Zeilen
+
+Kein Blocker, ein Befund. Er ist beim Abschluss der Mission „Die erfundene
+Frequenz" in Punkt 3a angefallen und steht auch im Abschlussblock der
+Missionsdatei; hier liegt er, weil er über diese Mission hinausreicht und
+**keine Zusage für einen späteren Zyklus** ist.
+
+**Gemessen** am 2026-09-07 gegen 12:40 UTC über 2076 frisch geklonte fremde
+`.ics`-Dateien: **7849** `RRULE`-Kandidaten aus dem Werkzeug heraus, **7854**
+unabhängig über die Bytefolge. Die Differenz sind fünf Zeilen, alle in
+absichtlich zerstörten libical-Testdaten:
+
+| Datei | Zeile | Meldung, die stattdessen kommt |
+|---|---|---|
+| `libical/test-data/issue252.ics` | 28 | `FEHLER P04 Wert enthält das Steuerzeichen 0x14` |
+| `libical/test-data/issue253.ics` | 31 | `FEHLER P04 … 0x17` |
+| `libical/test-data/issue253.ics` | 54 | `FEHLER P04 … 0x04` |
+| `libical/test-data/malloc.ics` | 138 | `FEHLER P04 … 0x00` |
+| `libical/test-data/malloc.ics` | 273 | `FEHLER P04 … 0x00` |
+
+**Die Ursache ist eine einzige und sie ist keine Lücke in `P29`:** `lz.name`
+wird erst gesetzt, wenn `P04` die logische Zeile vollständig zerlegt hat
+(`icsdoktor.py`, Zeile 537). Scheitert `P04`, bleibt `lz.name` auf `None`, und
+jede Prüfung, die über `lz.name` filtert, sieht die Zeile nie. Die Zeile bleibt
+gemeldet — unter `P04` und mit derselben Zeilennummer.
+
+**Warum das trotzdem notiert gehört:** `issue252.ics` Zeile 28 trägt
+`RRULE:FREQ=SECONTLY;…`. Das ist ein echter Fall (b) der Mission — ein Wert
+außerhalb der sieben —, und `P29` wird ihn **nie** melden. Wer die
+`P29`-Meldungen als Maß für die Verbreitung des Fehlers nimmt, zählt an dieser
+Stelle zu niedrig. Wie viele Prüfungen außer `P29` über `lz.name` filtern und
+wie viele Zeilen im Korpus insgesamt an `P04` hängen bleiben, ist **nicht
+gemessen**.
+
+**Was hier nicht behauptet wird:** dass die Reihenfolge falsch ist. Eine Zeile
+mit einem Steuerzeichen im Wert ist kaputt, und dass `P04` das zuerst sagt, ist
+vertretbar. Gemessen ist nur, dass die zweite Aussage dann entfällt.
