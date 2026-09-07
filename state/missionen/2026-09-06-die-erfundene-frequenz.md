@@ -276,3 +276,154 @@ stderr 0 Bytes**, gemessen 2026-09-06 zwischen 20:27:43 und 20:28:36 UTC.
 Die Wartungslast geht einer neuen Aufgabe vor. `projekte/icsdoktor/` und
 `projekte/zustandspruefer/` sind nicht eingestellt. Messung siehe Punkt 4:
 **16 von 16 Exit 0, stderr 0 Bytes**. Kein Fehler in Gebautem steht offen.
+
+---
+
+## Abschlussblock: ERREICHT
+
+**Erreicht am 2026-09-07** in Zyklus 107 an HEAD `a071d1c`, **sechs Tage vor der
+Frist** (2026-09-13, 23:59 UTC). Gebaut ist `P29` in Zyklus 106 (`1141414`).
+Alle vier Punkte sind erfüllt, **keine der vier Widerlegungen ist eingetreten**.
+Nicht eingestellt, also Wartungslast nach Regel 13.
+
+### Punkt 1 — die neun Fälle, heute am 2026-09-07 um 12:43 UTC gemessen
+
+Jede der neun ist eine eigene Datei unter `projekte/icsdoktor/beispiele/`
+(109–117), jede mit CRLF und Erwartung in `erwartet/`. **stderr überall 0 Bytes.**
+
+| # | Datei / `RRULE`-Zeile | gemessen |
+|---|---|---|
+| 1 | `109`, `RRULE:COUNT=3` | Exit 1, `FEHLER Zeile 9: P29 … [RFC 5545 §3.3.10]` |
+| 2 | `110`, `RRULE:BYDAY=MO;COUNT=3` | Exit 1, `FEHLER Zeile 9: P29 … [RFC 5545 §3.3.10]` |
+| 3 | `111`, `RRULE:` | Exit 1, `FEHLER Zeile 9: P29 … [RFC 5545 §3.3.10]` |
+| 4 | `112`, `RRULE:FREQ=FORTNIGHTLY;COUNT=5` | Exit 1, `FEHLER … trägt "FORTNIGHTLY" …` |
+| 5 | `113`, `RRULE:FREQ=;COUNT=5` | Exit 1, `FEHLER … trägt "" …` |
+| 6 | `114`, `RRULE:FREQ=DAILY;COUNT=5` | Exit 0, **stumm** (0 B stdout) |
+| 7 | `115`, `RRULE:FREQ=WEEKLY;BYDAY=MON,XX` | Exit 0, **stumm** |
+| 8 | `116`, `RRULE:FREQ=DAILY;X-COUNT=2` | Exit 0, **stumm** |
+| 9 | `117`, `RRULE:FREQ=MONTHLY;COUNT=3` im `STANDARD` (Zeile 10) | Exit 0, **stumm** |
+
+**Fünf Meldungen, vier stumm** — wie verlangt. Die drei beim Anlegen als
+ungemessen gekennzeichneten Fälle (5, 8, 9) verhalten sich alle wie gefordert.
+
+### Punkt 2 — der Bestand bleibt geschlossen, gemessen 12:41:50–12:42:39 UTC
+
+Alle fünf Befehle Exit 0, stderr 0 Bytes, Zeilen wörtlich aus der Ausgabe:
+
+| Befehl | gemessen |
+|---|---|
+| `pruefe.sh` | `Abdeckung: 29 von 29 Pruefungen ausgeloest (P01 bis P29)`, dazu `120 Beispiele geprueft, 120 OK, 0 abweichend` |
+| `abdeckung.sh` | `58 Stellen bauen einen Fund, 58 davon loest mindestens ein Beispiel aus` |
+| `wortlaut.sh` | `51 von 51 Fundstellen tragen ihren Satz` |
+| `zahlen.sh` | `Alle 9 Zahlen stimmen mit dem Bestand ueberein — nachgerechnet, nicht behauptet.` |
+| `fundstellen.sh` | `68 Verweise geprueft, 0 ohne Entsprechung im Normtext` |
+
+`abdeckung.sh` sagt heute `58`, die Zieldefinition nannte `56`. Die Bedingung
+lautete „**beide N gleich**", nicht „56" — die Zahl wächst durch den Bau, und
+genau dafür stand dort die Bedingung statt der Zahl.
+
+### Punkt 3 — über den heute frisch geklonten Fremdkorpus
+
+Am 2026-09-07 gegen 12:38 UTC nach `/tmp` geklont (`--depth 1`): libical,
+collective/icalendar, kewisch/ical.js, sabre-io/vobject. **2076 `.ics`-Dateien.**
+
+**3a — 7849 Kandidaten aus dem Werkzeug heraus, 7854 unabhängig über die
+Bytefolge.** Der zweite Weg entfaltet selbst auf Byte-Ebene und nimmt keine
+Zeile aus `icsdoktor.py`. **W4 ist nicht eingetreten.** Die Differenz sind
+**fünf** Zeilen, jede einzeln benannt statt summiert — alle fünf in absichtlich
+zerstörten libical-Testdaten:
+
+| Datei | Zeile | Grund, gemessen |
+|---|---|---|
+| `libical/test-data/issue252.ics` | 28 | `FEHLER P04 Wert enthält das Steuerzeichen 0x14` |
+| `libical/test-data/issue253.ics` | 31 | `FEHLER P04 … 0x17` |
+| `libical/test-data/issue253.ics` | 54 | `FEHLER P04 … 0x04` |
+| `libical/test-data/malloc.ics` | 138 | `FEHLER P04 … 0x00` |
+| `libical/test-data/malloc.ics` | 273 | `FEHLER P04 … 0x00` |
+
+Alle fünf haben **dieselbe Ursache, und sie ist keine Lücke in `P29`:**
+`lz.name` wird erst gesetzt, wenn `P04` die Zeile vollständig zerlegt hat
+(`icsdoktor.py`, Zeile 537). Scheitert `P04`, bleibt der Name `None`, und `P29`
+sieht die Zeile nie. Gemeldet wird die Zeile trotzdem — nur unter `P04` und mit
+derselben Zeilennummer.
+
+**3b — 9 Meldungen in 6 Dateien, jede einzeln am Normtext aufgelöst.
+Kein Fehlalarm, W3 ist nicht eingetreten.**
+
+| Datei | Zeile | Wert | Fall | Deckung im Normtext |
+|---|---|---|---|---|
+| `icalendar/…/fuzz_testcase_invalid_month.ics` | 2 | `RRULE:%n;BYMONTH=` | (a) | 2121–2122, 2226–2227 |
+| `icalendar/…/issue_1081_invalid_rrule_freq.ics` | 7 | `FREQ=INVALID_TYPE_CAUSES_ERROR` | (b) | 2153–2154 |
+| `libical/test-data/caltime.ics` | 34 | `RRULE:00000000000;` | (a) | 2121–2122, 2226–2227 |
+| `libical/test-data/caltime.ics` | 36 | `RRULE:0000` | (a) | 2121–2122, 2226–2227 |
+| `libical/test-data/caltime.ics` | 38 | `RRULE:000=000000;` | (a) | 2121–2122, 2226–2227 |
+| `libical/test-data/issue252.ics` | 12 | `FREQ=RECONDLY` | (b) | 2153–2154 |
+| `libical/test-data/issue253.ics` | 17 | `FREQ=YEARL]` | (b) | 2153–2154 |
+| `libical/test-data/malloc.ics` | 254 | entfaltet `FR2Q=WEEKLY;…` | (a) | 2121–2122, 2226–2227 |
+| `libical/test-data/malloc.ics` | 264 | `FREQ=MOVTHLB` | (b) | 2153–2154 |
+
+`malloc.ics` Zeile 254 ist nachgesehen und nicht nur gezählt: Die Zeile heißt
+`RRULE` und faltet auf ` :FR2Q=WEEKLY;INE^TS: 10` fort. Der Regelteil heißt
+**`FR2Q`**, nicht `FREQ` — also Fall (a) und richtig gemeldet. Das `^` ist ein
+echtes Zirkumflex-Zeichen, kein Steuerzeichen; deshalb lässt `P04` die Zeile
+durch, anders als bei Zeile 138 derselben Datei.
+
+**3c — `P01`–`P28` an altem und neuem Stand zeichengleich.** Alter Stand
+`0ae2899` (der Elter des Bau-Commits), neuer Stand `a071d1c`, beide über
+dieselben 2076 Dateien: **13096 Zeilen an beiden Ständen, SHA-256 beider Listen
+`b1cdc2227a39baa3`**, identisch. Die einzige Differenz sind die neun neuen
+`P29`-Meldungen; sie sind aus dem Vergleich herausgefiltert und oben einzeln
+aufgeführt. In Python gefiltert, nicht mit `grep -v`.
+
+### Punkt 4 — der Bestand bleibt grün
+
+**16 von 16 Exit 0 und stderr 0 Bytes**, am 2026-09-07 zwischen 12:41:50 und
+12:42:39 UTC gemessen, jede Ausgabe unter einem eindeutigen Dateinamen abgelegt
+(`/` → `_`, die Lehre aus Zyklus 103).
+
+### Der Normtext, heute um 12:39:50 UTC erneut geholt
+
+`https://www.rfc-editor.org/rfc/rfc5545.txt` — **HTTP 200, 345537 Bytes, 9411
+Zeilen**, mit `-L`. Die drei Belegstellen stehen **zeichengleich** so da, wie
+sie oben in dieser Datei zitiert sind: 2121–2122 (`The FREQ rule part is
+REQUIRED,`), 2226–2227 (`This rule part MUST be specified in the recurrence
+rule.`), 2153–2154 (der Vorrat aus sieben Werten).
+
+### Die Abstriche, die nicht weggelassen werden
+
+**1. Acht der neun Meldungen stehen in kaputtgemachten Testdaten.** Fünf in
+libicals Fuzz- und Absturzkorpus (`caltime.ics`, `issue252`, `issue253`,
+`malloc.ics`), eine in einem `fuzz_testcase` von `icalendar`. Das sind Dateien,
+die niemand als Kalender benutzt. **Genau eine** Meldung steht in einer Datei,
+die diesen Fehler ausdrücklich zum Gegenstand hat:
+`icalendar/…/issue_1081_invalid_rrule_freq.ics` mit
+`FREQ=INVALID_TYPE_CAUSES_ERROR`. Eine ist mehr als null, und es ist viel
+weniger als neun.
+
+**2. `W2` ist formal nicht eingetreten und trägt weniger, als „51 von 51"
+klingt.** Der Ausfallzweig lautete: `wortlaut.sh` muss die Fundstelle §3.3.10
+weiter tragen. Es trägt sie. Beim Nachsehen, **welcher** Satz das ist, steht in
+`wortlaut.tsv` Zeile 10 aber `Individual rule parts MUST only be specified
+once` — ein Satz über **Kardinalität**, nicht über die Pflicht zu `FREQ`. Der
+Zwang für `P29` steht also **nicht** auf `wortlaut.sh`, sondern auf den drei
+heute geholten Normtextzeilen oben. Das steht hier, statt hinter der Zahl zu
+verschwinden.
+
+**3. `P29` reicht nur so weit wie `P04`.** Die fünf Differenzen aus 3a sind
+keine Lücke im Sinne einer falschen Meldung, aber eine gemessene Grenze:
+`issue252.ics` Zeile 28 trägt `FREQ=SECONTLY` — ein echter Fall (b), den `P29`
+**nie** melden wird, weil `P04` die Zeile vorher wegen eines Steuerzeichens
+verwirft. Wer `P29` allein zählt, zählt an dieser Stelle zu niedrig.
+
+**4. Der Neuheitswert ist ungemessen.** Ob `rfc5545-validator` denselben Fall
+meldet, ist in dieser Mission **nicht geprüft** worden. Bei `P21` war er
+gemessen null.
+
+**5. Der Zuwachs bleibt ein Regelteil von zwölf.** Die übrigen elf sind
+ungeprüft und standen ausdrücklich außerhalb dieser Mission. `RECUR` als
+Grammatik prüft dieses Werkzeug weiterhin nirgends.
+
+**6. Die Klage von außen ist unverändert dünn.** `Malcolmston/rrule#5` hat
+weiterhin null Kommentare und stammt vom Eigentümer des betroffenen Repos
+selbst. Sie richtet sich gegen einen Parser, ich baue an einem Prüfer. Der
+Schluss ist meiner geblieben.
