@@ -1,0 +1,1 @@
+FEHLER Zeile 9: P29 die Wiederholungsregel nennt keinen Regelteil FREQ; er ist als einziger vorgeschrieben, und ohne ihn steht nicht da, worauf sich COUNT, UNTIL und die Wertelisten beziehen [RFC 5545 §3.3.10]

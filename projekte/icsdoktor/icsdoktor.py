@@ -109,6 +109,16 @@ once" sagt, und HINWEIS, wo sie "SHOULD NOT occur more than once" sagt. Der
 Anlass ist eine offene fremde Klage, py-vobject/vobject #56, in der ein
 Kommentator genau diesen Unterschied gegen ein drittes Werkzeug geltend macht.
 
+P29 kommt aus der Mission Die erfundene Frequenz,
+state/missionen/2026-09-06-die-erfundene-frequenz.md, und ist die erste
+Pruefung, die IN einen RECUR-Wert hineinsieht und dort einen Regelteil
+verlangt: FREQ ist in §3.3.10 zweimal unabhaengig als Pflicht ausgesprochen,
+und sein Wertevorrat ist geschlossen. Vor ihr prueften von §3.3.10 nur P17
+(Wertetyp von UNTIL) und P21 (COUNT und UNTIL zugleich); die Grammatik von
+RECUR selbst prueft dieses Werkzeug weiterhin nirgends — P29 nimmt genau
+einen Regelteil von zwoelf heraus und laesst die uebrigen elf stumm. Der
+Anlass ist eine offene fremde Klage, Malcolmston/rrule #5.
+
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
 Aufruf:
@@ -2851,6 +2861,102 @@ def pruefe_p28(komponenten, funde):
                         abschnitt))
 
 
+_FREQ_VORRAT = ("SECONDLY", "MINUTELY", "HOURLY", "DAILY", "WEEKLY",
+                "MONTHLY", "YEARLY")
+
+
+def pruefe_p29(logische, funde):
+    """§3.3.10: Jede RRULE traegt einen Regelteil FREQ aus dem Vorrat.
+
+    DER NORMTEXT, zwei unabhaengige Stellen fuer dieselbe Pflicht. Am
+    2026-09-06 um 20:29 UTC von rfc-editor.org geholt (HTTP 200, 345537 Bytes,
+    9411 Zeilen), Zeilen 2121-2122, in der ABNF-Kommentierung von 'recur':
+
+        ; The FREQ rule part is REQUIRED,
+        ; but MUST NOT occur more than once.
+
+    Und Zeilen 2226-2227, im Fliesstext derselben Abschnitts:
+
+        The FREQ rule part identifies the type of recurrence rule.  This
+        rule part MUST be specified in the recurrence rule.
+
+    Der Vorrat, Zeilen 2153-2154:
+
+        freq        = "SECONDLY" / "MINUTELY" / "HOURLY" / "DAILY"
+                    / "WEEKLY" / "MONTHLY" / "YEARLY"
+
+    DIESE PRODUKTION ENTHAELT WEDER iana-token NOCH x-name. Das ist der
+    Unterschied zu classvalue (Zeile 4625) und partstat-event (1219-1221), an
+    denen zwei frueher erwogene Pruefungen gefallen sind: Dort ist der Vorrat
+    offen, und ein unbekannter Wert ist kein Verstoss. Hier ist er zu.
+
+    ZWEI FAELLE, EINE MELDUNG:
+
+    (a) Die RRULE traegt keinen Regelteil FREQ. Dann ist die ganze Regel
+        bedeutungslos — und genau das ist der Schaden aus der Klage
+        Malcolmston/rrule #5 (eroeffnet 2026-08-10, am 2026-09-06 um 20:28 UTC
+        als OPEN abgerufen, 0 Kommentare): Dort wird eine RRULE ohne FREQ
+        stillschweigend zu YEARLY, weil der Nullwert der Aufzaehlung Yearly
+        heisst. Der Melder beschreibt, warum das die teuerste Form des Fehlers
+        ist: "the first occurrence is DTSTART itself, which looks correct, and
+        the divergence only shows up on the second one".
+
+    (b) Der Regelteil FREQ traegt einen Wert ausserhalb der sieben. Ein leerer
+        Wert ("FREQ=;COUNT=5") gehoert hierher und nicht zu (a): Der Regelteil
+        steht da, er traegt nur nichts.
+
+    WAS DIESE PRUEFUNG AUSDRUECKLICH NICHT TUT. Jeder dieser Faelle bleibt
+    stumm; sie stehen einzeln in state/offen.md und werden nicht mitgenommen,
+    weil eine Zieldefinition, die einen belegten und einen unbelegten Fall
+    buendelt, sich hinterher an dem retten laesst, der leichter faellt:
+
+    - Ein Regelteil mit X--Praefix (FREQ=DAILY;X-COUNT=2), Befund aus
+      Zyklus 63. Die ABNF hat fuer recur-rule-part keinen x-name-Zweig, aber
+      das ist ein anderer Satz und hat keine fremde Stimme hinter sich.
+    - Muell in BYDAY und jede andere Werteliste ausser freq.
+    - Kardinalitaet: zwei RRULE-Zeilen in einer Komponente (Zyklus 59) und ein
+      zweiter FREQ-Regelteil in derselben RRULE. Deshalb sieht diese Pruefung
+      nur den ERSTEN FREQ-Regelteil an und zaehlt nicht, wie oft er vorkommt;
+      "FREQ=DAILY;FREQ=BLA" bleibt stumm. Das ist keine Nachlaessigkeit,
+      sondern die Grenze zur verfehlten Vormission Die zweite Zeile.
+    - Die Reihenfolge der Regelteile. Zeile 2223 sagt zwar, FREQ "MUST be the
+      first rule part specified" — aber zwei Zeilen davor steht "Compliant
+      applications MUST accept rule parts ordered in any sequence". Das ist
+      eine Pflicht des Erzeugers, keine des Pruefers.
+
+    GROSS- UND KLEINSCHREIBUNG. Der Regelteilname wird von _recur_teil ohnehin
+    tolerant gelesen; der Wert wird hier ebenso tolerant verglichen, weil
+    ABNF-Literale nach RFC 5234 §2.3 ohne Ruecksicht auf die Schreibung
+    gelten. "freq=daily" ist also kein Fund. Die Wahl geht in die Richtung,
+    die WENIGER meldet — ein Fehlalarm waere nach W3 der Missionsdatei ein
+    Fehlschlag, eine ausgelassene Meldung nur ein kleinerer Zuwachs.
+
+    WO SIE GREIFT: an jeder RRULE, gleich in welcher Komponente. Eine RRULE in
+    STANDARD oder DAYLIGHT einer VTIMEZONE wird genauso gelesen wie eine im
+    VEVENT — §3.3.10 gibt den Wertetyp an und nicht die Komponente. Die Zeile
+    der Meldung ist die der RRULE.
+    """
+    for lz in logische:
+        if lz.name != "RRULE":
+            continue
+        freq, _anzahl = _recur_teil(lz.wert, "FREQ")
+        if freq is None:
+            funde.append(Fund(
+                FEHLER, lz.nr, "P29",
+                "die Wiederholungsregel nennt keinen Regelteil FREQ; er ist "
+                "als einziger vorgeschrieben, und ohne ihn steht nicht da, "
+                "worauf sich COUNT, UNTIL und die Wertelisten beziehen",
+                "3.3.10"))
+        elif freq.upper() not in _FREQ_VORRAT:
+            funde.append(Fund(
+                FEHLER, lz.nr, "P29",
+                "der Regelteil FREQ trägt %s; RFC 5545 zählt dafür genau "
+                "sieben Werte auf (SECONDLY, MINUTELY, HOURLY, DAILY, WEEKLY, "
+                "MONTHLY, YEARLY) und lässt keinen eigenen zu"
+                % _zeige_wort(freq),
+                "3.3.10"))
+
+
 _BOM_UTF8 = b"\xef\xbb\xbf"
 
 
@@ -2926,7 +3032,7 @@ def pruefe_p20(rohdaten, funde):
 
 
 def untersuche(rohdaten):
-    """Alle achtundzwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle neunundzwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     rohdaten, hatte_bom = pruefe_p20(rohdaten, funde)
     zeilen = zerlege_physisch(rohdaten)
@@ -2973,6 +3079,7 @@ def untersuche(rohdaten):
     pruefe_p26(logische, funde)
     pruefe_p27(komponenten, funde)
     pruefe_p28(komponenten, funde)
+    pruefe_p29(logische, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))

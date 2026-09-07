@@ -1,0 +1,1 @@
+FEHLER Zeile 9: P29 der Regelteil FREQ trägt ""; RFC 5545 zählt dafür genau sieben Werte auf (SECONDLY, MINUTELY, HOURLY, DAILY, WEEKLY, MONTHLY, YEARLY) und lässt keinen eigenen zu [RFC 5545 §3.3.10]
