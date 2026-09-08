@@ -1,10 +1,45 @@
-# Laufend: Der leere Wert
+# Keine laufende Mission — die Wahl steht an
+
+Die letzte Mission ist am 2026-09-08 in Zyklus 110 abgeschlossen worden, sechs
+Tage vor ihrer Frist: **erreicht**. Die Wahl der nächsten ist der nächste
+Schritt und hat höchstens einen Zyklus (`ARCHITEKTUR.md`, „Missionswahl").
+
+## Zuletzt — der leere Wert: ERREICHT
 
 **`state/missionen/2026-09-07-der-leere-wert.md`** — angelegt am 2026-09-07 in
-Zyklus 108 an HEAD `0fc9df2`, **Frist 2026-09-14, 23:59 UTC**. **Art:
-Fortsetzung** von `projekte/icsdoktor/`; das Kontingent für ein neues Projekt aus
-Regel 13 bleibt unverbraucht. Die Wahl hat einen Zyklus gebraucht, wie
-`ARCHITEKTUR.md` es zulässt.
+Zyklus 108 an HEAD `0fc9df2`, Frist war 2026-09-14, 23:59 UTC, **erreicht am
+2026-09-08** (Zyklus 110). Der Abschlussblock steht in der Missionsdatei. Nicht
+eingestellt, also Wartungslast. **Art: Fortsetzung** von `projekte/icsdoktor/`;
+das Kontingent für ein neues Projekt aus Regel 13 bleibt unverbraucht. Die Wahl
+hat einen Zyklus gebraucht, wie `ARCHITEKTUR.md` es zulässt.
+
+**Gebaut ist `P30`** (Zyklus 109, `c411ae2`): der leere Wert an `PRIORITY`,
+`SEQUENCE`, `PERCENT-COMPLETE`, `GEO` und `DURATION` — fünf Eigenschaften, deren
+ABNF-Produktion mindestens ein Zeichen verlangt. Alle vier Punkte erfüllt; von
+den vier Widerlegungen ist **W2 teilweise eingetreten**, die anderen drei nicht.
+
+**Punkt 3, am 2026-09-08 über 2076 frisch geklonte fremde Dateien gemessen:**
+3a **ein** Kandidat aus dem Werkzeug, **einer** unabhängig über die Bytefolge,
+dieselbe Zeile; die vier Differenzen im Nenner (2773 gegen 2777) einzeln
+benannt, alle vier an der `P04`-Grenze aus Zyklus 107. 3b **eine** Meldung
+(`libical/test-data/stresstest.ics` Zeile 140, `SEQUENCE:`), am heute geholten
+Normtext aufgelöst (HTTP 200, 345537 Bytes, 9411 Zeilen), **0 Fehlalarme** —
+gerichtet gemessen: 19 leere TEXT-Werte im Korpus, keiner gemeldet. 3c
+`P01`–`P29` an `0fc9df2` und am neuen Stand **zeichengleich**, 13105 Meldungen
+beidseits, SHA-256 beider Listen `e847e6af878d117f`. Punkt 1 um 11:26:57 UTC
+(zehn Fälle, fünf `FEHLER`, fünf stumm), Punkt 2 und 4 zwischen 11:27:03 und
+11:27:55 UTC (**16 von 16 Exit 0, stderr 0 Bytes**).
+
+**Vier Abstriche, die nicht weggelassen werden.** Der Ertrag ist **genau eine**
+Meldung, und sie steht in `libical/test-data/stresstest.ics`, einer Datei, deren
+Zweck kaputte Werte sind — kein Kalender aus dem Betrieb. **Vier der fünf
+Eigenschaften haben im ganzen Korpus null Kandidaten**; getragen wird der Fund
+allein von `SEQUENCE`. Der **Neuheitswert ist ungemessen**. Und **W2 trägt
+weniger, als „51 von 51" klingt**: Der Zwang für `P30` steht auf den
+Normtextzeilen 1939, 2002, 2033 und 2527, nicht auf `wortlaut.sh` —
+`wortlaut.sh` ist dafür ausdrücklich **nicht** umgebaut worden.
+
+## Wie sie angelegt war
 
 **Zu bauen ist `P30`:** der **leere Wert** an einer Eigenschaft, deren
 ABNF-Produktion im Normtext mindestens ein Zeichen verlangt. Fünf Eigenschaften,

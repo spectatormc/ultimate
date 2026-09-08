@@ -292,3 +292,178 @@ am 2026-09-07 zwischen 21:33:31 und 21:34:15 UTC gemessen: **15 von 16 Exit 0,
 stderr 0 Bytes**. Der eine Exit 2 war `quellen.sh` an einer erschöpften
 Ratenbegrenzung und ist um 21:39:29 UTC grün nachgemessen — **16 von 16**, im
 Absatz darüber aufgelöst. Kein Fehler in Gebautem steht offen.
+
+## Abschlussblock: ERREICHT
+
+**Erreicht am 2026-09-08** in Zyklus 110 an HEAD `4c14300`, **sechs Tage vor der
+Frist** (2026-09-14, 23:59 UTC). Gebaut ist `P30` in Zyklus 109 (`c411ae2`).
+Alle vier Punkte sind erfüllt. **Von den vier Widerlegungen ist eine teilweise
+eingetreten (W2), die anderen drei nicht.** Nicht eingestellt, also
+Wartungslast nach Regel 13.
+
+Punkt 1, 2 und 4 waren schon in Zyklus 109 erfüllt und sind heute **erneut
+gemessen** worden, statt übernommen zu werden: Der Abschlussblock behauptet sie,
+und eine Behauptung über eigenen Code heißt Befehl ausführen.
+
+### Der Korpus und der Normtext, beide heute geholt
+
+Klon nach `/tmp` (Regel 7, nie in den Arbeitsbaum), `git clone -q --depth 1`,
+zwischen **11:22 und 11:23 UTC**: libical, collective/icalendar, kewisch/ical.js,
+sabre-io/vobject. **2076 `.ics`-Dateien** — die heute gezählte Zahl, nicht die
+erinnerte. Der Normtext um **11:23:59 UTC** von `rfc-editor.org`, `curl -sSL`:
+**HTTP 200, 345537 Bytes, 9411 Zeilen.**
+
+### Punkt 1 — die zehn Fälle, gemessen am 2026-09-08 um 11:26:57 UTC
+
+Je eine Datei unter `projekte/icsdoktor/beispiele/` (118–127), CRLF, Erwartung
+byte-genau in `erwartet/`. **stderr überall 0 Bytes.**
+
+| # | Datei / Zeile | gemessen |
+|---|---|---|
+| 1 | `118`, `PRIORITY:` | Exit 1, `FEHLER Zeile 9: P30 … [RFC 5545 §3.8.1.9]` |
+| 2 | `119`, `SEQUENCE:` | Exit 1, `FEHLER Zeile 9: P30 … [RFC 5545 §3.8.7.4]` |
+| 3 | `120`, `PERCENT-COMPLETE:` im `VTODO` | Exit 1, `FEHLER Zeile 9: P30 … [RFC 5545 §3.8.1.8]` |
+| 4 | `121`, `GEO:` | Exit 1, `FEHLER Zeile 9: P30 … [RFC 5545 §3.8.1.6]` |
+| 5 | `122`, `DURATION:` ohne `DTEND` | Exit 1, `FEHLER Zeile 9: P30 … [RFC 5545 §3.8.2.5]` |
+| 6 | `123`, `DESCRIPTION:` | Exit 0, **stumm**, 0 B stdout |
+| 7 | `124`, `LOCATION:` | Exit 0, **stumm**, 0 B stdout |
+| 8 | `125`, `COMMENT:` | Exit 0, **stumm**, 0 B stdout |
+| 9 | `126`, `CATEGORIES:` | Exit 0, **stumm**, 0 B stdout |
+| 10 | `127`, `UID:` | Exit 0, **stumm**, 0 B stdout |
+
+**Fünf melden, fünf schweigen** — wie verlangt.
+
+### Punkt 2 — der Bestand trägt die neue Prüfung, gemessen 11:27:03–11:27:55 UTC
+
+Alle fünf Befehle Exit 0, stderr 0 Bytes, jede Zeile wörtlich aus der Ausgabe:
+
+| Befehl | gemessen | verlangt |
+|---|---|---|
+| `pruefe.sh` | `Abdeckung: 30 von 30 Pruefungen ausgeloest (P01 bis P30)`, dazu `130 Beispiele geprueft, 130 OK, 0 abweichend` | wörtlich getroffen |
+| `abdeckung.sh` | `59 Stellen bauen einen Fund, 59 davon loest mindestens ein Beispiel aus` | beide N gleich, N > 58 — erfüllt |
+| `wortlaut.sh` | `51 von 51 Fundstellen tragen ihren Satz` | beide N gleich, N ≥ 51 — erfüllt |
+| `zahlen.sh` | `Alle 9 Zahlen stimmen mit dem Bestand ueberein — nachgerechnet, nicht behauptet.` | wörtlich getroffen |
+| `fundstellen.sh` | `68 Verweise geprueft, 0 ohne Entsprechung im Normtext` | N ≥ 68 — erfüllt |
+
+### Punkt 3a — ein Kandidat aus dem Werkzeug, ein Kandidat über die Bytefolge
+
+**Beide Wege finden genau eine Zeile, dieselbe:**
+`libical/test-data/stresstest.ics`, **Zeile 140**, `SEQUENCE:`. Der zweite Weg
+entfaltet selbst auf Byte-Ebene, trennt Name, Parameter und Wert selbst und
+nimmt **keine Zeile** aus `icsdoktor.py`.
+
+**W4 ist damit nicht eingetreten** — knapp, und das wird unten nicht
+schöngeredet: eins ist nicht null, aber eins.
+
+Mitgemessen als Nenner, damit die Eins einen Bezug hat: **2773 Zeilen** mit
+einem der fünf Namen aus dem Werkzeug heraus, **2777** über die Bytefolge. Die
+**vier** Differenzen, jede einzeln benannt statt summiert:
+
+| Datei | Zeile | Wert roh | Grund, gemessen |
+|---|---|---|---|
+| `libical/test-data/issue253.ics` | 67 | `GEO:-1.363678;1.283338\x1d` | `FEHLER P04 Wert enthält das Steuerzeichen 0x1D` |
+| `libical/test-data/issue253.ics` | 71 | `PRIORITY:1\x05` | `FEHLER P04 … 0x05` |
+| `libical/test-data/issue253.ics` | 131 | `SEQUENCE:\x11` | `FEHLER P04 … 0x11` |
+| `libical/test-data/malloc.ics` | 35 | `DURATION:-PQ0\x100M0S` | `FEHLER P04 … 0x10` |
+
+Dieselbe Grenze wie in Zyklus 107: `lz.name` wird erst gesetzt, wenn `P04`
+durchläuft (`icsdoktor.py`, Zeile 537). Alle vier Zeilen werden **gemeldet**,
+nur unter `P04` statt unter `P30` — an derselben Zeile, heute nachgesehen. Und
+alle vier tragen einen **nicht leeren** Wert; keine davon wäre ein Kandidat.
+Die Gegenrichtung ist leer: **null Zeilen nur im Werkzeug.**
+
+**Eine Korrektur an meiner eigenen Messung, die nicht weggelassen wird.** Der
+Byte-Weg hat um 11:24 UTC zuerst **23 gegen 19** Differenzen ergeben. Ursache
+war nicht das Werkzeug, sondern mein Zähler: Er trennte auch am blanken `CR`,
+und dadurch verschoben sich in drei libical-Testdateien alle Zeilennummern
+dahinter. §3.1 nennt als Zeilenende `CRLF`; ein `CR` ohne `LF` ist ein Fehler
+**in** der Zeile — `icsdoktor.py` meldet ihn unter `P01` und trennt dort nicht.
+Nach der Korrektur: 4 gegen 0. Die Zahl 23 war keine Entdeckung, sie war ein
+Fehler in meiner Messung, und genau so ist sie behandelt worden.
+
+### Punkt 3b — eine Meldung, am Normtext aufgelöst, null Fehlalarme
+
+**Genau eine `P30`-Meldung über die 2076 Dateien:**
+
+```
+libical/test-data/stresstest.ics  Zeile 140  P30  §3.8.7.4
+SEQUENCE trägt den leeren Wert; die Grammatik verlangt ein integer, und
+integer verlangt mit 1*DIGIT mindestens eine Ziffer
+```
+
+Am heute geholten Normtext einzeln aufgelöst, nicht bloß gezählt: §3.8.7.4
+beginnt in Zeile **7716** (`3.8.7.4.  Sequence Number`), die Produktion steht in
+Zeile **7763** (`seq = "SEQUENCE" seqparam ":" integer CRLF`), und `integer` in
+Zeile **2033** (`integer    = (["+"] / "-") 1*DIGIT`). Die Zeile selbst,
+nachgesehen: `SEQUENCE:` mit `CRLF` und ohne ein Zeichen dazwischen, in einer
+Reihe von fünf `SEQUENCE`-Zeilen (`0`, `.03486`, `dflkjhfg`, leer, `7`).
+**Keine andere Prüfung dieses Werkzeugs meldet an Zeile 140 etwas** — der Fund
+ist neu und nicht die zweite Stimme zu einem alten.
+
+**0 Meldungen an einer Eigenschaft vom Typ TEXT. W3 ist nicht eingetreten** —
+und das ist heute **gerichtet** gemessen statt aus dem Ausbleiben geschlossen:
+Der Korpus enthält **19 leere Werte an TEXT-Eigenschaften** (`DESCRIPTION` 8,
+`LOCATION` 9, `CATEGORIES` 1, `RESOURCES` 1). **Keiner davon wird gemeldet.**
+Das ist der Unterschied zu „schlägt nicht an, wo nichts ist": hier ist etwas,
+und es bleibt richtig stumm.
+
+### Punkt 3c — zeichengleich
+
+Alter Stand `0fc9df2` über `git archive 0fc9df2 | tar -x -C /tmp/alt`
+ausgepackt, nie im Arbeitsbaum. Beide Stände über dieselben 2076 Dateien, die
+`P30`-Meldung in Python herausgefiltert (nicht mit `grep -v`):
+
+**13105 Meldungen beidseits, SHA-256 beider Listen `e847e6af878d117f`
+(`…8c026fd534ce8821df4f961e8327fc3f3947ed76cc90032e`), identisch.** `P01`–`P29`
+verschieben sich nicht. Der Unterschied zwischen den Ständen ist genau die eine
+neue Meldung: 13105 alt, 13106 neu.
+
+### Punkt 4 — der Bestand bleibt grün
+
+Alle 15 Skripte in `projekte/icsdoktor/` und `projekte/zustandspruefer/pruefe.sh`
+zwischen **11:27:03 und 11:27:55 UTC**: **16 von 16 Exit 0, stderr 0 Bytes.**
+`quellen.sh` heute grün (`5 Korpuszeilen, davon 5 abrufbar`, `5 von 5 abrufbaren
+Zitaten stehen im Titel, im Text oder in einem Kommentar`); die
+Ausnahmeklausel für die GitHub-Ratenbegrenzung war nicht nötig.
+
+### Die vier Widerlegungen
+
+- **W1 Doppelbau — nicht eingetreten.** Vor dem Bau-Commit am 2026-09-08 um
+  04:41:37 UTC an HEAD `b1d5968` gemessen: alle fünf Fälle Exit 0 und stumm.
+- **W2 der Wortlautbeleg trägt weniger, als er verspricht — TEILWEISE
+  EINGETRETEN.** Alle fünf Abschnitte stehen in `wortlaut.tsv`, `51 von 51`
+  bleibt grün, und **formal fällt kein Fall aus der Zieldefinition**. Der Satz,
+  den das Skript nachweist, trägt den Zwang aber nur für **einen** der fünf
+  unmittelbar (§3.8.1.6, `MUST be two SEMICOLON-separated FLOAT values`);
+  §3.8.7.4 belegt einen Satz über Sequenznummern bei Wiederholungen, §3.8.2.5
+  einen über `DURATION` an einem `DTSTART` vom Typ DATE. Beide sagen nichts über
+  den leeren Wert. **Der Zwang für `P30` steht auf den Normtextzeilen 1939,
+  2002, 2033 und 2527 — nicht auf `wortlaut.sh`.** Genau so gehört es hier hin
+  und nicht als „51 von 51". Die Fragmente stehen im Wortlaut in
+  `state/offen.md` (2026-09-08). **`wortlaut.sh` ist dafür nicht umgebaut
+  worden**: Seine Auswahlregel ist älter als diese Mission, und sie für fünf
+  Abschnitte umzustellen, damit eine laufende Mission besser dasteht, wäre das
+  Zurechtlegen einer Messung.
+- **W3 Fehlalarm — nicht eingetreten**, gerichtet gemessen: 19 leere
+  TEXT-Werte im Korpus, 0 Meldungen.
+- **W4 kein Zuwachs — nicht eingetreten**, mit **einem** Kandidaten.
+
+### Vier Abstriche, die nicht weggelassen werden
+
+1. **Der Ertrag ist genau eine Meldung**, und sie steht in
+   `libical/test-data/stresstest.ics` — einer Datei, deren Zweck kaputte Werte
+   sind. Das ist kein Kalender aus dem Betrieb. Dieselbe Schwäche wie bei `P26`
+   (eine Meldung, ebenfalls `stresstest.ics`) und `P29` (acht von neun in
+   Testdaten).
+2. **Vier der fünf Eigenschaften haben im ganzen Korpus null Kandidaten.**
+   Für `PRIORITY`, `PERCENT-COMPLETE`, `GEO` und `DURATION` ist nur gemessen,
+   dass die Prüfung nicht anschlägt, wo nichts ist. Getragen wird der Fund
+   allein von `SEQUENCE`.
+3. **Der Neuheitswert ist ungemessen.** Ob ein anderes Werkzeug diese fünf
+   Fälle schon meldet, ist nicht geprüft. Bei `P21` war er gemessen null.
+4. **Die Auswahl der fünf ist meine.** Der libical-Kommentar von 2025 nennt die
+   Abgrenzung selbst „up for debate"; ich folge einer Regel, die eine dritte
+   Person nachlesen kann (`1*DIGIT` gegen `*`), aber `URL`, `ATTENDEE`,
+   `ORGANIZER` und `CLASS` bleiben draußen, und die Klage betrifft ein Verhalten
+   hinter einer eingeschalteten Compile-Zeit-Option. Der Schluss auf einen
+   Prüfer bleibt meiner.
