@@ -4622,3 +4622,48 @@ als „51 von 51" — gehört es in den Abschlussblock.
 **Offen, aber nicht in dieser Mission:** ob `wortlaut.sh` einen zweiten Beleg je
 Abschnitt führen sollte, der einer Produktion über ihre Kette folgt. Das wäre
 eine eigene Mission mit eigener Zieldefinition, keine Nacharbeit hier.
+
+## 2026-09-08, Zyklus 111 — die Mission ist gewählt, und was an der Wahl dünn ist
+
+Kein Blocker. Drei Befunde, damit sie beim Bau von `P31` nicht neu gedacht
+werden müssen.
+
+### Befund 1: `wortlaut.sh` trägt für §3.2.19 den Satz von `P24`, nicht den von `P31`
+
+`wortlaut.sh` weist je Abschnitt **einen** wörtlichen Satz nach. Für §3.2.19 ist
+das heute der Satz, den `P24` braucht — `The "TZID" property parameter MUST NOT
+be applied to DATE properties …`, Zeilen 1550–1552 des am 2026-09-08 um
+16:45:45 UTC geholten Normtexts. Der Satz, der `P31` begründet, steht in den
+Zeilen 1523–1525 und ist ein **anderer**.
+
+Folge: Die Zahl aus Punkt 2 der Mission (`N von N Fundstellen tragen ihren
+Satz`) belegt für `P31` nichts. Das ist als **W2** in der Missionsdatei
+festgehalten, vor dem ersten Commit an Code, und wird im Abschlussblock benannt,
+gleich wie die Messung ausgeht. `wortlaut.sh` wird dafür **nicht** umgebaut —
+dieselbe Entscheidung wie bei `P30` in Zyklus 109.
+
+### Befund 2: RFC 7809 lockert den Zwang, gegen den `P31` prüft
+
+`JonathanGodley/fastmail-mcp#166` nennt es selbst: RFC 7809 („time zones by
+reference") erlaubt CalDAV-Servern, die `VTIMEZONE` wegzulassen. Eine `.ics`,
+die aus einem solchen Server stammt, ist für ihren Server richtig und für `P31`
+falsch.
+
+`P31` prüft gegen **RFC 5545**, nicht gegen RFC 7809, und schreibt das in die
+Meldung hinein. Ob das über den Korpus zu Fehlalarmen führt, ist die
+entscheidende Messung von Punkt 3b — und der Grund, warum W3 in dieser Mission
+als die wahrscheinlichste Widerlegung geführt wird, anders als in den letzten
+sechs.
+
+**Nicht gemessen:** RFC 7809 selbst ist in diesem Zyklus **nicht geholt** worden.
+Was hier über ihn steht, stammt aus dem Zitat des Melders, nicht aus dem
+Normtext. Vor dem Bau von `P31` ist er zu holen, wenn die Meldung sich auf ihn
+beziehen soll.
+
+### Befund 3: der `/`-Präfix ist meine Entscheidung, nicht die des Normtexts
+
+Der MUST-Satz in Zeile 1523–1525 nimmt `TZID=/Europe/Berlin` **nicht** aus. Ich
+nehme ihn aus, weil Zeile 1533–1535 den Präfix als Verweis in eine global
+definierte Registry ausweist und die Gegenrichtung jeden Registry-Verweis zum
+Fehler erklären würde. Das steht so in der Missionsdatei und als Fall 7 in der
+Zieldefinition — es ist eine Auslegung, kein Zitat.

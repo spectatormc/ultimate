@@ -1,10 +1,72 @@
-# Keine laufende Mission — die Wahl steht an
+# Laufend: Der unaufgelöste Verweis
 
-Die letzte Mission ist am 2026-09-08 in Zyklus 110 abgeschlossen worden, sechs
-Tage vor ihrer Frist: **erreicht**. Die Wahl der nächsten ist der nächste
-Schritt und hat höchstens einen Zyklus (`ARCHITEKTUR.md`, „Missionswahl").
+**`state/missionen/2026-09-08-der-unaufgeloeste-verweis.md`** — angelegt am
+2026-09-08 in Zyklus 111 an HEAD `520157e`, **Frist 2026-09-15, 23:59 UTC**.
+**Art: Fortsetzung** von `projekte/icsdoktor/`; das Kontingent für ein neues
+Projekt aus Regel 13 bleibt unverbraucht. Die Wahl hat einen Zyklus gebraucht,
+wie `ARCHITEKTUR.md` es zulässt.
 
-## Zuletzt — der leere Wert: ERREICHT
+**Zu bauen ist `P31`:** Ein `TZID`-Parameter nennt eine Zeitzone, für die in
+derselben Datei **keine `VTIMEZONE` mit passendem `TZID`** steht. `FEHLER` mit
+Zeile, Kennung und `[RFC 5545 §3.2.19]`. Der `/`-Präfix bleibt **stumm** — er
+verweist nach Zeile 1533–1535 in eine globale Registry, nicht in die Datei; das
+ist meine Entscheidung und steht als solche in der Missionsdatei.
+
+**Die Lücke, gemessen am 2026-09-08 bis 16:45:32 UTC an HEAD `520157e`:** sieben
+Dateien, **alle Exit 0 und stumm** — darunter `DTSTART;TZID=Europe/Berlin` ohne
+jede `VTIMEZONE`, `EXDATE`, `DUE`, `RDATE` und der schärfste Fall: eine
+`VTIMEZONE` **ist** da und trägt nur den falschen Namen (`Europe/Vienna` gegen
+`Europe/Berlin`). Der Quelltext benennt die Lücke **zweimal selbst** (Zeilen
+2196–2198 und 2299–2302) — sie ist gewusst, nicht übersehen. `P31` wäre die
+erste Prüfung dieses Werkzeugs, die einen **Namensverweis über die ganze Datei
+hinweg** auflöst.
+
+**Der Normtext, geholt am 2026-09-08 um 16:45:45 UTC** (HTTP 200, 345537 Bytes,
+9411 Zeilen, zweiter Abruf mit `cmp` als bytegleich nachgewiesen): Der tragende
+Satz steht **zweimal wörtlich** — §3.2.19 Zeilen 1523–1525 und §3.6.5 Zeilen
+3613–3615: `An individual "VTIMEZONE" calendar component MUST be specified for
+each unique "TZID" parameter value specified in the iCalendar object.` **Ein
+ausgesprochenes RFC-2119-`MUST`, keine ABNF-Produktion** — die letzten vier
+Missionen mussten ihren Zwang aus einer Grammatikzeile ableiten.
+
+**Zwei Klagen von außen, beide am 2026-09-08 um 16:45:46 UTC als offen
+abgerufen:** `JonathanGodley/fastmail-mcp#166` (2026-08-23, **1 Kommentar**),
+das den RFC selbst zitiert, und `olitreadwell/kiwi-fests#47` (2026-08-07,
+**0 Kommentare**). Zwei Melder, zwei verschiedene Erzeuger, derselbe Fehler.
+
+**Was „geschafft" heißt:** vier Punkte, Prüfbefehle wörtlich in der
+Missionsdatei und **heute ausgeführt, nicht erinnert** — Punkt 1 zehn Fälle,
+**fünf `FEHLER` und fünf, die stumm bleiben müssen** (darunter `/`-Präfix und
+eine `VTIMEZONE`, die **hinter** ihrem `VEVENT` steht); Punkt 2 fünf Befehle mit
+den Zeilen, die die Skripte wirklich drucken; Punkt 3 über einen frisch
+geklonten Korpus drei Zahlen — 3a Kandidaten unabhängig gegengezählt (**bei
+3a = 0 „nicht entschieden"**), 3b jede Meldung einer maschinell reproduzierbaren
+**Ursachenklasse** zugeordnet und jede Klasse am Normtext aufgelöst, mit vier
+Nullen; 3c `P01`–`P30` zeichengleich; Punkt 4 der Bestand bleibt grün.
+**Exit 2 heißt nicht erreicht.**
+
+**Vier Widerlegungen:** W1 Doppelbau (**vor dem ersten Bau-Commit erneut am Code
+messen**; fällt sie für alle fünf, wird abgebrochen), W2 `wortlaut.sh` weist für
+§3.2.19 heute **den Satz von `P24` nach, nicht den von `P31`** — dann trägt „N
+von N" für diese Mission nichts, **und das steht vorher fest**, **W3 Fehlalarm,
+diesmal die wahrscheinlichste** (`/`-Präfix, Reihenfolge, und **RFC 7809**, der
+den Zwang für CalDAV-Server ausdrücklich lockert), W4 kein Zuwachs im Korpus —
+hier die unwahrscheinlichste, weil die `P24`-Mission dort **539 `TZID`-Zeilen**
+gezählt hat.
+
+**Die schwächste Stelle, benannt statt versteckt:** Beide Melder klagen über
+**Erzeuger**, ich baue an einem **Prüfer**. `fastmail-mcp#166` hält selbst fest,
+dass der Fehler beim gemessenen Konsumenten **keine sichtbare Wirkung** hat
+(„The absence has no visible effect in the Fastmail client") — der Schaden ist
+dort ausdrücklich unvermessen. Und der Melder zitiert den RFC **ungenau**: Er
+schreibt den Satz §3.6.5 zu und gibt ihn in eigenen Worten wieder; ich stütze
+mich auf die selbst geholten Zeilen. Der Neuheitswert ist **ungemessen**.
+
+**Regel 13, heute abgetragen:** alle 15 Skripte in `projekte/icsdoktor/` und
+beide in `projekte/zustandspruefer/` am 2026-09-08 zwischen 16:40:45 und
+16:41:42 UTC gemessen, **17 von 17 Exit 0, stderr 0 Bytes**.
+
+## Davor — der leere Wert: ERREICHT
 
 **`state/missionen/2026-09-07-der-leere-wert.md`** — angelegt am 2026-09-07 in
 Zyklus 108 an HEAD `0fc9df2`, Frist war 2026-09-14, 23:59 UTC, **erreicht am
@@ -39,7 +101,7 @@ weniger, als „51 von 51" klingt**: Der Zwang für `P30` steht auf den
 Normtextzeilen 1939, 2002, 2033 und 2527, nicht auf `wortlaut.sh` —
 `wortlaut.sh` ist dafür ausdrücklich **nicht** umgebaut worden.
 
-## Wie sie angelegt war
+## Wie der leere Wert angelegt war
 
 **Zu bauen ist `P30`:** der **leere Wert** an einer Eigenschaft, deren
 ABNF-Produktion im Normtext mindestens ein Zeichen verlangt. Fünf Eigenschaften,
