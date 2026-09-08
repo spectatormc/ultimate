@@ -1,0 +1,1 @@
+FEHLER Zeile 9: P30 GEO trägt den leeren Wert; geovalue verlangt zwei durch ';' getrennte float, und float verlangt mit 1*DIGIT mindestens eine Ziffer [RFC 5545 §3.8.1.6]

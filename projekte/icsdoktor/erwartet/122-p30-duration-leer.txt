@@ -1,0 +1,1 @@
+FEHLER Zeile 9: P30 DURATION trägt den leeren Wert; dur-value verlangt ein wörtliches "P" und dahinter eine Dauer [RFC 5545 §3.8.2.5]

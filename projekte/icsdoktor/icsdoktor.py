@@ -119,6 +119,17 @@ RECUR selbst prueft dieses Werkzeug weiterhin nirgends — P29 nimmt genau
 einen Regelteil von zwoelf heraus und laesst die uebrigen elf stumm. Der
 Anlass ist eine offene fremde Klage, Malcolmston/rrule #5.
 
+P30 kommt aus der Mission Der leere Wert,
+state/missionen/2026-09-07-der-leere-wert.md, und ist die erste Pruefung, die
+den WERTETYP einer Eigenschaft zum Massstab nimmt statt ihren Namen, ihre
+Stellung oder ihren Wertevorrat: Der leere Wert ist ein Verstoss, wo die ABNF
+mindestens ein Zeichen verlangt (1*DIGIT bei integer und float, ein
+woertliches "P" bei dur-value), und er ist KEINER, wo sie mit * null Zeichen
+zulaesst (text). Fuenf Eigenschaften, fuenf Fundstellen, und alles vom Typ TEXT
+bleibt ausdruecklich stumm. Der Anlass ist eine offene fremde Klage,
+libical/libical #476, in der seit 2021 ueber genau diese Abgrenzung gestritten
+wird.
+
 Nur Python 3 aus der Standardbibliothek. Kein Netz zur Laufzeit.
 
 Aufruf:
@@ -2957,6 +2968,123 @@ def pruefe_p29(logische, funde):
                 "3.3.10"))
 
 
+# Die fuenf Eigenschaften der Mission Der leere Wert: Name, Abschnitt und der
+# Grund, warum der leere Wert gerade hier ein Verstoss ist. Der Grund steht als
+# Satzteil in der Meldung, damit jede der fuenf ihre eigene Produktion nennt
+# statt einer gemeinsamen Floskel — wer die Meldung liest, soll den Beweis
+# lesen und nicht nachschlagen muessen.
+_P30_MINDESTENS_EIN_ZEICHEN = {
+    "PRIORITY": ("3.8.1.9",
+                 "priovalue ist ein integer, und integer verlangt mit "
+                 "1*DIGIT mindestens eine Ziffer"),
+    "SEQUENCE": ("3.8.7.4",
+                 "die Grammatik verlangt ein integer, und integer verlangt "
+                 "mit 1*DIGIT mindestens eine Ziffer"),
+    "PERCENT-COMPLETE": ("3.8.1.8",
+                         "die Grammatik verlangt ein integer, und integer "
+                         "verlangt mit 1*DIGIT mindestens eine Ziffer"),
+    "GEO": ("3.8.1.6",
+            "geovalue verlangt zwei durch ';' getrennte float, und float "
+            "verlangt mit 1*DIGIT mindestens eine Ziffer"),
+    "DURATION": ("3.8.2.5",
+                 "dur-value verlangt ein wörtliches \"P\" und dahinter eine "
+                 "Dauer"),
+}
+
+
+def pruefe_p30(logische, funde):
+    """Der leere Wert an einer Eigenschaft, deren ABNF mindestens ein Zeichen
+    verlangt.
+
+    DER NORMTEXT. Am 2026-09-08 um 04:42:17 UTC von rfc-editor.org geholt
+    (HTTP 200, 345537 Bytes, 9411 Zeilen); die Zeilennummern sind an dieser
+    Datei gemessen, nicht erinnert:
+
+        1939  dur-value  = (["+"] / "-") "P" (dur-date / dur-time / dur-week)
+        2002  float      = (["+"] / "-") 1*DIGIT ["." 1*DIGIT]
+        2033  integer    = (["+"] / "-") 1*DIGIT
+        4834  geo        = "GEO" geoparam ":" geovalue CRLF
+        4838  geovalue   = float ";" float
+        4947  percent = "PERCENT-COMPLETE" pctparam ":" integer CRLF
+        5010  priority   = "PRIORITY" prioparam ":" priovalue CRLF
+        5015  priovalue   = integer       ;Must be in the range [0..9]
+        5523  duration   = "DURATION" durparam ":" dur-value CRLF
+        7763  seq = "SEQUENCE" seqparam ":" integer CRLF
+
+    DER GANZE BEWEIS IST EIN ZEICHEN: das 1 in 1*DIGIT. Dagegen Zeile 2527:
+
+        text       = *(TSAFE-CHAR / ":" / DQUOTE / ESCAPED-CHAR)
+
+    Ein * ohne Untergrenze heisst null oder mehr. Deshalb ist ein leeres
+    SUMMARY, DESCRIPTION, LOCATION, COMMENT, CATEGORIES oder UID KEIN Verstoss,
+    und ein Werkzeug, das es meldet, hat unrecht. Der Unterschied zwischen den
+    beiden Gruppen steht im Normtext und nicht in meinem Urteil — das ist der
+    einzige Grund, warum diese Pruefung eine feste Liste von fuenf Namen fuehrt
+    und nicht raet.
+
+    DIE KLAGE VON AUSSEN: libical/libical #476, "ICAL_ALLOW_EMPTY_PROPERTIES=
+    true allows invalid events", eroeffnet 2021-01-29, am 2026-09-07 um
+    21:34 UTC als OPEN abgerufen, 11 Kommentare. Ein Kommentator zitiert 2021
+    dieselbe Produktion:
+
+        RFC 5545 defines text as:
+        text       = *(TSAFE-CHAR / ":" / DQUOTE / ESCAPED-CHAR)
+        So it's legal to be empty AFAICT. Structured types shouldn't be
+        allowed to be empty IMHO unless explicitly allowed by the spec
+
+    Und 2025-09-25, vier Jahre spaeter, steht die Abgrenzung dort noch offen:
+    "we need to detect some other class of properties to prohibit from
+    emptiness, right?" Diese Pruefung ist eine Antwort auf genau diese Frage —
+    nicht die Antwort: Die Auswahl der fuenf ist meine, sie folgt nur einer
+    Regel, die eine dritte Person nachlesen kann.
+
+    WAS DIESE PRUEFUNG AUSDRUECKLICH NICHT TUT. Jeder dieser Faelle bleibt
+    stumm und steht in state/offen.md, statt hier mitgenommen zu werden:
+
+    - Jede Eigenschaft vom Typ TEXT, aus dem Grund oben.
+    - URL, ATTENDEE, ORGANIZER. Sie sind heute stumm, aber ihr Wertetyp haengt
+      an "uri = <As defined in Section 3 of [RFC3986]>" (Zeile 2706): eine
+      Verweisung aus dem Dokument heraus, keine Produktion, die ich im Normtext
+      nachlesen kann, und RFC 3986 laesst die leere Referenz zu. Wer sie hier
+      mitnaehme, behauptete einen Zwang, den er nicht zitieren kann.
+    - CLASS. Leer, stumm, und classvalue laesst iana-token zu. Das waere eine
+      Pruefung gegen einen Wertevorrat wie P25/P26, nicht diese hier.
+    - DER WERTEBEREICH. priovalue traegt ";Must be in the range [0..9]";
+      PRIORITY:42 bleibt trotzdem stumm. Diese Pruefung stellt leer gegen nicht
+      leer, sonst ist sie eine andere.
+    - Der leere Wert an einem PARAMETER (ATTENDEE;CN=:mailto:...). Andere
+      Grammatik, andere Fundstelle.
+
+    LEER HEISST HIER: NULL ZEICHEN, nicht "sieht leer aus". "PRIORITY: " mit
+    einem Leerzeichen bleibt stumm — ein Leerzeichen ist kein DIGIT, aber das
+    ist eine Aussage ueber den Wertebereich und gehoert zum Absatz darueber.
+    Die Wahl geht in die Richtung, die WENIGER meldet: Ein Fehlalarm ist nach
+    W3 der Missionsdatei ein Fehlschlag, eine ausgelassene Meldung nur ein
+    kleinerer Zuwachs.
+
+    WO SIE GREIFT: an der Eigenschaft, gleich in welcher Komponente. Die fuenf
+    Abschnitte geben den Wertetyp an und nicht die Komponente. Die Zeile der
+    Meldung ist die der Eigenschaft.
+
+    DOPPELMELDUNGEN SIND GEWOLLT, WO SIE ENTSTEHEN. "DURATION:" neben einem
+    DTEND in derselben Komponente traegt zusaetzlich eine P14-Meldung — aus
+    einem anderen Grund, mit einer anderen Fundstelle. Diese Pruefung
+    unterdrueckt sie nicht; sie zaehlt aber auch nicht als Beleg fuer P30, und
+    deshalb hat das Beispiel dieser Pruefung kein DTEND.
+    """
+    for lz in logische:
+        if lz.name is None:
+            continue
+        eintrag = _P30_MINDESTENS_EIN_ZEICHEN.get(lz.name)
+        if eintrag is None or lz.wert != "":
+            continue
+        abschnitt, grund = eintrag
+        funde.append(Fund(
+            FEHLER, lz.nr, "P30",
+            "%s trägt den leeren Wert; %s" % (lz.name, grund),
+            abschnitt))
+
+
 _BOM_UTF8 = b"\xef\xbb\xbf"
 
 
@@ -3032,7 +3160,7 @@ def pruefe_p20(rohdaten, funde):
 
 
 def untersuche(rohdaten):
-    """Alle neunundzwanzig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle dreißig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     rohdaten, hatte_bom = pruefe_p20(rohdaten, funde)
     zeilen = zerlege_physisch(rohdaten)
@@ -3080,6 +3208,7 @@ def untersuche(rohdaten):
     pruefe_p27(komponenten, funde)
     pruefe_p28(komponenten, funde)
     pruefe_p29(logische, funde)
+    pruefe_p30(logische, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))

@@ -1,0 +1,1 @@
+FEHLER Zeile 9: P30 PRIORITY trägt den leeren Wert; priovalue ist ein integer, und integer verlangt mit 1*DIGIT mindestens eine Ziffer [RFC 5545 §3.8.1.9]

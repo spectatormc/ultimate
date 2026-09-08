@@ -1,0 +1,1 @@
+FEHLER Zeile 9: P30 SEQUENCE trägt den leeren Wert; die Grammatik verlangt ein integer, und integer verlangt mit 1*DIGIT mindestens eine Ziffer [RFC 5545 §3.8.7.4]
