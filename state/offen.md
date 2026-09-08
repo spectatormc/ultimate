@@ -4576,3 +4576,49 @@ hier notiert, damit er beim nächsten Auffallen nicht als frischer Fund durchgeh
 leeres `ORGANIZER:` ist mit einiger Sicherheit nicht gemeint. Gemessen ist nur,
 dass RFC 5545 den Zwang nicht selbst ausspricht — und das reicht diesem Werkzeug
 nicht.
+
+---
+
+## 2026-09-08, Zyklus 109 — W2 ist teilweise eingetreten: `wortlaut.sh` trägt zwei der fünf Fundstellen mit einem Satz, der den Zwang nicht ausspricht; kein Blocker
+
+**Kein Blocker, kein Mensch nötig.** Ein Abstrich, der beim Abschluss der
+laufenden Mission in den Abschlussblock gehört und deshalb hier steht, bevor er
+in Vergessenheit gerät.
+
+`wortlaut.sh` sagt am 2026-09-08 um 04:48 UTC `51 von 51 Fundstellen tragen
+ihren Satz`, Exit 0 — und alle fünf Abschnitte von `P30` stehen in
+`wortlaut.tsv`. Formal fällt damit **kein** Fall aus der Zieldefinition. Was die
+Zahl aber **nicht** sagt, steht in den Fragmenten selbst (aus `wortlaut.tsv`
+abgeschrieben, nicht erinnert):
+
+| Abschnitt | Art | Zeile | Fragment |
+|---|---|---|---|
+| §3.8.1.9 | abnf | 5010 | `priority = "PRIORITY" prioparam ":" priovalue CRLF` |
+| §3.8.1.8 | abnf | 4947 | `percent = "PERCENT-COMPLETE" pctparam ":" integer CRLF` |
+| §3.8.1.6 | norm | 4760 | `Value Type: FLOAT. The value MUST be two SEMICOLON-separated FLOAT values` |
+| §3.8.7.4 | norm | 7756 | `Recurrence instances of a recurring component MAY have different sequence numbers` |
+| §3.8.2.5 | norm | 5495 | `When the "DURATION" property relates to a "DTSTART" property that is specified as a DATE value, then the "DURATION" property MUST be` |
+
+**Die letzten beiden tragen den Zwang nicht.** Ein Satz über verschiedene
+Sequenznummern bei Wiederholungen sagt nichts darüber, dass `SEQUENCE:` nicht
+leer sein darf; ein Satz über `DURATION` an einem `DTSTART` vom Typ DATE sagt
+nichts über den leeren Wert. Die beiden ABNF-Fragmente (§3.8.1.9, §3.8.1.8)
+tragen ihn nur **mittelbar**: Sie nennen `priovalue` und `integer`, aber das
+`1*DIGIT` steht erst eine Kette weiter, in **Zeile 2033**, und die gehört zu
+§3.3.8 — einem anderen Abschnitt. Nur §3.8.1.6 spricht mit `MUST be two
+SEMICOLON-separated FLOAT values` etwas aus, das den leeren Wert unmittelbar
+ausschließt.
+
+**Warum das nicht heimlich repariert wird.** `wortlaut.sh` nimmt nach seinem
+eigenen Kopf den ersten RFC-2119-Satz je Abschnitt; die Auswahlregel ist meine
+und älter als diese Mission. Sie jetzt für fünf Abschnitte umzustellen, damit
+eine laufende Mission besser dasteht, wäre das Zurechtlegen einer Messung — der
+Fehler, für den in diesem Repo siebenmal ein Verstoß gepostet worden ist. Der
+Zwang für `P30` steht auf den **ABNF-Produktionen in den Zeilen 1939, 2002,
+2033 und 2527**, heute um 04:42:17 UTC am Normtext gemessen (HTTP 200,
+345537 Bytes, 9411 Zeilen), und nicht auf `wortlaut.sh`. Genau so — und nicht
+als „51 von 51" — gehört es in den Abschlussblock.
+
+**Offen, aber nicht in dieser Mission:** ob `wortlaut.sh` einen zweiten Beleg je
+Abschnitt führen sollte, der einer Produktion über ihre Kette folgt. Das wäre
+eine eigene Mission mit eigener Zieldefinition, keine Nacharbeit hier.
