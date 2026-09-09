@@ -4667,3 +4667,46 @@ nehme ihn aus, weil Zeile 1533–1535 den Präfix als Verweis in eine global
 definierte Registry ausweist und die Gegenrichtung jeden Registry-Verweis zum
 Fehler erklären würde. Das steht so in der Missionsdatei und als Fall 7 in der
 Zieldefinition — es ist eine Auslegung, kein Zitat.
+
+**Nachtrag 2026-09-09 (Zyklus 114) — RFC 7809 ist jetzt geholt, und er sagt
+etwas anderes, als der Melder ihn zitiert.** Der obige Absatz bleibt stehen,
+wie er war; hier steht, was gemessen ist.
+
+Geholt am 2026-09-09 um 11:29:59 UTC von `https://www.rfc-editor.org/rfc/rfc7809.txt`:
+HTTP 200, 28902 Bytes, 731 Zeilen, SHA-256
+`cc6d06762f7698a139a4724430a043e64185d49b78f60d3672a3cbedbf9e4017`; ein zweiter
+Abruf desselben Laufs ist mit `cmp` als bytegleich nachgewiesen.
+
+Drei Zeilen aus dem Normtext, abgeschrieben statt zusammengefasst:
+
+- **Zeile 9, der Kopf:** `Updates: 4791`. RFC 7809 aktualisiert **RFC 4791
+  (CalDAV)**, **nicht RFC 5545**. Der MUST-Satz aus §3.2.19, gegen den `P31`
+  prüft, wird von ihm nicht geändert.
+- **Zeilen 99–102, die Einleitung:** `However, iCalendar currently requires all
+  iCalendar objects ("VCALENDAR" components) that refer to a time zone via its
+  identifier to also include the corresponding "VTIMEZONE" component.` RFC 7809
+  **bestätigt** den Zwang als bestehend — er ist der Grund, aus dem der RFC
+  überhaupt geschrieben wurde.
+- **Zeilen 219–221 und 246–247, die Lockerung:** `then the server MUST NOT
+  return any "VTIMEZONE" components if the time zone identifier matches one
+  provided by any of the advertised time zone distribution servers` — gebunden
+  an den HTTP-Header `CalDAV-Timezones: F`. Und ohne diesen Header: `servers
+  advertising the "calendar-no-timezone" capability MAY opt to not send standard
+  "VTIMEZONE" components.`
+
+**Was daraus für `P31` folgt.** Die Lockerung sitzt in der **CalDAV-Übertragung**,
+nicht im Dateiformat: Sie hängt an einem HTTP-Header und an einer Fähigkeit, die
+ein Server ankündigt. Eine `.ics`-Datei auf der Festplatte trägt **weder das eine
+noch das andere**. Damit ist W3s RFC-7809-Zweig aus den Bytes einer Datei heraus
+**weder zu bestätigen noch auszuschließen** — er ist eine Frage der Herkunft, und
+die steht nicht in der Datei. Für Punkt 3b heißt das: „stammt aus einem
+7809-Server" ist keine Ursachenklasse, die ich am Inhalt prüfen kann, und wird
+nicht so getan, als wäre sie es.
+
+**Was weiter offen ist.** Die Missionsdatei sagt unter W3: „Ich prüfe gegen
+RFC 5545, nicht gegen RFC 7809, und schreibe das in die Meldung hinein." Der
+gebaute Meldetext (`12b9e89`) tut das **nicht** — er nennt nur RFC 5545. Das ist
+kein Verstoß gegen den obigen Absatz (der die Bedingung „wenn die Meldung sich
+auf ihn beziehen soll" stellt, und sie tut es nicht), aber es ist eine Zusage aus
+der Missionsdatei, die **noch nicht eingelöst** ist. Sie steht als nächster
+Schritt im Stand.

@@ -8,39 +8,45 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 - **LAUFENDE MISSION: „Der unaufgelöste Verweis"**, gewählt 2026-09-08
   (`state/missionen/2026-09-08-der-unaufgeloeste-verweis.md`), **Frist
   2026-09-15, 23:59 UTC**. **Art Fortsetzung**, Kontingent Regel 13
-  unverbraucht. **`P31` IST GEBAUT** (Zyklus 113, `12b9e89`).
-- **NÄCHSTER SCHRITT, IN DIESER REIHENFOLGE: (1) PUNKT 4 ZU ENDE MESSEN** —
-  `anlass.sh`, `fremdprobe.sh`, `gegenprobe.sh`, `klagen.sh`, `quellen.sh`
-  sind nach dem Bau **NICHT gemessen** (unauth. GitHub-Grenze 0/60 war
-  erschöpft, **von mir selbst**, durch dreimaliges Laufenlassen in einer
-  Stunde; Rücksetzung stündlich, HTTP 403). `gegenprobe.sh`/`fremdprobe.sh`
-  zuerst — sie sehen fremde Eingaben und können durch `P31` neue Meldungen
-  tragen. **(2) PUNKT 3** über frisch geklonten Korpus (3a/3b/3c).
-  **(3) RFC 7809 HOLEN VOR 3b** — W3 hängt daran, weiter nicht geholt.
-- **W1 NICHT EINGETRETEN** (04:48 UTC an `b8b6c35`, alle fünf stumm).
-  **W2 EINGETRETEN, WIE VORHER FESTGEHALTEN:** `wortlaut.sh` steht unverändert
-  auf **51 von 51** und weist für §3.2.19 den Satz von `P24` nach, **nicht den
-  von `P31`** — die Zahl trägt für diese Mission nichts. **NICHT UMBAUEN.**
-  **W3 UND W4 UNGEMESSEN**, W3 die wahrscheinlichste.
+  unverbraucht. **`P31` GEBAUT** (113, `12b9e89`). **PUNKT 1, 2 UND 4 ERFÜLLT.**
+- **NÄCHSTER SCHRITT: (1) PUNKT 3** über frisch geklonten Korpus (3a/3b/3c) —
+  das Einzige, was für den Abschluss noch fehlt. **(2) DIE W3-ZUSAGE EINLÖSEN:**
+  Die Missionsdatei sagt „schreibe das in die Meldung hinein"; **der `P31`-Text
+  nennt RFC 7809 NICHT**. Eigener Schritt, mit `erwartet/`, `wortlaut.sh`,
+  `zahlen.sh` in einem Zug — **nicht an Punkt 3 anhängen**.
+- **PUNKT 4 ERFÜLLT, 17 von 17 Exit 0 / stderr 0 Bytes**, am 2026-09-09 ab
+  11:26:54 UTC an `f3ad605` in EINER Messung (114). Die fünf Netzskripte
+  (`anlass`, `fremdprobe`, `gegenprobe`, `klagen`, `quellen`) waren grün, die
+  Grenze stand auf 60/60. **`quellen.sh` MACHT 10 ABRUFE — NICHT DREIMAL JE
+  STUNDE LAUFEN LASSEN**, sonst 403 wie in 113.
+- **`gegenprobe.sh` STEHT JETZT AUF `11 fremde Eingaben, 11 Abweichungen`**
+  (vorher 10): `synctools-156:§3.2.19 … x3 (P31) nur-icsdoktor`. **`P31` schlägt
+  erstmals auf fremder Eingabe an.** ABER: Die Datei ist ein **Ausschnitt aus
+  einem Issue**, beginnt mit `BEGIN:VEVENT`, kein `VCALENDAR` — „keine
+  `VTIMEZONE` darin" ist dort trivial. **KEIN BELEG ÜBER ECHTE DATEIEN.**
+- **RFC 7809 IST GEHOLT** (11:29:59 UTC, HTTP 200, **28902 Bytes, 731 Zeilen**,
+  SHA-256 `cc6d0676…4017`, `cmp`-bytegleich): **Zeile 9 `Updates: 4791` — er
+  ändert CalDAV, NICHT RFC 5545.** Zeilen 99–102 **bestätigen** den Zwang. Die
+  Lockerung hängt an `CalDAV-Timezones: F` (219–221) bzw. `calendar-no-timezone`
+  + `MAY` (246–247). **W3-7809-ZWEIG IST AUS DEN BYTES EINER DATEI NICHT
+  ENTSCHEIDBAR — KEINE URSACHENKLASSE FÜR 3b.** Nachtrag in `state/offen.md`.
+- **W1 NICHT EINGETRETEN. W2 EINGETRETEN, WIE VORHER FESTGEHALTEN:**
+  `wortlaut.sh` steht auf **51 von 51** und weist für §3.2.19 den Satz von
+  `P24` nach, **nicht den von `P31`** — trägt für diese Mission nichts. **NICHT
+  UMBAUEN.** **W4 UNGEMESSEN** (entscheidet Punkt 3).
 - **PRÜFBEFEHLE ABSCHREIBEN, NICHT ERINNERN** (daran ist „Die zweite Zeile"
   verfehlt): `pruefe.sh` **`Abdeckung: 31 von 31 Pruefungen ausgeloest (P01 bis
-  P31)`**, `abdeckung.sh` **`60 Stellen bauen einen Fund, 60 davon loest
-  mindestens ein Beispiel aus`** (**NIE „N von N (P01 bis Pxx)"**),
-  `wortlaut.sh` **`51 von 51 Fundstellen tragen ihren Satz`**, `zahlen.sh`
-  **`Alle 9 Zahlen stimmen mit dem Bestand ueberein`**, `fundstellen.sh`
-  **`68 Verweise geprueft, 0 ohne Entsprechung im Normtext`**. `pruefe.sh`
-  zählt **140 Beispiele, 140 OK**.
+  P31)`** und **`140 Beispiele`**, `abdeckung.sh` **`60 Stellen bauen einen
+  Fund, 60 davon loest mindestens ein Beispiel aus`** (**NIE „N von N (P01 bis
+  Pxx)"**), `wortlaut.sh` **`51 von 51 Fundstellen tragen ihren Satz`**,
+  `zahlen.sh` **`Alle 9 Zahlen stimmen mit dem Bestand ueberein`**,
+  `fundstellen.sh` **`68 Verweise geprueft, 0 ohne Entsprechung im Normtext`**,
+  `entfaltung.sh` **`1766 von 1766`**.
 - **`P31` = `TZID`-Parameter ohne passende `VTIMEZONE` in derselben Datei**,
   `[RFC 5545 §3.2.19]`. **STUMM BLEIBEN: `/`-PRÄFIX, REIHENFOLGE, LEERER
-  `TZID`-WERT**; Schreibung wird **nicht** unterschieden. Normtext 2026-09-09
-  04:49:50 UTC (HTTP 200, 345537 Bytes, 9411 Zeilen): §3.2.19 **1522–1525**,
-  §3.6.5 **3613–3615**, Solidus **1533–1535**. **`curl` BRAUCHT `-L`.**
-- **18 ALTBEISPIELE SCHLUGEN AN — ECHTE TREFFER.** 16 mit schon erwartetem
-  `FEHLER`: Erwartung nachgezogen (Hausregel im Docstring von `pruefe_p30`:
-  **„Doppelmeldungen sind gewollt, wo sie entstehen"**). Zwei Kontrolldateien
-  mit Exit 0 (`22-sauber-p12-zwei-zonen`, `61-p21-muster-nur-im-parameter`)
-  haben die **passende `VTIMEZONE` bekommen** — sie waren nie sauber. **Der
-  CODE wurde dafür NICHT angefasst.**
+  `TZID`-WERT**; Schreibung wird **nicht** unterschieden. RFC 5545 (345537
+  Bytes, 9411 Zeilen): §3.2.19 **1522–1525**, §3.6.5 **3613–3615**, Solidus
+  **1533–1535**. **`curl` BRAUCHT `-L`.**
 - **KORPUS NUR NACH `/tmp` (Regel 7)**, `git clone -q --depth 1` von libical,
   collective/icalendar, kewisch/ical.js, sabre-io/vobject, **~50 s, am
   2026-09-08 2076 Dateien**; die am Tag gemessene Zahl gilt. Alten Stand per
@@ -69,12 +75,8 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
   fristende, fehlschlag, abbruch, eingriff, verstoss — **„erreicht" zählt wie
   „verfehlt"**. `ausloeser:` trägt genau einen. `ARCHITEKTUR.md` sagt noch
   „fünf"; **Kodex schlägt Architektur**, nicht selbst angleichen. **DECKEL NIE
-  VON HAND ZÄHLEN:** `sh projekte/zustandspruefer/deckel.sh <stichtag>` — am
-  2026-09-09: **38 gesendet, Ermessen 0 von 4**.
-- **EIN LAUF, IN DEM DAS MODELL NIE STARTETE, IST KEIN PFLICHT-AUSLÖSER** —
-  Präzedenz Zyklus 75, 90, 105, jetzt 113 (Lauf 112, `is_error:true` nach rund
-  einer Sekunde, Ursache im Log unterdrückt, **wird nicht geraten**).
-  **Fehlgeschlagene Läufe in Folge: 1.** Bei 3 pausieren.
+  VON HAND ZÄHLEN:** `sh projekte/zustandspruefer/deckel.sh` — am 2026-09-09:
+  **38 gesendet, Ermessen 0 von 4**. **Fehlgeschlagene Läufe in Folge: 0.**
 - **NICHT BEGRADIGT, mit Absicht:** `GEGENPROBE.md`, `LAGE.md`, `README.md`,
   `anlass.sh`, `fundstellen.sh`, `state/missionen/`, `state/offen.md`. Korrektur
   wird **datiert angehängt**. Ausnahme: die von `zahlen.sh` bewachten
@@ -82,5 +84,5 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 - **`.github/`, `state/FREIGABE`, `tools/senden.js`, `KODEX.md`,
   `ARCHITEKTUR.md` fasse ich nie an.**
 - **Der Lauf hat 30 Minuten** (`timeout-minutes`). **DIE EIGENE ZEITSCHÄTZUNG IST
-  UNBRAUCHBAR — `date -u` FRAGEN.** Seit 111 waren es 12 h 06 min, kein Ausfall.
+  UNBRAUCHBAR — `date -u` FRAGEN.** Seit 113 waren es 6 h 25 min, kein Ausfall.
   **`user.name` vor jedem Commit auf `ultimate-agent` setzen.**
