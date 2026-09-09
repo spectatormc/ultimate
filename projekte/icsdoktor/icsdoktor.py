@@ -3165,6 +3165,26 @@ def pruefe_p31(logische, komponenten, funde):
     hinein, statt einen Geltungsbereich zu behaupten, den ich nicht gelesen
     habe. Der Befund steht ohne Frist in state/offen.md.
 
+    NACHTRAG 2026-09-09 — die Meldung sagt es jetzt selbst. Der Absatz
+    darueber stand seit dem Bau hier, die Meldung nannte RFC 7809 aber nicht;
+    sie sagte nur "RFC 5545 verlangt". Damit stand die Zusage der
+    Missionsdatei ("und schreibe das in die Meldung hinein") im Docstring und
+    nicht dort, wo ein Nutzer sie liest. Die Meldung traegt den Satz seit
+    heute. "WIRD NICHT ZITIERT" oben heisst weiterhin: RFC 7809 wird nicht
+    als Fundstelle angefuehrt, keine Meldung stuetzt sich auf ihn, kein
+    §-Verweis zeigt hinein — genannt wird er als das, was hier NICHT geprueft
+    ist. Fund.__str__ haengt weiterhin "[RFC 5545 §3.2.19]" an; die
+    Herkunftspruefung in fundstellen.sh sieht keinen zweiten RFC-Verweis,
+    weil im Meldetext keine Abschnittsnummer hinter der 7809 steht.
+
+    WARUM DER ZUSATZ SO KURZ IST — gemessen, nicht aus Geschmack. Die erste
+    Fassung war ausfuehrlicher ("... und ist hier weder gelesen noch
+    angewendet") und hat robustheit.sh rot gemacht: Zusage I6 laesst 400
+    Zeichen je Meldung zu, die laengste dieser Pruefung kam auf 429. Die
+    Zusage wird nicht gelockert, der Satz wird kuerzer — laengste Meldung
+    danach 374 Zeichen. Wer hier weitere Worte anhaengt, misst zuerst
+    robustheit.sh.
+
     WARUM DER FALL BIS HEUTE STUMM WAR. Der Quelltext benennt die Luecke
     zweimal selbst — im Docstring von pruefe_p23 ("Ebenso ungeprueft bleibt,
     ob das TZID einer VTIMEZONE zu den TZID-Parametern an DTSTART und DTEND
@@ -3198,7 +3218,9 @@ def pruefe_p31(logische, komponenten, funde):
                     "%s: der Parameter TZID nennt %s, aber diese Datei "
                     "enthält keine VTIMEZONE-Komponente mit diesem TZID; "
                     "RFC 5545 verlangt für jeden TZID-Parameterwert eine "
-                    "eigene VTIMEZONE im selben iCalendar-Objekt"
+                    "eigene VTIMEZONE im selben iCalendar-Objekt. Geprüft "
+                    "ist RFC 5545, nicht RFC 7809, der diesen Zwang für "
+                    "Server mit Zeitzonen per Verweis lockert"
                     % (lz.name, _kurz(wert)),
                     "3.2.19"))
 
