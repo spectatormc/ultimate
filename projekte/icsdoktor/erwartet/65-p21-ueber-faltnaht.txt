@@ -1,1 +1,2 @@
+FEHLER Zeile 7: P31 DTSTART: der Parameter TZID nennt UTC, aber diese Datei enthält keine VTIMEZONE-Komponente mit diesem TZID; RFC 5545 verlangt für jeden TZID-Parameterwert eine eigene VTIMEZONE im selben iCalendar-Objekt [RFC 5545 §3.2.19]
 FEHLER Zeile 8: P21 die Wiederholungsregel nennt COUNT ("2") und UNTIL ("20260901T090000Z") zugleich; beide Regelteile sind einzeln erlaubt, aber nicht in derselben RRULE [RFC 5545 §3.3.10]

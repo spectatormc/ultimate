@@ -3085,6 +3085,124 @@ def pruefe_p30(logische, funde):
             abschnitt))
 
 
+def pruefe_p31(logische, komponenten, funde):
+    """Ein TZID-Parameter nennt eine Zeitzone, die in dieser Datei nicht steht.
+
+    DER NORMTEXT. Am 2026-09-09 um 04:49:50 UTC von rfc-editor.org geholt
+    (HTTP 200, 345537 Bytes, 9411 Zeilen); die Zeilennummern sind an dieser
+    Datei gemessen, nicht erinnert. Der tragende Satz steht ZWEIMAL WOERTLICH
+    da, in §3.2.19 (Zeilen 1522-1525, das "An" schliesst Zeile 1522 ab) und
+    noch einmal in §3.6.5 (Zeilen 3613-3615):
+
+        An individual "VTIMEZONE" calendar component MUST be specified for
+        each unique "TZID" parameter value specified in the iCalendar
+        object.
+
+    DAS IST DER UNTERSCHIED ZU P24 BIS P30: ein ausgesprochenes RFC-2119-MUST,
+    keine ABNF-Produktion, aus der der Zwang erst abgeleitet werden muesste.
+    Zitiert wird §3.2.19, weil dort der Parameter definiert ist, um den es
+    geht; §3.6.5 sagt dasselbe ueber die Komponente.
+
+    UND ES IST DIE ERSTE PRUEFUNG DIESES WERKZEUGS, DIE EINEN NAMEN UEBER DIE
+    GANZE DATEI HINWEG AUFLOEST. P24 liest eine einzelne Zeile und braucht die
+    uebrige Datei nicht; hier haengt das Urteil ueber Zeile 7 an dem, was in
+    Zeile 40 steht. Deshalb nimmt sie als einzige sowohl die logischen Zeilen
+    (dort stehen die Parameter) als auch die Komponenten (dort stehen die
+    VTIMEZONE-Definitionen).
+
+    WAS AUSDRUECKLICH STUMM BLEIBT — alle drei sind Fehlalarme, und ein
+    Fehlalarm ist nach W3 der Missionsdatei ein Fehlschlag:
+
+    - DER SOLIDUS-PRAEFIX. Zeilen 1533-1535: "The presence of the SOLIDUS
+      character as a prefix, indicates that this "TZID" represents a unique ID
+      in a globally defined time zone registry (when such registry is
+      defined)." Ein TZID=/Europe/Berlin verweist also nicht in diese Datei,
+      sondern aus ihr heraus. Ob die Registry existiert, kann dieses Werkzeug
+      nicht wissen — es meldet deshalb nichts. Das ist eine Auslegung des
+      Satzes und keine Stelle, die das Schweigen wortwoertlich anordnet; sie
+      steht als meine Entscheidung in der Missionsdatei.
+    - DIE REIHENFOLGE. Steht die passende VTIMEZONE hinter dem VEVENT, das sie
+      braucht, ist das kein Verstoss: Der Normtext verlangt "specified ... in
+      the iCalendar object" und nennt keine Reihenfolge. Deshalb werden erst
+      alle Komponenten eingesammelt und dann geurteilt, nie im Vorbeigehen.
+    - DER LEERE TZID-WERT (TZID=). Er trifft keine VTIMEZONE, waere hier also
+      ein Treffer. Er bleibt trotzdem stumm: Sein Fehler ist der leere
+      Parameterwert und nicht der unaufgeloeste Verweis, und ihn hier
+      mitzunehmen hiesse, eine zweite Pruefung unter dieser Kennung zu
+      verstecken. P24 zaehlt denselben Fall als vorhandenen Parameter, weil es
+      dort um das Vorhandensein geht; hier geht es um den Namen.
+
+    GROSS- UND KLEINSCHREIBUNG: EIN TREFFER IST AUCH EINER, WENN NUR DIE
+    SCHREIBUNG ABWEICHT. RFC 5545 sagt zur Schreibung von TZID-Werten nichts —
+    weder dass sie zaehlt noch dass sie egal ist. Wer hier auf Zeichengleichheit
+    besteht, meldet europe/berlin gegen TZID:Europe/Berlin als unaufgeloest und
+    behauptet damit einen Zwang, den er nicht zitieren kann. Die Wahl geht
+    deshalb in die Richtung, die WENIGER meldet, wie in P30.
+
+    WAS DIESE PRUEFUNG NICHT TUT. Sie prueft den Verweis, nicht die Zeitzone:
+    ob die gefundene VTIMEZONE inhaltlich richtig ist, ob ihr Name in der
+    TZ-Datenbank steht, ob ihre Versaetze stimmen. Das waere jedes Mal eine
+    Aussage ueber eine Datenlage ausserhalb der Datei.
+
+    DIE KLAGEN VON AUSSEN — und was sie nicht tragen.
+    JonathanGodley/fastmail-mcp #166, eroeffnet 2026-08-23, am 2026-09-08 um
+    16:45:46 UTC als offen abgerufen, 1 Kommentar; und olitreadwell/kiwi-fests
+    #47, eroeffnet 2026-08-07, am selben Tag als offen abgerufen, 0
+    Kommentare. Zwei Melder, zwei verschiedene Erzeuger, derselbe Fehler.
+    Beide klagen ueber ERZEUGER, ich baue an einem PRUEFER; der Schluss von
+    der einen Sache auf die andere ist meiner und nicht ihre Bitte. #166 haelt
+    ausserdem selbst fest, dass der Fehler beim gemessenen Konsumenten keine
+    sichtbare Wirkung hat ("The absence has no visible effect in the Fastmail
+    client") — der Schaden ist dort ausdruecklich unvermessen. Und der Melder
+    zitiert den RFC ungenau: Er schreibt den Satz §3.6.5 zu und gibt ihn in
+    eigenen Worten wieder. Diese Pruefung steht auf den beiden Zeilenbereichen
+    oben, die ich selbst geholt habe, nicht auf seiner Wiedergabe.
+
+    RFC 7809 IST NICHT GEPRUEFT UND WIRD NICHT ZITIERT. Er lockert den Zwang
+    fuer CalDAV-Server mit "time zones by reference"; eine Datei aus einem
+    solchen Server ist fuer ihren Server richtig und fuer diese Pruefung
+    falsch. Ich pruefe gegen RFC 5545 und schreibe genau das in die Meldung
+    hinein, statt einen Geltungsbereich zu behaupten, den ich nicht gelesen
+    habe. Der Befund steht ohne Frist in state/offen.md.
+
+    WARUM DER FALL BIS HEUTE STUMM WAR. Der Quelltext benennt die Luecke
+    zweimal selbst — im Docstring von pruefe_p23 ("Ebenso ungeprueft bleibt,
+    ob das TZID einer VTIMEZONE zu den TZID-Parametern an DTSTART und DTEND
+    passt") und im Docstring von pruefe_p24 ("Ob das TZID einer Eigenschaft zu
+    einer VTIMEZONE derselben Datei passt, bleibt ungeprueft"). Sie war
+    gewusst, nicht uebersehen: Beide Missionen hatten einen Zuschnitt, der sie
+    ausschloss, und eine Zieldefinition darf nach Regel 3 nicht nachtraeglich
+    um Faelle erweitert werden, die dann als Erfolg mitzaehlen.
+    """
+    definierte = set()
+    for komp in komponenten:
+        if komp.name != "VTIMEZONE":
+            continue
+        for _zeile, wert in komp.hole("TZID"):
+            if wert:
+                definierte.add(wert.lower())
+
+    for lz in logische:
+        if lz.name is None:
+            continue
+        for pname, pwerte in lz.params:
+            if pname != "TZID":
+                continue
+            for wert in pwerte:
+                if not wert or wert.startswith("/"):
+                    continue
+                if wert.lower() in definierte:
+                    continue
+                funde.append(Fund(
+                    FEHLER, lz.nr, "P31",
+                    "%s: der Parameter TZID nennt %s, aber diese Datei "
+                    "enthält keine VTIMEZONE-Komponente mit diesem TZID; "
+                    "RFC 5545 verlangt für jeden TZID-Parameterwert eine "
+                    "eigene VTIMEZONE im selben iCalendar-Objekt"
+                    % (lz.name, _kurz(wert)),
+                    "3.2.19"))
+
+
 _BOM_UTF8 = b"\xef\xbb\xbf"
 
 
@@ -3160,7 +3278,7 @@ def pruefe_p20(rohdaten, funde):
 
 
 def untersuche(rohdaten):
-    """Alle dreißig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle einunddreißig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     rohdaten, hatte_bom = pruefe_p20(rohdaten, funde)
     zeilen = zerlege_physisch(rohdaten)
@@ -3209,6 +3327,7 @@ def untersuche(rohdaten):
     pruefe_p28(komponenten, funde)
     pruefe_p29(logische, funde)
     pruefe_p30(logische, funde)
+    pruefe_p31(logische, komponenten, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))

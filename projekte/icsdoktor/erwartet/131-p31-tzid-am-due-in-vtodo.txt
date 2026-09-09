@@ -1,0 +1,1 @@
+FEHLER Zeile 7: P31 DUE: der Parameter TZID nennt Asia/Tokyo, aber diese Datei enthält keine VTIMEZONE-Komponente mit diesem TZID; RFC 5545 verlangt für jeden TZID-Parameterwert eine eigene VTIMEZONE im selben iCalendar-Objekt [RFC 5545 §3.2.19]

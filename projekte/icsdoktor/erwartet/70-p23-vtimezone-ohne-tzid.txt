@@ -1,1 +1,3 @@
 FEHLER Zeile 4: P23 VTIMEZONE ab Zeile 4 hat kein TZID; die Eigenschaft ist Pflicht und benennt die Zeitzone, auf die sich jedes TZID= in dieser Datei beruft [RFC 5545 §3.6.5]
+FEHLER Zeile 15: P31 DTSTART: der Parameter TZID nennt Europe/Berlin, aber diese Datei enthält keine VTIMEZONE-Komponente mit diesem TZID; RFC 5545 verlangt für jeden TZID-Parameterwert eine eigene VTIMEZONE im selben iCalendar-Objekt [RFC 5545 §3.2.19]
+FEHLER Zeile 16: P31 DTEND: der Parameter TZID nennt Europe/Berlin, aber diese Datei enthält keine VTIMEZONE-Komponente mit diesem TZID; RFC 5545 verlangt für jeden TZID-Parameterwert eine eigene VTIMEZONE im selben iCalendar-Objekt [RFC 5545 §3.2.19]

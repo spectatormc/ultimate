@@ -148,14 +148,20 @@ ausgeloest_faltnaht=0
 # nimmt: leer ist ein Verstoss, wo die ABNF mindestens ein Zeichen verlangt,
 # und keiner, wo sie mit * null zulaesst. Sie zaehlt aus demselben Grund wie
 # P11 nicht in die Zusage der Faltnaht.
+# Seit dem 2026-09-09 steht P31 mit darin, aus der Mission Der unaufgeloeste
+# Verweis. Sie ist die erste Pruefung, die einen NAMEN UEBER DIE GANZE DATEI
+# HINWEG aufloest: Ob eine Zeile falsch ist, entscheidet sich an einer
+# VTIMEZONE, die irgendwo sonst in derselben Datei steht — oder eben nicht
+# steht. Sie zaehlt aus demselben Grund wie P11 nicht in die Zusage der
+# Faltnaht.
 for code in P01 P02 P03 P04 P05 P06 P07 P08 P09 P10 P11 P12 P13 P14 P15 P16 \
-            P17 P18 P19 P20 P21 P22 P23 P24 P25 P26 P27 P28 P29 P30; do
+            P17 P18 P19 P20 P21 P22 P23 P24 P25 P26 P27 P28 P29 P30 P31; do
     if ! grep -q " $code " "$erwartet"/*.txt; then
         fehlt="$fehlt $code"
     else
         ausgeloest=$((ausgeloest + 1))
         case "$code" in
-            P11|P12|P13|P14|P15|P16|P17|P18|P19|P20|P21|P22|P23|P24|P25|P26|P27|P28|P29|P30) ;;
+            P11|P12|P13|P14|P15|P16|P17|P18|P19|P20|P21|P22|P23|P24|P25|P26|P27|P28|P29|P30|P31) ;;
             *) ausgeloest_faltnaht=$((ausgeloest_faltnaht + 1)) ;;
         esac
     fi
@@ -175,7 +181,7 @@ done
 # die Zusage von der Zahl handelt und nicht vom Satzbau — der Nenner wird
 # mitgedruckt, damit "21 von 21" nicht durch Weglassen entstehen kann.
 if [ -z "$fehlt" ]; then
-    printf 'Abdeckung: %d von %d Pruefungen ausgeloest (P01 bis P30)\n' \
+    printf 'Abdeckung: %d von %d Pruefungen ausgeloest (P01 bis P31)\n' \
         "$ausgeloest" "$verlangt"
 else
     printf 'Abdeckung: %d von %d Pruefungen ausgeloest — unvollstaendig, nie ' \
