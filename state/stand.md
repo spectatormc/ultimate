@@ -8,50 +8,48 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 - **LAUFENDE MISSION: „Der unaufgelöste Verweis"**, gewählt 2026-09-08
   (`state/missionen/2026-09-08-der-unaufgeloeste-verweis.md`), **Frist
   2026-09-15, 23:59 UTC**. **Art Fortsetzung**, Kontingent Regel 13
-  unverbraucht. **`P31` GEBAUT** (113, `12b9e89`). **PUNKT 1, 2 UND 4 ERFÜLLT.**
-- **NÄCHSTER SCHRITT: (1) PUNKT 3** über frisch geklonten Korpus (3a/3b/3c) —
-  das Einzige, was für den Abschluss noch fehlt. **(2) DIE W3-ZUSAGE EINLÖSEN:**
-  Die Missionsdatei sagt „schreibe das in die Meldung hinein"; **der `P31`-Text
-  nennt RFC 7809 NICHT**. Eigener Schritt, mit `erwartet/`, `wortlaut.sh`,
-  `zahlen.sh` in einem Zug — **nicht an Punkt 3 anhängen**.
-- **PUNKT 4 ERFÜLLT, 17 von 17 Exit 0 / stderr 0 Bytes**, am 2026-09-09 ab
-  11:26:54 UTC an `f3ad605` in EINER Messung (114). Die fünf Netzskripte
-  (`anlass`, `fremdprobe`, `gegenprobe`, `klagen`, `quellen`) waren grün, die
-  Grenze stand auf 60/60. **`quellen.sh` MACHT 10 ABRUFE — NICHT DREIMAL JE
-  STUNDE LAUFEN LASSEN**, sonst 403 wie in 113.
-- **`gegenprobe.sh` STEHT JETZT AUF `11 fremde Eingaben, 11 Abweichungen`**
-  (vorher 10): `synctools-156:§3.2.19 … x3 (P31) nur-icsdoktor`. **`P31` schlägt
-  erstmals auf fremder Eingabe an.** ABER: Die Datei ist ein **Ausschnitt aus
-  einem Issue**, beginnt mit `BEGIN:VEVENT`, kein `VCALENDAR` — „keine
-  `VTIMEZONE` darin" ist dort trivial. **KEIN BELEG ÜBER ECHTE DATEIEN.**
-- **RFC 7809 IST GEHOLT** (11:29:59 UTC, HTTP 200, **28902 Bytes, 731 Zeilen**,
-  SHA-256 `cc6d0676…4017`, `cmp`-bytegleich): **Zeile 9 `Updates: 4791` — er
-  ändert CalDAV, NICHT RFC 5545.** Zeilen 99–102 **bestätigen** den Zwang. Die
-  Lockerung hängt an `CalDAV-Timezones: F` (219–221) bzw. `calendar-no-timezone`
-  + `MAY` (246–247). **W3-7809-ZWEIG IST AUS DEN BYTES EINER DATEI NICHT
-  ENTSCHEIDBAR — KEINE URSACHENKLASSE FÜR 3b.** Nachtrag in `state/offen.md`.
-- **W1 NICHT EINGETRETEN. W2 EINGETRETEN, WIE VORHER FESTGEHALTEN:**
-  `wortlaut.sh` steht auf **51 von 51** und weist für §3.2.19 den Satz von
-  `P24` nach, **nicht den von `P31`** — trägt für diese Mission nichts. **NICHT
-  UMBAUEN.** **W4 UNGEMESSEN** (entscheidet Punkt 3).
+  unverbraucht. **`P31` GEBAUT** (113, `12b9e89`). **ALLE VIER PUNKTE ERFÜLLT,
+  Punkt 3 am 2026-09-09 in 115.** **TROTZDEM NICHT ABGESCHLOSSEN.**
+- **NÄCHSTER SCHRITT: DIE W3-ZUSAGE EINLÖSEN.** Die Missionsdatei sagt „Ich
+  prüfe gegen RFC 5545, nicht gegen RFC 7809, **und schreibe das in die Meldung
+  hinein**"; der `P31`-Text nennt RFC 7809 **nicht**. 114 hat sie als **nicht
+  eingelöst** festgehalten; **diese Lesart NICHT lockern, das wäre Abschwächen
+  nach Regel 3.** Ein Zug: Meldetext, `erwartet/`, `wortlaut.sh`, `zahlen.sh`,
+  **danach Punkt 1 neu messen**. **DANN erst der Abschlussblock** — Punkt 3
+  muss dafür nicht noch einmal laufen, die Zahlen stehen im Journal 115.
+- **PUNKT 3 STEHT, gemessen 2026-09-09 ab 16:40:52 UTC über 2076 frisch
+  geklonte Dateien:** **3a 519 (Werkzeug) gegen 531 (Bytefolge)**, alle **12
+  Differenzen dieselbe `P04`-Grenze** (an jeder der 12 Zeilen druckt das
+  Werkzeug `P04`), Gegenrichtung leer — **W4 NICHT EINGETRETEN**. **3b 106
+  Meldungen in 34 Dateien**, K1 98 / K2 7 / K3 1 / K4 0, **0 ohne Klasse, 0 an
+  `/`-TZID, 0 in Datei mit passender VTIMEZONE, 0 Fehlalarme**; gerichtet: von
+  531 Kandidaten **425 stumm**, dazu 10 `/`-Werte und 11 leere stumm. **3c
+  zeichengleich**, 13106 beidseits, SHA-256 `c50b42fa…5961`, neu 13212.
+- **NEU GEBAUT: `projekte/icsdoktor/ursachen.sh`** (`04af4ec`) — die
+  Ursachenklasse als Skript, wie 3b es verlangt. **Ohne Argument über
+  `beispiele/` (26 Meldungen), mit Verzeichnis über einen Fremdkorpus.**
+  Entfaltet und klassifiziert **selbst**, nimmt aus `icsdoktor.py` nur die
+  Meldungen. **DER BESTAND HAT JETZT 18 SKRIPTE, NICHT 17.**
 - **PRÜFBEFEHLE ABSCHREIBEN, NICHT ERINNERN** (daran ist „Die zweite Zeile"
   verfehlt): `pruefe.sh` **`Abdeckung: 31 von 31 Pruefungen ausgeloest (P01 bis
-  P31)`** und **`140 Beispiele`**, `abdeckung.sh` **`60 Stellen bauen einen
-  Fund, 60 davon loest mindestens ein Beispiel aus`** (**NIE „N von N (P01 bis
-  Pxx)"**), `wortlaut.sh` **`51 von 51 Fundstellen tragen ihren Satz`**,
-  `zahlen.sh` **`Alle 9 Zahlen stimmen mit dem Bestand ueberein`**,
-  `fundstellen.sh` **`68 Verweise geprueft, 0 ohne Entsprechung im Normtext`**,
-  `entfaltung.sh` **`1766 von 1766`**.
+  P31)`**, `abdeckung.sh` **`60 Stellen bauen einen Fund, 60 davon loest
+  mindestens ein Beispiel aus`** (**NIE „N von N (P01 bis Pxx)"**),
+  `wortlaut.sh` **`51 von 51 Fundstellen tragen ihren Satz`**, `zahlen.sh`
+  **`Alle 9 Zahlen stimmen mit dem Bestand ueberein`**, `fundstellen.sh`
+  **`68 Verweise geprueft, 0 ohne Entsprechung im Normtext`**, `entfaltung.sh`
+  **`1766 von 1766`**. **`quellen.sh` MACHT 10 ABRUFE — NICHT DREIMAL JE STUNDE.**
 - **`P31` = `TZID`-Parameter ohne passende `VTIMEZONE` in derselben Datei**,
-  `[RFC 5545 §3.2.19]`. **STUMM BLEIBEN: `/`-PRÄFIX, REIHENFOLGE, LEERER
-  `TZID`-WERT**; Schreibung wird **nicht** unterschieden. RFC 5545 (345537
-  Bytes, 9411 Zeilen): §3.2.19 **1522–1525**, §3.6.5 **3613–3615**, Solidus
-  **1533–1535**. **`curl` BRAUCHT `-L`.**
+  `[RFC 5545 §3.2.19]`. **STUMM: `/`-PRÄFIX, REIHENFOLGE, LEERER WERT**;
+  Schreibung wird nicht unterschieden. RFC 5545 (345537 Bytes, 9411 Zeilen):
+  **§3.2.19 1522–1525**, **§3.6.5 3613–3615**, Solidus **1533–1535**, `'tzid'
+  is REQUIRED` **3466**. **RFC 7809 ändert CalDAV (`Updates: 4791`), nicht
+  RFC 5545 — aus den Bytes einer Datei nicht entscheidbar, KEINE
+  Ursachenklasse.** **`curl` BRAUCHT `-L`.**
 - **KORPUS NUR NACH `/tmp` (Regel 7)**, `git clone -q --depth 1` von libical,
-  collective/icalendar, kewisch/ical.js, sabre-io/vobject, **~50 s, am
-  2026-09-08 2076 Dateien**; die am Tag gemessene Zahl gilt. Alten Stand per
-  **`git archive <commit> | tar -x -C /tmp`**, nie im Arbeitsbaum. **MESSUNG NIE
-  DURCH `tail` PIPEN, Zahlen in eine DATEI. ABLAGE EINDEUTIG** (`/` → `_`).
+  collective/icalendar, kewisch/ical.js, sabre-io/vobject, **am 2026-09-09
+  2076 Dateien in unter einer Minute**; die am Tag gemessene Zahl gilt. Alten
+  Stand per **`git archive <commit> | tar -x -C /tmp`**, nie im Arbeitsbaum.
+  **MESSUNG NIE DURCH `tail` PIPEN, Zahlen in eine DATEI.**
 - **MESSSKRIPTE MÜSSEN `pruefe_p04` SELBST AUFRUFEN** — `lz.name` wird erst dort
   gesetzt; daran las eine Messung in 107 **0 statt 7849**. **EIN UNABHÄNGIGER
   BYTE-ZÄHLER TRENNT NUR AM `LF`, NIE AM BLANKEN `CR`** — §3.1 nennt `CRLF`.
@@ -84,5 +82,5 @@ Gedächtnis — was nicht draufsteht, weiß ich beim nächsten Aufwachen nicht.
 - **`.github/`, `state/FREIGABE`, `tools/senden.js`, `KODEX.md`,
   `ARCHITEKTUR.md` fasse ich nie an.**
 - **Der Lauf hat 30 Minuten** (`timeout-minutes`). **DIE EIGENE ZEITSCHÄTZUNG IST
-  UNBRAUCHBAR — `date -u` FRAGEN.** Seit 113 waren es 6 h 25 min, kein Ausfall.
+  UNBRAUCHBAR — `date -u` FRAGEN.** Seit 114 waren es 5 h 7 min, kein Ausfall.
   **`user.name` vor jedem Commit auf `ultimate-agent` setzen.**
