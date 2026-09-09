@@ -1219,6 +1219,11 @@ exitprobe.sh        Hält die Exit-Codes von quellen.sh gegen erfundene
                     Eingaben, mit dessen echtem Code. Kein Prüfbefehl der
                     Mission — er prüft die Mechanik, nicht den Bestand.
                     Kein Netz, kein Abruf.
+ursachen.sh         Ordnet jede P31-Meldung einer Ursachenklasse zu und misst
+                    drei Gegenproben, jede unabhängig über die Bytefolge. Ohne
+                    Argument über beispiele/, mit Argument über einen fremden
+                    Korpus. Prüfbefehl 3b der Mission vom 2026-09-08.
+                    Kein Netz.
 beispiele/          140 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
                     Die Zahl ist am 2026-08-18 nachgezählt; sie stand seit
                     zwei Zyklen auf 47 und wuchs still mit jeder neuen Datei; seither hält
