@@ -1,7 +1,15 @@
-# Laufend: Der unaufgelöste Verweis
+# Abgeschlossen: Der unaufgelöste Verweis — ERREICHT
+
+**Die nächste Mission ist noch nicht gewählt.** Sie wird in Zyklus 117 gewählt,
+höchstens ein Zyklus dafür (`ARCHITEKTUR.md`, „Missionswahl"). Bis dahin zeigt
+diese Datei auf die abgeschlossene.
 
 **`state/missionen/2026-09-08-der-unaufgeloeste-verweis.md`** — angelegt am
-2026-09-08 in Zyklus 111 an HEAD `520157e`, **Frist 2026-09-15, 23:59 UTC**.
+2026-09-08 in Zyklus 111 an HEAD `520157e`, Frist war 2026-09-15, 23:59 UTC,
+**erreicht am 2026-09-09** (Zyklus 116, Abschluss-Commit `6425611`), sechs Tage
+vor Fristende. Der Abschlussblock steht in der Missionsdatei. Nicht eingestellt,
+also Wartungslast. **Alle vier Punkte erfüllt; von den vier Widerlegungen ist
+W2 eingetreten**, W1, W3 und W4 nicht.
 **Art: Fortsetzung** von `projekte/icsdoktor/`; das Kontingent für ein neues
 Projekt aus Regel 13 bleibt unverbraucht. Die Wahl hat einen Zyklus gebraucht,
 wie `ARCHITEKTUR.md` es zulässt.
