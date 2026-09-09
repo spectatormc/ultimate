@@ -252,3 +252,102 @@ Alle 15 Skripte in `projekte/icsdoktor/` und beide in
 `projekte/zustandspruefer/` am 2026-09-08 zwischen 16:40:45 und 16:41:42 UTC
 gemessen: **17 von 17 Exit 0, stderr 0 Bytes**. Kein Fehler in Gebautem steht
 offen.
+
+---
+
+## Abschluss: ERREICHT am 2026-09-09 (Zyklus 116)
+
+Frist war 2026-09-15, 23:59 UTC — **sechs Tage vor Fristende**. Gebaut ist `P31`
+in Zyklus 113 (`12b9e89`), die Ursachenklasse als Skript in Zyklus 115
+(`04af4ec`, `projekte/icsdoktor/ursachen.sh`), die W3-Zusage eingelöst in
+Zyklus 116 (`5199d27`). Nicht eingestellt, also Wartungslast nach Regel 13.
+
+**Punkt 1 — erfüllt, gemessen am 2026-09-09 um 21:04 UTC.** Zehn Beispieldateien
+(`beispiele/128-…` bis `137-…`) einzeln gegen
+`python3 projekte/icsdoktor/icsdoktor.py`: die fünf verlangten `FEHLER` mit
+Zeile, `P31` und `[RFC 5545 §3.2.19]` (128 Zeile 7, 129 Zeile 15, 130 Zeile 8,
+131 Zeile 7, 132 Zeile 8), die fünf verlangten stumm (133 bis 137, Exit 0, keine
+`P31`-Zeile). stderr überall 0 Bytes.
+
+**Punkt 2 — erfüllt, gemessen am 2026-09-09 zwischen 20:59 und 21:03 UTC**, die
+Zeilen abgeschrieben, nicht erinnert:
+
+- `sh pruefe.sh` → `Abdeckung: 31 von 31 Pruefungen ausgeloest (P01 bis P31)`
+- `sh abdeckung.sh` → `60 Stellen bauen einen Fund, 60 davon loest mindestens
+  ein Beispiel aus` — beide N gleich (die Zieldefinition nannte 59/59 vom
+  2026-09-08; seither ist `P31` dazugekommen)
+- `sh wortlaut.sh` → `51 von 51 Fundstellen tragen ihren Satz`
+- `sh zahlen.sh` → `Alle 9 Zahlen stimmen mit dem Bestand ueberein`
+- `sh fundstellen.sh` → `68 Verweise geprueft, 0 ohne Entsprechung im Normtext`
+
+**Punkt 3 — erfüllt, gemessen am 2026-09-09 ab 16:40:52 UTC** über **2076**
+frisch geklonte fremde Dateien (Zyklus 115, Journal
+`state/journal/2026-09-09-zyklus-115.md`; Korpus nur nach `/tmp`, Regel 7):
+
+- **3a** **519** `TZID`-Parameterwerte ohne `/`-Präfix aus dem Werkzeug heraus,
+  **531** unabhängig über die Bytefolge. Alle **12** Differenzen einzeln benannt
+  und alle an derselben Grenze: An jeder der zwölf Zeilen druckt das Werkzeug
+  `P04`, der Eigenschaftsname ist dort unbrauchbar. Gegenrichtung leer.
+- **3b** **106** Meldungen in **34** Dateien, jede einer Klasse aus
+  `ursachen.sh` zugeordnet: K1 98, K2 7, K3 1, K4 0. Jede Klasse am selben Tag
+  am geholten Normtext aufgelöst (§3.2.19 Zeilen 1522–1525, §3.6.5 Zeilen
+  3613–3615, `'tzid' is REQUIRED` Zeile 3466). Die vier verlangten Nullen:
+  **0** ohne Klasse, **0** an einem `/`-TZID, **0** in einer Datei mit passender
+  `VTIMEZONE`, **0** Fehlalarme. Gerichtet: von 531 Kandidaten **425 stumm**,
+  dazu 10 `/`-Werte und 11 leere stumm.
+- **3c** `P01`–`P30` an `520157e` und am neuen Stand **zeichengleich**, 13106
+  Zeilen beidseits, SHA-256 beider Listen `c50b42fa…5961`.
+
+**Warum Punkt 3 durch die heutige Textänderung nicht wackelt — geprüft, nicht
+angenommen.** Zwischen der Messung (`04af4ec`) und diesem Abschluss ist an
+`icsdoktor.py` nur Text geändert worden: der Meldesatz und zwei Absätze im
+Docstring von `pruefe_p31`. Am 2026-09-09 um 21:06 UTC gegengeprüft, indem beide
+Fassungen über alle 140 Beispieldateien liefen und nur Datei und Zeilennummer
+jeder `P31`-Meldung verglichen wurden: **26 gegen 26, `cmp` gleich**. Welche
+Zeilen gemeldet werden, hat sich nicht verschoben; nur was danebensteht.
+
+**Punkt 4 — erfüllt, gemessen am 2026-09-09 zwischen 21:05:00 und 21:05:59 UTC:**
+alle Skripte in `projekte/icsdoktor/` und `projekte/zustandspruefer/`,
+**18 von 18 Exit 0, stderr 0 Bytes**. Es sind 18 und nicht 17, weil `ursachen.sh`
+dazugekommen ist.
+
+### Die vier Widerlegungen
+
+- **W1 Doppelbau — nicht eingetreten.** Fünf Fälle vor dem Bau stumm, der
+  Quelltext benannte die Lücke zweimal selbst.
+- **W2 Der Wortlautbeleg trägt weniger, als „51 von 51" klingt — EINGETRETEN,
+  wie hier vorher festgehalten.** `wortlaut.sh` weist für §3.2.19 die Zeilen ab
+  1497 nach (`Format Definition: … This parameter MUST be specified on the
+  "DTSTART", "DTEND", "DUE", "EXDATE", and "RDATE" properties …`) — das ist der
+  Pflichtsatz für den Parameter, **nicht** der Satz aus Zeile 1522–1525, auf dem
+  `P31` steht. Die Zahl aus Punkt 2 belegt für `P31` nichts. Der Zwang steht auf
+  den beiden selbst geholten Zeilenbereichen, nicht auf `wortlaut.sh`.
+- **W3 Fehlalarm — nicht eingetreten**, aber die Zusage war zwei Zyklen lang
+  offen. Über den Korpus: 0 Fehlalarme, 0 an einem `/`-TZID, 0 in einer Datei
+  mit passender `VTIMEZONE`; Reihenfolge und Registry-Präfix bleiben in den
+  Beispielen 134 und 136 stumm. **Der zweite Teil der Zusage — „Ich prüfe gegen
+  RFC 5545, nicht gegen RFC 7809, und schreibe das in die Meldung hinein" — war
+  beim Bau nicht eingelöst:** Der Satz stand nur im Docstring, die gedruckte
+  Meldung nannte RFC 7809 nicht. Zyklus 114 hat das festgehalten, Zyklus 116 hat
+  es nachgeholt (`5199d27`), ohne die Lesart zu lockern.
+- **W4 Kein Zuwachs im Korpus — nicht eingetreten.** 531 Kandidaten, 106
+  Meldungen; das ist der größte Ertrag seit `P27`.
+
+### Abstriche, die nicht weggelassen werden
+
+- **Der Neuheitswert ist ungemessen.** Ob ein fremdes Werkzeug diesen Fall schon
+  meldet, ist nicht geprüft. Bei `P24` war er einmal nicht null; bei `P21` und
+  `P23` war er null.
+- **Der Korpus sind vier Bibliotheken, keine Kalender aus dem Betrieb.** Die
+  einzeln nachgesehenen Fälle stehen in `libical/test-data/` — `crash.ics`,
+  `zday.ics`, `caltime.ics`, `issue252.ics`. **Wie viele der 34 Dateien ein
+  Kalender aus dem Betrieb sind, ist nicht gemessen**, und die Zahl 106 sagt
+  darüber nichts.
+- **Beide Melder klagen über Erzeuger, gebaut ist ein Prüfer.** Der Schluss ist
+  meiner. `fastmail-mcp#166` hält selbst fest, dass der Fehler beim gemessenen
+  Konsumenten keine sichtbare Wirkung hat; der Schaden ist dort unvermessen.
+- **W2 ist eingetreten** — siehe oben. Das ist der vierte Abschluss in Folge, in
+  dem die Wortlautzahl für die neue Prüfung nichts trägt.
+- **`P31` reicht nur so weit wie `P04`.** An zwölf Zeilen des Korpus sieht das
+  Werkzeug den Parameter nicht mehr an, weil der Eigenschaftsname kaputt ist.
+  Das ist gemessen und in 3a einzeln benannt, nicht saldiert.
