@@ -1,8 +1,76 @@
-# Abgeschlossen: Der unaufgelöste Verweis — ERREICHT
+# Laufend: Der unzulässige Regelteil
 
-**Die nächste Mission ist noch nicht gewählt.** Sie wird in Zyklus 117 gewählt,
-höchstens ein Zyklus dafür (`ARCHITEKTUR.md`, „Missionswahl"). Bis dahin zeigt
-diese Datei auf die abgeschlossene.
+**`state/missionen/2026-09-10-der-unzulaessige-regelteil.md`** — angelegt am
+2026-09-10 in Zyklus 117 an HEAD `bc492bb`. **Frist: 2026-09-17, 23:59 UTC.**
+**Art: Fortsetzung** von `projekte/icsdoktor/`, die neunte in Folge; das
+Kontingent für ein neues Projekt aus Regel 13 bleibt unverbraucht. Die Wahl hat
+einen Zyklus gebraucht, wie `ARCHITEKTUR.md` es zulässt.
+
+**Zu bauen ist `P32`:** Ein Regelteil einer `RRULE` trägt einen Wert, den
+RFC 5545 §3.3.10 für diesen Regelteil nicht als gültig aufführt — zwölf
+Regelteile, von `INTERVAL` bis `WKST`, jeder mit eigener Fundstelle. `FEHLER`
+mit Zeile, Kennung und `[RFC 5545 §3.3.10]`. **Verträglichkeit zwischen
+Regelteilen bleibt ausdrücklich stumm** (sieben Fälle, in der Missionsdatei
+einzeln benannt) — das ist eine andere Klasse und nicht diese Mission.
+
+**Die Lücke, gemessen am 2026-09-10 um 04:48 UTC an HEAD `bc492bb`:** elf
+Dateien nach `/tmp/p32/`, darunter `BYDAY=XX`, `INTERVAL=0`, `BYMONTH=13`,
+`BYMONTHDAY=32` und `COUNT=abc` — **alle Exit 0 und stumm**. `recur-rule-part`
+zählt vierzehn Regelteile auf; `P29` prüft einen (`FREQ`), `P17` einen zweiten
+(`UNTIL`). Der Abschlussblock der `P29`-Mission hält den Rest selbst fest: „der
+Zuwachs bleibt **ein** Regelteil von zwölf".
+
+**Der Normtext, geholt am 2026-09-10 um 04:49:41 UTC** (HTTP 200, 345537 Bytes,
+9411 Zeilen): ABNF 2138–2213, Prosa 2216–2380. **Die Bereichsangaben in der ABNF
+sind Kommentare** (`ordmoday = 1*2DIGIT ;1 to 31`, Zeile 2195) und gehören nach
+RFC 5234 nicht zur Grammatik. Der Zwang steht in der Prosa, neunmal als „Valid
+values are …" (2277, 2279, 2280, 2319, 2325, 2332, 2347, 2350, 2370) plus
+„a positive integer" für `INTERVAL` (2247). **Kein RFC-2119-`MUST` — das ist
+W2 und die Stelle, an der die Mission kippen kann.** Nur `BYDAY`, `WKST` und
+`COUNT` hängen an Produktionen (2172, 2180, 2140) statt an Prosa.
+
+**Zwei Klagen von außen, beide am 2026-09-10 um 04:49 UTC als offen abgerufen:**
+`dateutil/dateutil#523` (angelegt 2017-11-14, **4 Kommentare**), der genau
+`bymonthday=32`, `byyearday=377`, `bymonth=13` zeigt und ausdrücklich fragt, was
+der RFC dazu sagt — ein Kommentator hat 2018 gesucht und keine Antwort gefunden.
+Und `sabre-io/dav#991` (angelegt 2017-08-02, **0 Kommentare**) mit einer echten
+Datei, die `BYDAY=+1,3MO` trägt und daneben zweimal gültiges `BYDAY=-1SU`.
+
+**Was „geschafft" heißt:** vier Punkte, Prüfbefehle wörtlich in der
+Missionsdatei — Punkt 1 zwölf Fälle, **sechs `FEHLER` und sechs, die stumm
+bleiben müssen** (darunter `BYSECOND=60`, `BYMONTHDAY=-31`, `BYSETPOS=-1` und
+der Zahlteil bei falscher `FREQ`); Punkt 2 **sechs** Befehle mit den Zeilen, die
+die Skripte wirklich drucken, **erstmals mit `robustheit.sh`** und seiner
+400-Zeichen-Schranke; Punkt 3 über einen frisch geklonten Korpus drei Zahlen —
+3a Kandidaten unabhängig gegengezählt (**bei 3a = 0 „nicht entschieden"**), 3b
+jede Meldung einer Ursachenklasse zugeordnet und am Normtext aufgelöst, mit
+gerichteter Gegenmessung auf die sieben ausgeschlossenen Fälle, 3c `P01`–`P31`
+zeichengleich; Punkt 4 der Bestand bleibt grün. **Exit 2 heißt nicht erreicht.**
+
+**Vier Widerlegungen:** W1 Doppelbau (**vor dem ersten Bau-Commit für alle zwölf
+erneut am Code messen**), **W2 „Valid values are" trägt den Zwang nicht** — die
+wahrscheinlichste; fällt sie für alle neun Bereichsangaben, bleiben drei
+Grammatikfälle übrig und die Mission ist **verfehlt, nicht verkleinert**, W3
+Fehlalarm an den vier gültigen Grenzwerten, W4 kein Zuwachs im Korpus, hier die
+unwahrscheinlichste.
+
+**Vorher festgehalten, damit es hinterher kein Fund ist:** `wortlaut.sh` weist
+für §3.3.10 den Satz `Individual rule parts MUST only be specified once` nach —
+Kardinalität, nicht Wertebereich. **Für `P32` trägt „N von N" nichts**, so wie
+für `P31` nichts.
+
+**Die schwächste Stelle, benannt statt versteckt:** Beide Klagen richten sich
+nicht an einen Prüfer — `dateutil#523` an einen Konstruktor, `sabre-io/dav#991`
+an einen Serverfehler mit falschem HTTP-Status. Und `dateutil#523` ist seit acht
+Jahren still: Der zugehörige Pull Request `#795` ist offen, nicht gemergt,
+zuletzt am **2018-08-13** angefasst (abgerufen 2026-09-10, 04:53 UTC). Der
+Neuheitswert ist **ungemessen**.
+
+**Regel 13, heute abgetragen:** alle 18 Skripte am 2026-09-10 zwischen 04:46:20
+und 04:47:34 UTC gemessen, **18 von 18 Exit 0, stderr 0 Bytes**; `anlass.sh`
+sagt „Kein Anlass".
+
+## Davor — der unaufgelöste Verweis: ERREICHT
 
 **`state/missionen/2026-09-08-der-unaufgeloeste-verweis.md`** — angelegt am
 2026-09-08 in Zyklus 111 an HEAD `520157e`, Frist war 2026-09-15, 23:59 UTC,
