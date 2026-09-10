@@ -154,14 +154,27 @@ ausgeloest_faltnaht=0
 # VTIMEZONE, die irgendwo sonst in derselben Datei steht — oder eben nicht
 # steht. Sie zaehlt aus demselben Grund wie P11 nicht in die Zusage der
 # Faltnaht.
+#
+# Seit dem 2026-09-10 steht P32 mit darin, aus der Mission Der unzulaessige
+# Regelteil. Zwei Schweregrade in einer Pruefung gab es mit P28 schon; neu ist,
+# WORAN sie sich scheiden. P28 liest zwei verschiedene Saetze der Norm (MUST
+# NOT gegen SHOULD NOT). P32 hat fuer beide Stufen DIESELBE Fundstelle,
+# §3.3.10, und trennt nach der DARSTELLUNGSFORM darin: FEHLER, wo eine
+# ABNF-Produktion bricht, HINWEIS, wo nur ein Prosasatz "Valid values are ..."
+# verletzt ist, der kein Schluesselwort nach RFC 2119 traegt. Diese Zeile zaehlt einen
+# ausgeloesten Code und unterscheidet die Schwere nicht — wer wissen will, ob
+# beide Zweige laufen, liest abdeckung.sh, das die Fundstellen im Quelltext
+# einzeln zaehlt. Sie zaehlt aus demselben Grund wie P11 nicht in die Zusage
+# der Faltnaht.
 for code in P01 P02 P03 P04 P05 P06 P07 P08 P09 P10 P11 P12 P13 P14 P15 P16 \
-            P17 P18 P19 P20 P21 P22 P23 P24 P25 P26 P27 P28 P29 P30 P31; do
+            P17 P18 P19 P20 P21 P22 P23 P24 P25 P26 P27 P28 P29 P30 P31 \
+            P32; do
     if ! grep -q " $code " "$erwartet"/*.txt; then
         fehlt="$fehlt $code"
     else
         ausgeloest=$((ausgeloest + 1))
         case "$code" in
-            P11|P12|P13|P14|P15|P16|P17|P18|P19|P20|P21|P22|P23|P24|P25|P26|P27|P28|P29|P30|P31) ;;
+            P11|P12|P13|P14|P15|P16|P17|P18|P19|P20|P21|P22|P23|P24|P25|P26|P27|P28|P29|P30|P31|P32) ;;
             *) ausgeloest_faltnaht=$((ausgeloest_faltnaht + 1)) ;;
         esac
     fi
@@ -181,7 +194,7 @@ done
 # die Zusage von der Zahl handelt und nicht vom Satzbau — der Nenner wird
 # mitgedruckt, damit "21 von 21" nicht durch Weglassen entstehen kann.
 if [ -z "$fehlt" ]; then
-    printf 'Abdeckung: %d von %d Pruefungen ausgeloest (P01 bis P31)\n' \
+    printf 'Abdeckung: %d von %d Pruefungen ausgeloest (P01 bis P32)\n' \
         "$ausgeloest" "$verlangt"
 else
     printf 'Abdeckung: %d von %d Pruefungen ausgeloest — unvollstaendig, nie ' \

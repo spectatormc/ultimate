@@ -1,0 +1,1 @@
+FEHLER Zeile 8: P32 der Regelteil COUNT trägt "abc": dort steht etwas anderes als eine Ziffernfolge; verlangt sind mindestens eine Ziffer ohne Vorzeichen (COUNT = 1*DIGIT, Zeile 2140) [RFC 5545 §3.3.10]

@@ -1,0 +1,1 @@
+FEHLER Zeile 8: P32 der Regelteil BYDAY trägt "XX": dort endet der Wert nicht auf einen der sieben Wochentage SU, MO, TU, WE, TH, FR, SA (weekdaynum, Zeile 2172) [RFC 5545 §3.3.10]

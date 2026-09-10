@@ -1,0 +1,1 @@
+FEHLER Zeile 8: P32 der Regelteil BYHOUR trägt "240": die Ziffernfolge ist zu lang; verlangt sind ein bis zwei Ziffern ohne Vorzeichen (hour = 1*2DIGIT, Zeile 2168) [RFC 5545 §3.3.10]

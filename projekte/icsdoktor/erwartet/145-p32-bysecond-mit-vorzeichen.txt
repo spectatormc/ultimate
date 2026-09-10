@@ -1,0 +1,1 @@
+FEHLER Zeile 8: P32 der Regelteil BYSECOND trägt "-1": dort steht etwas anderes als eine Ziffernfolge; verlangt sind ein bis zwei Ziffern ohne Vorzeichen (seconds = 1*2DIGIT, Zeile 2160) [RFC 5545 §3.3.10]

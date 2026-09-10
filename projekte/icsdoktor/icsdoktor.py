@@ -3225,6 +3225,228 @@ def pruefe_p31(logische, komponenten, funde):
                     "3.2.19"))
 
 
+# Die sieben Wochentage aus weekday, Zeile 2180. Derselbe geschlossene Vorrat
+# gilt fuer BYDAY und fuer WKST; die ABNF verweist an beiden Stellen auf
+# dieselbe Produktion.
+_P32_WEEKDAY = ("SU", "MO", "TU", "WE", "TH", "FR", "SA")
+
+# Die acht Regelteile mit Zahlwerten. Je Regelteil:
+#   stellen     hoechste Ziffernzahl aus der Produktion (1*2DIGIT -> 2)
+#   vorzeichen  ob die Produktion ein "+"/"-" davor zulaesst
+#   form        was die Grammatik verlangt, im Klartext der Meldung
+#   prosa       (untere, obere, negativ_erlaubt, Klartext) aus der Prosa,
+#               oder None, wo die Prosa keinen Bereich nennt
+#
+# Die Trennung zwischen "stellen" und "prosa" ist der ganze Punkt dieser
+# Pruefung. BYHOUR=240 hat drei Ziffern und verletzt die Produktion hour =
+# 1*2DIGIT — das ist Grammatik und damit FEHLER. BYHOUR=24 hat zwei Ziffern,
+# ist also grammatisch einwandfrei, und liegt nur ausserhalb des Satzes "Valid
+# values are 0 to 23" in Zeile 2280 — das ist Prosa und damit HINWEIS.
+_P32_ZAHLTEILE = {
+    "BYSECOND":   (2, False, "ein bis zwei Ziffern ohne Vorzeichen "
+                             "(seconds = 1*2DIGIT, Zeile 2160)",
+                   (0, 60, False, "0 bis 60")),
+    "BYMINUTE":   (2, False, "ein bis zwei Ziffern ohne Vorzeichen "
+                             "(minutes = 1*2DIGIT, Zeile 2164)",
+                   (0, 59, False, "0 bis 59")),
+    "BYHOUR":     (2, False, "ein bis zwei Ziffern ohne Vorzeichen "
+                             "(hour = 1*2DIGIT, Zeile 2168)",
+                   (0, 23, False, "0 bis 23")),
+    "BYMONTHDAY": (2, True,  "ein bis zwei Ziffern, davor höchstens ein "
+                             "Vorzeichen (monthdaynum, Zeile 2193)",
+                   (1, 31, True, "1 bis 31 oder -31 bis -1")),
+    "BYYEARDAY":  (3, True,  "ein bis drei Ziffern, davor höchstens ein "
+                             "Vorzeichen (yeardaynum, Zeile 2199)",
+                   (1, 366, True, "1 bis 366 oder -366 bis -1")),
+    "BYWEEKNO":   (2, True,  "ein bis zwei Ziffern, davor höchstens ein "
+                             "Vorzeichen (weeknum, Zeile 2205)",
+                   (1, 53, True, "1 bis 53 oder -53 bis -1")),
+    "BYMONTH":    (2, False, "ein bis zwei Ziffern ohne Vorzeichen "
+                             "(monthnum = 1*2DIGIT, Zeile 2209)",
+                   (1, 12, False, "1 bis 12")),
+    "BYSETPOS":   (3, True,  "ein bis drei Ziffern, davor höchstens ein "
+                             "Vorzeichen (setposday = yeardaynum, Zeile 2213)",
+                   (1, 366, True, "1 bis 366 oder -366 bis -1")),
+    # COUNT und INTERVAL stehen unmittelbar in recur-rule-part (2140, 2141)
+    # als 1*DIGIT: beliebig viele Ziffern, kein Vorzeichen. INTERVAL hat
+    # daneben einen Prosasatz, COUNT hat keinen.
+    "COUNT":      (0, False, "mindestens eine Ziffer ohne Vorzeichen "
+                             "(COUNT = 1*DIGIT, Zeile 2140)",
+                   None),
+    "INTERVAL":   (0, False, "mindestens eine Ziffer ohne Vorzeichen "
+                             "(INTERVAL = 1*DIGIT, Zeile 2141)",
+                   (1, None, False, "eine positive ganze Zahl, also 1 oder "
+                                    "mehr")),
+}
+
+# Wo die Prosa steht, die einen HINWEIS traegt. Die Zeile wandert in die
+# Meldung, damit der Leser nicht suchen muss, worauf sie sich stuetzt.
+_P32_PROSAZEILE = {
+    "INTERVAL": 2247, "BYSECOND": 2277, "BYMINUTE": 2279, "BYHOUR": 2280,
+    "BYMONTHDAY": 2319, "BYYEARDAY": 2325, "BYWEEKNO": 2332,
+    "BYMONTH": 2347, "BYSETPOS": 2370,
+}
+
+# Regelteile, deren Wert eine COMMA-getrennte Liste ist. COUNT, INTERVAL und
+# WKST tragen genau einen Wert.
+_P32_LISTEN = {"BYSECOND", "BYMINUTE", "BYHOUR", "BYDAY", "BYMONTHDAY",
+               "BYYEARDAY", "BYWEEKNO", "BYMONTH", "BYSETPOS"}
+
+# Reihenfolge der Meldungen innerhalb einer RRULE: die der ABNF-Aufzaehlung
+# recur-rule-part, Zeilen 2138-2151. FREQ und UNTIL fehlen mit Absicht.
+_P32_REIHENFOLGE = ("COUNT", "INTERVAL", "BYSECOND", "BYMINUTE", "BYHOUR",
+                    "BYDAY", "BYMONTHDAY", "BYYEARDAY", "BYWEEKNO", "BYMONTH",
+                    "BYSETPOS", "WKST")
+
+
+def _p32_zahl(text, stellen, vorzeichen):
+    """Liest ein Zahlelement gegen seine Produktion.
+
+    Rueckgabe (wert, None) bei grammatisch gueltigem Element, sonst
+    (None, Grund) mit dem Grund als Satzteil fuer die Meldung. `stellen` 0
+    heisst 1*DIGIT ohne obere Schranke.
+    """
+    ziffern = text
+    if vorzeichen and ziffern[:1] in ("+", "-"):
+        ziffern = ziffern[1:]
+    if not ziffern:
+        return None, "dort steht keine Ziffer"
+    if not ziffern.isdigit() or not ziffern.isascii():
+        return None, "dort steht etwas anderes als eine Ziffernfolge"
+    if stellen and len(ziffern) > stellen:
+        return None, "die Ziffernfolge ist zu lang"
+    wert = int(ziffern)
+    if text[:1] == "-":
+        wert = -wert
+    return wert, None
+
+
+def pruefe_p32(logische, funde):
+    """§3.3.10: ein Regelteil traegt einen Wert, den §3.3.10 nicht zulaesst.
+
+    P32 kommt aus der Mission Der unzulaessige Regelteil,
+    state/missionen/2026-09-10-der-unzulaessige-regelteil.md.
+
+    ZWEI SCHWEREGRADE, UND DAS IST DER GANZE BEFUND DIESER MISSION. Die
+    Zieldefinition verlangte FEHLER fuer alle zwoelf Regelteile. Die Messung
+    in regelteile.sh (Zyklus 118) hat das widerlegt: Von 26 Belegzeilen in
+    §3.3.10 stehen 15 in der Grammatik, 10 in der Prosa, 1 nur in einem
+    ABNF-Kommentar — und KEINE EINZIGE traegt ein Schluesselwort nach
+    RFC 2119. Neun Bereichsangaben haengen damit an nichts als dem Satz
+    "Valid values are ...".
+
+    Wer daraus einen FEHLER machte, verschaerfte die Norm, statt sie zu
+    pruefen — dieselbe Doktrin, die schon P03 und P22 auf HINWEIS gesetzt
+    hat. Also:
+
+      FEHLER   wo eine ABNF-Produktion gebrochen ist. Eine Produktion ist
+               normativ, ohne dass ein MUST danebenstehen muesste: RFC 5234
+               ist die Sprache, in der die Norm ihre Syntax schreibt.
+      HINWEIS  wo nur ein Prosasatz "Valid values are ..." verletzt ist.
+               BYMONTH=13 ist syntaktisch tadellos; dass 13 kein Monat ist,
+               steht in Zeile 2347 als Beschreibung.
+
+    Damit ist Punkt 1 der Missionsdatei unerreichbar: Er verlangt FEHLER
+    ausdruecklich fuer INTERVAL=0, BYMONTH=13 und BYMONTHDAY=32, und das
+    sind alle drei Prosafaelle. Die Mission ist deshalb VERFEHLT. Sie wird
+    nicht umgeschrieben — Regel 3 des Kodex laesst eine Zieldefinition
+    verschaerfen und nie abschwaechen. Der ehrliche Schweregrad steht ueber
+    dem erreichten Ziel.
+
+    WAS AUSDRUECKLICH STUMM BLEIBT:
+
+    - FREQ (P29) und UNTIL (P17, P18). Ihre Regelteile stehen in derselben
+      Aufzaehlung, haben aber ihre eigene Pruefung; ein zweiter Befund waere
+      derselbe Fund unter neuer Nummer.
+    - DER ZAHLTEIL VON BYDAY. ordwk = 1*2DIGIT begrenzt die Ziffernzahl,
+      und die Ziffernzahl wird hier geprueft. Der Bereich 1 bis 53 steht in
+      Zeile 2178 aber NUR IN EINEM ABNF-KOMMENTAR — nach RFC 5234 §3.9 kein
+      Teil der Grammatik, und in der Prosa taucht er fuer BYDAY nirgends
+      auf. BYDAY=54MO bleibt also stumm, waehrend BYWEEKNO=54 einen HINWEIS
+      traegt: Fuer BYWEEKNO sagt es Zeile 2332 in Prosa, fuer BYDAY sagt es
+      niemand. Das sieht wie eine Inkonsequenz aus und ist der Wortlaut.
+    - Vertraeglichkeit zwischen Regelteilen, die sieben Faelle aus der
+      Missionsdatei. BYDAY=1MO bei FREQ=WEEKLY ist hier gueltig; dass 2312
+      es verbietet, ist eine Beziehung zwischen zwei Regelteilen und eine
+      andere Klasse.
+    - Kardinalitaet. Wie P29 sieht diese Pruefung nur den ERSTEN Regelteil
+      jedes Namens an; ein zweiter BYMONTH ist §3.3.10 "Individual rule
+      parts MUST only be specified once" und nicht diese Pruefung.
+    - Unbekannte Regelteilnamen und COUNT=0. Fuer COUNT nennt die Prosa
+      keinen Bereich (Zeilen 2272-2274) — dann nennt ihn dieses Werkzeug
+      auch nicht.
+
+    GROSS- UND KLEINSCHREIBUNG wie bei P29: ABNF-Literale gelten nach
+    RFC 5234 §2.3 ohne Ruecksicht auf die Schreibung, "byday=mo" ist kein
+    Fund.
+    """
+    for lz in logische:
+        if lz.name != "RRULE":
+            continue
+        for name in _P32_REIHENFOLGE:
+            roh, _anzahl = _recur_teil(lz.wert, name)
+            if roh is None:
+                continue
+            teile = roh.split(",") if name in _P32_LISTEN else [roh]
+            for element in teile:
+                grund = None
+                hinweis = None
+                if name == "WKST":
+                    if element.upper() not in _P32_WEEKDAY:
+                        grund = ("dort steht keiner der sieben Wochentage "
+                                 "SU, MO, TU, WE, TH, FR, SA "
+                                 "(weekday, Zeile 2180)")
+                elif name == "BYDAY":
+                    tag = element[-2:].upper()
+                    if tag not in _P32_WEEKDAY:
+                        grund = ("dort endet der Wert nicht auf einen der "
+                                 "sieben Wochentage SU, MO, TU, WE, TH, FR, "
+                                 "SA (weekdaynum, Zeile 2172)")
+                    elif element[:-2]:
+                        # Der Zahlteil ist optional — die eckigen Klammern in
+                        # weekdaynum = [[plus / minus] ordwk] weekday. Nur ein
+                        # VORHANDENER Zahlteil wird geprueft; BYDAY=MO ist
+                        # gueltig. Das war beim ersten Bau am 2026-09-10 anders
+                        # und hat fuenf Fehlalarme auf das RFC-eigene Beispiel
+                        # aus Zeile 2375 geworfen — W3 der Missionsdatei, von
+                        # der eigenen Gegenprobe gefangen.
+                        _zahl, grund = _p32_zahl(element[:-2], 2, True)
+                        if grund is not None:
+                            grund = ("der Zahlteil vor dem Wochentag ist "
+                                     "kein ordwk: %s (Zeile 2178)" % grund)
+                else:
+                    stellen, vorz, form, prosa = _P32_ZAHLTEILE[name]
+                    wert, grund = _p32_zahl(element, stellen, vorz)
+                    if grund is not None:
+                        grund = "%s; verlangt sind %s" % (grund, form)
+                    elif prosa is not None:
+                        unten, oben, negativ, klartext = prosa
+                        if negativ:
+                            passt = unten <= abs(wert) <= oben and wert != 0
+                        else:
+                            passt = (wert >= unten
+                                     and (oben is None or wert <= oben))
+                        if not passt:
+                            hinweis = klartext
+
+                if grund is not None:
+                    funde.append(Fund(
+                        FEHLER, lz.nr, "P32",
+                        "der Regelteil %s trägt %s: %s"
+                        % (name, _zeige_wort(element), grund),
+                        "3.3.10"))
+                elif hinweis is not None:
+                    funde.append(Fund(
+                        HINWEIS, lz.nr, "P32",
+                        "der Regelteil %s trägt %s; §3.3.10 nennt in Zeile %d "
+                        "als gültige Werte %s. Das steht dort als "
+                        "Beschreibung ohne Schlüsselwort nach RFC 2119, "
+                        "deshalb HINWEIS und nicht FEHLER"
+                        % (name, _zeige_wort(element),
+                           _P32_PROSAZEILE[name], hinweis),
+                        "3.3.10"))
+
+
 _BOM_UTF8 = b"\xef\xbb\xbf"
 
 
@@ -3300,7 +3522,7 @@ def pruefe_p20(rohdaten, funde):
 
 
 def untersuche(rohdaten):
-    """Alle einunddreißig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
+    """Alle zweiunddreißig Pruefungen. Rueckgabe: sortierte Liste der Funde."""
     funde = []
     rohdaten, hatte_bom = pruefe_p20(rohdaten, funde)
     zeilen = zerlege_physisch(rohdaten)
@@ -3350,6 +3572,7 @@ def untersuche(rohdaten):
     pruefe_p29(logische, funde)
     pruefe_p30(logische, funde)
     pruefe_p31(logische, komponenten, funde)
+    pruefe_p32(logische, funde)
     # Nach Zeile, dann nach Code — bei gleicher Zeile steht P01 vor P08.
     # Innerhalb desselben Codes bleibt die Fundreihenfolge erhalten.
     funde.sort(key=lambda f: (f.zeile, f.code))

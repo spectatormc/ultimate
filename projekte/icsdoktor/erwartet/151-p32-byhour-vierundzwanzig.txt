@@ -1,0 +1,1 @@
+HINWEIS Zeile 8: P32 der Regelteil BYHOUR trägt "24"; §3.3.10 nennt in Zeile 2280 als gültige Werte 0 bis 23. Das steht dort als Beschreibung ohne Schlüsselwort nach RFC 2119, deshalb HINWEIS und nicht FEHLER [RFC 5545 §3.3.10]

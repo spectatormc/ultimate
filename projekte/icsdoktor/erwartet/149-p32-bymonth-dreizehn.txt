@@ -1,0 +1,1 @@
+HINWEIS Zeile 8: P32 der Regelteil BYMONTH trägt "13"; §3.3.10 nennt in Zeile 2347 als gültige Werte 1 bis 12. Das steht dort als Beschreibung ohne Schlüsselwort nach RFC 2119, deshalb HINWEIS und nicht FEHLER [RFC 5545 §3.3.10]

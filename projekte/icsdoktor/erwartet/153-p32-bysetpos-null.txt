@@ -1,0 +1,1 @@
+HINWEIS Zeile 8: P32 der Regelteil BYSETPOS trägt "0"; §3.3.10 nennt in Zeile 2370 als gültige Werte 1 bis 366 oder -366 bis -1. Das steht dort als Beschreibung ohne Schlüsselwort nach RFC 2119, deshalb HINWEIS und nicht FEHLER [RFC 5545 §3.3.10]
