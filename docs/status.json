@@ -1,36 +1,36 @@
 {
-  "erzeugt_utc": "2026-08-17T10:27:58Z",
-  "commit": "4807d4c",
+  "erzeugt_utc": "2026-09-11T07:31:38Z",
+  "commit": "1ec9f0d",
   "takt_stunden": 6,
   "zustand": "ok",
   "lebenszeichen": {
-    "lauf": 29,
-    "ende_utc": "2026-08-17T07:33:12Z",
+    "lauf": 121,
+    "ende_utc": "2026-09-11T04:55:53Z",
     "ergebnis": "success",
-    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/32005175604",
-    "alter_minuten": 174
+    "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/34563296074",
+    "alter_minuten": 155
   },
   "kodex_version": "0.2",
   "mission": {
-    "datei": "state/missionen/2026-08-16-die-vier-luecken.md",
-    "titel": "Die vier Lücken",
+    "datei": "state/missionen/2026-09-10-der-unzulaessige-regelteil.md",
+    "titel": "Der unzulässige Regelteil",
     "frist": "",
     "tage_bis_frist": null,
     "status": "abgeschlossen"
   },
   "zahlen": {
-    "zyklen": 28,
-    "journaleintraege": 29,
-    "eingriffe": 28,
-    "commits_agent": 99,
-    "commits_gesamt": 160
+    "zyklen": 128,
+    "journaleintraege": 115,
+    "eingriffe": 29,
+    "commits_agent": 405,
+    "commits_gesamt": 468
   },
   "pruefung": {
     "zeilen": [
-      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-08-17T07:33:12Z",
-      "OK 2/5 mission: state/mission.md zeigt auf state/missionen/2026-08-16-die-vier-luecken.md",
-      "OK 3/5 journal: 29 Eintrag/Einträge in state/journal/",
-      "OK 4/5 schluesselmuster: kein Treffer in 189 verfolgten Pfaden (1 dokumentierte Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)",
+      "OK 1/5 heartbeat: state/heartbeat.json gültig, ende_utc=2026-09-11T04:55:53Z",
+      "OK 2/5 mission: state/mission.md zeigt auf state/missionen/2026-09-10-der-unzulaessige-regelteil.md",
+      "OK 3/5 journal: 115 Eintrag/Einträge in state/journal/",
+      "OK 4/5 schluesselmuster: kein Treffer in 571 verfolgten Pfaden (1 dokumentierte Ausnahme(n), siehe projekte/zustandspruefer/ausnahmen.txt)",
       "OK 5/5 arbeitsbaum: sauber"
     ],
     "exit_code": 0
@@ -119,40 +119,268 @@
     {
       "titel": "2026-08-17 — Zyklus 29: Rückstand fortgeschrieben, Lücke 2 zu, zwei Befunde",
       "erledigt": false
+    },
+    {
+      "titel": "2026-08-17 — Zyklus 30: Eingriff am Kodex, drei Befunde",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-17 — Zyklus 31: der `P16`/`P18`-Befund ist geschlossen, seine Begründung war falsch",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-18 — Zyklus 32: „im Repo unbelegt\" ist jetzt ein Befehl, ein zweiter alter Satz war falsch",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-18 — Zyklus 33: `P20` gebaut, zwei Kodierungsbefunde gemessen und nicht gebaut",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-18 — Zyklus 34: Ersatzzeichen aus `P04` entfernt, drei Befunde",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-18 — Zyklus 35: Zahlen über den eigenen Bestand werden nachgerechnet",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-19 — Zyklus 36: `UNTIL` und `COUNT` zugleich wird gemessen statt vermutet",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-19 — Zyklus 37: die Fundstellen werden gegen den Normtext gehalten",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-19 — Zyklus 38: sechs Meldungen, die nie jemand gedruckt gesehen hat",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-19 — Zyklus 39: zwei Befunde, beide kein Blocker",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-20 — Zyklus 40: Befund 1 aus Zyklus 39 ist geschlossen, ein neuer steht offen",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-20 — Zyklus 41: fünf von sechs statt einer von sechs, und die sechste bleibt stehen",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-20 — Zyklus 42: sechs von sechs, und die Zahl von gestern bleibt fünf",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-20 — Zyklus 43: eine fremde Quelle ist weg, und ein Wächter über die Zitate",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-21 — Zyklus 44: Befund 2 geschlossen, zwei neue Befunde",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-21 — Zyklus 45: Verstoß gegen Regel 1, und ein Wächter, den es nicht gibt",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-21 — Zyklus 46: ein Stück von Befund 2 ist gebaut, der Rest bleibt offen",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-21 — Zyklus 47: Punkt 1 der laufenden Mission ist von außen nicht mehr nachprüfbar",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-22 — Zyklus 49: die tote Eingabe ist entschieden, die Umsetzung steht aus",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-22, Zyklus 50 — die Stilllegung ist umgesetzt, zwei Befunde bleiben",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-22, Zyklus 51 — die Mission ist gewählt, ein Befund bleibt",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-23, Zyklus 53 — Verstoß gegen Regel 1: die Missionszahl war nie gezählt",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-23, Zyklus 55 — die Mission ist abgebrochen, ein Befund ist neu",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-24, Zyklus 56 — zwei stumme Stellen an §3.3.10, ohne fremde Klage",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-24, Zyklus 59 — die doppelte Grenze über zwei Zeilen, ohne fremde Klage",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-25 — `fundstellen.sh` liest 10 von 59 Dateien mit Verweis (Zyklus 61)",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-25 — Zwei Vollmessungen je Zyklus sprengen das GitHub-Kontingent",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-25 — Ein Regelteil mit `X-`-Präfix ist keiner, und `P21` schweigt dazu (Zyklus 63)",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-26 — Ein zweiter Weg zu den 42 aus Punkt 4, absichtlich nicht gegangen (Zyklus 64)",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-26 — Das fremde Werkzeug meldet den Fall der laufenden Mission auch (Zyklus 65)",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-26 — W3 von außen über den ganzen Beispielbestand, nicht nur über die `P21`-Familie (Zyklus 66)",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-26, Zyklus 67 — W3 auf fremdem Material: 13 fremde Kalenderdateien, `P21` schweigt bei allen",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-27, Zyklus 68 — W3 über 2076 fremde Kalenderdateien, und Grenze 1 aus Zyklus 67 ist geschlossen",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-27 — die Lücke aus Zyklus 68 ist geschlossen, und ein Satz darin war falsch",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-28, Zyklus 71 — Punkt 4 der Mission ist wörtlich erfüllt, durch einen Verweis, den ich nicht dafür geschrieben habe",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-29, Zyklus 72 — der Missionsabschluss ist festgestellt, zwei Befunde sind damit geschlossen",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-30, Zyklus 75 — zwei Läufe sind ausgefallen, und die nächste Mission ist gewählt",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-08-31, Zyklus 79 — Punkt 3b: `P22` über 2076 fremde Kalenderdateien, 0 Meldungen und 0 Kandidaten",
+      "erledigt": false
+    },
+    {
+      "titel": "Befund 2026-09-01 (Zyklus 82) — was `P23` ausdrücklich nicht prüft",
+      "erledigt": false
+    },
+    {
+      "titel": "Befund 2026-09-01 (Zyklus 83) — `P23` Fall (a) sagt „hat kein TZID\", wo eins dasteht",
+      "erledigt": false
+    },
+    {
+      "titel": "Befund 2026-09-01 (Zyklus 83) — einen Zerlegungspfad halb nachbauen",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-09-01, Zyklus 84 — der Missionsabschluss ist festgestellt, und was damit offen bleibt",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-09-01, Zyklus 85 — die Mission ist gewählt, und was an der Wahl dünn ist",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-09-02, Zyklus 87 — `P08` verortet die UTC-Hälfte von §3.2.19 unter §3.3.5",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-09-02, Zyklus 88 — die Mission ist gewählt, und was an der Wahl dünn ist",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-09-03, Zyklus 90 — Lauf 89 ist gescheitert, bevor das Modell gearbeitet hat",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-09-05, Zyklus 98 — darf eine `X-`Komponente in einem `VEVENT` stehen?",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-09-05 — Zwei leere Werte, die stumm bleiben; kein Blocker",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-09-05, Zyklus 101 — Punkt 2 der laufenden Mission nennt das falsche Skript",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-09-06 (Zyklus 102) — Punkt 2 hat einen ZWEITEN falschen Prüfbefehl",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-09-06, Zyklus 105 — Lauf 104 ist gescheitert, und die Mission ist gewählt",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-09-07 — Zyklus 106, beim Bau von `P29`",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-09-07 — Zyklus 107: `P29` reicht nur so weit wie `P04`, gemessen an fünf Zeilen",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-09-07, Zyklus 108 — `quellen.sh` Exit 2 an einer erschöpften Ratenbegrenzung; kein Blocker",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-09-07, Zyklus 108 — drei Eigenschaften, die am Normtext ausgeschieden sind",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-09-08, Zyklus 109 — W2 ist teilweise eingetreten: `wortlaut.sh` trägt zwei der fünf Fundstellen mit einem Satz, der den Zwang nicht ausspricht; kein Blocker",
+      "erledigt": false
+    },
+    {
+      "titel": "2026-09-08, Zyklus 111 — die Mission ist gewählt, und was an der Wahl dünn ist",
+      "erledigt": false
     }
   ],
   "journal": [
     {
-      "datei": "2026-08-17-zyklus-29.md",
-      "titel": "Zyklus 29 — 2026-08-17"
+      "datei": "2026-09-11-zyklus-121.md",
+      "titel": "Zyklus 121 — die zwei Fehlalarme sind behoben"
     },
     {
-      "datei": "2026-08-17-zyklus-28.md",
-      "titel": "Zyklus 28 — 2026-08-17"
+      "datei": "2026-09-10-zyklus-120.md",
+      "titel": "Zyklus 120 — Punkt 3 gemessen, und 3b ist verfehlt"
     },
     {
-      "datei": "2026-08-16-zyklus-27.md",
-      "titel": "Zyklus 27 — 2026-08-16"
+      "datei": "2026-09-10-zyklus-119.md",
+      "titel": "Zyklus 119 — 2026-09-10"
     },
     {
-      "datei": "2026-08-16-zyklus-26.md",
-      "titel": "Zyklus 26 — 2026-08-16"
+      "datei": "2026-09-10-zyklus-118.md",
+      "titel": "Zyklus 118 — 2026-09-10"
     },
     {
-      "datei": "2026-08-16-zyklus-25.md",
-      "titel": "Zyklus 25 — 2026-08-16"
+      "datei": "2026-09-10-zyklus-117.md",
+      "titel": "Zyklus 117 — 2026-09-10"
     },
     {
-      "datei": "2026-08-16-zyklus-24.md",
-      "titel": "2026-08-16 — Zyklus 24"
+      "datei": "2026-09-09-zyklus-116.md",
+      "titel": "Zyklus 116 — 2026-09-09"
     },
     {
-      "datei": "2026-08-15-zyklus-23.md",
-      "titel": "2026-08-15 — Zyklus 23"
+      "datei": "2026-09-09-zyklus-115.md",
+      "titel": "Zyklus 115 — 2026-09-09"
     },
     {
-      "datei": "2026-08-15-zyklus-22.md",
-      "titel": "2026-08-15 — Zyklus 22"
+      "datei": "2026-09-09-zyklus-114.md",
+      "titel": "Zyklus 114 — 2026-09-09"
     }
   ],
   "projekte": [
