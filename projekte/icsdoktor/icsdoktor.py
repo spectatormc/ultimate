@@ -3379,10 +3379,69 @@ def pruefe_p32(logische, funde):
     GROSS- UND KLEINSCHREIBUNG wie bei P29: ABNF-Literale gelten nach
     RFC 5234 §2.3 ohne Ruecksicht auf die Schreibung, "byday=mo" ist kein
     Fund.
+
+    RSCALE (RFC 7529) NIMMT DIESER PRUEFUNG IHREN MASSSTAB WEG. Nachgetragen
+    am 2026-09-11, nachdem die Korpusmessung in Zyklus 120 zwei Fehlalarme
+    gefunden hatte — beide in icalendar/…/tests/calendars/rfc_7529.ics, beide
+    woertlich Beispiele aus RFC 7529 selbst. Der Normtext dazu, am 2026-09-11
+    um 04:45:15 UTC geholt (HTTP 200, 43124 Bytes, 1179 Zeilen):
+
+        Zeile 293  "When "RSCALE" is present, the other changes to "RRULE"
+                   are:" — die Erweiterung haengt an der Anwesenheit des
+                   Regelteils, nicht am Dokument.
+        Zeile 295-297  "Elements that include numeric values (e.g.,
+                   "BYYEARDAY") have numeric ranges defined by the "RSCALE"
+                   value".
+        Zeile 299-301  "Month numbers can include an "L" suffix".
+        Zeile 310  recur-rule-part =/ ("RSCALE" "=" rscale)
+        Zeile 324  monthnum = 1*2DIGIT ["L"]
+
+    Zwei Folgen, beide eng an diesen Zeilen:
+
+      1. STEHT RSCALE IM WERT, SCHWEIGT JEDER PROSABEREICH. Die neun Saetze
+         "Valid values are ..." aus RFC 5545 beschreiben den gregorianischen
+         Kalender; Zeile 295-297 setzt an ihre Stelle einen Bereich, den der
+         RSCALE-Wert bestimmt. Dieses Werkzeug kennt keinen Kalender ausser
+         dem gregorianischen — es kann den neuen Bereich also nicht pruefen
+         und nennt ihn deshalb nicht. BYMONTH=13 neben RSCALE=ETHIOPIC ist
+         der Fall aus Zeile 546: dreizehn Monate, kein Fund.
+      2. STEHT RSCALE IM WERT, DARF BYMONTH AUF "L" ENDEN. monthnum ist die
+         einzige Produktion, die RFC 7529 ersetzt, und BYMONTH ist der
+         einzige Regelteil, der sie benutzt. BYMONTH=5L neben RSCALE=HEBREW
+         ist der Fall aus Zeile 592.
+
+    WAS DIESE LOCKERUNG AUSDRUECKLICH NICHT TUT:
+
+    - OHNE RSCALE AENDERT SICH NICHTS. Zeile 293 macht die Anwesenheit zur
+      Bedingung, also ist BYMONTH=5L ohne RSCALE weiter ein FEHLER.
+    - DIE PRODUKTIONEN BLEIBEN. RFC 7529 ersetzt monthnum und sonst keine;
+      BYMONTH=133L bleibt FEHLER, weil 1*2DIGIT zwei Ziffern zulaesst und
+      nicht drei. Das ist die sichtbare Spannung dieser Stelle: Zeile 296
+      stellt groessere Bereiche in Aussicht, waehrend yeardaynum weiterhin
+      auf drei Ziffern begrenzt. Ich loese sie nicht auf, ich benenne sie.
+    - INTERVAL SCHWEIGT MIT. "Elements that include numeric values" nennt
+      keine Liste und schliesst nichts aus; welcher Bereich kalenderabhaengig
+      ist und welcher nicht, entscheidet dort niemand. Diese Unterscheidung
+      waere meine und nicht die des Normtexts — der Preis ist, dass
+      INTERVAL=0 neben RSCALE ungemeldet bleibt, und er steht hier.
+    - DER RSCALE-WERT SELBST WIRD NICHT GEPRUEFT. rscale = iana-token /
+      x-name (Zeile 313-317) verweist auf die CLDR-Registry, die dieses
+      Werkzeug nicht hat. "Anwesend" heisst deshalb: der Regelteil RSCALE
+      steht mit einem "=" im Wert, gleich was dahinter kommt.
+
+    NICHT DER FALL VON RFC 7809. Bei P31 ist eine aehnliche Lockerung
+    verworfen worden, weil sie an einem Header der Uebertragung haengt und
+    aus den Bytes einer Datei nicht abzulesen ist. Hier steht der Ausloeser
+    in derselben Zeile wie der Regelteil, den er lockert.
     """
     for lz in logische:
         if lz.name != "RRULE":
             continue
+        # Zeile 293 in RFC 7529: die Erweiterung gilt, wenn RSCALE im Wert
+        # steht. _recur_teil liefert None, wenn der Regelteil fehlt, und den
+        # (moeglicherweise leeren) Wert, wenn er da ist.
+        _rscale, _rscale_n = _recur_teil(lz.wert, "RSCALE")
+        mit_rscale = _rscale is not None
         for name in _P32_REIHENFOLGE:
             roh, _anzahl = _recur_teil(lz.wert, name)
             if roh is None:
@@ -3416,9 +3475,26 @@ def pruefe_p32(logische, funde):
                                      "kein ordwk: %s (Zeile 2178)" % grund)
                 else:
                     stellen, vorz, form, prosa = _P32_ZAHLTEILE[name]
-                    wert, grund = _p32_zahl(element, stellen, vorz)
+                    ziffernteil = element
+                    if (mit_rscale and name == "BYMONTH"
+                            and element[-1:].upper() == "L"):
+                        # monthnum = 1*2DIGIT ["L"], RFC 7529 Zeile 324. Das
+                        # Literal gilt nach RFC 5234 §2.3 ohne Ruecksicht auf
+                        # die Schreibung, wie ueberall sonst in dieser
+                        # Pruefung. Genau EIN Suffix: "5LL" faellt durch.
+                        ziffernteil = element[:-1]
+                        form = ("ein bis zwei Ziffern ohne Vorzeichen, danach "
+                                "höchstens ein L (monthnum = 1*2DIGIT [\"L\"],"
+                                " RFC 7529 Zeile 324)")
+                    wert, grund = _p32_zahl(ziffernteil, stellen, vorz)
                     if grund is not None:
                         grund = "%s; verlangt sind %s" % (grund, form)
+                    elif mit_rscale:
+                        # RFC 7529 Zeile 295-297: der Bereich kommt ab hier
+                        # vom RSCALE-Wert. Den kennt dieses Werkzeug nicht,
+                        # also nennt es keinen. Die Grammatik darueber bleibt
+                        # geprueft — nur die Prosa faellt weg.
+                        pass
                     elif prosa is not None:
                         unten, oben, negativ, klartext = prosa
                         if negativ:

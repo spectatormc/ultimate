@@ -1,0 +1,1 @@
+FEHLER Zeile 8: P32 der Regelteil BYMONTH trägt "133L": die Ziffernfolge ist zu lang; verlangt sind ein bis zwei Ziffern ohne Vorzeichen, danach höchstens ein L (monthnum = 1*2DIGIT ["L"], RFC 7529 Zeile 324) [RFC 5545 §3.3.10]

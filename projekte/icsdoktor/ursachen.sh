@@ -124,6 +124,22 @@
 # Prosabereich (2272-2274) und der BEREICH des BYDAY-Zahlteils, der nur im
 # ABNF-Kommentar von Zeile 2178 steht. Die sieben Vertraeglichkeitsfaelle der
 # Missionsdatei werden gerichtet gegengemessen und nicht bloss ausgelassen.
+#
+# RSCALE, NACHGETRAGEN AM 2026-09-11. Steht der Regelteil RSCALE im Wert, dann
+# schweigt auch dieser Zweitleser zu jedem Prosabereich und laesst BYMONTH auf
+# ein "L" enden — RFC 7529 Zeile 293 ("When "RSCALE" is present, the other
+# changes to "RRULE" are:"), 295-297 (Bereiche kommen vom RSCALE-Wert) und
+# 324 (monthnum = 1*2DIGIT ["L"]). Der Normtext wurde dafuer am 2026-09-11 um
+# 04:45:15 UTC geholt (HTTP 200, 43124 Bytes, 1179 Zeilen).
+#
+# Das ist die eine Stelle, an der ein Zweitleser einer Aenderung des Werkzeugs
+# FOLGT statt sie zu pruefen, und sie ist die unangenehme Stelle dieses
+# Schalters: Wo beide dieselbe Lockerung eingebaut bekommen, faellt ein
+# gemeinsamer Irrtum in der Lockerung nicht mehr auf. Was weiterhin unabhaengig
+# bleibt, ist alles andere — die Grammatik ueber dem "L", die Bereiche ohne
+# RSCALE und jedes Schweigen an jeder anderen Stelle. Die Gegenprobe gegen die
+# Lockerung selbst leisten die vier Beispieldateien 161 bis 164 und die
+# Korpusmessung, nicht dieses Skript.
 # ------------------------------------------------------------------------
 set -eu
 
@@ -244,8 +260,13 @@ def ziffern(text, stellen, vorz):
     return -zahl if text[:1] == "-" else zahl, None
 
 
-def urteil(name, element):
-    """Was DIESES Skript zu einem Element sagt: Klasse oder None."""
+def urteil(name, element, mit_rscale=False):
+    """Was DIESES Skript zu einem Element sagt: Klasse oder None.
+
+    `mit_rscale` heisst: im selben RRULE-Wert steht der Regelteil RSCALE.
+    Dann gilt RFC 7529 — BYMONTH darf auf ein "L" enden (Zeile 324), und
+    kein Prosabereich aus RFC 5545 wird mehr behauptet (Zeile 295-297).
+    """
     if name == "WKST":
         return None if element.upper() in WEEKDAY else "G4"
     if name == "BYDAY":
@@ -256,9 +277,13 @@ def urteil(name, element):
         _zahl, klasse = ziffern(element[:-2], 2, True)
         return "G5" if klasse else None      # Bereich steht nur in 2178
     stellen, vorz, prosa = PRODUKTION[name]
+    if mit_rscale and name == "BYMONTH" and element[-1:].upper() == "L":
+        element = element[:-1]               # monthnum, RFC 7529 Zeile 324
     zahl, klasse = ziffern(element, stellen, vorz)
     if klasse:
         return klasse
+    if mit_rscale:
+        return None                          # RFC 7529 Zeile 295-297
     if prosa is None:
         return None
     unten, oben, negativ = prosa
@@ -346,6 +371,7 @@ for pfad in dateien:
         if name != "RRULE":
             continue
         freq = (teil(wert, "FREQ") or "").upper()
+        mit_rscale = teil(wert, "RSCALE") is not None
         hat = dict((n, elemente(wert, n)) for n in ZWOELF)
         for rteil in ZWOELF:
             liste = hat[rteil]
@@ -353,7 +379,7 @@ for pfad in dateien:
                 continue
             for element in liste:
                 kandidaten += 1
-                klasse = urteil(rteil, element)
+                klasse = urteil(rteil, element, mit_rscale)
                 if klasse:
                     eigen.setdefault((nr, rteil), []).append((element, klasse))
         # Gerichtet: welche Elemente die sieben Faelle angreifen. Gezaehlt
@@ -385,7 +411,7 @@ for pfad in dateien:
         for nummer, rteil, liste in treffer:
             for element in liste:
                 vertraeglich[nummer] = vertraeglich.get(nummer, [0, 0])
-                if urteil(rteil, element) is None:
+                if urteil(rteil, element, mit_rscale) is None:
                     vertraeglich[nummer][0] += 1
                     still.setdefault((nr, rteil), []).append(
                         (nummer, element))

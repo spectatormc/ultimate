@@ -531,7 +531,7 @@ weicht sie ab, endet er mit `1` und nennt jeden Unterschied. Beide brauchen Netz
 
 ### `zahlen.sh` — die Zahlen über den eigenen Bestand
 
-Der letzte prüft nicht das Werkzeug, sondern diesen Text. „160 Kalenderdateien",
+Der letzte prüft nicht das Werkzeug, sondern diesen Text. „164 Kalenderdateien",
 „die zwanzig Prüfungen", „Anlass für eine 21. Prüfung" — das sind keine
 Meinungen, sondern Zahlen, die man nachsehen kann. Sie stehen im Text, während
 der Bestand daneben wächst, und niemand zieht sie nach, weil niemand sie liest.
@@ -1224,7 +1224,7 @@ ursachen.sh         Ordnet jede P31-Meldung einer Ursachenklasse zu und misst
                     Argument über beispiele/, mit Argument über einen fremden
                     Korpus. Prüfbefehl 3b der Mission vom 2026-09-08.
                     Kein Netz.
-beispiele/          160 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
+beispiele/          164 Kalenderdateien, byte-genau, teils mit Absicht kaputt.
                     Die Zahl ist am 2026-08-18 nachgezählt; sie stand seit
                     zwei Zyklen auf 47 und wuchs still mit jeder neuen Datei; seither hält
                     zahlen.sh sie nach.

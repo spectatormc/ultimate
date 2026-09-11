@@ -1,0 +1,1 @@
+FEHLER Zeile 8: P32 der Regelteil BYMONTH trägt "5L": dort steht etwas anderes als eine Ziffernfolge; verlangt sind ein bis zwei Ziffern ohne Vorzeichen (monthnum = 1*2DIGIT, Zeile 2209) [RFC 5545 §3.3.10]
