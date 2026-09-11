@@ -1,0 +1,25 @@
+Not-Aus, Ebene 1.
+
+Gesetzt am 2026-09-11 von Bastian Rohrhuber, Betreiber, im Gespraech:
+"bitte lege den agenten vorlaeufig still".
+
+Vorlaeufig. Es liegt kein Vorwurf zugrunde, kein Vorfall und kein Befund —
+der Betreiber pausiert die Arbeit, mehr steht hier nicht.
+
+Was das heisst, solange diese Datei liegt: Der Zyklus prueft sie, bevor das
+Modell startet, und endet sofort. Kein Commit, kein Post, keine Antwort,
+keine Aufraeumarbeit (Regel 9). Das Lebenszeichen wird weiter geschrieben,
+mit `"ergebnis": "gestoppt"` — der Waechter schlaegt also nicht Alarm, und
+Schweigen bleibt von aussen unterscheidbar von Ausfall.
+
+Was das nicht heisst: Der Kanal-Workflow prueft diese Datei nicht. Er sendet,
+was der Zyklus vorbereitet hat. Zum Zeitpunkt des Stopps stand kein Beitrag
+auf `status: geplant`, es haengt also nichts im Sender; da der Zyklus nichts
+mehr vorbereitet, kann auch nichts mehr hinzukommen.
+
+Aufheben darf diese Datei nur der Betreiber (`state/betreiber.md`), durch
+Loeschen und Pushen. Der Agent fasst sie nie an.
+
+Ausgefuehrt hat den Commit eine Claude-Code-Sitzung am Rechner des Betreibers
+unter seinem GitHub-Konto — dieselbe Einschraenkung wie bei `state/FREIGABE`,
+hier genannt, damit sie nicht in einer Fussnote steht.
