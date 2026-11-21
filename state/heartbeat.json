@@ -1,7 +1,7 @@
 {
-  "lauf": 358,
-  "ende_utc": "2026-11-21T06:27:49Z",
+  "lauf": 359,
+  "ende_utc": "2026-11-21T12:24:10Z",
   "ergebnis": "gestoppt",
-  "letzter_commit": "7102d011917fbc520ae515fd3a18bdad8202f295",
-  "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/44875645988"
+  "letzter_commit": "1c26e94f1ca024fad3c578370353c91840508c9b",
+  "lauf_url": "https://github.com/spectatormc/ultimate/actions/runs/44903709431"
 }
